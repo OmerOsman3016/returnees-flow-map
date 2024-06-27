@@ -5,11 +5,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
   <meta name="description" content="Flow Map" />
-
   <title>Displacement Flow Map</title>
-
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-
   <style>
     body {
       margin: 0;
@@ -25,17 +22,14 @@
     }
 
     .legend {
-	background: #fff;
-	border-radius: 5px;
-	padding: 8px;
-	}
-
+      background: #fff;
+      border-radius: 5px;
+      padding: 8px;
+    }
   </style>
-
 </head>
 
 <body>
-
   <div id="map"></div>
 
   <!-- first load LeafletJS -->
@@ -52,38 +46,46 @@
 
   <!-- also load 3rd-party CSV parsing libary just for this demo  -->
   <script src="https://unpkg.com/papaparse@5.3.0/papaparse.min.js"></script>
-  
+
   <script>
     var map = L.map('map');
 
     if (L.Browser.mobile) {
-      map.setView([16, 32], 3);
+      map.setView([34.5, 66.0], 3);
     } else {
-      map.setView([16, 31], 6);
+      map.setView([34.5, 66.0], 6.45);
     }
 
-    L.esri.basemapLayer('Gray').addTo(map);
+    // Replace the basemap layer with Mapbox URL and access token
+    L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/clxuieayb00au01pa33qc7nuo/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
+      attribution: 'Map data &copy; <a href="https://www.mapbox.com/">Mapbox</a> contributors'
+    }).addTo(map);
 
     var admn1 = L.esri
-        .featureLayer({
-          url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
-          where: "ADMLEVEL = 1",
-          style: { color: "gray", weight: 1,  dashArray: "2, 3", dashOffset: "2" }
-        });
+      .featureLayer({
+        url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/PAK_pcode/MapServer/4",
+        where: "ADMLEVEL = 1",
+        style: {
+          color: "gray",
+          weight: 1,
+          dashArray: "2, 3",
+          dashOffset: "2"
+        }
+      });
 
-        admn1.addTo(map);
-    
+    admn1.addTo(map);
+
     var admn2 = L.esri
-        .featureLayer({
-          url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
-          where: "ADMLEVEL = 2",
-          //style: { color: "gray", weight: 1,  dashArray: "2, 3", dashOffset: "2" }
-          style: { color: "gray", weight: 0.25 }
-        });
+      .featureLayer({
+        url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/PAK_pcode/MapServer/4",
+        where: "ADMLEVEL = 2",
+        style: {
+          color: "gray",
+          weight: 0.25
+        }
+      });
 
-        admn2.addTo(map);
-    
-   
+    admn2.addTo(map);
 
     Papa.parse('./data/data.csv', {
       download: true,
@@ -186,24 +188,23 @@
           animationDuration: 2000,
           onEachFeature: TooltipName,
         }).addTo(map);
-                
-        //create tooltip function on hover
-        function TooltipName(feature, layer){
-        layer.on('mouseover', function (e) {
-        this.openPopup();
-        });
-        layer.on('mouseout', function (e) {
-        this.closePopup();
-        });
-        if (layer._radius===6){
-          layer.bindTooltip("State of Origin: "+feature.properties.s_State );
-        }else {
-          layer.bindTooltip("Locality of Displacement: "+feature.properties.e_locality);
 
-        }
-       
+        //create tooltip function on hover
+        function TooltipName(feature, layer) {
+          layer.on('mouseover', function(e) {
+            this.openPopup();
+          });
+          layer.on('mouseout', function(e) {
+            this.closePopup();
+          });
+          if (layer._radius === 6) {
+            layer.bindTooltip("Border Point: " + feature.properties.s_State);
+          } else {
+            layer.bindTooltip("Province of Return: " + feature.properties.e_locality);
+
+          }
+
         };
-        
 
         // since this demo is using the optional "pathDisplayMode" as "selection",
         // it is up to the developer to wire up a click or mouseover listener
@@ -224,21 +225,22 @@
       }
     });
 
-    	//Adding Legend to the map
-	var legend = L.control({position: 'bottomleft'});
-	legend.onAdd = function (map) {
-    var legend = L.DomUtil.create('div', 'legend');
-	legend.innerHTML = 
-  '<div style="width:17px;height:17px;background:rgba(255, 103, 31, 0.8) ;float:left;margin-right:10px;border-radius:30px"></div>'+ '<span style="float:left;margin-top:1px; font-weight:bold"> State of origin </span>'+'<br/>'+'<br/>'+
-  '<div style="width:17px;height:17px;background:rgba(0, 51, 160, 0.8) ;float:left;margin-right:10px;border-radius:30px"></div>'+ '<span style="float:left;margin-top:1px; font-weight:bold"> Locality of diplacement </span>'+'<br/>'+'<br/>'+
-  '<span style="font-size: 14px">Displacement flow:</span>'+'<br/>'+
-	'<div style="width:70px;height:3px;background:#ffb81c ;float:left;margin-right:10px;margin-top:10px"></div><span style="float:left; font-weight:bold"> < 80,000</span>'+'<br/>'+
-	'<div style="width:70px;height:4px;background:#ff671f ;float:left;margin-right:10px;;margin-top:10px"></div><span style="float:left; font-weight:bold">80,001 - 160,000</span>'+'<br/>'+
-	'<div style="width:70px;height:7px;background:#e34a33 ;float:left;margin-right:10px;;margin-top:10px"></div><span style="float:left; font-weight:bold"> > 160,000</span>'+'<br/>'
-    return legend;
-	};
-	legend.addTo(map);
-
+    //Adding Legend to the map
+    var legend = L.control({
+      position: 'bottomleft'
+    });
+    legend.onAdd = function(map) {
+      var legend = L.DomUtil.create('div', 'legend');
+      legend.innerHTML =
+        '<div style="width:17px;height:17px;background:rgba(255, 103, 31, 0.8) ;float:left;margin-right:10px;border-radius:30px"></div>' + '<span style="float:left;margin-top:1px; font-weight:bold"> Border Point </span>' + '<br/>' + '<br/>' +
+        '<div style="width:17px;height:17px;background:rgba(0, 51, 160, 0.8) ;float:left;margin-right:10px;border-radius:30px"></div>' + '<span style="float:left;margin-top:1px; font-weight:bold"> Province of Return </span>' + '<br/>' + '<br/>' +
+        '<span style="font-size: 14px"> Flow:</span>' + '<br/>' +
+        '<div style="width:70px;height:3px;background:#ffb81c ;float:left;margin-right:10px;margin-top:10px"></div><span style="float:left; font-weight:bold"> < 80,000</span>' + '<br/>' +
+        '<div style="width:70px;height:4px;background:#ff671f ;float:left;margin-right:10px;;margin-top:10px"></div><span style="float:left; font-weight:bold">80,001 - 160,000</span>' + '<br/>' +
+        '<div style="width:70px;height:7px;background:#e34a33 ;float:left;margin-right:10px;;margin-top:10px"></div><span style="float:left; font-weight:bold"> > 160,000</span>' + '<br/>'
+      return legend;
+    };
+    legend.addTo(map);
   </script>
 
 </body>
