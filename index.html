@@ -109,12 +109,12 @@
 
         var oneToManyFlowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
           originAndDestinationFieldIds: {
-            originUniqueIdField: 's_state_id',
+            originUniqueIdField: 'e_locality_id',
             originGeometry: {
               x: 'e_lon',
               y: 'e_lat'
             },
-            destinationUniqueIdField: 'e_locality_id',
+            destinationUniqueIdField: 's_state_id',
             destinationGeometry: {
               x: 's_lon',
               y: 's_lat'
