@@ -111,32 +111,31 @@
           originAndDestinationFieldIds: {
             originUniqueIdField: 's_state_id',
             originGeometry: {
-              x: 'e_lon',
-              y: 'e_lat'
+              x: 's_lon',
+              y: 's_lat'
             },
             destinationUniqueIdField: 'e_locality_id',
             destinationGeometry: {
-              x: 's_lon',
-              y: 's_lat'
+              x: 'e_lon',
+              y: 'e_lat'
             }
           },
           style: function(geoJsonFeature) {
             if (geoJsonFeature.properties.isOrigin) {
-            return {
-                radius: 3,
-                weight: 0.25,
-                color: 'rgb(17, 142, 170)',
-                fillColor: 'rgb(0, 51, 160)',
-                fillOpacity: 0.7 
-              };
-            } else {
               return {
-                
                 radius: 6,
                 weight: 1,
                 color: 'rgb(195, 255, 62)',
                 fillColor: 'rgba(255, 103, 31)',
                 fillOpacity: 0.8
+              };
+            } else {
+              return {
+                radius: 3,
+                weight: 0.25,
+                color: 'rgb(17, 142, 170)',
+                fillColor: 'rgb(0, 51, 160)',
+                fillOpacity: 0.7
               };
             }
           },
@@ -226,21 +225,22 @@
       }
     });
 
-    	//Adding Legend to the map
-	var legend = L.control({position: 'bottomleft'});
-	legend.onAdd = function (map) {
-    var legend = L.DomUtil.create('div', 'legend');
-	legend.innerHTML = 
-  '<div style="width:17px;height:17px;background:rgba(255, 103, 31, 0.8) ;float:left;margin-right:10px;border-radius:30px"></div>'+ '<span style="float:left;margin-top:1px; font-weight:bold"> State of origin </span>'+'<br/>'+'<br/>'+
-  '<div style="width:17px;height:17px;background:rgba(0, 51, 160, 0.8) ;float:left;margin-right:10px;border-radius:30px"></div>'+ '<span style="float:left;margin-top:1px; font-weight:bold"> Locality of diplacement </span>'+'<br/>'+'<br/>'+
-  '<span style="font-size: 14px">Displacement flow:</span>'+'<br/>'+
-	'<div style="width:70px;height:3px;background:#ffb81c ;float:left;margin-right:10px;margin-top:10px"></div><span style="float:left; font-weight:bold"> < 80,000</span>'+'<br/>'+
-	'<div style="width:70px;height:4px;background:#ff671f ;float:left;margin-right:10px;;margin-top:10px"></div><span style="float:left; font-weight:bold">80,001 - 160,000</span>'+'<br/>'+
-	'<div style="width:70px;height:7px;background:#e34a33 ;float:left;margin-right:10px;;margin-top:10px"></div><span style="float:left; font-weight:bold"> > 160,000</span>'+'<br/>'
-    return legend;
-	};
-	legend.addTo(map);
-
+    //Adding Legend to the map
+    var legend = L.control({
+      position: 'bottomleft'
+    });
+    legend.onAdd = function(map) {
+      var legend = L.DomUtil.create('div', 'legend');
+      legend.innerHTML =
+        '<div style="width:17px;height:17px;background:rgba(255, 103, 31, 0.8) ;float:left;margin-right:10px;border-radius:30px"></div>' + '<span style="float:left;margin-top:1px; font-weight:bold"> Border Point </span>' + '<br/>' + '<br/>' +
+        '<div style="width:17px;height:17px;background:rgba(0, 51, 160, 0.8) ;float:left;margin-right:10px;border-radius:30px"></div>' + '<span style="float:left;margin-top:1px; font-weight:bold"> Province of Return </span>' + '<br/>' + '<br/>' +
+        '<span style="font-size: 14px"> Flow:</span>' + '<br/>' +
+        '<div style="width:70px;height:3px;background:#ffb81c ;float:left;margin-right:10px;margin-top:10px"></div><span style="float:left; font-weight:bold"> < 80,000</span>' + '<br/>' +
+        '<div style="width:70px;height:4px;background:#ff671f ;float:left;margin-right:10px;;margin-top:10px"></div><span style="float:left; font-weight:bold">80,001 - 160,000</span>' + '<br/>' +
+        '<div style="width:70px;height:7px;background:#e34a33 ;float:left;margin-right:10px;;margin-top:10px"></div><span style="float:left; font-weight:bold"> > 160,000</span>' + '<br/>'
+      return legend;
+    };
+    legend.addTo(map);
   </script>
 
 </body>
