@@ -111,13 +111,13 @@
           originAndDestinationFieldIds: {
             originUniqueIdField: 's_state_id',
             originGeometry: {
-              x: 's_lon',
-              y: 's_lat'
+              x: 'e_lon',
+              y: 'e_lat'
             },
             destinationUniqueIdField: 'e_locality_id',
             destinationGeometry: {
-              x: 'e_lon',
-              y: 'e_lat'
+              x: 's_lon',
+              y: 's_lat'
             }
           },
           style: function(geoJsonFeature) {
