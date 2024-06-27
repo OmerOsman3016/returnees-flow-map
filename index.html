@@ -122,19 +122,19 @@
           },
           style: function(geoJsonFeature) {
             if (geoJsonFeature.properties.isOrigin) {
-              return {
-                radius: 3,
-                weight: 0.25,
-                color: 'rgb(0, 51, 160)',
-                fillColor: 'rgb(195, 255, 62)',
+            return {
+                radius: 6,
+                weight: 1,
+                color: 'rgb(195, 255, 62)',
+                fillColor: 'rgba(255, 103, 31)',
                 fillOpacity: 0.8
               };
             } else {
               return {
-                radius: 5,
-                weight: 1,
+                radius: 3,
+                weight: 0.25,
                 color: 'rgb(17, 142, 170)',
-                fillColor: 'rgba(255, 103, 31)',
+                fillColor: 'rgb(0, 51, 160)',
                 fillOpacity: 0.7
               };
             }
