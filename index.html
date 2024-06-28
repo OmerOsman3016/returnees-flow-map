@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -91,7 +91,7 @@
               type: 'Feature',
               geometry: {
                 type: 'Point',
-                coordinates: [datum.s_lon, datum.s_lat]
+                coordinates: [datum.e_lon, datum.e_lat]
               },
               properties: datum
             }
@@ -178,10 +178,11 @@
           animationEasingType: 'None',
           animationDuration: 2000,
           onEachFeature: TooltipName,
-        }).addTo(map);
+        });
 
-        // Ensure the layer is fully loaded before selecting the initial path
-        oneToManyFlowmapLayer.on('load', function() {
+        oneToManyFlowmapLayer.addTo(map);
+
+        map.on('layeradd', function() {
           oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', "AFG5", 'SELECTION_NEW');
         });
 
