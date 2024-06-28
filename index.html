@@ -198,9 +198,9 @@
             this.closePopup();
           });
           if (layer._radius === 6) {
-            layer.bindTooltip("origin Province : " + feature.properties.e_locality);
-          } else {
             layer.bindTooltip("Border Point : " + feature.properties.s_State);
+          } else {
+            layer.bindTooltip("origin Province : " + feature.properties.e_locality);
 
           }
 
