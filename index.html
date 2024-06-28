@@ -147,9 +147,13 @@
           onEachFeature: TooltipName,
         }).addTo(map);
 
-        // Directly select the features for path display after layer is added
-        manyToOneFlowmapLayer.on('add', function() {
-          manyToOneFlowmapLayer.selectFeaturesForPathDisplayById('s_state_id', "AFG1", 'SELECTION_NEW');
+        // Ensure the layer is fully added before selecting features for path display
+        map.on('layeradd', function(event) {
+          if (event.layer === manyToOneFlowmapLayer) {
+            setTimeout(function() {
+              manyToOneFlowmapLayer.selectFeaturesForPathDisplayById('s_state_id', "AFG5", 'SELECTION_NEW');
+            }, 100);
+          }
         });
 
         // create tooltip function on hover
@@ -199,4 +203,3 @@
 </body>
 
 </html>
- 
