@@ -178,14 +178,19 @@
           animationEasingType: 'None',
           animationDuration: 2000,
           onEachFeature: TooltipName,
-        });
-
-        oneToManyFlowmapLayer.addTo(map);
+        }).addTo(map);
 
         // Ensure the layer is fully loaded before selecting the initial path
+        oneToManyFlowmapLayer.on('layeradd', function() {
+          oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', "AFG5", 'SELECTION_NEW');
+        });
+
+        // Directly select the features for path display after layer is added
         map.on('layeradd', function(event) {
           if (event.layer === oneToManyFlowmapLayer) {
-            oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', "AFG5", 'SELECTION_NEW');
+            setTimeout(function() {
+              oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', "AFG5", 'SELECTION_NEW');
+            }, 100);
           }
         });
 
