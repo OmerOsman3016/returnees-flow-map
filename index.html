@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+  <!DOCTYPE html>
 <html>
 
 <head>
@@ -178,12 +178,10 @@
           animationEasingType: 'None',
           animationDuration: 2000,
           onEachFeature: TooltipName,
-        });
-
-        oneToManyFlowmapLayer.addTo(map);
+        }).addTo(map);
 
         // Ensure the layer is fully loaded before selecting the initial path
-        oneToManyFlowmapLayer.on('layeradd', function() {
+        oneToManyFlowmapLayer.on('load', function() {
           oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', "AFG5", 'SELECTION_NEW');
         });
 
