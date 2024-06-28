@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -82,19 +82,19 @@
           style: function(geoJsonFeature) {
             if (geoJsonFeature.properties.isOrigin) {
               return {
-                radius: 4,
-                weight: 0.5,
-                color: 'rgb(0, 123, 255)',
-                fillColor: 'rgb(0, 123, 255)',
-                fillOpacity: 0.6
-              };
-            } else {
-              return {
                 radius: 6,
                 weight: 1,
                 color: 'rgb(40, 167, 69)',
                 fillColor: 'rgb(40, 167, 69)',
                 fillOpacity: 0.8
+              };
+            } else {
+              return {
+                radius: 4,
+                weight: 0.5,
+                color: 'rgb(0, 123, 255)',
+                fillColor: 'rgb(0, 123, 255)',
+                fillOpacity: 0.6
               };
             }
           },
@@ -165,7 +165,7 @@
           layer.on('mouseout', function(e) {
             this.closePopup();
           });
-          if (layer._radius === 6) {
+          if (layer.options.radius === 6) {
             layer.bindTooltip("Origin Province : " + feature.properties.e_locality);
           } else {
             layer.bindTooltip("Destination Border Point : " + feature.properties.s_State);
