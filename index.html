@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -147,17 +147,10 @@
           onEachFeature: TooltipName,
         }).addTo(map);
 
-        // Ensure the layer is fully added before selecting features for path display
-        map.on('layeradd', function(event) {
-          if (event.layer === manyToOneFlowmapLayer) {
-            setTimeout(function() {
-              manyToOneFlowmapLayer.selectFeaturesForPathDisplay([
-                { featureId: 'e_locality_id', id: "AF12" }, // Set the correct ID for Islam Qala
-                { featureId: 's_state_id', id: "AFG5" } // Set the correct ID for Taybad
-              ], 'SELECTION_NEW');
-            }, 100);
-          }
-        });
+        // Automatically select and display the flow paths for the specified border point
+        setTimeout(function() {
+          manyToOneFlowmapLayer.selectFeaturesForPathDisplayById('s_state_id', 'AFG5', 'SELECTION_NEW'); // Replace 'AFG5' with the correct s_state_id
+        }, 100);
 
         // create tooltip function on hover
         function TooltipName(feature, layer) {
