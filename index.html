@@ -185,12 +185,12 @@
         // it is up to the developer to wire up a click or mouseover listener
         // and then call the "selectFeaturesForPathDisplay()" method to inform the layer
         // which Bezier paths need to be drawn
-        oneToManyFlowmapLayer.on('mouseover', function(e) {
+         manyToOneFlowmapLayer.on('mouseover', function(e) {
           if (e.sharedOriginFeatures.length) {
-            oneToManyFlowmapLayer.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
+             manyToOneFlowmapLayer.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
           }
           if (e.sharedDestinationFeatures.length) {
-            oneToManyFlowmapLayer.selectFeaturesForPathDisplay(e.sharedDestinationFeatures, 'SELECTION_NEW');
+             manyToOneFlowmapLayer.selectFeaturesForPathDisplay(e.sharedDestinationFeatures, 'SELECTION_NEW');
           }
         });
 
