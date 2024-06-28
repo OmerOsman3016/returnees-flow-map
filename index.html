@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 
 <head>
@@ -25,7 +25,6 @@
       background: #fff;
       border-radius: 5px;
       padding: 8px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     }
   </style>
 </head>
@@ -82,19 +81,19 @@
           style: function(geoJsonFeature) {
             if (geoJsonFeature.properties.isOrigin) {
               return {
-                radius: 6,
-                weight: 1,
-                color: 'rgb(40, 167, 69)',
-                fillColor: 'rgb(40, 167, 69)',
-                fillOpacity: 0.8
+                radius: 3.4,
+                weight: 0.25,
+                color: 'rgb(17, 142, 170)',
+                fillColor: 'rgb(0, 51, 160)',
+                fillOpacity: 0.7
               };
             } else {
               return {
-                radius: 4,
-                weight: 0.5,
-                color: 'rgb(0, 123, 255)',
-                fillColor: 'rgb(0, 123, 255)',
-                fillOpacity: 0.6
+                radius: 6,
+                weight: 1,
+                color: 'rgb(195, 255, 62)',
+                fillColor: 'rgba(255, 103, 31)',
+                fillOpacity: 0.8
               };
             }
           },
@@ -105,38 +104,38 @@
               classMinValue: 0,
               classMaxValue: 80000,
               symbol: {
-                strokeStyle: '#28a745',
+                strokeStyle: '#ffb81c',
                 lineWidth: 0.5,
                 lineCap: 'round',
-                shadowColor: '#c3e6cb',
+                shadowColor: '#fee8c8',
                 shadowBlur: 2.0
               }
             }, {
               classMinValue: 80001,
               classMaxValue: 160000,
               symbol: {
-                strokeStyle: '#ffc107',
+                strokeStyle: '#ff671f',
                 lineWidth: 1.5,
                 lineCap: 'round',
-                shadowColor: '#ffeeba',
+                shadowColor: '#fdbb84',
                 shadowBlur: 2.0
               }
             }, {
               classMinValue: 160001,
               classMaxValue: 10000000,
               symbol: {
-                strokeStyle: '#dc3545',
+                strokeStyle: '#d22630',
                 lineWidth: 3,
                 lineCap: 'round',
-                shadowColor: '#f5c6cb',
+                shadowColor: '#e34a33',
                 shadowBlur: 2.0
               }
             }],
             defaultSymbol: {
-              strokeStyle: '#6c757d',
+              strokeStyle: '#e7e1ef',
               lineWidth: 0.5,
               lineCap: 'round',
-              shadowColor: '#ced4da',
+              shadowColor: '#e7e1ef',
               shadowBlur: 1.5
             },
           },
@@ -166,9 +165,9 @@
             this.closePopup();
           });
           if (layer.options.radius === 6) {
-            layer.bindTooltip("Origin Province : " + feature.properties.e_locality);
-          } else {
             layer.bindTooltip("Destination Border Point : " + feature.properties.s_State);
+          } else {
+            layer.bindTooltip("Origin Province : " + feature.properties.e_locality);
           }
         };
 
@@ -190,12 +189,12 @@
     legend.onAdd = function(map) {
       var legend = L.DomUtil.create('div', 'legend');
       legend.innerHTML =
-        '<div style="width:17px;height:17px;background:rgba(40, 167, 69, 0.8);float:left;margin-right:10px;border-radius:50%;"></div>' + '<span style="float:left;margin-top:1px; font-weight:bold"> Border Point </span>' + '<br/><br/>' +
-        '<div style="width:17px;height:17px;background:rgba(0, 123, 255, 0.8);float:left;margin-right:10px;border-radius:50%;"></div>' + '<span style="float:left;margin-top:1px; font-weight:bold"> Province of Return </span>' + '<br/><br/>' +
+        '<div style="width:17px;height:17px;background:rgba(255, 103, 31, 0.8);float:left;margin-right:10px;border-radius:30px"></div>' + '<span style="float:left;margin-top:1px; font-weight:bold"> Border Point </span>' + '<br/><br/>' +
+        '<div style="width:17px;height:17px;background:rgba(0, 51, 160, 0.8);float:left;margin-right:10px;border-radius:30px"></div>' + '<span style="float:left;margin-top:1px; font-weight:bold"> Province of Return </span>' + '<br/><br/>' +
         '<span style="font-size: 14px"> Flow:</span><br/>' +
-        '<div style="width:70px;height:3px;background:#28a745;float:left;margin-right:10px;margin-top:10px"></div><span style="float:left; font-weight:bold"> < 80,000</span><br/>' +
-        '<div style="width:70px;height:4px;background:#ffc107;float:left;margin-right:10px;margin-top:10px"></div><span style="float:left; font-weight:bold">80,001 - 160,000</span><br/>' +
-        '<div style="width:70px;height:7px;background:#dc3545;float:left;margin-right:10px;margin-top:10px"></div><span style="float:left; font-weight:bold"> > 160,000</span><br/>';
+        '<div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div><span style="float:left; font-weight:bold"> < 80,000</span><br/>' +
+        '<div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div><span style="float:left; font-weight:bold">80,001 - 160,000</span><br/>' +
+        '<div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div><span style="float:left; font-weight:bold"> > 160,000</span><br/>';
       return legend;
     };
     legend.addTo(map);
