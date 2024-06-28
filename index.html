@@ -151,7 +151,10 @@
         map.on('layeradd', function(event) {
           if (event.layer === manyToOneFlowmapLayer) {
             setTimeout(function() {
-              manyToOneFlowmapLayer.selectFeaturesForPathDisplayById('s_state_id', "AFG5", 'SELECTION_NEW');
+              manyToOneFlowmapLayer.selectFeaturesForPathDisplay([
+                { featureId: 'e_locality_id', id: "AF12" }, // Set the correct ID for Islam Qala
+                { featureId: 's_state_id', id: "AFG5" } // Set the correct ID for Taybad
+              ], 'SELECTION_NEW');
             }, 100);
           }
         });
