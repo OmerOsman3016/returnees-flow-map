@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 
 <head>
@@ -91,7 +91,7 @@
               type: 'Feature',
               geometry: {
                 type: 'Point',
-                coordinates: [datum.e_lon, datum.e_lat]
+                coordinates: [datum.s_lon, datum.s_lat]
               },
               properties: datum
             }
@@ -100,33 +100,33 @@
 
         var oneToManyFlowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
           originAndDestinationFieldIds: {
-            originUniqueIdField: 's_state_id',
+            originUniqueIdField: 'e_locality_id',
             originGeometry: {
-              x: 's_lon',
-              y: 's_lat'
-            },
-            destinationUniqueIdField: 'e_locality_id',
-            destinationGeometry: {
               x: 'e_lon',
               y: 'e_lat'
+            },
+            destinationUniqueIdField: 's_state_id',
+            destinationGeometry: {
+              x: 's_lon',
+              y: 's_lat'
             }
           },
           style: function(geoJsonFeature) {
             if (geoJsonFeature.properties.isOrigin) {
-              return {
-                radius: 3,
-                weight: 0.25,
-                color: 'rgb(195, 255, 62)',
-                fillColor: 'rgba(0, 51, 160)',
-                fillOpacity: 0.8
-              };
-            } else {
               return {
                 radius: 6,
                 weight: 1,
                 color: 'rgb(17, 142, 170)',
                 fillColor: 'rgb(255, 103, 31)',
                 fillOpacity: 0.7
+              };
+            } else {
+              return {
+                radius: 3,
+                weight: 0.25,
+                color: 'rgb(195, 255, 62)',
+                fillColor: 'rgba(0, 51, 160)',
+                fillOpacity: 0.8
               };
             }
           },
@@ -189,16 +189,16 @@
             this.closePopup();
           });
           if (layer._radius === 6) {
-            layer.bindTooltip("Border Point : " + feature.properties.s_State);
-          } else {
             layer.bindTooltip("Origin Province : " + feature.properties.e_locality);
+          } else {
+            layer.bindTooltip("Border Point : " + feature.properties.s_State);
           }
         };
 
         // immediately select an origin point for Bezier path display,
         // instead of waiting for the first user click event to fire
         oneToManyFlowmapLayer.on('layeradd', function() {
-          oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('s_state_id', "AFG5", 'SELECTION_NEW');
+          oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', "AFG5", 'SELECTION_NEW');
         });
 
         oneToManyFlowmapLayer.on('mouseover', function(e) {
@@ -234,4 +234,3 @@
 </body>
 
 </html>
- 
