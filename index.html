@@ -178,7 +178,14 @@
           animationEasingType: 'None',
           animationDuration: 2000,
           onEachFeature: TooltipName,
-        }).addTo(map);
+        });
+
+        oneToManyFlowmapLayer.addTo(map);
+
+        // Ensure the layer is fully loaded before selecting the initial path
+        oneToManyFlowmapLayer.on('layeradd', function() {
+          oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', "AFG5", 'SELECTION_NEW');
+        });
 
         // create tooltip function on hover
         function TooltipName(feature, layer) {
@@ -195,11 +202,6 @@
           }
         };
 
-        // Ensure the layer is fully loaded before selecting the initial path
-        setTimeout(function() {
-          oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', "AFG5", 'SELECTION_NEW');
-        }, 1000);
-
         oneToManyFlowmapLayer.on('mouseover', function(e) {
           if (e.sharedOriginFeatures.length) {
             oneToManyFlowmapLayer.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
@@ -208,7 +210,6 @@
             oneToManyFlowmapLayer.selectFeaturesForPathDisplay(e.sharedDestinationFeatures, 'SELECTION_NEW');
           }
         });
-
       }
     });
 
