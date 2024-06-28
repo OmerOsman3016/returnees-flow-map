@@ -91,7 +91,7 @@
               type: 'Feature',
               geometry: {
                 type: 'Point',
-                coordinates: [datum.e_lon, datum.e_lat]
+                coordinates: [datum.s_lon, datum.s_lat]
               },
               properties: datum
             }
@@ -182,8 +182,11 @@
 
         oneToManyFlowmapLayer.addTo(map);
 
-        map.on('layeradd', function() {
-          oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', "AFG5", 'SELECTION_NEW');
+        // Ensure the layer is fully loaded before selecting the initial path
+        map.on('layeradd', function(event) {
+          if (event.layer === oneToManyFlowmapLayer) {
+            oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', "AFG5", 'SELECTION_NEW');
+          }
         });
 
         // create tooltip function on hover
