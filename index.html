@@ -91,7 +91,7 @@
               type: 'Feature',
               geometry: {
                 type: 'Point',
-                coordinates: [datum.s_lon, datum.s_lat]
+                coordinates: [datum.e_lon, datum.e_lat]
               },
               properties: datum
             }
@@ -100,15 +100,15 @@
 
         var oneToManyFlowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
           originAndDestinationFieldIds: {
-            originUniqueIdField: 'e_locality_id',
+            originUniqueIdField: 's_state_id',
             originGeometry: {
-              x: 'e_lon',
-              y: 'e_lat'
-            },
-            destinationUniqueIdField: 's_state_id',
-            destinationGeometry: {
               x: 's_lon',
               y: 's_lat'
+            },
+            destinationUniqueIdField: 'e_locality_id',
+            destinationGeometry: {
+              x: 'e_lon',
+              y: 'e_lat'
             }
           },
           style: function(geoJsonFeature) {
@@ -191,14 +191,14 @@
           if (layer._radius === 6) {
             layer.bindTooltip("Border Point : " + feature.properties.s_State);
           } else {
-            layer.bindTooltip("origin Province : " + feature.properties.e_locality);
+            layer.bindTooltip("Origin Province : " + feature.properties.e_locality);
           }
         };
 
         // immediately select an origin point for Bezier path display,
         // instead of waiting for the first user click event to fire
         oneToManyFlowmapLayer.on('layeradd', function() {
-          oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', "AFG5", 'SELECTION_NEW');
+          oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('s_state_id', "AFG5", 'SELECTION_NEW');
         });
 
         oneToManyFlowmapLayer.on('mouseover', function(e) {
@@ -234,3 +234,4 @@
 </body>
 
 </html>
+ 
