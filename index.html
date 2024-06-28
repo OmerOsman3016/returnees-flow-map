@@ -180,18 +180,9 @@
           onEachFeature: TooltipName,
         }).addTo(map);
 
-        // Ensure the layer is fully loaded before selecting the initial path
-        oneToManyFlowmapLayer.on('layeradd', function() {
-          oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', "AFG5", 'SELECTION_NEW');
-        });
-
         // Directly select the features for path display after layer is added
-        map.on('layeradd', function(event) {
-          if (event.layer === oneToManyFlowmapLayer) {
-            setTimeout(function() {
-              oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', "AFG5", 'SELECTION_NEW');
-            }, 100);
-          }
+        oneToManyFlowmapLayer.on('add', function() {
+          oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', "AFG5", 'SELECTION_NEW');
         });
 
         // create tooltip function on hover
