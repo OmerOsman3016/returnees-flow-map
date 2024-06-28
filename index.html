@@ -212,10 +212,10 @@
         // which Bezier paths need to be drawn
         oneToManyFlowmapLayer.on('mouseover', function(e) {
           if (e.sharedOriginFeatures.length) {
-            oneToManyFlowmapLayer.selectFeaturesForPathDisplay(e.sharedDestinationFeatures, 'SELECTION_NEW');
+            oneToManyFlowmapLayer.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
           }
           if (e.sharedDestinationFeatures.length) {
-            oneToManyFlowmapLayer.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
+            oneToManyFlowmapLayer.selectFeaturesForPathDisplay(e.sharedDestinationFeatures, 'SELECTION_NEW');
           }
         });
 
