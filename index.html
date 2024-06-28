@@ -195,11 +195,10 @@
           }
         };
 
-        // immediately select an origin point for Bezier path display,
-        // instead of waiting for the first user click event to fire
-        oneToManyFlowmapLayer.on('layeradd', function() {
+        // Ensure the layer is fully loaded before selecting the initial path
+        setTimeout(function() {
           oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', "AFG5", 'SELECTION_NEW');
-        });
+        }, 1000);
 
         oneToManyFlowmapLayer.on('mouseover', function(e) {
           if (e.sharedOriginFeatures.length) {
