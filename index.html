@@ -147,10 +147,10 @@
           onEachFeature: TooltipName,
         }).addTo(map);
 
-        // Automatically select and display the flow paths for the specified border point
-        setTimeout(function() {
-          manyToOneFlowmapLayer.selectFeaturesForPathDisplayById('s_state_id', 'AFG5', 'SELECTION_NEW'); // Replace 'AFG5' with the correct s_state_id
-        }, 100);
+        // Automatically select and display the flow paths for all border points
+        results.data.forEach(function(item) {
+          manyToOneFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', item.e_locality_id, 'SELECTION_ADD');
+        });
 
         // create tooltip function on hover
         function TooltipName(feature, layer) {
