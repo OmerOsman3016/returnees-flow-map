@@ -73,7 +73,7 @@
               type: 'Feature',
               geometry: {
                 type: 'Point',
-                coordinates: [datum.s_lon, datum.s_lat]
+                coordinates: [datum.e_lon, datum.e_lat]
               },
               properties: datum
             }
@@ -176,9 +176,9 @@
             this.closePopup();
           });
           if (layer.options.radius === 6) {
-            layer.bindTooltip("Destination Border Point : " + feature.properties.s_State);
+            layer.bindTooltip("Destination Border Point: " + feature.properties.s_State);
           } else {
-            layer.bindTooltip("Origin Province : " + feature.properties.e_locality);
+            layer.bindTooltip("Origin Province: " + feature.properties.e_locality);
           }
         };
 
