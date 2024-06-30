@@ -162,9 +162,12 @@
           onEachFeature: TooltipName,
         }).addTo(map);
 
-        // Automatically select and display the flow paths for the specified border point
+        // Automatically select and display the flow paths for multiple border points
+        var selectedStates = ['AFG5', 'AFG10']; // Add all the s_state_ids you want to select here
         setTimeout(function() {
-          manyToOneFlowmapLayer.selectFeaturesForPathDisplayById('s_state_id', 'AFG5', 'SELECTION_NEW'); // Replace 'AFG5' with the correct s_state_id
+          selectedStates.forEach(function(state) {
+            manyToOneFlowmapLayer.selectFeaturesForPathDisplayById('s_state_id', state, 'SELECTION_ADD');
+          });
         }, 100);
 
         // create tooltip function on hover
@@ -214,3 +217,4 @@
 </body>
 
 </html>
+ 
