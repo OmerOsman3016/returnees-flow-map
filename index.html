@@ -45,6 +45,26 @@
       attribution: 'Map data &copy; <a href="https://www.mapbox.com/">Mapbox</a> contributors'
     }).addTo(map);
 
+    // Load and add GeoJSON files for Iran and Pakistan
+    function addGeoJsonLayer(url, map, color, opacity = 1) {
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          L.geoJSON(data, {
+            style: function(feature) {
+              return {
+                color: color,
+                weight: 1,
+                opacity: opacity
+              };
+            }
+          }).addTo(map);
+        });
+    }
+
+    addGeoJsonLayer('./data/iran.geojson', map, "#ff7800");
+    addGeoJsonLayer('./data/pakistan.geojson', map, "#00ff00", 0.2);
+
     Papa.parse('./data/data.csv', {
       download: true,
       header: true,
