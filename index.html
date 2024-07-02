@@ -182,7 +182,7 @@
               shadowBlur: 1.5
             },
           },
-          pathDisplayMode: 'selection',
+          pathDisplayMode: 'all',
           animationStarted: true,
           animationEasingFamily: 'Linear',
           animationEasingType: 'None',
@@ -259,7 +259,7 @@
       oneToManyFlowmapLayer.clearAllPathSelections();
 
       selectedIds.forEach(function (id) {
-        oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', id, 'SELECTION_NEW');
+        oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('s_state_id', id, 'SELECTION_NEW');
       });
     }
   </script>
