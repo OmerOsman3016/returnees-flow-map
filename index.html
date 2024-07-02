@@ -162,7 +162,7 @@
               shadowBlur: 1.5
             },
           },
-          pathDisplayMode: 'selection',
+          pathDisplayMode: 'all',
           animationStarted: true,
           animationEasingFamily: 'Linear',
           animationEasingType: 'None',
@@ -216,29 +216,23 @@
     };
     legend.addTo(map);
 
-    // Function to create checkboxes for each border point
     function populateCheckboxes(borderPoints) {
       var checkboxesDiv = document.getElementById('checkboxes');
       for (var id in borderPoints) {
         var checkboxLabel = document.createElement('label');
-        // Create a checkbox for each border point with an event listener
         checkboxLabel.innerHTML = '<input type="checkbox" value="' + id + '">' + borderPoints[id];
         checkboxLabel.querySelector('input').addEventListener('change', updateFlowmapLayer);
         checkboxesDiv.appendChild(checkboxLabel);
       }
     }
 
-    // Function to update the displayed flows based on selected checkboxes
     function updateFlowmapLayer() {
-      // Get all selected checkbox values
       var selectedIds = Array.from(document.querySelectorAll('#checkboxes input:checked')).map(function (input) {
         return input.value;
       });
 
-      // Clear all currently displayed paths
       oneToManyFlowmapLayer.clearAllPathSelections();
 
-      // Display paths for each selected border point
       selectedIds.forEach(function (id) {
         oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('s_state_id', id, 'SELECTION_NEW');
       });
