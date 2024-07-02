@@ -85,7 +85,7 @@
     addGeoJsonLayer('./data/pakistan.geojson', map, "#DC7633", 20);
 
     var borderPoints = {};
-    var manyToOneFlowmapLayer;
+    var oneToManyFlowmapLayer;
 
     Papa.parse('./data/data.csv', {
       download: true,
@@ -108,35 +108,35 @@
           })
         };
 
-        manyToOneFlowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
+        oneToManyFlowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
           originAndDestinationFieldIds: {
-            originUniqueIdField: 'e_locality_id',
+            originUniqueIdField: 's_state_id',
             originGeometry: {
-              x: 'e_lon',
-              y: 'e_lat'
-            },
-            destinationUniqueIdField: 's_state_id',
-            destinationGeometry: {
               x: 's_lon',
               y: 's_lat'
+            },
+            destinationUniqueIdField: 'e_locality_id',
+            destinationGeometry: {
+              x: 'e_lon',
+              y: 'e_lat'
             }
           },
           style: function (geoJsonFeature) {
             if (geoJsonFeature.properties.isOrigin) {
-              return {
-                radius: 3.4,
-                weight: 0.25,
-                color: 'rgb(17, 142, 170)',
-                fillColor: 'rgb(0, 51, 160)',
-                fillOpacity: 0.7
-              };
-            } else {
               return {
                 radius: 6,
                 weight: 1,
                 color: 'rgb(195, 255, 62)',
                 fillColor: 'rgba(255, 103, 31)',
                 fillOpacity: 0.8
+              };
+            } else {
+              return {
+                radius: 3.4,
+                weight: 0.25,
+                color: 'rgb(17, 142, 170)',
+                fillColor: 'rgb(0, 51, 160)',
+                fillOpacity: 0.7
               };
             }
           },
@@ -207,18 +207,18 @@
             this.closePopup();
           });
           if (layer.options.radius === 6) {
-            layer.bindTooltip("Destination Border Point : " + feature.properties.s_State);
+            layer.bindTooltip("Origin Border Point : " + feature.properties.s_State);
           } else {
-            layer.bindTooltip("Origin Province : " + feature.properties.e_locality);
+            layer.bindTooltip("Destination Province : " + feature.properties.e_locality);
           }
         };
 
-        manyToOneFlowmapLayer.on('mouseover', function (e) {
+        oneToManyFlowmapLayer.on('mouseover', function (e) {
           if (e.sharedOriginFeatures.length) {
-            manyToOneFlowmapLayer.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
+            oneToManyFlowmapLayer.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
           }
           if (e.sharedDestinationFeatures.length) {
-            manyToOneFlowmapLayer.selectFeaturesForPathDisplay(e.sharedDestinationFeatures, 'SELECTION_NEW');
+            oneToManyFlowmapLayer.selectFeaturesForPathDisplay(e.sharedDestinationFeatures, 'SELECTION_NEW');
           }
         });
       }
@@ -256,10 +256,10 @@
         return input.value;
       });
 
-      manyToOneFlowmapLayer.clearAllPathSelections();
+      oneToManyFlowmapLayer.clearAllPathSelections();
 
       selectedIds.forEach(function (id) {
-        manyToOneFlowmapLayer.selectFeaturesForPathDisplayById('s_state_id', id, 'SELECTION_NEW');
+        oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('s_state_id', id, 'SELECTION_NEW');
       });
     }
   </script>
