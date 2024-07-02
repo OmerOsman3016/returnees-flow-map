@@ -70,7 +70,7 @@
         .then(response => response.json())
         .then(data => {
           L.geoJSON(data, {
-            style: function(feature) {
+            style: function (feature) {
               return {
                 color: color,
                 weight: 1,
@@ -92,10 +92,10 @@
       header: true,
       dynamicTyping: true,
       skipEmptyLines: true,
-      complete: function(results) {
+      complete: function (results) {
         var geoJsonFeatureCollection = {
           type: 'FeatureCollection',
-          features: results.data.map(function(datum) {
+          features: results.data.map(function (datum) {
             borderPoints[datum.s_state_id] = datum.s_State;
             return {
               type: 'Feature',
@@ -121,7 +121,7 @@
               y: 's_lat'
             }
           },
-          style: function(geoJsonFeature) {
+          style: function (geoJsonFeature) {
             if (geoJsonFeature.properties.isOrigin) {
               return {
                 radius: 3.4,
@@ -194,16 +194,16 @@
         populateCheckboxes(borderPoints);
 
         // Automatically select and display the flow paths for the specified border point
-        setTimeout(function() {
-          manyToOneFlowmapLayer.selectFeaturesForPathDisplayById('s_state_id', 'AFG5', 'SELECTION_NEW'); // Replace 'AFG5' with the correct s_state_id
+        setTimeout(function () {
+          updateFlowmapLayer(); // Update the flowmap layer based on the initial selected checkboxes
         }, 100);
 
         // create tooltip function on hover
         function TooltipName(feature, layer) {
-          layer.on('mouseover', function(e) {
+          layer.on('mouseover', function (e) {
             this.openPopup();
           });
-          layer.on('mouseout', function(e) {
+          layer.on('mouseout', function (e) {
             this.closePopup();
           });
           if (layer.options.radius === 6) {
@@ -213,7 +213,7 @@
           }
         };
 
-        manyToOneFlowmapLayer.on('mouseover', function(e) {
+        manyToOneFlowmapLayer.on('mouseover', function (e) {
           if (e.sharedOriginFeatures.length) {
             manyToOneFlowmapLayer.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
           }
@@ -228,7 +228,7 @@
     var legend = L.control({
       position: 'bottomleft'
     });
-    legend.onAdd = function(map) {
+    legend.onAdd = function (map) {
       var legend = L.DomUtil.create('div', 'legend');
       legend.innerHTML =
         '<div style="width:17px;height:17px;background:rgba(255, 103, 31, 0.8);float:left;margin-right:10px;border-radius:30px"></div>' + '<span style="float:left;margin-top:1px; font-weight:bold"> Border Point </span>' + '<br/><br/>' +
@@ -252,13 +252,13 @@
     }
 
     function updateFlowmapLayer() {
-      var selectedIds = Array.from(document.querySelectorAll('#checkboxes input:checked')).map(function(input) {
+      var selectedIds = Array.from(document.querySelectorAll('#checkboxes input:checked')).map(function (input) {
         return input.value;
       });
 
       manyToOneFlowmapLayer.clearAllPathSelections();
 
-      selectedIds.forEach(function(id) {
+      selectedIds.forEach(function (id) {
         manyToOneFlowmapLayer.selectFeaturesForPathDisplayById('s_state_id', id, 'SELECTION_NEW');
       });
     }
@@ -267,4 +267,3 @@
 </body>
 
 </html>
- 
