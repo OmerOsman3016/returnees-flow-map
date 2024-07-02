@@ -193,12 +193,7 @@
         // Populate the filter checkboxes
         populateCheckboxes(borderPoints);
 
-        // Automatically select and display the flow paths for the specified border point
-        setTimeout(function () {
-          updateFlowmapLayer(); // Update the flowmap layer based on the initial selected checkboxes
-        }, 100);
-
-        // create tooltip function on hover
+        // Create tooltip function on hover
         function TooltipName(feature, layer) {
           layer.on('mouseover', function (e) {
             this.openPopup();
@@ -245,7 +240,7 @@
       var checkboxesDiv = document.getElementById('checkboxes');
       for (var id in borderPoints) {
         var checkboxLabel = document.createElement('label');
-        checkboxLabel.innerHTML = '<input type="checkbox" value="' + id + '" checked>' + borderPoints[id];
+        checkboxLabel.innerHTML = '<input type="checkbox" value="' + id + '">' + borderPoints[id];
         checkboxLabel.querySelector('input').addEventListener('change', updateFlowmapLayer);
         checkboxesDiv.appendChild(checkboxLabel);
       }
