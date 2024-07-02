@@ -26,11 +26,25 @@
       border-radius: 5px;
       padding: 8px;
     }
+
+    #controls {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: white;
+      padding: 10px;
+      z-index: 1000;
+      border-radius: 5px;
+    }
   </style>
 </head>
 
 <body>
   <div id="map"></div>
+  <div id="controls">
+    <h4>Select Border Points</h4>
+    <div id="checkboxes"></div>
+  </div>
 
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   <script src="https://unpkg.com/@tweenjs/tween.js@18.6.4/dist/tween.umd.js"></script>
@@ -63,7 +77,9 @@
     }
 
     addGeoJsonLayer('./data/iran.geojson', map, "#ff7800");
-    addGeoJsonLayer('./data/pakistan.geojson', map, "#DC7633", 20);
+    addGeoJsonLayer('./data/pakistan.geojson', map, "#DC7633", 0.2);
+
+    let geoJsonFeatureCollection;
 
     Papa.parse('./data/data.csv', {
       download: true,
@@ -71,7 +87,7 @@
       dynamicTyping: true,
       skipEmptyLines: true,
       complete: function(results) {
-        var geoJsonFeatureCollection = {
+        geoJsonFeatureCollection = {
           type: 'FeatureCollection',
           features: results.data.map(function(datum) {
             return {
@@ -85,116 +101,150 @@
           })
         };
 
-        var manyToOneFlowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
-          originAndDestinationFieldIds: {
-            originUniqueIdField: 'e_locality_id',
-            originGeometry: {
-              x: 'e_lon',
-              y: 'e_lat'
-            },
-            destinationUniqueIdField: 's_state_id',
-            destinationGeometry: {
-              x: 's_lon',
-              y: 's_lat'
-            }
+        const borderPoints = [...new Set(results.data.map(d => d.s_State))];
+
+        const checkboxesDiv = document.getElementById('checkboxes');
+        borderPoints.forEach(point => {
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.id = point;
+          checkbox.value = point;
+          checkbox.checked = true;
+          checkbox.onchange = filterFlows;
+
+          const label = document.createElement('label');
+          label.htmlFor = point;
+          label.appendChild(document.createTextNode(point));
+
+          checkboxesDiv.appendChild(checkbox);
+          checkboxesDiv.appendChild(label);
+          checkboxesDiv.appendChild(document.createElement('br'));
+        });
+
+        filterFlows();
+      }
+    });
+
+    let manyToOneFlowmapLayer;
+
+    function filterFlows() {
+      const selectedPoints = Array.from(document.querySelectorAll('#checkboxes input[type="checkbox"]:checked')).map(cb => cb.value);
+
+      const filteredFeatures = geoJsonFeatureCollection.features.filter(feature => selectedPoints.includes(feature.properties.s_State));
+
+      const filteredCollection = {
+        type: 'FeatureCollection',
+        features: filteredFeatures
+      };
+
+      if (manyToOneFlowmapLayer) {
+        map.removeLayer(manyToOneFlowmapLayer);
+      }
+
+      manyToOneFlowmapLayer = L.canvasFlowmapLayer(filteredCollection, {
+        originAndDestinationFieldIds: {
+          originUniqueIdField: 'e_locality_id',
+          originGeometry: {
+            x: 'e_lon',
+            y: 'e_lat'
           },
-          style: function(geoJsonFeature) {
-            if (geoJsonFeature.properties.isOrigin) {
-              return {
-                radius: 3.4,
-                weight: 0.25,
-                color: 'rgb(17, 142, 170)',
-                fillColor: 'rgb(0, 51, 160)',
-                fillOpacity: 0.7
-              };
-            } else {
-              return {
-                radius: 6,
-                weight: 1,
-                color: 'rgb(195, 255, 62)',
-                fillColor: 'rgba(255, 103, 31)',
-                fillOpacity: 0.8
-              };
-            }
-          },
-          canvasBezierStyle: {
-            type: 'classBreaks',
-            field: 'e_Volume',
-            classBreakInfos: [{
-              classMinValue: 0,
-              classMaxValue: 10000,
-              symbol: {
-                strokeStyle: '#ffb81c',
-                lineWidth: 0.5,
-                lineCap: 'round',
-                shadowColor: '#fee8c8',
-                shadowBlur: 2.0
-              }
-            }, {
-              classMinValue: 10001,
-              classMaxValue: 160000,
-              symbol: {
-                strokeStyle: '#ff671f',
-                lineWidth: 1.5,
-                lineCap: 'round',
-                shadowColor: '#fdbb84',
-                shadowBlur: 2.0
-              }
-            }, {
-              classMinValue: 160001,
-              classMaxValue: 10000000,
-              symbol: {
-                strokeStyle: '#d22630',
-                lineWidth: 3,
-                lineCap: 'round',
-                shadowColor: '#e34a33',
-                shadowBlur: 2.0
-              }
-            }],
-            defaultSymbol: {
-              strokeStyle: '#e7e1ef',
+          destinationUniqueIdField: 's_state_id',
+          destinationGeometry: {
+            x: 's_lon',
+            y: 's_lat'
+          }
+        },
+        style: function(geoJsonFeature) {
+          if (geoJsonFeature.properties.isOrigin) {
+            return {
+              radius: 3.4,
+              weight: 0.25,
+              color: 'rgb(17, 142, 170)',
+              fillColor: 'rgb(0, 51, 160)',
+              fillOpacity: 0.7
+            };
+          } else {
+            return {
+              radius: 6,
+              weight: 1,
+              color: 'rgb(195, 255, 62)',
+              fillColor: 'rgba(255, 103, 31)',
+              fillOpacity: 0.8
+            };
+          }
+        },
+        canvasBezierStyle: {
+          type: 'classBreaks',
+          field: 'e_Volume',
+          classBreakInfos: [{
+            classMinValue: 0,
+            classMaxValue: 10000,
+            symbol: {
+              strokeStyle: '#ffb81c',
               lineWidth: 0.5,
               lineCap: 'round',
-              shadowColor: '#e7e1ef',
-              shadowBlur: 1.5
-            },
+              shadowColor: '#fee8c8',
+              shadowBlur: 2.0
+            }
+          }, {
+            classMinValue: 10001,
+            classMaxValue: 160000,
+            symbol: {
+              strokeStyle: '#ff671f',
+              lineWidth: 1.5,
+              lineCap: 'round',
+              shadowColor: '#fdbb84',
+              shadowBlur: 2.0
+            }
+          }, {
+            classMinValue: 160001,
+            classMaxValue: 10000000,
+            symbol: {
+              strokeStyle: '#d22630',
+              lineWidth: 3,
+              lineCap: 'round',
+              shadowColor: '#e34a33',
+              shadowBlur: 2.0
+            }
+          }],
+          defaultSymbol: {
+            strokeStyle: '#e7e1ef',
+            lineWidth: 0.5,
+            lineCap: 'round',
+            shadowColor: '#e7e1ef',
+            shadowBlur: 1.5
           },
-          pathDisplayMode: 'selection',
-          animationStarted: true,
-          animationEasingFamily: 'Linear',
-          animationEasingType: 'None',
-          animationDuration: 2000,
-          onEachFeature: TooltipName,
-        }).addTo(map);
+        },
+        pathDisplayMode: 'selection',
+        animationStarted: true,
+        animationEasingFamily: 'Linear',
+        animationEasingType: 'None',
+        animationDuration: 2000,
+        onEachFeature: TooltipName,
+      }).addTo(map);
+    }
 
-        // Automatically select and display the flow paths for the specified border point
-        setTimeout(function() {
-          manyToOneFlowmapLayer.selectFeaturesForPathDisplayById('s_state_id', 'AFG5', 'SELECTION_NEW'); // Replace 'AFG5' with the correct s_state_id
-        }, 100);
+    // create tooltip function on hover
+    function TooltipName(feature, layer) {
+      layer.on('mouseover', function(e) {
+        this.openPopup();
+      });
+      layer.on('mouseout', function(e) {
+        this.closePopup();
+      });
+      if (layer.options.radius === 6) {
+        layer.bindTooltip("Destination Border Point : " + feature.properties.s_State);
+      } else {
+        layer.bindTooltip("Origin Province : " + feature.properties.e_locality);
+      }
+    };
 
-        // create tooltip function on hover
-        function TooltipName(feature, layer) {
-          layer.on('mouseover', function(e) {
-            this.openPopup();
-          });
-          layer.on('mouseout', function(e) {
-            this.closePopup();
-          });
-          if (layer.options.radius === 6) {
-            layer.bindTooltip("Destination Border Point : " + feature.properties.s_State);
-          } else {
-            layer.bindTooltip("Origin Province : " + feature.properties.e_locality);
-          }
-        };
-
-        manyToOneFlowmapLayer.on('mouseover', function(e) {
-          if (e.sharedOriginFeatures.length) {
-            manyToOneFlowmapLayer.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
-          }
-          if (e.sharedDestinationFeatures.length) {
-            manyToOneFlowmapLayer.selectFeaturesForPathDisplay(e.sharedDestinationFeatures, 'SELECTION_NEW');
-          }
-        });
+    manyToOneFlowmapLayer.on('mouseover', function(e) {
+      if (e.sharedOriginFeatures.length) {
+        manyToOneFlowmapLayer.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
+      }
+      if (e.sharedDestinationFeatures.length) {
+        manyToOneFlowmapLayer.selectFeaturesForPathDisplay(e.sharedDestinationFeatures, 'SELECTION_NEW');
       }
     });
 
@@ -219,3 +269,4 @@
 </body>
 
 </html>
+ 
