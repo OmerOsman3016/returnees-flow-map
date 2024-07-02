@@ -101,7 +101,7 @@
               type: 'Feature',
               geometry: {
                 type: 'Point',
-                coordinates: [datum.s_lon, datum.s_lat]
+                coordinates: [datum.e_lon, datum.e_lat]
               },
               properties: datum
             };
@@ -110,15 +110,15 @@
 
         oneToManyFlowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
           originAndDestinationFieldIds: {
-            originUniqueIdField: 's_state_id',
+            originUniqueIdField: 'e_locality_id',
             originGeometry: {
-              x: 's_lon',
-              y: 's_lat'
-            },
-            destinationUniqueIdField: 'e_locality_id',
-            destinationGeometry: {
               x: 'e_lon',
               y: 'e_lat'
+            },
+            destinationUniqueIdField: 's_state_id',
+            destinationGeometry: {
+              x: 's_lon',
+              y: 's_lat'
             }
           },
           style: function (geoJsonFeature) {
@@ -207,9 +207,9 @@
             this.closePopup();
           });
           if (layer.options.radius === 6) {
-            layer.bindTooltip("Origin Border Point : " + feature.properties.s_State);
+            layer.bindTooltip("Origin Province : " + feature.properties.e_locality);
           } else {
-            layer.bindTooltip("Destination Province : " + feature.properties.e_locality);
+            layer.bindTooltip("Destination Border Point : " + feature.properties.s_State);
           }
         };
 
@@ -259,7 +259,7 @@
       oneToManyFlowmapLayer.clearAllPathSelections();
 
       selectedIds.forEach(function (id) {
-        oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('s_state_id', id, 'SELECTION_NEW');
+        oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', id, 'SELECTION_NEW');
       });
     }
   </script>
