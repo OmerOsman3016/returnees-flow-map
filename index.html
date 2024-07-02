@@ -1,272 +1,77 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <meta name="description" content="Flow Map" />
-  <title>Displacement Flow Map</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-    }
-
-    #map {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      right: 0;
-      left: 0;
-    }
-
-    .legend {
-      background: #fff;
-      border-radius: 5px;
-      padding: 8px;
-    }
-
-    #controls {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: white;
-      padding: 10px;
-      z-index: 1000;
-      border-radius: 5px;
-    }
-  </style>
+    <title>Flow Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-canvas-flowmap-layer/dist/leaflet.canvasflowmaplayer.min.js"></script>
 </head>
-
 <body>
-  <div id="map"></div>
-  <div id="controls">
-    <h4>Select Border Points</h4>
-    <div id="checkboxes"></div>
-  </div>
+    <div id="map" style="width: 100%; height: 600px;"></div>
+    <script>
+        // Initialize the map
+        var map = L.map('map').setView([34.5, 69.0], 6);
 
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/@tweenjs/tween.js@18.6.4/dist/tween.umd.js"></script>
-  <script src="./src/CanvasFlowmapLayer.js"></script>
-  <script src="https://unpkg.com/papaparse@5.3.0/papaparse.min.js"></script>
+        // Add a tile layer to the map
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
 
-  <script>
-    var map = L.map('map').setView([34.5, 66.0], 6.45);
+        // Data from the CSV
+        var data = [
+            { "s_State": "Abu Nasr Farahi", "s_Volume": 40610, "s_state_id": "AFG1", "s_lat": 32.165039, "s_lon": 60.873467, "e_locality": "Kabul", "e_locality_id": "AF01", "e_lat": 34.498247, "e_lon": 69.589362, "e_Volume": 15 },
+            { "s_State": "Abu Nasr Farahi", "s_Volume": 2250, "s_state_id": "AFG1", "s_lat": 32.165039, "s_lon": 60.873467, "e_locality": "Wardak", "e_locality_id": "AF02", "e_lat": 33.990654, "e_lon": 68.504375, "e_Volume": 5 },
+            { "s_State": "Abu Nasr Farahi", "s_Volume": 665, "s_state_id": "AFG1", "s_lat": 32.165039, "s_lon": 60.873467, "e_locality": "Ghazni", "e_locality_id": "AF03", "e_lat": 33.086709, "e_lon": 67.767134, "e_Volume": 5 },
+            { "s_State": "Abu Nasr Farahi", "s_Volume": 1250, "s_state_id": "AFG1", "s_lat": 32.165039, "s_lon": 60.873467, "e_locality": "Paktya", "e_locality_id": "AF04", "e_lat": 35.142430, "e_lon": 71.400403, "e_Volume": 5 },
+            { "s_State": "Abu Nasr Farahi", "s_Volume": 31560, "s_state_id": "AFG1", "s_lat": 32.165039, "s_lon": 60.873467, "e_locality": "Ghor", "e_locality_id": "AF05", "e_lat": 33.132149, "e_lon": 66.578813, "e_Volume": 5 }
+        ];
 
-    // Replace the basemap layer with Mapbox URL and access token
-    L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/clxz0kwyr002001pf455vb6gz/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
-      attribution: 'Map data &copy; <a href="https://www.mapbox.com/">Mapbox</a> contributors'
-    }).addTo(map);
-
-    // Load and add GeoJSON files for Iran and Pakistan
-    function addGeoJsonLayer(url, map, color, opacity = 1) {
-      fetch(url)
-        .then(response => response.json())
-        .then(data => {
-          L.geoJSON(data, {
-            style: function(feature) {
-              return {
-                color: color,
-                weight: 1,
-                opacity: opacity
-              };
-            }
-          }).addTo(map);
-        });
-    }
-
-    addGeoJsonLayer('./data/iran.geojson', map, "#ff7800");
-    addGeoJsonLayer('./data/pakistan.geojson', map, "#DC7633", 0.2);
-
-    let geoJsonFeatureCollection;
-
-    Papa.parse('./data/data.csv', {
-      download: true,
-      header: true,
-      dynamicTyping: true,
-      skipEmptyLines: true,
-      complete: function(results) {
-        geoJsonFeatureCollection = {
-          type: 'FeatureCollection',
-          features: results.data.map(function(datum) {
-            return {
-              type: 'Feature',
-              geometry: {
-                type: 'Point',
-                coordinates: [datum.s_lon, datum.s_lat]
-              },
-              properties: datum
-            }
-          })
+        // Convert the data into GeoJSON format
+        var geoJsonData = {
+            "type": "FeatureCollection",
+            "features": data.map(function (item) {
+                return {
+                    "type": "Feature",
+                    "properties": {
+                        "origin": item.s_State,
+                        "destination": item.e_locality,
+                        "volume": item.e_Volume
+                    },
+                    "geometry": {
+                        "type": "LineString",
+                        "coordinates": [
+                            [item.s_lon, item.s_lat],
+                            [item.e_lon, item.e_lat]
+                        ]
+                    }
+                };
+            })
         };
 
-        const borderPoints = [...new Set(results.data.map(d => d.s_State))];
-
-        const checkboxesDiv = document.getElementById('checkboxes');
-        borderPoints.forEach(point => {
-          const checkbox = document.createElement('input');
-          checkbox.type = 'checkbox';
-          checkbox.id = point;
-          checkbox.value = point;
-          checkbox.checked = true;
-          checkbox.onchange = filterFlows;
-
-          const label = document.createElement('label');
-          label.htmlFor = point;
-          label.appendChild(document.createTextNode(point));
-
-          checkboxesDiv.appendChild(checkbox);
-          checkboxesDiv.appendChild(label);
-          checkboxesDiv.appendChild(document.createElement('br'));
-        });
-
-        filterFlows();
-      }
-    });
-
-    let manyToOneFlowmapLayer;
-
-    function filterFlows() {
-      const selectedPoints = Array.from(document.querySelectorAll('#checkboxes input[type="checkbox"]:checked')).map(cb => cb.value);
-
-      const filteredFeatures = geoJsonFeatureCollection.features.filter(feature => selectedPoints.includes(feature.properties.s_State));
-
-      const filteredCollection = {
-        type: 'FeatureCollection',
-        features: filteredFeatures
-      };
-
-      if (manyToOneFlowmapLayer) {
-        map.removeLayer(manyToOneFlowmapLayer);
-      }
-
-      manyToOneFlowmapLayer = L.canvasFlowmapLayer(filteredCollection, {
-        originAndDestinationFieldIds: {
-          originUniqueIdField: 'e_locality_id',
-          originGeometry: {
-            x: 'e_lon',
-            y: 'e_lat'
-          },
-          destinationUniqueIdField: 's_state_id',
-          destinationGeometry: {
-            x: 's_lon',
-            y: 's_lat'
-          }
-        },
-        style: function(geoJsonFeature) {
-          if (geoJsonFeature.properties.isOrigin) {
-            return {
-              radius: 3.4,
-              weight: 0.25,
-              color: 'rgb(17, 142, 170)',
-              fillColor: 'rgb(0, 51, 160)',
-              fillOpacity: 0.7
-            };
-          } else {
-            return {
-              radius: 6,
-              weight: 1,
-              color: 'rgb(195, 255, 62)',
-              fillColor: 'rgba(255, 103, 31)',
-              fillOpacity: 0.8
-            };
-          }
-        },
-        canvasBezierStyle: {
-          type: 'classBreaks',
-          field: 'e_Volume',
-          classBreakInfos: [{
-            classMinValue: 0,
-            classMaxValue: 10000,
-            symbol: {
-              strokeStyle: '#ffb81c',
-              lineWidth: 0.5,
-              lineCap: 'round',
-              shadowColor: '#fee8c8',
-              shadowBlur: 2.0
+        // Add the CanvasFlowmapLayer
+        var flowmapLayer = L.canvasFlowmapLayer(geoJsonData, {
+            originAndDestinationFieldIds: {
+                originUniqueIdField: 'origin',
+                originGeometry: {
+                    x: 's_lon',
+                    y: 's_lat'
+                },
+                destinationUniqueIdField: 'destination',
+                destinationGeometry: {
+                    x: 'e_lon',
+                    y: 'e_lat'
+                }
+            },
+            canvasBezierStyle: {
+                type: 'solid',
+                strokeStyle: '#0000FF',
+                lineWidth: 1,
+                lineCap: 'round',
+                lineJoin: 'round'
             }
-          }, {
-            classMinValue: 10001,
-            classMaxValue: 160000,
-            symbol: {
-              strokeStyle: '#ff671f',
-              lineWidth: 1.5,
-              lineCap: 'round',
-              shadowColor: '#fdbb84',
-              shadowBlur: 2.0
-            }
-          }, {
-            classMinValue: 160001,
-            classMaxValue: 10000000,
-            symbol: {
-              strokeStyle: '#d22630',
-              lineWidth: 3,
-              lineCap: 'round',
-              shadowColor: '#e34a33',
-              shadowBlur: 2.0
-            }
-          }],
-          defaultSymbol: {
-            strokeStyle: '#e7e1ef',
-            lineWidth: 0.5,
-            lineCap: 'round',
-            shadowColor: '#e7e1ef',
-            shadowBlur: 1.5
-          },
-        },
-        pathDisplayMode: 'selection',
-        animationStarted: true,
-        animationEasingFamily: 'Linear',
-        animationEasingType: 'None',
-        animationDuration: 2000,
-        onEachFeature: TooltipName,
-      }).addTo(map);
-    }
-
-    // create tooltip function on hover
-    function TooltipName(feature, layer) {
-      layer.on('mouseover', function(e) {
-        this.openPopup();
-      });
-      layer.on('mouseout', function(e) {
-        this.closePopup();
-      });
-      if (layer.options.radius === 6) {
-        layer.bindTooltip("Destination Border Point : " + feature.properties.s_State);
-      } else {
-        layer.bindTooltip("Origin Province : " + feature.properties.e_locality);
-      }
-    };
-
-    manyToOneFlowmapLayer.on('mouseover', function(e) {
-      if (e.sharedOriginFeatures.length) {
-        manyToOneFlowmapLayer.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
-      }
-      if (e.sharedDestinationFeatures.length) {
-        manyToOneFlowmapLayer.selectFeaturesForPathDisplay(e.sharedDestinationFeatures, 'SELECTION_NEW');
-      }
-    });
-
-    // Adding Legend to the map
-    var legend = L.control({
-      position: 'bottomleft'
-    });
-    legend.onAdd = function(map) {
-      var legend = L.DomUtil.create('div', 'legend');
-      legend.innerHTML =
-        '<div style="width:17px;height:17px;background:rgba(255, 103, 31, 0.8);float:left;margin-right:10px;border-radius:30px"></div>' + '<span style="float:left;margin-top:1px; font-weight:bold"> Border Point </span>' + '<br/><br/>' +
-        '<div style="width:17px;height:17px;background:rgba(0, 51, 160, 0.8);float:left;margin-right:10px;border-radius:30px"></div>' + '<span style="float:left;margin-top:1px; font-weight:bold"> Province of Origin </span>' + '<br/><br/>' +
-        '<span style="font-size: 14px"> Flow:</span><br/>' +
-        '<div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div><span style="float:left; font-weight:bold"> < 10,000</span><br/>' +
-        '<div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div><span style="float:left; font-weight:bold">10,001 - 160,000</span><br/>' +
-        '<div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div><span style="float:left; font-weight:bold"> > 160,000</span><br/>';
-      return legend;
-    };
-    legend.addTo(map);
-  </script>
-
+        }).addTo(map);
+    </script>
 </body>
-
 </html>
- 
