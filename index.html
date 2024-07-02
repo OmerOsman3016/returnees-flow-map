@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -26,11 +26,30 @@
       border-radius: 5px;
       padding: 8px;
     }
+
+    #borderPointFilter {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 1000;
+      background: white;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #borderPointFilter label {
+      display: block;
+    }
   </style>
 </head>
 
 <body>
   <div id="map"></div>
+  <div id="borderPointFilter">
+    <h4>Filter by Border Point</h4>
+    <div id="checkboxes"></div>
+  </div>
 
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   <script src="https://unpkg.com/@tweenjs/tween.js@18.6.4/dist/tween.umd.js"></script>
@@ -65,6 +84,9 @@
     addGeoJsonLayer('./data/iran.geojson', map, "#ff7800");
     addGeoJsonLayer('./data/pakistan.geojson', map, "#DC7633", 20);
 
+    var borderPoints = {};
+    var manyToOneFlowmapLayer;
+
     Papa.parse('./data/data.csv', {
       download: true,
       header: true,
@@ -74,6 +96,7 @@
         var geoJsonFeatureCollection = {
           type: 'FeatureCollection',
           features: results.data.map(function(datum) {
+            borderPoints[datum.s_state_id] = datum.s_State;
             return {
               type: 'Feature',
               geometry: {
@@ -81,11 +104,11 @@
                 coordinates: [datum.s_lon, datum.s_lat]
               },
               properties: datum
-            }
+            };
           })
         };
 
-        var manyToOneFlowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
+        manyToOneFlowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
           originAndDestinationFieldIds: {
             originUniqueIdField: 'e_locality_id',
             originGeometry: {
@@ -167,6 +190,9 @@
           onEachFeature: TooltipName,
         }).addTo(map);
 
+        // Populate the filter checkboxes
+        populateCheckboxes(borderPoints);
+
         // Automatically select and display the flow paths for the specified border point
         setTimeout(function() {
           manyToOneFlowmapLayer.selectFeaturesForPathDisplayById('s_state_id', 'AFG5', 'SELECTION_NEW'); // Replace 'AFG5' with the correct s_state_id
@@ -214,8 +240,31 @@
       return legend;
     };
     legend.addTo(map);
+
+    function populateCheckboxes(borderPoints) {
+      var checkboxesDiv = document.getElementById('checkboxes');
+      for (var id in borderPoints) {
+        var checkboxLabel = document.createElement('label');
+        checkboxLabel.innerHTML = '<input type="checkbox" value="' + id + '" checked>' + borderPoints[id];
+        checkboxLabel.querySelector('input').addEventListener('change', updateFlowmapLayer);
+        checkboxesDiv.appendChild(checkboxLabel);
+      }
+    }
+
+    function updateFlowmapLayer() {
+      var selectedIds = Array.from(document.querySelectorAll('#checkboxes input:checked')).map(function(input) {
+        return input.value;
+      });
+
+      manyToOneFlowmapLayer.clearAllPathSelections();
+
+      selectedIds.forEach(function(id) {
+        manyToOneFlowmapLayer.selectFeaturesForPathDisplayById('s_state_id', id, 'SELECTION_NEW');
+      });
+    }
   </script>
 
 </body>
 
 </html>
+ 
