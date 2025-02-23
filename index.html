@@ -107,9 +107,12 @@
       dynamicTyping: true,
       skipEmptyLines: true,
       complete: (results) => {
+        // Filter data to include only records where s_state_id is SD15
+        const filteredData = results.data.filter(datum => datum.s_state_id === "SD15");
+
         const geoJsonFeatureCollection = {
           type: 'FeatureCollection',
-          features: results.data.map(datum => ({
+          features: filteredData.map(datum => ({
             type: 'Feature',
             geometry: { type: 'Point', coordinates: [datum.s_lon, datum.s_lat] },
             properties: datum
@@ -173,28 +176,6 @@
         flowmapLayer.selectFeaturesForPathDisplayById('s_state_id', "SD15", true, 'SELECTION_NEW');
       }
     });
-/*
-    // Add legend to the map
-    const legend = L.control({ position: 'bottomleft' });
-    legend.onAdd = () => {
-      const div = L.DomUtil.create('div', 'legend');
-      div.innerHTML = `
-        <div style="width:17px;height:17px;background:rgba(255, 103, 31, 0.8);float:left;margin-right:10px;border-radius:30px"></div>
-        <span style="float:left;margin-top:1px;font-weight:bold">State of Displacement</span><br/><br/>
-        <div style="width:17px;height:17px;background:rgba(0, 51, 160, 0.8);float:left;margin-right:10px;border-radius:30px"></div>
-        <span style="float:left;margin-top:1px;font-weight:bold">State of Return</span><br/><br/>
-        <span style="font-size:14px">Displacement flow:</span><br/>
-        <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> < 80,000</span><br/>
-        <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold">80,001 - 160,000</span><br/>
-        <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> > 160,000</span><br/>
-      `;
-      return div;
-    };
-    legend.addTo(map);
-    */
   </script>
 </body>
 
