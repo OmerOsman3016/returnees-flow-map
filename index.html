@@ -80,7 +80,7 @@ admn0.addTo(map);
         .featureLayer({
           url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
           where: "ADMLEVEL = 1",
-          style: { color: "gray", weight: 1,  dashArray: "1, 2", dashOffset: "2" }
+          style: { color: "gray", weight: 1.5,  dashArray: "1, 2", dashOffset: "2" }
         });
 
         admn1.addTo(map);
@@ -233,10 +233,15 @@ admn0.addTo(map);
 
         // immediately select an origin point for Bezier path display,
         // instead of waiting for the first user click event to fire
+	      // Loop through all features and activate paths to SD15
+geoJsonFeatureCollection.features.forEach(feature => {
+  oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', "SD15", true, 'SELECTION_ADD');
+});
+/*
         oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', "SD15", true, 'SELECTION_NEW');
       }
     });
-
+*/
     	//Adding Legend to the map
 	var legend = L.control({position: 'bottomleft'});
 	legend.onAdd = function (map) {
