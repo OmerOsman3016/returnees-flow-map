@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -12,64 +12,56 @@
 
   <style>
     body {
-      margin: 0;
+      margin: 20px;
       padding: 0;
       font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
     }
 
     #title {
       text-align: left;
       padding: 20px;
       background-color: #0033A0;
-      color: #FFFFFF;
+      margin-bottom: 20px;
+    }
+
+    #title h1 {
+      margin: 0;
       font-size: 24px;
-    }
-
-    #container {
-      display: flex;
-      flex: 1;
-    }
-
-    #sidebar {
-      width: 300px;
-      background-color: #f4f4f4;
-      padding: 20px;
-      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-      overflow-y: auto;
+      color: #FFFFFF;
     }
 
     #map {
-      flex: 1;
-      height: calc(100vh - 120px);
+      height: calc(100vh - 170px); /* 120px + 50px */
+      margin-top: 10px;
+      height: 500px;
+      width: 100%;
     }
 
-    footer {
-      background-color: #0033A0;
-      color: #FFFFFF;
-      text-align: left;
-      padding: 10px;
-      font-size: 14px;
+    #displacementCard {
+      position: absolute;
+      bottom: 50px;
+      right: 20px;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
     }
 
     .legend {
       background: #fff;
       border-radius: 5px;
       padding: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
-    h2 {
-      margin-top: 0;
-      font-size: 20px;
-      color: #0033A0;
-    }
-
-    p {
+    footer {
+      background-color: #0033A0;
+      color: #FFFFFF;
+      text-align: left;
+      padding: 5px;
+      margin-top: 5px;
       font-size: 14px;
-      line-height: 1.5;
     }
   </style>
 </head>
@@ -79,33 +71,7 @@
     <h1>Sudan | Displacement Tracking Matrix - Returnees Flow</h1>
   </div>
 
-  <div id="container">
-    <!-- Sidebar -->
-    <div id="sidebar">
-      <h2>About This Map</h2>
-      <p>This map visualizes the flow of returnees in Sudan. The data is sourced from the Displacement Tracking Matrix (DTM).</p>
-      <h2>Filters</h2>
-      <p>Add filters here (e.g., by region, volume, or time period).</p>
-      <h2>Legend</h2>
-      <div class="legend">
-        <div style="width:17px;height:17px;background:rgba(255, 103, 31, 0.8);float:left;margin-right:10px;border-radius:30px"></div>
-        <span style="float:left;margin-top:1px;font-weight:bold">State of Displacement</span><br/><br/>
-        <div style="width:17px;height:17px;background:rgba(0, 51, 160, 0.8);float:left;margin-right:10px;border-radius:30px"></div>
-        <span style="float:left;margin-top:1px;font-weight:bold">State of Return</span><br/><br/>
-        <span style="font-size:14px">Returnee Flow Volume:</span><br/>
-        <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> < 50,000</span><br/>
-        <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold">50,001 - 100,000</span><br/>
-        <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> > 100,000</span><br/>
-      </div>
-    </div>
-
-    <!-- Map -->
-    <div id="map"></div>
-  </div>
-
+  <div id="map"></div>
   <footer>
     <p>&copy; 2023 Your Organization Name. All rights reserved.</p>
   </footer>
@@ -114,29 +80,8 @@
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   <script src="https://unpkg.com/esri-leaflet@3.0.0/dist/esri-leaflet.js"></script>
   <script src="https://unpkg.com/@tweenjs/tween.js@18.6.4/dist/tween.umd.js"></script>
+  <script src="./src/CanvasFlowmapLayer.js"></script>
   <script src="https://unpkg.com/papaparse@5.3.0/papaparse.min.js"></script>
-
-  <!-- CanvasFlowmapLayer Script -->
-  <script>
-    // Mock CanvasFlowmapLayer for demonstration purposes
-    L.CanvasFlowmapLayer = L.Layer.extend({
-      initialize: function (data, options) {
-        this._data = data;
-        this._options = options;
-      },
-      onAdd: function (map) {
-        this._map = map;
-        // Add your custom rendering logic here
-      },
-      onRemove: function (map) {
-        // Clean up logic here
-      }
-    });
-
-    L.canvasFlowmapLayer = function (data, options) {
-      return new L.CanvasFlowmapLayer(data, options);
-    };
-  </script>
 
   <script>
     // Initialize the map
@@ -166,79 +111,112 @@
       style: { color: "LightSteelBlue", weight: 0.25 }
     }).addTo(map);
 
-    // Mock CSV data for demonstration
-    const mockData = `s_state_id,s_lat,s_lon,e_locality_id,e_lat,e_lon,e_Volume,s_State,e_locality,isOrigin
-SD15,15.5,32.5,SD01,16.5,31.5,75000,Khartoum,North Kordofan,true
-SD15,15.5,32.5,SD02,14.5,30.5,120000,Khartoum,South Kordofan,true
-SD01,16.5,31.5,SD15,15.5,32.5,50000,North Kordofan,Khartoum,false`;
+    // Store the flowmap layer globally
+    let flowmapLayer;
 
     // Parse CSV data and create flow map layer
-    const results = Papa.parse(mockData, {
+    Papa.parse('./data/data.csv', {
+      download: true,
       header: true,
       dynamicTyping: true,
-      skipEmptyLines: true
+      skipEmptyLines: true,
+      complete: (results) => {
+        const geoJsonFeatureCollection = {
+          type: 'FeatureCollection',
+          features: results.data.map(datum => ({
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: [datum.s_lon, datum.s_lat] },
+            properties: datum
+          }))
+        };
+
+        flowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
+          originAndDestinationFieldIds: {
+            originUniqueIdField: 's_state_id',
+            originGeometry: { x: 's_lon', y: 's_lat' },
+            destinationUniqueIdField: 'e_locality_id',
+            destinationGeometry: { x: 'e_lon', y: 'e_lat' }
+          },
+          style: (feature) => ({
+            radius: 6,
+            weight: 1,
+            color: feature.properties.isOrigin ? 'rgb(17, 142, 170)' : 'rgb(195, 255, 62)',
+            fillColor: feature.properties.isOrigin ? 'rgba(0, 51, 160)' : 'rgb(255, 103, 31)',
+            fillOpacity: feature.properties.isOrigin ? 0.8 : 0.7
+          }),
+          canvasBezierStyle: {
+            type: 'classBreaks',
+            field: 'e_Volume',
+            classBreakInfos: [
+              { classMinValue: 1, classMaxValue: 50000, symbol: { strokeStyle: '#ffb81c', lineWidth: 0.5, lineCap: 'round', shadowColor: '#fee8c8', shadowBlur: 2.0 } },
+              { classMinValue: 50001, classMaxValue: 100000, symbol: { strokeStyle: '#ff671f', lineWidth: 1.5, lineCap: 'round', shadowColor: '#fdbb84', shadowBlur: 2.0 } },
+              { classMinValue: 100001, classMaxValue: 200000, symbol: { strokeStyle: '#d22630', lineWidth: 3, lineCap: 'round', shadowColor: '#e34a33', shadowBlur: 2.0 } }
+            ],
+            defaultSymbol: { strokeStyle: '#e7e1ef', lineWidth: 0.5, lineCap: 'round', shadowColor: '#e7e1ef', shadowBlur: 1.5 }
+          },
+          pathDisplayMode: 'all',
+          animationStarted: true,
+          animationEasingFamily: 'Linear',
+          animationEasingType: 'None',
+          animationDuration: 3000,
+          onEachFeature: addTooltip
+        }).addTo(map);
+
+        // Add tooltip and popup to features
+        function addTooltip(feature, layer) {
+          const tooltipContent = feature.properties.isOrigin
+            ? `State of Displacement: ${feature.properties.s_State}<br>Returnees: ${feature.properties.e_Volume}`
+           : `State of Return: ${feature.properties.e_locality}<br>Returnees: ${feature.properties.e_Volume}`;  
+
+          layer.bindTooltip(tooltipContent);
+          layer.on('mouseover', () => layer.openTooltip());
+          layer.on('mouseout', () => layer.closeTooltip());
+
+          // Add popup
+          const popupContent = feature.properties.isOrigin
+            ? `<b>State of Displacement:</b> ${feature.properties.s_State}<br>
+               <b>Returnees:</b> ${feature.properties.e_Volume}`
+            : `<b>State of Return:</b> ${feature.properties.e_locality}<br>
+               <b>Returnees:</b> ${feature.properties.e_Volume}`;
+
+          layer.bindPopup(popupContent);
+        }
+
+        // Highlight paths on mouseover
+        flowmapLayer.on('mouseover', (e) => {
+          if (e.sharedOriginFeatures.length) {
+            flowmapLayer.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
+          }
+          if (e.sharedDestinationFeatures.length) {
+            flowmapLayer.selectFeaturesForPathDisplay(e.sharedDestinationFeatures, 'SELECTION_NEW');
+          }
+        });
+
+        // Select initial feature for path display
+        flowmapLayer.selectFeaturesForPathDisplayById('s_state_id', "SD15", true, 'SELECTION_NEW');
+      }
     });
 
-    const geoJsonFeatureCollection = {
-      type: 'FeatureCollection',
-      features: results.data.map(datum => ({
-        type: 'Feature',
-        geometry: { type: 'Point', coordinates: [datum.s_lon, datum.s_lat] },
-        properties: datum
-      }))
+    // Add legend to the map
+    const legend = L.control({ position: 'bottomleft' });
+    legend.onAdd = () => {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = `
+        <div style="width:17px;height:17px;background:rgba(255, 103, 31, 0.8);float:left;margin-right:10px;border-radius:30px"></div>
+        <span style="float:left;margin-top:1px;font-weight:bold">State of Displacement</span><br/><br/>
+        <div style="width:17px;height:17px;background:rgba(0, 51, 160, 0.8);float:left;margin-right:10px;border-radius:30px"></div>
+        <span style="float:left;margin-top:1px;font-weight:bold">State of Return</span><br/><br/>
+        <span style="font-size:14px">Returnee Flow Volume:</span><br/>
+        <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold"> < 50,000</span><br/>
+        <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold">50,001 - 100,000</span><br/>
+        <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold"> > 100,000</span><br/>
+      `;
+      return div;
     };
-
-    const flowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
-      originAndDestinationFieldIds: {
-        originUniqueIdField: 's_state_id',
-        originGeometry: { x: 's_lon', y: 's_lat' },
-        destinationUniqueIdField: 'e_locality_id',
-        destinationGeometry: { x: 'e_lon', y: 'e_lat' }
-      },
-      style: (feature) => ({
-        radius: 6,
-        weight: 1,
-        color: feature.properties.isOrigin ? 'rgb(17, 142, 170)' : 'rgb(195, 255, 62)',
-        fillColor: feature.properties.isOrigin ? 'rgba(0, 51, 160)' : 'rgb(255, 103, 31)',
-        fillOpacity: feature.properties.isOrigin ? 0.8 : 0.7
-      }),
-      canvasBezierStyle: {
-        type: 'classBreaks',
-        field: 'e_Volume',
-        classBreakInfos: [
-          { classMinValue: 1, classMaxValue: 50000, symbol: { strokeStyle: '#ffb81c', lineWidth: 0.5, lineCap: 'round', shadowColor: '#fee8c8', shadowBlur: 2.0 } },
-          { classMinValue: 50001, classMaxValue: 100000, symbol: { strokeStyle: '#ff671f', lineWidth: 1.5, lineCap: 'round', shadowColor: '#fdbb84', shadowBlur: 2.0 } },
-          { classMinValue: 100001, classMaxValue: 200000, symbol: { strokeStyle: '#d22630', lineWidth: 3, lineCap: 'round', shadowColor: '#e34a33', shadowBlur: 2.0 } }
-        ],
-        defaultSymbol: { strokeStyle: '#e7e1ef', lineWidth: 0.5, lineCap: 'round', shadowColor: '#e7e1ef', shadowBlur: 1.5 }
-      },
-      pathDisplayMode: 'all',
-      animationStarted: true,
-      animationEasingFamily: 'Linear',
-      animationEasingType: 'None',
-      animationDuration: 3000,
-      onEachFeature: addTooltip
-    }).addTo(map);
-
-    // Add tooltip and popup to features
-    function addTooltip(feature, layer) {
-      const tooltipContent = feature.properties.isOrigin
-        ? `State of Displacement: ${feature.properties.s_State}<br>Returnees: ${feature.properties.e_Volume}`
-        : `State of Return: ${feature.properties.e_locality}<br>Returnees: ${feature.properties.e_Volume}`;
-
-      layer.bindTooltip(tooltipContent);
-      layer.on('mouseover', () => layer.openTooltip());
-      layer.on('mouseout', () => layer.closeTooltip());
-
-      // Add popup
-      const popupContent = feature.properties.isOrigin
-        ? `<b>State of Displacement:</b> ${feature.properties.s_State}<br>
-           <b>Returnees:</b> ${feature.properties.e_Volume}`
-        : `<b>State of Return:</b> ${feature.properties.e_locality}<br>
-           <b>Returnees:</b> ${feature.properties.e_Volume}`;
-
-      layer.bindPopup(popupContent);
-    }
+    legend.addTo(map);
   </script>
 </body>
 
