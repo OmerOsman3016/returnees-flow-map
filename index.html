@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -12,56 +12,59 @@
 
   <style>
     body {
-      margin: 20px;
+      margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
     }
 
     #title {
       text-align: left;
       padding: 20px;
       background-color: #0033A0;
-      margin-bottom: 20px;
+      color: #FFFFFF;
+      font-size: 24px;
     }
 
-    #title h1 {
-      margin: 0;
-      font-size: 24px;
-      color: #FFFFFF;
+    #main-container {
+      display: flex;
+      flex: 1;
+    }
+
+    #sidebar {
+      width: 300px; /* Fixed width for the sidebar */
+      background-color: #f4f4f4;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      overflow-y: auto; /* Enable scrolling if content overflows */
+    }
+
+    #map-container {
+      flex: 1; /* Map container takes up remaining space */
+      display: flex;
+      flex-direction: column;
     }
 
     #map {
-      height: calc(100vh - 170px); /* 120px + 50px */
-      margin-top: 10px;
-      height: 500px;
-      width: 100%;
-    }
-
-    #displacementCard {
-      position: absolute;
-      bottom: 50px;
-      right: 20px;
-      background: #fff;
-      border: 1px solid #ccc;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
-    }
-
-    .legend {
-      background: #fff;
-      border-radius: 5px;
-      padding: 8px;
+      flex: 1; /* Map takes up remaining space */
+      height: 100%; /* Full height of the container */
     }
 
     footer {
       background-color: #0033A0;
       color: #FFFFFF;
       text-align: left;
-      padding: 5px;
-      margin-top: 5px;
+      padding: 10px;
       font-size: 14px;
+    }
+
+    .legend {
+      background: #fff;
+      border-radius: 5px;
+      padding: 8px;
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -71,7 +74,33 @@
     <h1>Sudan | Displacement Tracking Matrix - Returnees Flow</h1>
   </div>
 
-  <div id="map"></div>
+  <div id="main-container">
+    <!-- Sidebar -->
+    <div id="sidebar">
+      <h2>Sidebar Title</h2>
+      <p>This is the sidebar content. You can add filters, descriptions, or other controls here.</p>
+      <div class="legend">
+        <h3>Legend</h3>
+        <div style="width:17px;height:17px;background:rgba(255, 103, 31, 0.8);float:left;margin-right:10px;border-radius:30px"></div>
+        <span style="float:left;margin-top:1px;font-weight:bold">State of Displacement</span><br/><br/>
+        <div style="width:17px;height:17px;background:rgba(0, 51, 160, 0.8);float:left;margin-right:10px;border-radius:30px"></div>
+        <span style="float:left;margin-top:1px;font-weight:bold">State of Return</span><br/><br/>
+        <span style="font-size:14px">Returnee Flow Volume:</span><br/>
+        <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold"> < 50,000</span><br/>
+        <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold">50,001 - 100,000</span><br/>
+        <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold"> > 100,000</span><br/>
+      </div>
+    </div>
+
+    <!-- Map Container -->
+    <div id="map-container">
+      <div id="map"></div>
+    </div>
+  </div>
+
   <footer>
     <p>&copy; 2023 Your Organization Name. All rights reserved.</p>
   </footer>
@@ -121,6 +150,11 @@
       dynamicTyping: true,
       skipEmptyLines: true,
       complete: (results) => {
+        if (results.errors.length > 0) {
+          console.error('Error parsing CSV:', results.errors);
+          return;
+        }
+
         const geoJsonFeatureCollection = {
           type: 'FeatureCollection',
           features: results.data.map(datum => ({
@@ -148,11 +182,10 @@
             type: 'classBreaks',
             field: 'e_Volume',
             classBreakInfos: [
-              { classMinValue: 1, classMaxValue: 50000, symbol: { strokeStyle: '#ffb81c', lineWidth: 0.5, lineCap: 'round', shadowColor: '#fee8c8', shadowBlur: 2.0 } },
-              { classMinValue: 50001, classMaxValue: 100000, symbol: { strokeStyle: '#ff671f', lineWidth: 1.5, lineCap: 'round', shadowColor: '#fdbb84', shadowBlur: 2.0 } },
-              { classMinValue: 100001, classMaxValue: 200000, symbol: { strokeStyle: '#d22630', lineWidth: 3, lineCap: 'round', shadowColor: '#e34a33', shadowBlur: 2.0 } }
-            ],
-            defaultSymbol: { strokeStyle: '#e7e1ef', lineWidth: 0.5, lineCap: 'round', shadowColor: '#e7e1ef', shadowBlur: 1.5 }
+              { classMinValue: 1, classMaxValue: 50000, symbol: { strokeStyle: '#ffb81c', lineWidth: 0.5 } },
+              { classMinValue: 50001, classMaxValue: 100000, symbol: { strokeStyle: '#ff671f', lineWidth: 1.5 } },
+              { classMinValue: 100001, classMaxValue: 200000, symbol: { strokeStyle: '#d22630', lineWidth: 3 } }
+            ]
           },
           pathDisplayMode: 'all',
           animationStarted: true,
@@ -194,29 +227,11 @@
 
         // Select initial feature for path display
         flowmapLayer.selectFeaturesForPathDisplayById('s_state_id', "SD15", true, 'SELECTION_NEW');
+      },
+      error: (error) => {
+        console.error('Failed to load CSV:', error);
       }
     });
-
-    // Add legend to the map
-    const legend = L.control({ position: 'bottomleft' });
-    legend.onAdd = () => {
-      const div = L.DomUtil.create('div', 'legend');
-      div.innerHTML = `
-        <div style="width:17px;height:17px;background:rgba(255, 103, 31, 0.8);float:left;margin-right:10px;border-radius:30px"></div>
-        <span style="float:left;margin-top:1px;font-weight:bold">State of Displacement</span><br/><br/>
-        <div style="width:17px;height:17px;background:rgba(0, 51, 160, 0.8);float:left;margin-right:10px;border-radius:30px"></div>
-        <span style="float:left;margin-top:1px;font-weight:bold">State of Return</span><br/><br/>
-        <span style="font-size:14px">Returnee Flow Volume:</span><br/>
-        <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> < 50,000</span><br/>
-        <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold">50,001 - 100,000</span><br/>
-        <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> > 100,000</span><br/>
-      `;
-      return div;
-    };
-    legend.addTo(map);
   </script>
 </body>
 
