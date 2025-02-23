@@ -233,15 +233,12 @@ admn0.addTo(map);
 
         // immediately select an origin point for Bezier path display,
         // instead of waiting for the first user click event to fire
-	      // Loop through all features and activate paths to SD15
-geoJsonFeatureCollection.features.forEach(feature => {
-  oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', "SD15", true, 'SELECTION_ADD');
-});
-/*
-        oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('e_locality_id', "SD15", true, 'SELECTION_NEW');
+ 
+ 
+        oneToManyFlowmapLayer.selectFeaturesForPathDisplayById('s_state_id', "SD15", true, 'SELECTION_NEW');
       }
     });
-*/
+ 
     	//Adding Legend to the map
 	var legend = L.control({position: 'bottomleft'});
 	legend.onAdd = function (map) {
