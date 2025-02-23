@@ -71,7 +71,7 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
    var admn0 = L.esri.featureLayer({
   url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
   where: "ADMLEVEL = 0",
-  style: { color: "black", weight: 3, dashArray: "5, 5" } // Dashed black border
+  style: { color: "gray", weight: 2, dashArray: "2, 3" } // Dashed black border
 });
 admn0.addTo(map);
 
@@ -80,7 +80,7 @@ admn0.addTo(map);
         .featureLayer({
           url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
           where: "ADMLEVEL = 1",
-          style: { color: "gray", weight: 1.5,  dashArray: "1, 2", dashOffset: "2" }
+          style: { color: "gray", weight: 1,  dashArray: "1, 2", dashOffset: "2" }
         });
 
         admn1.addTo(map);
