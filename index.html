@@ -119,9 +119,9 @@
         flowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
           originAndDestinationFieldIds: {
             originUniqueIdField: 'e_locality_id',
-            originGeometry: { x: 's_lon', y: 's_lat' },
+            originGeometry: { x: 'e_lon', y: 'e_lat' },
             destinationUniqueIdField: 's_state_id',
-            destinationGeometry: { x: 'e_lon', y: 'e_lat' }
+            destinationGeometry: { x: 's_lon', y: 's_lat' }
           },
           style: (feature) => ({
             radius: 6,
