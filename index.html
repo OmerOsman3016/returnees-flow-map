@@ -83,6 +83,29 @@
       where: "ADMLEVEL = 0",
       style: { color: "gray", weight: 2, dashArray: "2, 3" }
     }).addTo(map);
+       
+    var admn1 = L.esri
+        .featureLayer({
+          url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
+          where: "ADMLEVEL = 1",
+          style: { color: "gray", weight: 1.5,  dashArray: "1, 2", dashOffset: "2" }
+        });
+
+        admn1.addTo(map);
+	  
+
+    var admn2 = L.esri
+        .featureLayer({
+          url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
+          where: "ADMLEVEL = 2",
+          //style: { color: "gray", weight: 1,  dashArray: "2, 3", dashOffset: "2" }
+          style: { color: "gray", weight: 0.25 }
+        });
+
+        admn2.addTo(map);
+    
+   
+
 
     // Parse CSV data and create flow map layer
     Papa.parse('./data/data.csv', {
