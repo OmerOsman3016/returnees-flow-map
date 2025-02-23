@@ -18,7 +18,7 @@
     }
 
     #title {
-      text-align: left;
+      text-align: center;
       padding: 20px;
       background-color: #f0f0f0;
       margin-bottom: 20px;
@@ -31,8 +31,28 @@
     }
 
     #map {
-      height: calc(100vh - 120px);
+      height: calc(100vh - 180px);
       margin-top: 20px;
+    }
+
+    #controls {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #controls button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #2a9d8f;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    #controls button:hover {
+      background-color: #21867a;
     }
 
     #displacementCard {
@@ -57,8 +77,15 @@
 
 <body>
   <div id="title">
-    <h1>Sudan | Displacement Tracking Matrix-Returnees Flow</h1>
+    <h1>Sudan | Displacement Tracking Matrix - Returnees Flow</h1>
   </div>
+
+  <!-- Control Buttons -->
+  <div id="controls">
+    <button onclick="highlightAdmin1('RSF', '#ff0000')">Show RSF Areas (Red)</button>
+    <button onclick="highlightAdmin1('SAF', '#0000ff')">Show SAF Areas (Blue)</button>
+  </div>
+
   <div id="map"></div>
 
   <!-- External Scripts -->
@@ -77,35 +104,27 @@
       attribution: '&copy; CartoDB'
     }).addTo(map);
 
-    // Add administrative boundaries layer
+    // Add administrative boundaries layers
     const admn0 = L.esri.featureLayer({
       url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
       where: "ADMLEVEL = 0",
       style: { color: "gray", weight: 2, dashArray: "2, 3" }
     }).addTo(map);
-       
-    var admn1 = L.esri
-        .featureLayer({
-          url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
-          where: "ADMLEVEL = 1",
-          style: { color: "gray", weight: 1.5,  dashArray: "1, 2", dashOffset: "2" }
-        });
 
-        admn1.addTo(map);
-	  
+    const admn1 = L.esri.featureLayer({
+      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
+      where: "ADMLEVEL = 1",
+      style: { color: "gray", weight: 1.5, dashArray: "1, 2", dashOffset: "2" }
+    }).addTo(map);
 
-    var admn2 = L.esri
-        .featureLayer({
-          url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
-          where: "ADMLEVEL = 2",
-          //style: { color: "gray", weight: 1,  dashArray: "2, 3", dashOffset: "2" }
-          style: { color: "gray", weight: 0.25 }
-        });
+    const admn2 = L.esri.featureLayer({
+      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
+      where: "ADMLEVEL = 2",
+      style: { color: "gray", weight: 0.25 }
+    }).addTo(map);
 
-        admn2.addTo(map);
-    
-   
-
+    // Store the flowmap layer globally
+    let flowmapLayer;
 
     // Parse CSV data and create flow map layer
     Papa.parse('./data/data.csv', {
@@ -123,7 +142,7 @@
           }))
         };
 
-        const flowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
+        flowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
           originAndDestinationFieldIds: {
             originUniqueIdField: 's_state_id',
             originGeometry: { x: 's_lon', y: 's_lat' },
@@ -180,6 +199,21 @@
         flowmapLayer.selectFeaturesForPathDisplayById('s_state_id', "SD02", true, 'SELECTION_NEW');
       }
     });
+
+    // Function to highlight ADMLEVEL 1 features for RSF or SAF
+    function highlightAdmin1(type, color) {
+      if (!admn1) return;
+
+      // Reset all ADMLEVEL 1 features to default style
+      admn1.setStyle({ color: "gray", weight: 1.5, dashArray: "1, 2", dashOffset: "2" });
+
+      // Define the query based on the type (RSF or SAF)
+      const whereClause = type === 'RSF' ? "ADM1_NAME LIKE '%RSF%'" : "ADM1_NAME LIKE '%SAF%'";
+
+      // Query and highlight the features
+      admn1.setWhere(whereClause);
+      admn1.setStyle({ color: color, weight: 3, dashArray: "0" });
+    }
 
     // Add legend to the map
     const legend = L.control({ position: 'bottomleft' });
