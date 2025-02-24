@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -33,14 +33,73 @@
     }
 
     #infoCard {
-  background: #fff;
-  color: #000;
-  padding: 3px; /* Reduced padding */
-  border-radius: 8px; /* Slightly smaller border radius */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Lighter shadow */
-  text-align: center;
-  font-size: 15px; /* Reduced font size */
-  width: 250px; /* Set a fixed width */
+      background: #fff;
+      color: #000;
+      padding: 15px; /* Adjusted padding for better spacing */
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      font-size: 15px;
+      width: 250px;
+      transition: all 0.3s ease; /* Smooth transition for hover effects */
+      border: 1px solid #e0e0e0; /* Subtle border */
+      margin: 10px; /* Added margin for spacing */
+      cursor: pointer; /* Indicates interactivity */
+    }
+
+    /* Hover effect */
+    #infoCard:hover {
+      transform: translateY(-5px); /* Slight lift on hover */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+      background: #f9f9f9; /* Slight background color change */
+    }
+
+    /* Responsive design for smaller screens */
+    @media (max-width: 768px) {
+      #infoCard {
+        width: 100%; /* Full width on smaller screens */
+        font-size: 14px; /* Slightly smaller font size */
+        padding: 10px; /* Reduced padding */
+      }
+    }
+
+    /* Add a subtle animation on load */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #infoCard {
+      animation: fadeIn 0.5s ease-in-out; /* Apply the fade-in animation */
+    }
+
+    /* Optional: Add a gradient border for a modern look */
+    #infoCard {
+      position: relative;
+    }
+
+    #infoCard::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #6a11cb, #2575fc);
+      border-radius: 10px;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    #infoCard:hover::before {
+      opacity: 1; /* Show gradient border on hover */
     }
 
     #map {
@@ -192,7 +251,6 @@
           layer.on('mouseout', () => layer.closeTooltip());
 
           // Add popup
-         
           const popupContent = feature.properties.isOrigin
             ? `<b>State of Displacement:</b> ${feature.properties.s_State}<br>
                <b>Returnees:</b> ${feature.properties.e_Volume}`
@@ -240,4 +298,4 @@
   </script>
 </body>
 
-</html>
+</html> 
