@@ -33,7 +33,7 @@
     #map {
       height: calc(100vh - 170px); /* 120px + 50px */
       margin-top: 10px;
-      height: 800px;
+      height: 750px;
       width: 100%;
     }
 
@@ -85,7 +85,7 @@
 
   <script>
     // Initialize the map
-    const map = L.map('map').setView([16, 31], L.Browser.mobile ? 3 : 5.3);
+    const map = L.map('map').setView([16, 31], L.Browser.mobile ? 3 : 5.5);
 
     // Add base layer
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
