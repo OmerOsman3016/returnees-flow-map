@@ -192,6 +192,7 @@
           layer.on('mouseout', () => layer.closeTooltip());
 
           // Add popup
+         /*
           const popupContent = feature.properties.isOrigin
             ? `<b>State of Displacement:</b> ${feature.properties.s_State}<br>
                <b>Returnees:</b> ${feature.properties.e_Volume}`
@@ -200,7 +201,7 @@
 
           layer.bindPopup(popupContent);
         }
-
+*/
         // Highlight paths on mouseover
         flowmapLayer.on('mouseover', (e) => {
           if (e.sharedOriginFeatures.length) {
