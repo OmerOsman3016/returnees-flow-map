@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -17,17 +17,28 @@
       font-family: Arial, sans-serif;
     }
 
-    #title {
-      text-align: left;
-      padding: 20px;
+    #title-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       background-color: #0033A0;
+      padding: 20px;
+      color: white;
       margin-bottom: 20px;
     }
 
     #title h1 {
       margin: 0;
       font-size: 24px;
-      color: #FFFFFF;
+    }
+
+    #infoCard {
+      background: #fff;
+      color: #000;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      text-align: center;
     }
 
     #map {
@@ -67,8 +78,14 @@
 </head>
 
 <body>
-  <div id="title">
-    <h1>Sudan | Displacement Tracking Matrix - Returnees Flow</h1>
+  <div id="title-container">
+    <div id="title">
+      <h1>Sudan | Displacement Tracking Matrix - Returnees Flow</h1>
+    </div>
+    <div id="infoCard">
+      <p><strong>Latest Update:</strong> February 2025</p>
+      <p><strong>Total Returnees:</strong> 200,000+</p>
+    </div>
   </div>
 
   <div id="map"></div>
