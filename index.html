@@ -59,10 +59,13 @@
     }
 
     #timeline-container {
-      margin-bottom: 20px; /* Add space between the chart and the map */
-      width: 50%;
-      height: 150px;
-    }
+  margin-bottom: 20px; /* Space between the chart and the map */
+  width: 50%;
+  height: 150px;
+  display: flex;
+  justify-content: flex-end; /* Move it to the right */
+  margin-left: auto; /* Ensure it moves to the right */
+}
 
     #map {
       height: calc(130vh - 400px); /* Adjust height to accommodate the chart */
