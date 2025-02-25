@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -9,6 +9,9 @@
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+  <!-- Chart.js CSS (optional) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.css" />
 
   <style>
     body {
@@ -28,8 +31,8 @@
     }
 
     #title h1 {
-      hite-space: pre-line; /* Ensures the text breaks into two lines naturally */
-      text-align: center; /* Centers the title */
+      white-space: pre-line;
+      text-align: center;
       margin: 0;
       font-size: 24px;
     }
@@ -55,47 +58,6 @@
       background: #f9f9f9;
     }
 
-    @media (max-width: 768px) {
-      #infoCard {
-        width: 100%;
-        font-size: 14px;
-        padding: 10px;
-      }
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    #infoCard {
-      animation: fadeIn 0.5s ease-in-out;
-    }
-
-    #infoCard::before {
-      content: '';
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(45deg, #0073e6, #003366);
-      border-radius: 10px;
-      z-index: -1;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    #infoCard:hover::before {
-      opacity: 1;
-    }
-
     #map {
       height: calc(100vh - 220px);
       margin-top: 10px;
@@ -103,22 +65,10 @@
       width: 100%;
     }
 
-    #displacementCard {
-      position: absolute;
-      bottom: 50px;
-      right: 20px;
-      background: #fff;
-      border: 1px solid #ccc;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
-    }
-
-    .legend {
-      background: #fff;
-      border-radius: 5px;
-      padding: 8px;
+    #timeline-container {
+      margin-top: 20px;
+      width: 100%;
+      height: 300px;
     }
 
     footer {
@@ -133,20 +83,27 @@
 </head>
 
 <body>
-   <div id="title-container">
-  <div id="title">
-    <h1>
-      International Organization for Migration | IOM, UN Migration <br>    </h1>
-       <h2>Sudan | Displacement Tracking Matrix - Returnees Flow
-    </h2>
+  <div id="title-container">
+    <div id="title">
+      <h1>
+        International Organization for Migration | IOM, UN Migration <br>
+      </h1>
+      <h2>Sudan | Displacement Tracking Matrix - Returnees Flow
+      </h2>
+    </div>
+    <div id="infoCard">
+      <p><strong>Latest Update:</strong> February 2025</p>
+      <p><strong>Total Returnees:</strong> 200,843+</p>
+    </div>
   </div>
-  <div id="infoCard">
-    <p><strong>Latest Update:</strong> February 2025</p>
-    <p><strong>Total Returnees:</strong> 200,843+</p>
-  </div>
-</div>
 
   <div id="map"></div>
+
+  <!-- Timeline Graph Container -->
+  <div id="timeline-container">
+    <canvas id="timelineChart"></canvas>
+  </div>
+
   <footer>
     <p>&copy; 2025 International Organization for Migration | IOM, UN Migration. Sudan | Displacement Tracking Matrix.</p>
   </footer>
@@ -157,6 +114,7 @@
   <script src="https://unpkg.com/@tweenjs/tween.js@18.6.4/dist/tween.umd.js"></script>
   <script src="./src/CanvasFlowmapLayer.js"></script>
   <script src="https://unpkg.com/papaparse@5.3.0/papaparse.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 
   <script>
     // Initialize the map
@@ -290,6 +248,42 @@
       return div;
     };
     legend.addTo(map);
+
+    // Initialize Timeline Graph
+    const ctx = document.getElementById('timelineChart').getContext('2d');
+    const timelineChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [{
+          label: 'Returnees Over Time',
+          data: [5000, 10000, 15000, 20000, 25000, 30000, 35000, 40000, 45000, 50000, 55000, 60000],
+          borderColor: '#0033A0',
+          backgroundColor: 'rgba(0, 51, 160, 0.2)',
+          borderWidth: 2,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Number of Returnees'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Month'
+            }
+          }
+        }
+      }
+    });
   </script>
 </body>
 
