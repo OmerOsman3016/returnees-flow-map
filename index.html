@@ -59,21 +59,23 @@
     }
 
     #timeline-container {
-      margin-bottom: 20px; /* Space between the chart and the map */
+      margin-bottom: 20px;
       width: 100%;
-      height: 150px;
+      height: 200px; /* Increased height for better visibility */
       display: flex;
-      justify-content: flex-end; /* Move it to the right */
-      margin-left: auto; /* Ensure it moves to the right */
-      border: 2px solid #0033A0; /* Border */
-      background-color: #f9f9f9; /* Background color */
+      justify-content: flex-end;
+      margin-left: auto;
+      border: 2px solid #0033A0;
+      background-color: #f9f9f9;
+      border-radius: 8px; /* Rounded corners */
+      padding: 10px; /* Padding inside the container */
     }
 
     #map {
-      height: calc(130vh - 400px); /* Adjust height to accommodate the chart */
+      height: calc(130vh - 400px);
       width: 100%;
-      border: 2px solid #0033A0; /* Border */
-      background-color: #f9f9f9; /* Background color */
+      border: 2px solid #0033A0;
+      background-color: #f9f9f9;
     }
 
     footer {
@@ -87,14 +89,14 @@
 
     /* BPR Paragraph Styling */
     #bpr-paragraph {
-      border: 2px solid #0033A0; /* Border */
-      padding: 15px; /* Padding */
-      margin: 20px 0; /* Margin */
-      background-color: #f9f9f9; /* Background color */
-      border-radius: 8px; /* Rounded corners */
-      font-size: 14px; /* Font size */
-      line-height: 1.6; /* Line height */
-      color: #333; /* Text color */
+      border: 2px solid #0033A0;
+      padding: 15px;
+      margin: 20px 0;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #333;
     }
   </style>
 </head>
@@ -109,8 +111,8 @@
     <div id="infoCard">
       <p>Latest Update: February 2025</p>
       <p><strong>Total Returnees:</strong> <h3 style="color: #ffb81c;"> 200,843+  </h3></p>
-</div>
-</div>
+    </div>
+  </div>
 
   <!-- BPR Paragraph -->
   <div id="bpr-paragraph">
@@ -276,6 +278,10 @@
 
     // Initialize Timeline Graph
     const ctx = document.getElementById('timelineChart').getContext('2d');
+    const gradient = ctx.createLinearGradient(0, 0, 0, 200);
+    gradient.addColorStop(0, 'rgba(0, 51, 160, 0.8)'); // Top color
+    gradient.addColorStop(1, 'rgba(0, 51, 160, 0.2)'); // Bottom color
+
     const timelineChart = new Chart(ctx, {
       type: 'line',
       data: {
@@ -284,28 +290,66 @@
           label: 'Returnees Over Time',
           data: [5000, 30000, 15000, 20000, 25000, 30000, 25000, 20000, 15000, 100000, 20000, 15000],
           borderColor: '#0033A0',
-          backgroundColor: 'rgba(0, 51, 160, 0.2)',
-          borderWidth: 2,
-          fill: true
+          backgroundColor: gradient, // Use gradient for fill
+          borderWidth: 3,
+          fill: true,
+          pointBackgroundColor: '#0033A0',
+          pointBorderColor: '#fff',
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          tension: 0.4 // Add smooth curves
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        plugins: {
+          tooltip: {
+            backgroundColor: '#0033A0',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            borderColor: '#fff',
+            borderWidth: 1,
+            displayColors: false
+          },
+          legend: {
+            display: false // Hide legend
+          }
+        },
         scales: {
           y: {
             beginAtZero: true,
             title: {
               display: true,
-              text: 'Number of Returnees'
+              text: 'Number of Returnees',
+              color: '#0033A0',
+              font: {
+                size: 14,
+                weight: 'bold'
+              }
+            },
+            grid: {
+              color: '#e0e0e0'
             }
           },
           x: {
             title: {
               display: true,
-              text: 'Month'
+              text: 'Month',
+              color: '#0033A0',
+              font: {
+                size: 14,
+                weight: 'bold'
+              }
+            },
+            grid: {
+              color: '#e0e0e0'
             }
           }
+        },
+        animation: {
+          duration: 2000, // Animation duration
+          easing: 'easeInOutQuart' // Smooth animation
         }
       }
     });
