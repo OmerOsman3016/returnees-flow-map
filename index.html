@@ -1,7 +1,4 @@
- <!DOCTYPE html>
-<html lang="en">
-
-<head>
+ <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <meta name="description" content="Sudan | Displacement Tracking Matrix-Returnees Flow" />
@@ -35,32 +32,35 @@
     #infoCard {
       background: #fff;
       color: #000;
-      padding: 1px;
+      padding: 1px; /* Adjusted padding for better spacing */
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
       text-align: center;
       font-size: 15px;
       width: 250px;
-      transition: all 0.2s ease;
-      border: 1px solid #e0e0e0;
-      margin: 10px;
-      cursor: pointer;
+      transition: all 0.2s ease; /* Smooth transition for hover effects */
+      border: 1px solid #e0e0e0; /* Subtle border */
+      margin: 10px; /* Added margin for spacing */
+      cursor: pointer; /* Indicates interactivity */
     }
 
+    /* Hover effect */
     #infoCard:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      background: #f9f9f9;
+      transform: translateY(-5px); /* Slight lift on hover */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+      background: #f9f9f9; /* Slight background color change */
     }
 
+    /* Responsive design for smaller screens */
     @media (max-width: 768px) {
       #infoCard {
-        width: 100%;
-        font-size: 14px;
-        padding: 10px;
+        width: 100%; /* Full width on smaller screens */
+        font-size: 14px; /* Slightly smaller font size */
+        padding: 10px; /* Reduced padding */
       }
     }
 
+    /* Add a subtle animation on load */
     @keyframes fadeIn {
       from {
         opacity: 0;
@@ -73,7 +73,12 @@
     }
 
     #infoCard {
-      animation: fadeIn 0.5s ease-in-out;
+      animation: fadeIn 0.5s ease-in-out; /* Apply the fade-in animation */
+    }
+
+    /* Optional: Add a gradient border for a modern look */
+    #infoCard {
+      position: relative;
     }
 
     #infoCard::before {
@@ -91,11 +96,11 @@
     }
 
     #infoCard:hover::before {
-      opacity: 1;
+      opacity: 1; /* Show gradient border on hover */
     }
 
     #map {
-      height: calc(100vh - 220px);
+      height: calc(100vh - 220px); /* 120px + 50px */
       margin-top: 10px;
       height: 750px;
       width: 100%;
@@ -137,7 +142,7 @@
     </div>
     <div id="infoCard">
       <p><strong>Latest Update:</strong> February 2025</p>
-      <p><strong>Total Returnees:</strong> <span id="totalReturnees">Loading...</span></p>
+      <p><strong>Total Returnees:</strong> 200,843+</p>
     </div>
   </div>
 
@@ -184,16 +189,6 @@
     // Store the flowmap layer globally
     let flowmapLayer;
 
-    // Function to calculate total returnees for a specific e_locality_id
-    function calculateTotalReturnees(data, localityId) {
-      return data.reduce((total, datum) => {
-        if (datum.e_locality_id === localityId) {
-          return total + (datum.e_Volume || 0);
-        }
-        return total;
-      }, 0);
-    }
-
     // Parse CSV data and create flow map layer
     Papa.parse('./data/data.csv', {
       download: true,
@@ -209,12 +204,6 @@
             properties: datum
           }))
         };
-
-        // Calculate total returnees for a specific e_locality_id
-        const totalReturnees = calculateTotalReturnees(results.data, 'SD15'); // Replace 'SD15' with the desired e_locality_id
-
-        // Update the infoCard with the calculated total
-        document.getElementById('totalReturnees').textContent = `${totalReturnees.toLocaleString()}+`;
 
         flowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
           originAndDestinationFieldIds: {
@@ -247,12 +236,12 @@
           animationDuration: 3000,
           onEachFeature: addTooltip
         }).addTo(map);
-
+  
         // Add tooltip and popup to features
         function addTooltip(feature, layer) {
           const tooltipContent = feature.properties.isOrigin
             ? `State of Displacement: ${feature.properties.s_State}<br>Returnees: ${feature.properties.e_Volume}`
-            : `State of Return: ${feature.properties.e_locality}<br>Returnees: ${feature.properties.e_Volume}<br>Total Returnees: ${calculateTotalReturnees(results.data, feature.properties.e_locality_id).toLocaleString()}`;
+           : `State of Return: ${feature.properties.e_locality}<br>Returnees: ${feature.properties.e_Volume}`;  
 
           layer.bindTooltip(tooltipContent);
           layer.on('mouseover', () => layer.openTooltip());
@@ -263,12 +252,11 @@
             ? `<b>State of Displacement:</b> ${feature.properties.s_State}<br>
                <b>Returnees:</b> ${feature.properties.e_Volume}`
             : `<b>State of Return:</b> ${feature.properties.e_locality}<br>
-               <b>Returnees:</b> ${feature.properties.e_Volume}<br>
-               <b>Total Returnees:</b> ${calculateTotalReturnees(results.data, feature.properties.e_locality_id).toLocaleString()}`;
+               <b>Returnees:</b> ${feature.properties.e_Volume}`;
 
           layer.bindPopup(popupContent);
         }
-
+ 
         // Highlight paths on mouseover
         flowmapLayer.on('mouseover', (e) => {
           if (e.sharedOriginFeatures.length) {
