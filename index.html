@@ -59,13 +59,13 @@
     }
 
     #timeline-container {
-  margin-bottom: 20px; /* Space between the chart and the map */
-  width: 50%;
-  height: 150px;
-  display: flex;
-  justify-content: flex-end; /* Move it to the right */
-  margin-left: auto; /* Ensure it moves to the right */
-}
+      margin-bottom: 20px; /* Space between the chart and the map */
+      width: 50%;
+      height: 150px;
+      display: flex;
+      justify-content: flex-end; /* Move it to the right */
+      margin-left: auto; /* Ensure it moves to the right */
+    }
 
     #map {
       height: calc(130vh - 400px); /* Adjust height to accommodate the chart */
@@ -80,6 +80,18 @@
       margin-top: 5px;
       font-size: 12px;
     }
+
+    /* BPR Paragraph Styling */
+    #bpr-paragraph {
+      border: 2px solid #0033A0; /* Border */
+      padding: 15px; /* Padding */
+      margin: 20px 0; /* Margin */
+      background-color: #f9f9f9; /* Background color */
+      border-radius: 8px; /* Rounded corners */
+      font-size: 14px; /* Font size */
+      line-height: 1.6; /* Line height */
+      color: #333; /* Text color */
+    }
   </style>
 </head>
 
@@ -87,13 +99,22 @@
   <div id="title-container">
     <div id="title">
       <h1>
-       Sudan | Displacement Tracking Matrix - Returnees Flow
+        Sudan | Displacement Tracking Matrix - Returnees Flow
       </h1>
     </div>
     <div id="infoCard">
       <p><strong>Latest Update:</strong> February 2025</p>
       <p><strong>Total Returnees:</strong> 200,843+</p>
     </div>
+  </div>
+
+  <!-- BPR Paragraph -->
+  <div id="bpr-paragraph">
+    <p>
+      The Displacement Tracking Matrix (DTM) provides critical data on the movement and trends of returnees in Sudan. 
+      This visualization highlights the flow of returnees across different states, offering insights into displacement 
+      patterns and return trends. The data is updated regularly to ensure accuracy and relevance.
+    </p>
   </div>
 
   <!-- Timeline Graph Container -->
