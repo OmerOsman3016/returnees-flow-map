@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -82,7 +82,6 @@
       display: flex; /* Enables Flexbox */
       flex-direction: column; /* Stacks content vertically */
       justify-content: flex-start; /* Aligns content to the top */
-      text-align: left;
     }
 
     #bpr-paragraph h2 {
@@ -90,12 +89,13 @@
       color: #0033A0;
       font-size: 20px;
       margin-bottom: 15px;
+      text-align: left; /* Align title to the left */
     }
 
     #timeline-container {
       flex: 1;
       max-width: 35%;
-      height: 190px;
+      height: 170px;
       border: 2px solid #0033A0;
       background-color: #f9f9f9;
       border-radius: 8px;
@@ -159,7 +159,7 @@
   <div class="content-container">
     <!-- BPR Paragraph -->
     <div id="bpr-paragraph">
-      <h4>About the Displacement Tracking Matrix (DTM)</h4>
+      <h2>About the Displacement Tracking Matrix (DTM)</h2>
       <p>
         The Displacement Tracking Matrix (DTM) provides critical data on the movement and trends of returnees in Sudan. 
         This visualization highlights the flow of returnees across different states, offering insights into displacement patterns and return trends.
@@ -169,7 +169,10 @@
     </div>
 
     <!-- Timeline Graph Container -->
-     
+    <div id="timeline-container">
+      <h3>Returnees Over Time</h3>
+      <canvas id="timelineChart"></canvas>
+    </div>
   </div>
 
   <!-- Map Container -->
@@ -402,4 +405,4 @@
   </script>
 </body>
 
-</html> 
+</html>
