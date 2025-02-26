@@ -101,6 +101,24 @@
       padding: 10px;
     }
 
+    #timeline-container h2 {
+      margin-top: 0;
+      color: #0033A0;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    #map-container {
+      margin-bottom: 20px;
+    }
+
+    #map-container h2 {
+      margin-top: 0;
+      color: #0033A0;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
     #map {
       height: calc(80vh - 140px);
       width: 100%;
@@ -158,12 +176,16 @@
 
     <!-- Timeline Graph Container -->
     <div id="timeline-container">
+      <h2>Returnees Over Time</h2>
       <canvas id="timelineChart"></canvas>
     </div>
   </div>
 
   <!-- Map Container -->
-  <div id="map"></div>
+  <div id="map-container">
+    <h2>Returnee Flow Map</h2>
+    <div id="map"></div>
+  </div>
 
   <footer>
     <p>&copy; 2025 International Organization for Migration | IOM, UN Migration. Sudan | Displacement Tracking Matrix.</p>
