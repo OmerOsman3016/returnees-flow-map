@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -13,34 +13,42 @@
   <!-- Chart.js CSS (optional) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.css" />
 
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
   <style>
     body {
       margin: 20px;
       padding: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Roboto', Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f4f4f4;
     }
 
     #title-container {
       display: flex;
       justify-content: space-between;
-      align-items: left;
+      align-items: center;
       background-color: #0033A0;
-      padding: 2px;
+      padding: 15px 20px;
       color: white;
       margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     #title h1 {
-      white-space: pre-line;
-      text-align: center;
       margin: 0;
-      font-size: 24px;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
     }
 
     #infoCard {
       background: #fff;
       color: #000;
-      padding: 1px;
+      padding: 15px;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
       text-align: center;
@@ -48,7 +56,6 @@
       width: 250px;
       transition: all 0.2s ease;
       border: 1px solid #e0e0e0;
-      margin: 10px;
       cursor: pointer;
     }
 
@@ -58,7 +65,6 @@
       background: #f9f9f9;
     }
 
-    /* New Layout for Paragraph and Timeline */
     .content-container {
       display: flex;
       justify-content: space-between;
@@ -71,25 +77,26 @@
       flex-shrink: 1;
       max-width: 30%;
       border: 2px solid #0033A0;
-      padding: 15px 30px; /* Reduced top and bottom padding to 20px, left and right remain 40px */
+      padding: 20px;
       background-color: #f9f9f9;
       border-radius: 8px;
       font-size: 14px;
       line-height: 1.6;
       color: #333;
-      margin: 0px 0;
-      text-align: left; /* Aligns text to the left */
-      display: flex; /* Enables Flexbox */
-      flex-direction: column; /* Stacks content vertically */
-      justify-content: flex-start; /* Aligns content to the top */
+      margin: 0;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     #bpr-paragraph h2 {
       margin-top: 0;
       color: #0033A0;
       font-size: 20px;
+      font-weight: 600;
       margin-bottom: 15px;
-      text-align: left; /* Align title to the left */
     }
 
     #timeline-container {
@@ -99,13 +106,15 @@
       border: 2px solid #0033A0;
       background-color: #f9f9f9;
       border-radius: 8px;
-      padding: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     #timeline-container h2 {
       margin-top: 0;
       color: #0033A0;
       font-size: 20px;
+      font-weight: 600;
       margin-bottom: 10px;
     }
 
@@ -118,16 +127,23 @@
       width: 100%;
       border: 2px solid #0033A0;
       background-color: #f9f9f9;
-       border-radius: 8px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     footer {
       background-color: #0033A0;
       color: #FFFFFF;
       text-align: left;
-      padding: 1px;
-      margin-top: 5px;
+      padding: 15px 20px;
+      margin-top: 20px;
       font-size: 12px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    footer p {
+      margin: 0;
     }
 
     /* Responsive Design */
@@ -138,6 +154,9 @@
       #bpr-paragraph,
       #timeline-container {
         max-width: 100%;
+      }
+      #title h1 {
+        font-size: 24px;
       }
     }
   </style>
@@ -171,7 +190,6 @@
 
     <!-- Timeline Graph Container -->
     <div id="timeline-container">
-       
       <canvas id="timelineChart"></canvas>
     </div>
   </div>
