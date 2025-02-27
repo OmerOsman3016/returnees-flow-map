@@ -57,6 +57,10 @@
       transition: all 0.2s ease;
       border: 1px solid #e0e0e0;
       cursor: pointer;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
     }
 
     #infoCard:hover {
@@ -120,6 +124,7 @@
 
     #map-container {
       margin-bottom: 20px;
+      position: relative; /* Add this to make the infoCard position relative to the map-container */
     }
 
     #map {
@@ -169,10 +174,6 @@
         Sudan | Displacement Tracking Matrix - Returnees Flow
       </h1>
     </div>
-    <div id="infoCard">
-      <p><strong>Latest Update:</strong> February 2025</p>
-      <p><strong>Total Returnees:</strong> 200,843+</p>
-    </div>
   </div>
 
   <!-- Content Container for Paragraph and Timeline -->
@@ -197,6 +198,10 @@
   <!-- Map Container -->
   <div id="map-container">
     <div id="map"></div>
+    <div id="infoCard">
+      <p><strong>Latest Update:</strong> February 2025</p>
+      <p><strong>Total Returnees:</strong> 200,843+</p>
+    </div>
   </div>
 
   <footer>
@@ -386,7 +391,7 @@
         },
         scales: {
           y: {
-            beginAtZero: true,
+            beginAtZero:
             title: {
               display: true,
               text: 'Number of Returnees',
