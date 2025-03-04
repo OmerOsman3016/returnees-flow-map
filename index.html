@@ -306,14 +306,14 @@
 
     // Add administrative boundaries layers
     const admn0 = L.esri.featureLayer({
-      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
-      where: "ADMLEVEL = 0",
-      style: {
-        color: "#0f0101",
-        weight: 4,
-        dashArray: ""
-      }
-    }).addTo(map);
+  url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
+  where: "ADMLEVEL = 0", // Ensure this matches your data
+  style: {
+    color: "#0033A0",
+    weight: 2,
+    dashArray: "5, 5"
+  }
+}).addTo(map); // Ensure the layer is added to the map
 
     const admn1 = L.esri.featureLayer({
       url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
