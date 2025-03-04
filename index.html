@@ -222,24 +222,36 @@
       attribution: '&copy; CartoDB'
     }).addTo(map);
 
-    // Add administrative boundaries layers
-    const admn0 = L.esri.featureLayer({
-      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
-      where: "ADMLEVEL = 0",
-      style: { color: "#0033A0", weight: 4, dashArray: "5, 5" }
-    }).addTo(map);
+   // Add administrative boundaries layers
+const admn0 = L.esri.featureLayer({
+  url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
+  where: "ADMLEVEL = 0",
+  style: { 
+    color: "#0033A0", // Darker color for better contrast
+    weight: 4,        // Thicker border
+    dashArray: "5, 5" // Dashed pattern for better visibility
+  }
+}).addTo(map);
 
-    const admn1 = L.esri.featureLayer({
-      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
-      where: "ADMLEVEL = 1",
-      style: { color: "#626262", weight: 1.5, dashArray: "1, 2", dashOffset: "2" }
-    }).addTo(map);
+const admn1 = L.esri.featureLayer({
+  url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
+  where: "ADMLEVEL = 1",
+  style: { 
+    color: "#0033A0", // Darker color for better contrast
+    weight: 2,        // Slightly thinner border for sub-regions
+    dashArray: "2, 2" // Dashed pattern for better visibility
+  }
+}).addTo(map);
 
-    const admn2 = L.esri.featureLayer({
-      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
-      where: "ADMLEVEL = 2",
-      style: { color: "LightSteelBlue", weight: 0.25 }
-    }).addTo(map);
+const admn2 = L.esri.featureLayer({
+  url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
+  where: "ADMLEVEL = 2",
+  style: { 
+    color: "#0033A0", // Darker color for better contrast
+    weight: 1,        // Thinnest border for smaller regions
+    dashArray: "1, 1" // Dashed pattern for better visibility
+  }
+}).addTo(map);
 
     // Store the flowmap layer globally
     let flowmapLayer;
