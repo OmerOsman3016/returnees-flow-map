@@ -173,7 +173,7 @@
   <div class="content-container">
     <!-- BPR Paragraph -->
     <div id="bpr-paragraph">
-       
+      <h2>About the Displacement Tracking Matrix (DTM)</h2>
       <p>
         Between 18 December 2024 and 04 March 2025, DTM field teams monitored the return movements of an estimated 276,122 individuals who were displaced internally in Sudan. Individuals reportedly moved back to locations across Aj Jazirah (70%), Sennar (23%), and Khartoum (7%). 
         DTM field teams reported that approximately X per cent (X individuals) were reported at their initial location of origin. An estimated x per cent were monitored at departure points at locations of displacement and reportedly intended to move back to their locations of origin, but were not yet recorded at sites of origin. 
@@ -217,41 +217,66 @@
     // Initialize the map
     const map = L.map('map').setView([16, 31], L.Browser.mobile ? 3 : 5);
 
-    // Add base layer
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; CartoDB'
+    // Define multiple base layers
+    const cartoDBLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const openStreetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const esriWorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
+    });
+
+    const stamenToner = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
+    });
+
+    // Add default base layer
+    cartoDBLight.addTo(map);
+
+    // Add administrative boundaries layers
+    const admn0 = L.esri.featureLayer({
+      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
+      where: "ADMLEVEL = 0",
+      style: { 
+        color: "#0033A0", // Darker color for better contrast
+        weight: 4,        // Thicker border
+        dashArray: "5, 5" // Dashed pattern for better visibility
+      }
     }).addTo(map);
 
-   // Add administrative boundaries layers
-const admn0 = L.esri.featureLayer({
-  url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
-  where: "ADMLEVEL = 0",
-  style: { 
-    color: "#0033A0", // Darker color for better contrast
-    weight: 4,        // Thicker border
-    dashArray: "5, 5" // Dashed pattern for better visibility
-  }
-}).addTo(map);
+    const admn1 = L.esri.featureLayer({
+      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
+      where: "ADMLEVEL = 1",
+      style: { 
+        color: "#0033A0", // Darker color for better contrast
+        weight: 2,        // Slightly thinner border for sub-regions
+        dashArray: "2, 2" // Dashed pattern for better visibility
+      }
+    }).addTo(map);
 
-const admn1 = L.esri.featureLayer({
-  url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
-  where: "ADMLEVEL = 1",
-  style: { 
-    color: "#0033A0", // Darker color for better contrast
-    weight: 2,        // Slightly thinner border for sub-regions
-    dashArray: "2, 2" // Dashed pattern for better visibility
-  }
-}).addTo(map);
+    const admn2 = L.esri.featureLayer({
+      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
+      where: "ADMLEVEL = 2",
+      style: { 
+        color: "#0033A0", // Darker color for better contrast
+        weight: 1,        // Thinnest border for smaller regions
+        dashArray: "1, 1" // Dashed pattern for better visibility
+      }
+    }).addTo(map);
 
-const admn2 = L.esri.featureLayer({
-  url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
-  where: "ADMLEVEL = 2",
-  style: { 
-    color: "#0033A0", // Darker color for better contrast
-    weight: 1,        // Thinnest border for smaller regions
-    dashArray: "1, 1" // Dashed pattern for better visibility
-  }
-}).addTo(map);
+    // Add layer control
+    const baseLayers = {
+      "CartoDB Light": cartoDBLight,
+      "OpenStreetMap": openStreetMap,
+      "Esri World Imagery": esriWorldImagery,
+      "Stamen Toner": stamenToner
+    };
+
+    L.control.layers(baseLayers).addTo(map);
 
     // Store the flowmap layer globally
     let flowmapLayer;
