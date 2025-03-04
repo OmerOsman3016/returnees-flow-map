@@ -354,21 +354,10 @@ const admn2 = L.esri.featureLayer({
       const div = L.DomUtil.create('div', 'legend');
       div.innerHTML = `
         <div style="width:17px;height:17px;background:rgba(255, 103, 31, 0.8);float:left;margin-right:10px;border-radius:30px"></div>
-        <span style="float:left;margin-top:1px;font-weight:bold">State of Displacement</span><br/><br/>
-        <div style="width:17px;height:17px;background:rgba(0, 51, 160, 0.8);float:left;margin-right:10px;border-radius:30px"></div>
         <span style="float:left;margin-top:1px;font-weight:bold">State of Return</span><br/><br/>
-        <span style="font-size:14px">Returnee Flow Volume:</span><br/>
-        <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> < 50,000</span><br/>
-        <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold">50,001 - 100,000</span><br/>
-        <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> > 100,000</span><br/>
-        <span style="font-size:14px">Destination Point Size:</span><br/>
-        <div style="width:10px;height:10px;background:rgba(255, 103, 31, 0.8);float:left;margin-right:10px;border-radius:30px"></div>
-        <span style="float:left;font-weight:bold">Small</span><br/>
-        <div style="width:20px;height:20px;background:rgba(255, 103, 31, 0.8);float:left;margin-right:10px;border-radius:30px"></div>
-        <span style="float:left;font-weight:bold">Large</span><br/>
+        <div style="width:17px;height:17px;background:rgba(0, 51, 160, 0.8);float:left;margin-right:10px;border-radius:30px"></div>
+        <span style="float:left;margin-top:1px;font-weight:bold">State ofDisplacement </span><br/><br/>
+      
       `;
       return div;
     };
