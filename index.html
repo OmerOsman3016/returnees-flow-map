@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -72,28 +72,71 @@
       margin-bottom: 20px;
     }
 
-    /* Paragraph Section */
+    /* Enhanced Paragraph Section */
     #bpr-paragraph {
       flex: 1;
       background-color: #fff;
       border: 2px solid #0033A0;
       border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 25px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
     }
 
     #bpr-paragraph h2 {
       margin-top: 0;
       color: #0033A0;
-      font-size: 20px;
-      margin-bottom: 15px;
+      font-size: 22px;
+      margin-bottom: 20px;
+      font-weight: 600;
+      border-bottom: 2px solid #0033A0;
+      padding-bottom: 10px;
     }
 
     #bpr-paragraph p {
-      font-size: 14px;
-      line-height: 1.6;
-      color: #333;
-      margin: 0;
+      font-size: 15px;
+      line-height: 1.8;
+      color: #444;
+      margin: 0 0 20px 0;
+    }
+
+    #bpr-paragraph p:last-child {
+      margin-bottom: 0;
+    }
+
+    #bpr-paragraph p strong {
+      color: #0033A0;
+      font-weight: 600;
+    }
+
+    #bpr-paragraph p em {
+      font-style: italic;
+      color: #555;
+    }
+
+    #bpr-paragraph p a {
+      color: #0033A0;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    #bpr-paragraph p a:hover {
+      color: #002366;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      #bpr-paragraph {
+        padding: 20px;
+      }
+
+      #bpr-paragraph h2 {
+        font-size: 20px;
+      }
+
+      #bpr-paragraph p {
+        font-size: 14px;
+      }
     }
 
     /* Timeline and Map Container */
@@ -181,8 +224,21 @@
   <div class="content-container">
     <!-- BPR Paragraph -->
     <div id="bpr-paragraph">
-       
-           <strong>Sennar</strong>: Of the estimated <strong>114,759 return movements</strong> to locations in Sennar state, DTM field teams recorded an estimated <strong>63,305 individuals</strong> entering Sennar from other states. Compared to other states of origin, there were higher rates of displacement within Sennar state and therefore more return movements within Sennar state. DTM teams were also unable to monitor all return movements from neighbouring states into Sennar due to funding constraints and reduced data collection.
+      <h2>Displacement and Returnee Movements in Sudan</h2>
+      <p>
+        Due to <strong>funding constraints</strong>, DTM had to significantly reduce the scope and frequency of data collection activities, which has led to delays in data verification and reporting.
+      </p>
+      <p>
+        Between <strong>18 December 2024</strong> and <strong>04 March 2025</strong>, DTM field teams monitored the return movements of an estimated <strong>276,122 individuals</strong> who were displaced internally in Sudan. Individuals reportedly moved back to locations across <strong>Aj Jazirah (70%)</strong>, <strong>Sennar (23%)</strong>, and <strong>Khartoum (7%)</strong>.
+      </p>
+      <p>
+        DTM field teams reported that approximately <strong>X per cent (X individuals)</strong> were reported at their initial location of origin. An estimated <strong>x per cent</strong> were monitored at departure points at locations of displacement and reportedly intended to move back to their locations of origin, but were not yet recorded at sites of origin.
+      </p>
+      <p>
+        Individuals who returned to locations of origin in <strong>Aj Jazirah</strong> returned from locations in <strong>Aj Jazirah</strong>: Of the estimated <strong>x return movements</strong> to locations in Aj Jazirah state, DTM field teams recorded <strong>x individuals</strong> leaving states of displacement with the reported intention of returning to Aj Jazirah. These individuals left from locations in <strong>Gedaref (44%)</strong>, <strong>Sennar (21%)</strong>, <strong>Kassala (11%)</strong>, <strong>River Nile (9%)</strong>, <strong>Red Sea (7%)</strong>, <strong>White Nile (4%)</strong>, <strong>Blue Nile (2%)</strong>, and <strong>Northern (2%)</strong>. DTM monitored approximately <strong>x individuals</strong> crossing into Aj Jazirah at monitored entry points. Of these, an estimated <strong>x individuals</strong> were subsequently recorded in their locations of origin across Aj Jazirah state.
+      </p>
+      <p>
+        <strong>Sennar</strong>: Of the estimated <strong>114,759 return movements</strong> to locations in Sennar state, DTM field teams recorded an estimated <strong>63,305 individuals</strong> entering Sennar from other states. Compared to other states of origin, there were higher rates of displacement within Sennar state and therefore more return movements within Sennar state. DTM teams were also unable to monitor all return movements from neighbouring states into Sennar due to <strong>funding constraints</strong> and reduced data collection.
       </p>
       <p>
         <strong>Khartoum</strong>: DTM field teams monitored an estimated <strong>19,334 individuals</strong> who departed from states of displacement to reportedly return to Khartoum. Further data collection is needed to verify the number of returnees at locations of origin within Khartoum.
@@ -191,7 +247,7 @@
         <em>NOTE</em>: IDPs who returned from locations of displacement may not have returned to their specific locations of origin and may remain displaced within their locality or state of origin. DTM Sudan defines a returnee as a person who was previously displaced from their habitual residence within Sudan, due to an event dating from <strong>2003 onwards</strong>, and who has now voluntarily returned to the location of their habitual residence, irrespective of whether they have returned to their former residence or to another shelter type.
       </p>
       <p>
-        Further verification is needed to confirm the estimated number of returnees. All figures should be understood as preliminary estimates only, pending further verification on the <strong>Admin 3 level</strong>.
+        Further verification is needed to confirm the estimated number of returnees. All figures should be understood as <strong>preliminary estimates only</strong>, pending further verification on the <strong>Admin 3 level</strong>.
       </p>
       <p>
         For further information on displacement and mobility in Sudan, see <a href="#">Sudan Mobility Update (16)</a>. All reports, datasets, and dashboards are available on the <a href="#">DTM-IOM website</a>. See also <a href="#">DTM Methodological Note</a>.
@@ -252,30 +308,30 @@
     const admn0 = L.esri.featureLayer({
       url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
       where: "ADMLEVEL = 0",
-      style: { 
-        color: "#0033A0", // Darker color for better contrast
-        weight: 4,        // Thicker border
-        dashArray: "5, 5" // Dashed pattern for better visibility
+      style: {
+        color: "#0033A0",
+        weight: 4,
+        dashArray: "5, 5"
       }
     }).addTo(map);
 
     const admn1 = L.esri.featureLayer({
       url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
       where: "ADMLEVEL = 1",
-      style: { 
-        color: "#0033A0", // Darker color for better contrast
-        weight: 2,        // Slightly thinner border for sub-regions
-        dashArray: "2, 2" // Dashed pattern for better visibility
+      style: {
+        color: "#0033A0",
+        weight: 2,
+        dashArray: "2, 2"
       }
     }).addTo(map);
 
     const admn2 = L.esri.featureLayer({
       url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
       where: "ADMLEVEL = 2",
-      style: { 
-        color: "#0033A0", // Darker color for better contrast
-        weight: 1,        // Thinnest border for smaller regions
-        dashArray: "1, 1" // Dashed pattern for better visibility
+      style: {
+        color: "#0033A0",
+        weight: 1,
+        dashArray: "1, 1"
       }
     }).addTo(map);
 
@@ -316,14 +372,13 @@
             destinationGeometry: { x: 'e_lon', y: 'e_lat' }
           },
           style: (feature) => {
-            const baseRadius = 6; // Base radius for origin points
-            const maxRadius = 20; // Maximum radius for destination points
-            const volume = feature.properties.e_Volume || 0; // Get the volume of returnees
+            const baseRadius = 6;
+            const maxRadius = 20;
+            const volume = feature.properties.e_Volume || 0;
 
-            // Calculate the radius for destination points based on volume
             const radius = feature.properties.isOrigin
               ? baseRadius
-              : Math.min(baseRadius + (volume / 5000), maxRadius); // Adjust the divisor to control scaling
+              : Math.min(baseRadius + (volume / 5000), maxRadius);
 
             return {
               radius: radius,
@@ -401,25 +456,25 @@
     // Initialize Timeline Graph
     const ctx = document.getElementById('timelineChart').getContext('2d');
     const gradient = ctx.createLinearGradient(0, 0, 0, 200);
-    gradient.addColorStop(0, 'rgba(0, 51, 160, 0.8)'); // Top color
-    gradient.addColorStop(1, 'rgba(0, 51, 160, 0.2)'); // Bottom color
+    gradient.addColorStop(0, 'rgba(0, 51, 160, 0.8)');
+    gradient.addColorStop(1, 'rgba(0, 51, 160, 0.2)');
 
     const timelineChart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: ['Dec-24','Jan-25', 'Feb-25','Mar-25', 'Apr-25', 'May-25', 'Jun-25'],
+        labels: ['Dec-24', 'Jan-25', 'Feb-25', 'Mar-25', 'Apr-25', 'May-25', 'Jun-25'],
         datasets: [{
           label: 'Returnees Over Time',
-          data: [8690, 94525, 177628,0,0,0,0],
+          data: [8690, 94525, 177628, 0, 0, 0, 0],
           borderColor: '#0033A0',
-          backgroundColor: gradient, // Use gradient for fill
+          backgroundColor: gradient,
           borderWidth: 3,
           fill: true,
           pointBackgroundColor: '#0033A0',
           pointBorderColor: '#fff',
           pointRadius: 5,
           pointHoverRadius: 7,
-          tension: 0.4 // Add smooth curves
+          tension: 0.4
         }]
       },
       options: {
@@ -435,7 +490,7 @@
             displayColors: false
           },
           legend: {
-            display: false // Hide legend
+            display: false
           }
         },
         scales: {
@@ -470,8 +525,8 @@
           }
         },
         animation: {
-          duration: 2000, // Animation duration
-          easing: 'easeInOutQuart' // Smooth animation
+          duration: 2000,
+          easing: 'easeInOutQuart'
         }
       }
     });
