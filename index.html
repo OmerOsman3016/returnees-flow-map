@@ -92,15 +92,9 @@
       text-align: left;
     }
 
-    /* Timeline and Map Container */
-    #timeline-map-container {
-      display: flex;
-      gap: 20px;
-      margin-bottom: 20px;
-    }
-
     #timeline-container {
       flex: 1;
+      max-width: 65%;
       height: 240px;
       border: 2px solid #0033A0;
       background-color: #f9f9f9;
@@ -116,17 +110,15 @@
     }
 
     #map-container {
-      flex: 1;
-      height: 240px;
-      border: 2px solid #0033A0;
-      background-color: #f9f9f9;
-      border-radius: 8px;
-      padding: 10px;
+      margin-bottom: 20px;
     }
 
     #map {
-      height: 100%;
+      height: calc(80vh - 140px);
       width: 100%;
+      border: 2px solid #0033A0;
+      background-color: #f9f9f9;
+      border-radius: 8px;
     }
 
     footer {
@@ -144,24 +136,9 @@
         flex-direction: column;
       }
       #bpr-paragraph,
-      #timeline-container,
-      #map-container {
+      #timeline-container {
         max-width: 100%;
       }
-      #timeline-map-container {
-        flex-direction: column;
-      }
-    }
-
-    /* Dropdown Styling */
-    #state-filter {
-      margin-bottom: 20px;
-      padding: 10px;
-      font-size: 16px;
-      border: 2px solid #0033A0;
-      border-radius: 8px;
-      background-color: #f9f9f9;
-      color: #0033A0;
     }
   </style>
 </head>
@@ -179,11 +156,6 @@
     </div>
   </div>
 
-  <!-- State Filter Dropdown -->
-  <select id="state-filter">
-    <option value="all">All States</option>
-  </select>
-
   <!-- Content Container for Paragraph and Timeline -->
   <div class="content-container">
     <!-- BPR Paragraph -->
@@ -197,18 +169,15 @@
       </p>
     </div>
 
-    <!-- Timeline and Map Container -->
-    <div id="timeline-map-container">
-      <!-- Timeline Graph Container -->
-      <div id="timeline-container">
-        <canvas id="timelineChart"></canvas>
-      </div>
-
-      <!-- Map Container -->
-      <div id="map-container">
-        <div id="map"></div>
-      </div>
+    <!-- Timeline Graph Container -->
+    <div id="timeline-container">
+      <canvas id="timelineChart"></canvas>
     </div>
+  </div>
+
+  <!-- Map Container -->
+  <div id="map-container">
+    <div id="map"></div>
   </div>
 
   <footer>
@@ -253,7 +222,6 @@
 
     // Store the flowmap layer globally
     let flowmapLayer;
-    let allData = []; // Store all data for filtering
 
     // Parse CSV data and create flow map layer
     Papa.parse('./data/data.csv', {
@@ -262,121 +230,90 @@
       dynamicTyping: true,
       skipEmptyLines: true,
       complete: (results) => {
-        allData = results.data; // Store all data
+        const geoJsonFeatureCollection = {
+          type: 'FeatureCollection',
+          features: results.data.map(datum => ({
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: [datum.s_lon, datum.s_lat] },
+            properties: datum
+          }))
+        };
 
-        // Populate the state filter dropdown
-        const states = [...new Set(results.data.map(d => d.s_State))]; // Get unique states
-        const stateFilter = document.getElementById('state-filter');
-        states.forEach(state => {
-          const option = document.createElement('option');
-          option.value = state;
-          option.textContent = state;
-          stateFilter.appendChild(option);
+        flowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
+          originAndDestinationFieldIds: {
+            originUniqueIdField: 's_state_id',
+            originGeometry: { x: 's_lon', y: 's_lat' },
+            destinationUniqueIdField: 'e_locality_id',
+            destinationGeometry: { x: 'e_lon', y: 'e_lat' }
+          },
+          style: (feature) => {
+            const baseRadius = 6; // Base radius for origin points
+            const maxRadius = 20; // Maximum radius for destination points
+            const volume = feature.properties.e_Volume || 0; // Get the volume of returnees
+
+            // Calculate the radius for destination points based on volume
+            const radius = feature.properties.isOrigin
+              ? baseRadius
+              : Math.min(baseRadius + (volume / 5000), maxRadius); // Adjust the divisor to control scaling
+
+            return {
+              radius: radius,
+              weight: 1,
+              color: feature.properties.isOrigin ? 'rgb(17, 142, 170)' : 'rgb(195, 255, 62)',
+              fillColor: feature.properties.isOrigin ? 'rgba(0, 51, 160)' : 'rgb(255, 103, 31)',
+              fillOpacity: feature.properties.isOrigin ? 0.8 : 0.7
+            };
+          },
+          canvasBezierStyle: {
+            type: 'classBreaks',
+            field: 'e_Volume',
+            classBreakInfos: [
+              { classMinValue: 1, classMaxValue: 50000, symbol: { strokeStyle: '#ffb81c', lineWidth: 0.5, lineCap: 'round', shadowColor: '#fee8c8', shadowBlur: 2.0 } },
+              { classMinValue: 50001, classMaxValue: 100000, symbol: { strokeStyle: '#ff671f', lineWidth: 1.5, lineCap: 'round', shadowColor: '#fdbb84', shadowBlur: 2.0 } },
+              { classMinValue: 100001, classMaxValue: 200000, symbol: { strokeStyle: '#d22630', lineWidth: 3, lineCap: 'round', shadowColor: '#e34a33', shadowBlur: 2.0 } }
+            ],
+            defaultSymbol: { strokeStyle: '#e7e1ef', lineWidth: 0.5, lineCap: 'round', shadowColor: '#e7e1ef', shadowBlur: 1.5 }
+          },
+          pathDisplayMode: 'all',
+          animationStarted: true,
+          animationEasingFamily: 'Linear',
+          animationEasingType: 'None',
+          animationDuration: 3000,
+          onEachFeature: addTooltip
+        }).addTo(map);
+
+        // Add tooltip and popup to features
+        function addTooltip(feature, layer) {
+          const tooltipContent = feature.properties.isOrigin
+            ? `State of Displacement: ${feature.properties.s_State}`
+            : `State of Return: ${feature.properties.e_locality}`;
+
+          layer.bindTooltip(tooltipContent);
+          layer.on('mouseover', () => layer.openTooltip());
+          layer.on('mouseout', () => layer.closeTooltip());
+
+          // Add popup
+          const popupContent = feature.properties.isOrigin
+            ? `<b>State of Displacement:</b> ${feature.properties.s_State}`
+            : `<b>State of Return:</b> ${feature.properties.e_locality}`;
+
+          layer.bindPopup(popupContent);
+        }
+
+        // Highlight paths on mouseover
+        flowmapLayer.on('mouseover', (e) => {
+          if (e.sharedOriginFeatures.length) {
+            flowmapLayer.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
+          }
+          if (e.sharedDestinationFeatures.length) {
+            flowmapLayer.selectFeaturesForPathDisplay(e.sharedDestinationFeatures, 'SELECTION_NEW');
+          }
         });
 
-        // Initial map rendering with all data
-        updateMap(allData);
-
-        // Add event listener to the state filter
-        stateFilter.addEventListener('change', (e) => {
-          const selectedState = e.target.value;
-          const filteredData = selectedState === 'all'
-            ? allData
-            : allData.filter(d => d.s_State === selectedState);
-          updateMap(filteredData);
-        });
+        // Select initial feature for path display
+        flowmapLayer.selectFeaturesForPathDisplayById('s_state_id', "SD15", true, 'SELECTION_NEW');
       }
     });
-
-    // Function to update the map with filtered data
-    function updateMap(data) {
-      if (flowmapLayer) {
-        map.removeLayer(flowmapLayer); // Remove existing flowmap layer
-      }
-
-      const geoJsonFeatureCollection = {
-        type: 'FeatureCollection',
-        features: data.map(datum => ({
-          type: 'Feature',
-          geometry: { type: 'Point', coordinates: [datum.s_lon, datum.s_lat] },
-          properties: datum
-        }))
-      };
-
-      flowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
-        originAndDestinationFieldIds: {
-          originUniqueIdField: 's_state_id',
-          originGeometry: { x: 's_lon', y: 's_lat' },
-          destinationUniqueIdField: 'e_locality_id',
-          destinationGeometry: { x: 'e_lon', y: 'e_lat' }
-        },
-        style: (feature) => {
-          const baseRadius = 6; // Base radius for origin points
-          const maxRadius = 20; // Maximum radius for destination points
-          const volume = feature.properties.e_Volume || 0; // Get the volume of returnees
-
-          // Calculate the radius for destination points based on volume
-          const radius = feature.properties.isOrigin
-            ? baseRadius
-            : Math.min(baseRadius + (volume / 5000), maxRadius); // Adjust the divisor to control scaling
-
-          return {
-            radius: radius,
-            weight: 1,
-            color: feature.properties.isOrigin ? 'rgb(17, 142, 170)' : 'rgb(195, 255, 62)',
-            fillColor: feature.properties.isOrigin ? 'rgba(0, 51, 160)' : 'rgb(255, 103, 31)',
-            fillOpacity: feature.properties.isOrigin ? 0.8 : 0.7
-          };
-        },
-        canvasBezierStyle: {
-          type: 'classBreaks',
-          field: 'e_Volume',
-          classBreakInfos: [
-            { classMinValue: 1, classMaxValue: 50000, symbol: { strokeStyle: '#ffb81c', lineWidth: 0.5, lineCap: 'round', shadowColor: '#fee8c8', shadowBlur: 2.0 } },
-            { classMinValue: 50001, classMaxValue: 100000, symbol: { strokeStyle: '#ff671f', lineWidth: 1.5, lineCap: 'round', shadowColor: '#fdbb84', shadowBlur: 2.0 } },
-            { classMinValue: 100001, classMaxValue: 200000, symbol: { strokeStyle: '#d22630', lineWidth: 3, lineCap: 'round', shadowColor: '#e34a33', shadowBlur: 2.0 } }
-          ],
-          defaultSymbol: { strokeStyle: '#e7e1ef', lineWidth: 0.5, lineCap: 'round', shadowColor: '#e7e1ef', shadowBlur: 1.5 }
-        },
-        pathDisplayMode: 'all',
-        animationStarted: true,
-        animationEasingFamily: 'Linear',
-        animationEasingType: 'None',
-        animationDuration: 3000,
-        onEachFeature: addTooltip
-      }).addTo(map);
-
-      // Add tooltip and popup to features
-      function addTooltip(feature, layer) {
-        const tooltipContent = feature.properties.isOrigin
-          ? `State of Displacement: ${feature.properties.s_State}`
-          : `State of Return: ${feature.properties.e_locality}`;
-
-        layer.bindTooltip(tooltipContent);
-        layer.on('mouseover', () => layer.openTooltip());
-        layer.on('mouseout', () => layer.closeTooltip());
-
-        // Add popup
-        const popupContent = feature.properties.isOrigin
-          ? `<b>State of Displacement:</b> ${feature.properties.s_State}`
-          : `<b>State of Return:</b> ${feature.properties.e_locality}`;
-
-        layer.bindPopup(popupContent);
-      }
-
-      // Highlight paths on mouseover
-      flowmapLayer.on('mouseover', (e) => {
-        if (e.sharedOriginFeatures.length) {
-          flowmapLayer.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
-        }
-        if (e.sharedDestinationFeatures.length) {
-          flowmapLayer.selectFeaturesForPathDisplay(e.sharedDestinationFeatures, 'SELECTION_NEW');
-        }
-      });
-
-      // Select initial feature for path display
-      flowmapLayer.selectFeaturesForPathDisplayById('s_state_id', "SD15", true, 'SELECTION_NEW');
-    }
 
     // Add legend to the map
     const legend = L.control({ position: 'bottomleft' });
