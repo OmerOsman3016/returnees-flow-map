@@ -1,4 +1,4 @@
-   <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -71,17 +71,17 @@
       flex-shrink: 1;
       max-width: 30%;
       border: 2px solid #0033A0;
-      padding: 15px 30px; /* Reduced top and bottom padding to 20px, left and right remain 40px */
+      padding: 15px 30px;
       background-color: #f9f9f9;
       border-radius: 8px;
       font-size: 14px;
       line-height: 1.6;
       color: #333;
       margin: 0px 0;
-      text-align: left; /* Aligns text to the left */
-      display: flex; /* Enables Flexbox */
-      flex-direction: column; /* Stacks content vertically */
-      justify-content: flex-start; /* Aligns content to the top */
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
     }
 
     #bpr-paragraph h2 {
@@ -89,7 +89,7 @@
       color: #0033A0;
       font-size: 20px;
       margin-bottom: 15px;
-      text-align: left; /* Align title to the left */
+      text-align: left;
     }
 
     #timeline-container {
@@ -118,7 +118,7 @@
       width: 100%;
       border: 2px solid #0033A0;
       background-color: #f9f9f9;
-       border-radius: 8px;
+      border-radius: 8px;
     }
 
     footer {
@@ -171,7 +171,6 @@
 
     <!-- Timeline Graph Container -->
     <div id="timeline-container">
-       
       <canvas id="timelineChart"></canvas>
     </div>
   </div>
@@ -247,13 +246,24 @@
             destinationUniqueIdField: 'e_locality_id',
             destinationGeometry: { x: 'e_lon', y: 'e_lat' }
           },
-          style: (feature) => ({
-            radius: 6,
-            weight: 1,
-            color: feature.properties.isOrigin ? 'rgb(17, 142, 170)' : 'rgb(195, 255, 62)',
-            fillColor: feature.properties.isOrigin ? 'rgba(0, 51, 160)' : 'rgb(255, 103, 31)',
-            fillOpacity: feature.properties.isOrigin ? 0.8 : 0.7
-          }),
+          style: (feature) => {
+            const baseRadius = 6; // Base radius for origin points
+            const maxRadius = 20; // Maximum radius for destination points
+            const volume = feature.properties.e_Volume || 0; // Get the volume of returnees
+
+            // Calculate the radius for destination points based on volume
+            const radius = feature.properties.isOrigin
+              ? baseRadius
+              : Math.min(baseRadius + (volume / 5000), maxRadius); // Adjust the divisor to control scaling
+
+            return {
+              radius: radius,
+              weight: 1,
+              color: feature.properties.isOrigin ? 'rgb(17, 142, 170)' : 'rgb(195, 255, 62)',
+              fillColor: feature.properties.isOrigin ? 'rgba(0, 51, 160)' : 'rgb(255, 103, 31)',
+              fillOpacity: feature.properties.isOrigin ? 0.8 : 0.7
+            };
+          },
           canvasBezierStyle: {
             type: 'classBreaks',
             field: 'e_Volume',
@@ -321,6 +331,11 @@
         <span style="float:left;font-weight:bold">50,001 - 100,000</span><br/>
         <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
         <span style="float:left;font-weight:bold"> > 100,000</span><br/>
+        <span style="font-size:14px">Destination Point Size:</span><br/>
+        <div style="width:10px;height:10px;background:rgba(255, 103, 31, 0.8);float:left;margin-right:10px;border-radius:30px"></div>
+        <span style="float:left;font-weight:bold">Small</span><br/>
+        <div style="width:20px;height:20px;background:rgba(255, 103, 31, 0.8);float:left;margin-right:10px;border-radius:30px"></div>
+        <span style="float:left;font-weight:bold">Large</span><br/>
       `;
       return div;
     };
