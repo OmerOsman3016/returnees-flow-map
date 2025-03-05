@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -170,6 +170,13 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
+    #map-container h2 {
+      margin-top: 0;
+      color: #0033A0;
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
     #map {
       height: 930px;
       width: 100%;
@@ -258,11 +265,13 @@
     <div id="timeline-map-container">
       <!-- Timeline Graph Container -->
       <div id="timeline-container">
+        <h2>Returnees Over Time</h2>
         <canvas id="timelineChart"></canvas>
       </div>
 
       <!-- Map Container -->
       <div id="map-container">
+        <h2>Returnee Flow Map</h2>
         <div id="map"></div>
       </div>
     </div>
@@ -304,17 +313,18 @@
     // Add default base layer
     cartoDBLight.addTo(map);
 
-   // Add Sudan Admin 0 boundaries
-const admn0 = L.esri.featureLayer({
-  url: "https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/World_Countries/FeatureServer/0",
-  where: "ISO = 'SDN'", // Filter for Sudan using ISO country code
-  style: {
-    color: "#0033A0", // Border color
-    weight: 2, // Border thickness
-    dashArray: "5, 5", // Dashed border
-    fillOpacity: 0 // No fill
-  }
-}).addTo(map);
+    // Add Sudan Admin 0 boundaries
+    const admn0 = L.esri.featureLayer({
+      url: "https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/World_Countries/FeatureServer/0",
+      where: "ISO = 'SDN'", // Filter for Sudan using ISO country code
+      style: {
+        color: "#0033A0", // Border color
+        weight: 2, // Border thickness
+        dashArray: "5, 5", // Dashed border
+        fillOpacity: 0 // No fill
+      }
+    }).addTo(map);
+
     const admn1 = L.esri.featureLayer({
       url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
       where: "ADMLEVEL = 1",
@@ -448,14 +458,13 @@ const admn0 = L.esri.featureLayer({
         <span style="float:left;margin-top:1px;font-weight:bold">State of Return</span><br/><br/>
         <div style="width:17px;height:17px;background:rgba(0, 51, 160, 0.8);float:left;margin-right:10px;border-radius:30px"></div>
         <span style="float:left;margin-top:1px;font-weight:bold">State of Displacement </span><br/><br/>
-                <span style="font-size:14px">Returnee Flow Volume:</span><br/>
+        <span style="font-size:14px">Returnee Flow Volume:</span><br/>
         <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
         <span style="float:left;font-weight:bold"> < 10000</span><br/>
         <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
         <span style="float:left;font-weight:bold">10,001 - 20,000</span><br/>
         <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
         <span style="float:left;font-weight:bold"> > 20,000</span><br/>
-
       `;
       return div;
     };
@@ -473,7 +482,7 @@ const admn0 = L.esri.featureLayer({
         labels: ['Dec-24', 'Jan-25', 'Feb-25', 'Mar-25', 'Apr-25', 'May-25', 'Jun-25'],
         datasets: [{
           label: 'Returnees Over Time',
-          data: [53517, 32240, 282217,9430, 0, 0, 0],
+          data: [53517, 32240, 282217, 9430, 0, 0, 0],
           borderColor: '#0033A0',
           backgroundColor: gradient,
           borderWidth: 3,
