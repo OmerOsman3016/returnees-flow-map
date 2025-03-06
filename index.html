@@ -322,18 +322,7 @@
     // Add default base layer
     cartoDBLight.addTo(map);
 
-    // Add Sudan Admin 0 boundaries
-    const admn0 = L.esri.featureLayer({
-      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
-      where: "ISO = 'SDN'", // Filter for Sudan using ISO country code
-      style: {
-        color: "#0033A0", // Border color
-        weight: 2, // Border thickness
-        dashArray: "5, 5", // Dashed border
-        fillOpacity: 0 // No fill
-      }
-    }).addTo(map);
-
+ 
     const admn1 = L.esri.featureLayer({
       url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
       where: "ADMLEVEL = 1",
