@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -227,36 +227,6 @@
       #map {
         height: 50vh; /* Adjust height for mobile */
       }
-     /* Interactive Legend Styles */
-.legend {
-  background: white;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-size: 14px;
-}
-
-.legend h4 {
-  margin: 0 0 10px 0;
-  font-size: 16px;
-  color: #0033A0;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 5px;
-  cursor: pointer;
-}
-
-.legend-item span {
-  margin-left: 10px;
-}
-
-.legend-item input {
-  margin: 0;
-  cursor: pointer;
-}
     }
   </style>
 </head>
@@ -485,62 +455,23 @@
       }
     });
 
-   // Add interactive legend to the map
-const legend = L.control({ position: 'bottomleft' });
-legend.onAdd = () => {
-  const div = L.DomUtil.create('div', 'legend');
-  div.innerHTML = `
-    <h4>Legend</h4>
-    <div class="legend-item">
-      <input type="checkbox" id="toggleReturneeFlow" checked>
-      <span>Returnee Flow</span>
-    </div>
-    <div class="legend-item">
-      <input type="checkbox" id="toggleAdmn1" checked>
-      <span>Admin 1 Boundaries</span>
-    </div>
-    <div class="legend-item">
-      <input type="checkbox" id="toggleAdmn2" checked>
-      <span>Admin 2 Boundaries</span>
-    </div>
-    <br/>
-    <span style="font-size:14px">Returnee Flow Volume:</span><br/>
-    <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
-    <span style="float:left;font-weight:bold"> < 10000</span><br/>
-    <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
-    <span style="float:left;font-weight:bold">10,001 - 20,000</span><br/>
-    <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
-    <span style="float:left;font-weight:bold"> > 20,000</span><br/>
-  `;
-
-  // Add event listeners for toggling layers
-  div.querySelector('#toggleReturneeFlow').addEventListener('change', (e) => {
-    if (e.target.checked) {
-      flowmapLayer.addTo(map);
-    } else {
-      map.removeLayer(flowmapLayer);
-    }
-  });
-
-  div.querySelector('#toggleAdmn1').addEventListener('change', (e) => {
-    if (e.target.checked) {
-      admn1.addTo(map);
-    } else {
-      map.removeLayer(admn1);
-    }
-  });
-
-  div.querySelector('#toggleAdmn2').addEventListener('change', (e) => {
-    if (e.target.checked) {
-      admn2.addTo(map);
-    } else {
-      map.removeLayer(admn2);
-    }
-  });
-
-  return div;
-};
-legend.addTo(map);
+    // Add legend to the map
+    const legend = L.control({ position: 'bottomleft' });
+    legend.onAdd = () => {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = `
+       
+        <span style="font-size:14px">Returnee Flow Volume:</span><br/>
+        <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold"> < 10000</span><br/>
+        <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold">10,001 - 20,000</span><br/>
+        <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold"> > 20,000</span><br/>
+      `;
+      return div;
+    };
+    legend.addTo(map);
 
     // Initialize Timeline Graph
     const ctx = document.getElementById('timelineChart').getContext('2d');
