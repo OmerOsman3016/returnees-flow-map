@@ -1152,84 +1152,140 @@
       }
     });
 
-    // Initialize Bar Chart
-    const barCtx = document.getElementById('barChart').getContext('2d');
-    const barChart = new Chart(barCtx, {
-      type: 'bar',
-      data: {
-        labels: [
-          "Madani Alkubra", "Um Algura", "Janoub Aj Jazirah", "Al Hassahisa", 
-          "Sharg Aj Jazirah", "Abu Hujar", "Ad Dinder", "As Suki", 
-          "Sennar", "Sharg Sennar", "Sinja"
-        ],
-        datasets: [{
-          label: 'Total Returness',
-          data: [10960, 84575, 20455, 12705, 133950, 4690, 6935, 74509, 15725, 3305, 9595],
-          backgroundColor: 'rgba(0, 51, 160, 0.6)',
-          borderColor: '#0033A0',
-          borderWidth: 2,
-          hoverBackgroundColor: 'rgba(0, 51, 160, 0.8)',
-          hoverBorderColor: '#0033A0'
-        }]
+   // Initialize Bar Chart
+const barCtx = document.getElementById('barChart').getContext('2d');
+const barChart = new Chart(barCtx, {
+  type: 'bar',
+  data: {
+    labels: [
+      "Madani Alkubra", "Um Algura", "Janoub Aj Jazirah", "Al Hassahisa", 
+      "Sharg Aj Jazirah", "Abu Hujar", "Ad Dinder", "As Suki", 
+      "Sennar", "Sharg Sennar", "Sinja"
+    ],
+    datasets: [{
+      label: 'Total Returnees',
+      data: [10960, 84575, 20455, 12705, 133950, 4690, 6935, 74509, 15725, 3305, 9595],
+      backgroundColor: [
+        // Aj Jazirah localities (first 5 items)
+        'rgba(0, 51, 160, 0.6)', // Madani Alkubra
+        'rgba(0, 51, 160, 0.6)', // Um Algura
+        'rgba(0, 51, 160, 0.6)', // Janoub Aj Jazirah
+        'rgba(0, 51, 160, 0.6)', // Al Hassahisa
+        'rgba(0, 51, 160, 0.6)', // Sharg Aj Jazirah
+        // Sennar localities (remaining items)
+        'rgba(255, 103, 31, 0.6)', // Abu Hujar
+        'rgba(255, 103, 31, 0.6)', // Ad Dinder
+        'rgba(255, 103, 31, 0.6)', // As Suki
+        'rgba(255, 103, 31, 0.6)', // Sennar
+        'rgba(255, 103, 31, 0.6)', // Sharg Sennar
+        'rgba(255, 103, 31, 0.6)'  // Sinja
+      ],
+      borderColor: [
+        // Aj Jazirah localities (first 5 items)
+        '#0033A0', // Madani Alkubra
+        '#0033A0', // Um Algura
+        '#0033A0', // Janoub Aj Jazirah
+        '#0033A0', // Al Hassahisa
+        '#0033A0', // Sharg Aj Jazirah
+        // Sennar localities (remaining items)
+        '#FF671F', // Abu Hujar
+        '#FF671F', // Ad Dinder
+        '#FF671F', // As Suki
+        '#FF671F', // Sennar
+        '#FF671F', // Sharg Sennar
+        '#FF671F'  // Sinja
+      ],
+      borderWidth: 2,
+      hoverBackgroundColor: [
+        // Aj Jazirah localities (first 5 items)
+        'rgba(0, 51, 160, 0.8)', // Madani Alkubra
+        'rgba(0, 51, 160, 0.8)', // Um Algura
+        'rgba(0, 51, 160, 0.8)', // Janoub Aj Jazirah
+        'rgba(0, 51, 160, 0.8)', // Al Hassahisa
+        'rgba(0, 51, 160, 0.8)', // Sharg Aj Jazirah
+        // Sennar localities (remaining items)
+        'rgba(255, 103, 31, 0.8)', // Abu Hujar
+        'rgba(255, 103, 31, 0.8)', // Ad Dinder
+        'rgba(255, 103, 31, 0.8)', // As Suki
+        'rgba(255, 103, 31, 0.8)', // Sennar
+        'rgba(255, 103, 31, 0.8)', // Sharg Sennar
+        'rgba(255, 103, 31, 0.8)'  // Sinja
+      ],
+      hoverBorderColor: [
+        // Aj Jazirah localities (first 5 items)
+        '#0033A0', // Madani Alkubra
+        '#0033A0', // Um Algura
+        '#0033A0', // Janoub Aj Jazirah
+        '#0033A0', // Al Hassahisa
+        '#0033A0', // Sharg Aj Jazirah
+        // Sennar localities (remaining items)
+        '#FF671F', // Abu Hujar
+        '#FF671F', // Ad Dinder
+        '#FF671F', // As Suki
+        '#FF671F', // Sennar
+        '#FF671F', // Sharg Sennar
+        '#FF671F'  // Sinja
+      ]
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      tooltip: {
+        backgroundColor: '#0033A0',
+        titleColor: '#fff',
+        bodyColor: '#fff',
+        borderColor: '#fff',
+        borderWidth: 1,
+        displayColors: false
       },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          tooltip: {
-            backgroundColor: '#0033A0',
-            titleColor: '#fff',
-            bodyColor: '#fff',
-            borderColor: '#fff',
-            borderWidth: 1,
-            displayColors: false
-          },
-          legend: {
-            display: false
+      legend: {
+        display: false
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Total Returnees',
+          color: '#0033A0',
+          font: {
+            size: 14,
+            weight: 'bold'
           }
         },
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Total Returness',
-              color: '#0033A0',
-              font: {
-                size: 14,
-                weight: 'bold'
-              }
-            },
-            grid: {
-              color: '#e0e0e0'
-            }
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'State of Return',
-              color: '#0033A0',
-              font: {
-                size: 14,
-                weight: 'bold'
-              }
-            },
-            grid: {
-              display: false
-            },
-            ticks: {
-              autoSkip: false,
-              maxRotation: 45,
-              minRotation: 45
-            }
+        grid: {
+          color: '#e0e0e0'
+        }
+      },
+      x: {
+        title: {
+          display: true,
+          text: 'Locality of Return',
+          color: '#0033A0',
+          font: {
+            size: 14,
+            weight: 'bold'
           }
         },
-        animation: {
-          duration: 2000,
-          easing: 'easeInOutQuart'
+        grid: {
+          display: false
+        },
+        ticks: {
+          autoSkip: false,
+          maxRotation: 45,
+          minRotation: 45
         }
       }
-    });
+    },
+    animation: {
+      duration: 2000,
+      easing: 'easeInOutQuart'
+    }
+  }
+});
   </script>
 </body>
 
