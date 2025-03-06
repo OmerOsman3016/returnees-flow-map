@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -31,6 +31,7 @@
       margin-bottom: 20px;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      flex-wrap: wrap; /* Allow wrapping on smaller screens */
     }
 
     #title h1 {
@@ -57,6 +58,7 @@
       width: 250px;
       transition: all 0.2s ease;
       border: 1px solid #e0e0e0;
+      margin-top: 10px; /* Add margin on smaller screens */
     }
 
     #infoCard:hover {
@@ -70,6 +72,7 @@
       display: flex;
       gap: 20px;
       margin-bottom: 20px;
+      flex-wrap: wrap; /* Allow wrapping on smaller screens */
     }
 
     /* Enhanced Paragraph Section */
@@ -81,6 +84,7 @@
       padding: 20px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       margin-bottom: 20px;
+      min-width: 300px; /* Ensure it doesn't get too small */
     }
 
     #bpr-paragraph h2 {
@@ -124,27 +128,13 @@
       color: #002366;
     }
 
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      #bpr-paragraph {
-        padding: 20px;
-      }
-
-      #bpr-paragraph h2 {
-        font-size: 20px;
-      }
-
-      #bpr-paragraph p {
-        font-size: 14px;
-      }
-    }
-
     /* Timeline and Map Container */
     #timeline-map-container {
       flex: 1;
       display: flex;
       flex-direction: column;
       gap: 20px;
+      min-width: 300px; /* Ensure it doesn't get too small */
     }
 
     #timeline-container {
@@ -187,7 +177,7 @@
     }
 
     #map {
-      height: 900px;
+      height: 60vh; /* Use viewport height for dynamic sizing */
       width: 100%;
       border-radius: 8px;
     }
@@ -201,10 +191,21 @@
       font-size: 12px;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background: linear-gradient(145deg, #0033A0, #002366); /* Add gradient */
     }
 
     /* Responsive Design */
     @media (max-width: 768px) {
+      #title-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      #infoCard {
+        width: 100%;
+        margin-top: 10px;
+      }
+
       .content-container {
         flex-direction: column;
       }
@@ -216,7 +217,7 @@
       }
 
       #map {
-        height: 700px;
+        height: 50vh; /* Adjust height for mobile */
       }
     }
   </style>
@@ -322,7 +323,6 @@
     // Add default base layer
     cartoDBLight.addTo(map);
 
- 
     const admn1 = L.esri.featureLayer({
       url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
       where: "ADMLEVEL = 1",
