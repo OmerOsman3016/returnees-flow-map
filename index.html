@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -14,63 +14,44 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.css" />
 
   <style>
-    /* Modern Color Palette */
-    :root {
-      --primary-color: #0033A0;
-      --secondary-color: #FF671F;
-      --background-color: #f5f5f5;
-      --text-color: #333;
-      --text-light: #666;
-      --white: #fff;
-      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
     body {
       margin: 20px;
       padding: 0;
-      font-family: 'Arial', sans-serif;
-      background-color: var(--background-color);
-      color: var(--text-color);
-      line-height: 1.6;
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
     }
 
     #title-container {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background-color: var(--primary-color);
-      padding: 20px;
-      color: var(--white);
+      background-color: #0033A0;
+      padding: 10px 20px;
+      color: white;
       margin-bottom: 20px;
-      border-radius: 12px;
-      box-shadow: var(--shadow);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    #title-container:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     #title h1 {
       margin: 0;
-      font-size: 26px;
-      font-weight: 700;
+      font-size: 24px;
+      font-weight: bold;
     }
 
     #title h2 {
       margin: 5px 0 0 0;
       font-size: 16px;
-      font-weight: 400;
-      color: rgba(255, 255, 255, 0.9);
+      font-weight: normal;
+      color: #f0f0f0;
     }
 
     #infoCard {
-      background: var(--white);
-      color: var(--text-color);
-      padding: 15px;
+      background: #fff;
+      color: #000;
+      padding: 10px;
       border-radius: 8px;
-      box-shadow: var(--shadow);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       text-align: center;
       font-size: 14px;
       width: 250px;
@@ -80,8 +61,8 @@
 
     #infoCard:hover {
       transform: translateY(-5px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-      background: var(--white);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      background: #f9f9f9;
     }
 
     /* Content Container */
@@ -94,34 +75,28 @@
     /* Enhanced Paragraph Section */
     #bpr-paragraph {
       flex: 1;
-      background-color: var(--white);
-      border: 2px solid var(--primary-color);
-      border-radius: 12px;
+      background-color: #fff;
+      border: 2px solid #0033A0;
+      border-radius: 8px;
       padding: 25px;
-      box-shadow: var(--shadow);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       margin-bottom: 20px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    #bpr-paragraph:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 
     #bpr-paragraph h2 {
       margin-top: 0;
-      color: var(--primary-color);
-      font-size: 24px;
+      color: #0033A0;
+      font-size: 22px;
       margin-bottom: 20px;
-      font-weight: 700;
-      border-bottom: 2px solid var(--primary-color);
+      font-weight: 600;
+      border-bottom: 2px solid #0033A0;
       padding-bottom: 10px;
     }
 
     #bpr-paragraph p {
-      font-size: 16px;
+      font-size: 15px;
       line-height: 1.8;
-      color: var(--text-light);
+      color: #444;
       margin: 0 0 20px 0;
     }
 
@@ -130,23 +105,38 @@
     }
 
     #bpr-paragraph p strong {
-      color: var(--primary-color);
-      font-weight: 700;
+      color: #0033A0;
+      font-weight: 600;
     }
 
     #bpr-paragraph p em {
       font-style: italic;
-      color: var(--text-light);
+      color: #555;
     }
 
     #bpr-paragraph p a {
-      color: var(--primary-color);
+      color: #0033A0;
       text-decoration: underline;
-      font-weight: 700;
+      font-weight: 600;
     }
 
     #bpr-paragraph p a:hover {
-      color: var(--secondary-color);
+      color: #002366;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      #bpr-paragraph {
+        padding: 20px;
+      }
+
+      #bpr-paragraph h2 {
+        font-size: 20px;
+      }
+
+      #bpr-paragraph p {
+        font-size: 14px;
+      }
     }
 
     /* Timeline and Map Container */
@@ -158,52 +148,40 @@
     }
 
     #timeline-container {
-      background-color: var(--white);
-      border: 2px solid var(--primary-color);
-      border-radius: 12px;
+      background-color: #fff;
+      border: 2px solid #0033A0;
+      border-radius: 8px;
       padding: 30px;
-      box-shadow: var(--shadow);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       height: 300px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    #timeline-container:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 
     #timeline-container h2 {
       margin-top: 0;
-      color: var(--primary-color);
-      font-size: 22px;
+      color: #0033A0;
+      font-size: 20px;
       margin-bottom: 15px;
-      font-weight: 700;
+      font-weight: bold;
       text-align: center;
-      border-bottom: 2px solid var(--primary-color);
+      border-bottom: 2px solid #0033A0;
       padding-bottom: 10px;
     }
 
     #map-container {
-      background-color: var(--white);
-      border: 2px solid var(--primary-color);
-      border-radius: 12px;
+      background-color: #fff;
+      border: 2px solid #0033A0;
+      border-radius: 8px;
       padding: 10px;
-      box-shadow: var(--shadow);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    #map-container:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     #map-title {
       margin: 0;
-      color: var(--primary-color);
-      font-size: 22px;
-      font-weight: 700;
+      color: #0033A0;
+      font-size: 20px;
+      font-weight: bold;
       text-align: center;
-      border-bottom: 2px solid var(--primary-color);
+      border-bottom: 2px solid #0033A0;
       padding-bottom: 10px;
       margin-bottom: 10px;
     }
@@ -215,14 +193,14 @@
     }
 
     footer {
-      background-color: var(--primary-color);
-      color: var(--white);
+      background-color: #0033A0;
+      color: #FFFFFF;
       text-align: center;
-      padding: 15px;
+      padding: 10px;
       margin-top: 20px;
-      font-size: 14px;
-      border-radius: 12px;
-      box-shadow: var(--shadow);
+      font-size: 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     /* Responsive Design */
@@ -344,22 +322,26 @@
     // Add default base layer
     cartoDBLight.addTo(map);
 
-    // Add Sudan Admin 0 boundaries using Natural Earth Data
-    fetch('https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_admin_0_countries.geojson')
-      .then(response => response.json())
-      .then(data => {
-        const sudanFeature = data.features.find(feature => feature.properties.ISO_A2 === 'SD');
-        if (sudanFeature) {
-          L.geoJSON(sudanFeature, {
-            style: {
-              color: var(--primary-color),
-              weight: 2,
-              dashArray: "5, 5",
-              fillOpacity: 0
-            }
-          }).addTo(map);
-        }
-      });
+ 
+    const admn1 = L.esri.featureLayer({
+      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
+      where: "ADMLEVEL = 1",
+      style: {
+        color: "#0033A0",
+        weight: 2,
+        dashArray: "2, 2"
+      }
+    }).addTo(map);
+
+    const admn2 = L.esri.featureLayer({
+      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
+      where: "ADMLEVEL = 2",
+      style: {
+        color: "#0033A0",
+        weight: 1,
+        dashArray: "1, 1"
+      }
+    }).addTo(map);
 
     // Add layer control
     const baseLayers = {
