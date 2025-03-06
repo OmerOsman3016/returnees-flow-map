@@ -575,6 +575,583 @@
       }
     });
 
+    <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="description" content="Sudan | Displacement Tracking Matrix-Returnees Flow" />
+  <title>Sudan | Displacement Tracking Matrix - Returnees Flow</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+  <!-- Chart.js CSS (optional) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.css" />
+
+  <style>
+    body {
+      margin: 20px;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    #title-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #0033A0;
+      padding: 10px 20px;
+      color: white;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    }
+
+    #title h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: bold;
+      border-bottom: 3px solid white; /* Add a white line below the title */
+      padding-bottom: 5px; /* Add some spacing between the title and the line */
+    }
+
+    #title h1:last-of-type {
+      margin: 5px 0 0 0; /* Adjust margin for the second title */
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    #title h2 {
+      margin: 5px 0 0 0;
+      font-size: 22px;
+      font-weight: normal;
+      color: #f0f0f0;
+    }
+
+    #infoCard {
+      background: #fff;
+      color: #000;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      font-size: 15px;
+      width: 250px;
+      transition: all 0.2s ease;
+      border: 1px solid #e0e0e0;
+      margin-top: 10px; /* Add margin on smaller screens */
+    }
+
+    #infoCard:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      background: #f9f9f9;
+    }
+
+    /* Content Container */
+    .content-container {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+      flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    }
+
+    /* Enhanced Paragraph Section */
+    #bpr-paragraph {
+      flex: 1;
+      background-color: #fff;
+      border: 2px solid #0033A0;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      min-width: 300px; /* Ensure it doesn't get too small */
+    }
+
+    #bpr-paragraph h2 {
+      margin-top: 0;
+      color: #0033A0;
+      font-size: 22px;
+      margin-bottom: 20px;
+      font-weight: 600;
+      border-bottom: 2px solid #0033A0;
+      padding-bottom: 10px;
+    }
+
+    #bpr-paragraph p {
+      font-size: 15px;
+      line-height: 1.8;
+      color: #444;
+      margin: 0 0 20px 0;
+    }
+
+    #bpr-paragraph p:last-child {
+      margin-bottom: 0;
+    }
+
+    #bpr-paragraph p strong {
+      color: #0033A0;
+      font-weight: 600;
+    }
+
+    #bpr-paragraph p em {
+      font-style: italic;
+      color: #555;
+    }
+
+    #bpr-paragraph p a {
+      color: #0033A0;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    #bpr-paragraph p a:hover {
+      color: #002366;
+    }
+
+    /* Bar Chart Container */
+    #bar-chart-container {
+      background-color: #fff;
+      border: 2px solid #0033A0;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      width: 100%;
+     height: 300px; /* Set a fixed height for the bar chart container */
+    }
+
+    #bar-chart-container h2 {
+      margin-top: 0;
+      color: #0033A0;
+      font-size: 22px;
+      margin-bottom: 20px;
+      font-weight: 600;
+      border-bottom: 2px solid #0033A0;
+      padding-bottom: 10px;
+      text-align: center;
+    }
+
+    /* Timeline and Map Container */
+    #timeline-map-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 300px; /* Ensure it doesn't get too small */
+    }
+
+    #timeline-container {
+      background-color: #fff;
+      border: 2px solid #0033A0;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      height: 300px;
+    }
+
+    #timeline-container h2 {
+      margin-top: 0;
+      color: #0033A0;
+      font-size: 20px;
+      margin-bottom: 15px;
+      font-weight: bold;
+      text-align: center;
+      border-bottom: 2px solid #0033A0;
+      padding-bottom: 10px;
+    }
+
+    #map-container {
+      background-color: #fff;
+      border: 2px solid #0033A0;
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    #map-title {
+      margin: 0;
+      color: #0033A0;
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      border-bottom: 2px solid #0033A0;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+    }
+
+    #map {
+      height: 90vh; /* Use viewport height for dynamic sizing */
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    footer {
+      background-color: #0033A0;
+      color: #FFFFFF;
+      text-align: center;
+      padding: 10px;
+      margin-top: 20px;
+      font-size: 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background: linear-gradient(145deg, #0033A0, #002366); /* Add gradient */
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      #title-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      #infoCard {
+        width: 100%;
+        margin-top: 10px;
+      }
+
+      .content-container {
+        flex-direction: column;
+      }
+
+      #bpr-paragraph,
+      #timeline-container,
+      #map-container,
+      #bar-chart-container {
+        width: 100%;
+      }
+
+      #map {
+        height: 50vh; /* Adjust height for mobile */
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="title-container">
+    <div id="title">
+      <h1>
+        Sudan | Displacement Tracking Matrix - Returnees Flow
+      </h1>
+      <h2><strong>Return Monitoring Snapshot</h2></strong>
+    </div>
+    <div id="infoCard">
+      <p><strong>Latest Update:</strong> March 2025</p>
+      <p><strong>Total Returnees:</strong> 396,738</p>
+    </div>
+  </div>
+
+  <!-- Content Container for Paragraph and Timeline -->
+  <div class="content-container">
+    <!-- BPR Paragraph -->
+    <div id="bpr-paragraph">
+  <h2>Displacement and Returnee Movements in Sudan</h2>
+  <p>
+    DTM field teams monitored approximately <strong>396,738 individuals</strong> who returned from internal displacement to their locations of origin in Sudan. Individuals reportedly moved back to locations across <strong>Aj Jazirah (66%)</strong>, <strong>Sennar (29%)</strong>, and <strong>Khartoum (5%)</strong>.
+ 
+   
+    In addition to monitoring returnees at locations of origin, DTM field teams also track the return intentions of individuals leaving displacement sites and entering <strong>Aj Jazirah</strong>, <strong>Sennar</strong>, and <strong>Khartoum</strong> states to verify figures.
+  
+  
+    Returnees recorded in <strong>Aj Jazirah</strong> reportedly moved back from locations in <strong>Gedaref (44%)</strong>, <strong>Sennar (21%)</strong>, <strong>Kassala (11%)</strong>, <strong>River Nile (9%)</strong>, <strong>Red Sea (7%)</strong>, <strong>White Nile (4%)</strong>, <strong>Blue Nile (2%)</strong>, and <strong>Northern (2%)</strong>.
+ 
+     
+    Returnees recorded in <strong>Sennar</strong> reportedly moved back from locations in <strong>Gedaref (38%)</strong>, <strong>Blue Nile (18%)</strong>, <strong>Kassala (13%)</strong>, <strong>Red Sea (19%)</strong>, <strong>White Nile (7%)</strong>, <strong>River Nile (3%)</strong>, <strong>Northern (1%)</strong>, and <strong>Khartoum (1%)</strong>.
+  </p>
+  <p>
+    In addition to monitoring returnees at locations of origin, DTM field teams also track the return intentions of individuals leaving displacement sites and entering <strong>Aj Jazirah</strong>, <strong>Sennar</strong>, and <strong>Khartoum</strong> states to verify figures.
+   
+ 
+    These estimates represent data on individuals leaving states of displacement and intending to return to states of origin and therefore do not account for returnees who were displaced within the same state. Individuals returning to <strong>Khartoum</strong> reportedly moved back from <strong>River Nile (38%)</strong>, <strong>Red Sea (34%)</strong>, <strong>White Nile (18%)</strong>, and <strong>Northern (10%)</strong>.
+  </p>
+  <p>
+    <em>NOTE</em>: IDPs who returned from locations of displacement may not have returned to their specific locations of origin and may remain displaced within their locality or state of origin. DTM Sudan defines a returnee as a person who was previously displaced from their habitual residence within Sudan, due to an event dating from <strong>2003 onwards</strong>, and who has now voluntarily returned to the location of their habitual residence, irrespective of whether they have returned to their former residence or to another shelter type.
+  </p>
+ 
+</div>
+
+    <!-- Bar Chart Container -->
+    <div id="bar-chart-container">
+      <h2>Total Returness by Locality of Return</h2>
+      <canvas id="barChart"></canvas>
+    </div>
+
+    <!-- Timeline and Map Container -->
+    <div id="timeline-map-container">
+      <!-- Timeline Graph Container -->
+      <div id="timeline-container">
+        <h2>Returnees Over Time (October 2024 - June 2025)</h2>
+        <canvas id="timelineChart"></canvas>
+      </div>
+
+      <!-- Map Container -->
+      <div id="map-container">
+        <h2 id="map-title">Returnee Movements Across Sudan</h2>
+        <div id="map"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 International Organization for Migration | IOM, UN Migration. Sudan | Displacement Tracking Matrix.</p>
+  </footer>
+
+  <!-- External Scripts -->
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/esri-leaflet@3.0.0/dist/esri-leaflet.js"></script>
+  <script src="https://unpkg.com/@tweenjs/tween.js@18.6.4/dist/tween.umd.js"></script>
+  <script src="./src/CanvasFlowmapLayer.js"></script>
+  <script src="https://unpkg.com/papaparse@5.3.0/papaparse.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+  <script>
+    // Initialize the map
+    const map = L.map('map').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
+
+    // Define multiple base layers
+    const cartoDBLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const openStreetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const esriWorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
+    });
+
+    const stamenToner = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
+    });
+
+    // Add default base layer
+    cartoDBLight.addTo(map);
+
+    const admn1 = L.esri.featureLayer({
+      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
+      where: "ADMLEVEL = 1",
+      style: {
+        color: "#0033A0",
+        weight: 2,
+        dashArray: "2, 2"
+      }
+    }).addTo(map);
+
+    const admn2 = L.esri.featureLayer({
+      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
+      where: "ADMLEVEL = 2",
+      style: {
+        color: "#0033A0",
+        weight: 1,
+        dashArray: "1, 1"
+      }
+    }).addTo(map);
+
+    // Add layer control
+    const baseLayers = {
+      "CartoDB Light": cartoDBLight,
+      "OpenStreetMap": openStreetMap,
+      "Esri World Imagery": esriWorldImagery,
+      "Stamen Toner": stamenToner
+    };
+
+    L.control.layers(baseLayers).addTo(map);
+
+    // Store the flowmap layer globally
+    let flowmapLayer;
+
+    // Parse CSV data and create flow map layer
+    Papa.parse('./data/data.csv', {
+      download: true,
+      header: true,
+      dynamicTyping: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        const geoJsonFeatureCollection = {
+          type: 'FeatureCollection',
+          features: results.data.map(datum => ({
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: [datum.s_lon, datum.s_lat] },
+            properties: datum
+          }))
+        };
+
+        flowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
+          originAndDestinationFieldIds: {
+            originUniqueIdField: 's_state_id',
+            originGeometry: { x: 's_lon', y: 's_lat' },
+            destinationUniqueIdField: 'e_locality_id',
+            destinationGeometry: { x: 'e_lon', y: 'e_lat' }
+          },
+          style: (feature) => {
+            const baseRadius = 6;
+            const maxRadius = 20;
+            const volume = feature.properties.e_Volume || 0;
+
+            const radius = feature.properties.isOrigin
+              ? baseRadius
+              : Math.min(baseRadius + (volume / 5000), maxRadius);
+
+            return {
+              radius: radius,
+              weight: 1,
+              color: feature.properties.isOrigin ? 'rgb(17, 142, 170)' : 'rgb(195, 255, 62)',
+              fillColor: feature.properties.isOrigin ? 'rgba(0, 51, 160)' : 'rgb(255, 103, 31)',
+              fillOpacity: feature.properties.isOrigin ? 0.8 : 0.7
+            };
+          },
+          canvasBezierStyle: {
+            type: 'classBreaks',
+            field: 'e_Volume',
+            classBreakInfos: [
+              { classMinValue: 1, classMaxValue: 10000, symbol: { strokeStyle: '#ffb81c', lineWidth: 0.5, lineCap: 'round', shadowColor: '#fee8c8', shadowBlur: 2.0 } },
+              { classMinValue: 10001, classMaxValue: 20000, symbol: { strokeStyle: '#ff671f', lineWidth: 1.5, lineCap: 'round', shadowColor: '#fdbb84', shadowBlur: 2.0 } },
+              { classMinValue: 20001, classMaxValue: 200000, symbol: { strokeStyle: '#d22630', lineWidth: 3, lineCap: 'round', shadowColor: '#e34a33', shadowBlur: 2.0 } }
+            ],
+            defaultSymbol: { strokeStyle: '#e7e1ef', lineWidth: 0.5, lineCap: 'round', shadowColor: '#e7e1ef', shadowBlur: 1.5 }
+          },
+          pathDisplayMode: 'all',
+          animationStarted: true,
+          animationEasingFamily: 'Linear',
+          animationEasingType: 'None',
+          animationDuration: 3000,
+          onEachFeature: addTooltip
+        }).addTo(map);
+
+        // Add tooltip and popup to features
+        function addTooltip(feature, layer) {
+          const tooltipContent = feature.properties.isOrigin
+            ? `State of Displacement: ${feature.properties.s_State}`
+            : `State of Return: ${feature.properties.e_locality}`;
+
+          layer.bindTooltip(tooltipContent);
+          layer.on('mouseover', () => layer.openTooltip());
+          layer.on('mouseout', () => layer.closeTooltip());
+
+          // Add popup
+          const popupContent = feature.properties.isOrigin
+            ? `<b>State of Displacement:</b> ${feature.properties.s_State}`
+            : `<b>State of Return:</b> ${feature.properties.e_locality}`;
+
+          layer.bindPopup(popupContent);
+        }
+
+        // Highlight paths on mouseover
+        flowmapLayer.on('mouseover', (e) => {
+          if (e.sharedOriginFeatures.length) {
+            flowmapLayer.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
+          }
+          if (e.sharedDestinationFeatures.length) {
+            flowmapLayer.selectFeaturesForPathDisplay(e.sharedDestinationFeatures, 'SELECTION_NEW');
+          }
+        });
+
+        // Select initial feature for path display
+        flowmapLayer.selectFeaturesForPathDisplayById('s_state_id', "SD15", true, 'SELECTION_NEW');
+      }
+    });
+
+    // Add legend to the map
+    const legend = L.control({ position: 'bottomleft' });
+    legend.onAdd = () => {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = `
+        <span style="font-size:14px">Returnee Flow Volume:</span><br/>
+        <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold"> < 10000</span><br/>
+        <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold">10,001 - 20,000</span><br/>
+        <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold"> > 20,000</span><br/>
+      `;
+      return div;
+    };
+    legend.addTo(map);
+
+    // Initialize Timeline Graph
+    const ctx = document.getElementById('timelineChart').getContext('2d');
+    const gradient = ctx.createLinearGradient(0, 0, 0, 200);
+    gradient.addColorStop(0, 'rgba(0, 51, 160, 0.8)');
+    gradient.addColorStop(1, 'rgba(0, 51, 160, 0.2)');
+
+    const timelineChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Oct-24','Nov-24','Dec-24', 'Jan-25', 'Feb-25', 'Mar-25', 'Apr-25', 'May-25', 'Jun-25'],
+        datasets: [{
+          label: 'Returnees Over Time',
+          data: [0,0,53517, 32240, 282217, 9430, 0, 0, 0],
+          borderColor: '#0033A0',
+          backgroundColor: gradient,
+          borderWidth: 3,
+          fill: true,
+          pointBackgroundColor: '#0033A0',
+          pointBorderColor: '#fff',
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          tooltip: {
+            backgroundColor: '#0033A0',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            borderColor: '#fff',
+            borderWidth: 1,
+            displayColors: false
+          },
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Number of Returnees',
+              color: '#0033A0',
+              font: {
+                size: 14,
+                weight: 'bold'
+              }
+            },
+            grid: {
+              color: '#e0e0e0'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Month',
+              color: '#0033A0',
+              font: {
+                size: 14,
+                weight: 'bold'
+              }
+            },
+            grid: {
+              color: '#e0e0e0'
+            }
+          }
+        },
+        animation: {
+          duration: 2000,
+          easing: 'easeInOutQuart'
+        }
+      }
+    });
+
     // Initialize Bar Chart
     const barCtx = document.getElementById('barChart').getContext('2d');
     const barChart = new Chart(barCtx, {
@@ -653,6 +1230,10 @@
         }
       }
     });
+  </script>
+</body>
+
+</html>
   </script>
 </body>
 
