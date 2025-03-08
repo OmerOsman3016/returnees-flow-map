@@ -13,6 +13,9 @@
   <!-- Chart.js CSS (optional) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.css" />
 
+  <!-- Leaflet Heatmap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.heat@0.2.0/dist/leaflet-heat.css" />
+
   <style>
     body {
       margin: 20px;
@@ -331,6 +334,8 @@
   <script src="./src/CanvasFlowmapLayer.js"></script>
   <script src="https://unpkg.com/papaparse@5.3.0/papaparse.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <!-- Leaflet Heatmap Plugin -->
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
 
   <script>
     // Initialize the map
@@ -477,6 +482,15 @@
 
         // Select initial feature for path display
         flowmapLayer.selectFeaturesForPathDisplayById('s_state_id', "SD15", true, 'SELECTION_NEW');
+
+        // Add Heatmap Layer
+        const heatmapData = results.data.map(datum => [datum.e_lat, datum.e_lon, datum.e_Volume]);
+        const heatmapLayer = L.heatLayer(heatmapData, {
+          radius: 25,
+          blur: 15,
+          maxZoom: 17,
+          gradient: { 0.4: 'blue', 0.6: 'lime', 1: 'red' }
+        }).addTo(map);
       }
     });
 
