@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -225,6 +225,12 @@
       border-radius: 8px;
     }
 
+    #map2 {
+      height: 90vh; /* Use viewport height for dynamic sizing */
+      width: 100%;
+      border-radius: 8px;
+    }
+
     footer {
       background-color: #0033A0;
       color: #FFFFFF;
@@ -261,6 +267,10 @@
       }
 
       #map {
+        height: 50vh; /* Adjust height for mobile */
+      }
+
+      #map2 {
         height: 50vh; /* Adjust height for mobile */
       }
     }
@@ -319,6 +329,12 @@
         <h2 id="map-title">Returnee Movements Across Sudan</h2>
         <div id="map"></div>
       </div>
+
+      <!-- Second Map Container -->
+      <div id="map-container">
+        <h2 id="map-title">Additional Map</h2>
+        <div id="map2"></div>
+      </div>
     </div>
   </div>
 
@@ -345,7 +361,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 
   <script>
-    // Initialize the map
+    // Initialize the first map
     const map = L.map('map').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
 
     // Define multiple base layers
@@ -743,6 +759,35 @@
         }
       }
     });
+
+    // Initialize the second map
+    const map2 = L.map('map2').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
+
+    // Add default base layer
+    cartoDBLight.addTo(map2);
+
+    const admn1_2 = L.esri.featureLayer({
+      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/1",
+      where: "ADMLEVEL = 1",
+      style: {
+        color: "#0033A0",
+        weight: 2,
+        dashArray: "2, 2"
+      }
+    }).addTo(map2);
+
+    const admn2_2 = L.esri.featureLayer({
+      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
+      where: "ADMLEVEL = 2",
+      style: {
+        color: "#0033A0",
+        weight: 1,
+        dashArray: "1, 1"
+      }
+    }).addTo(map2);
+
+    // Add layer control
+    L.control.layers(baseLayers).addTo(map2);
   </script>
 </body>
 
