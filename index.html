@@ -378,6 +378,7 @@
   <script src="./src/CanvasFlowmapLayer.js"></script>
   <script src="https://unpkg.com/papaparse@5.3.0/papaparse.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
 
   <script>
     // Initialize the first map
@@ -524,15 +525,25 @@
     };
     legend.addTo(map);
 
-    // Initialize the second map
-    const map2 = L.map('map2').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
+   // Initialize the second map with Mapbox
+    mapboxgl.accessToken = 'pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q'; // Your Mapbox access token
 
-    // Add default base layer to the second map
-    openStreetMap.addTo(map2);
+    const map2 = new mapboxgl.Map({
+        container: 'map2', // Container ID
+        style: 'mapbox://styles/mapbox/streets-v11', // Mapbox style URL
+        center: [30, 16], // Initial map center [lng, lat]
+        zoom: 5.5, // Initial zoom level
+        attributionControl: false // Disable default attribution control
+    });
 
-    // Add layer control to the second map
-    L.control.layers(baseLayers).addTo(map2);
+    // Add navigation controls to the map
+    map2.addControl(new mapboxgl.NavigationControl());
 
+    // Add Mapbox layer control (optional)
+    map2.addControl(new mapboxgl.AttributionControl({
+        compact: true
+    }));
+    
     // Add legend to the second map
     const legend2 = L.control({ position: 'bottomleft' });
     legend2.onAdd = () => {
