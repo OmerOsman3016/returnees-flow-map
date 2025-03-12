@@ -528,7 +528,7 @@
     const map2 = L.map('map2').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
 
     // Add default base layer to the second map
-    cartoDBLight.addTo(map2);
+    openStreetMap.addTo(map2);
 
     // Add layer control to the second map
     L.control.layers(baseLayers).addTo(map2);
