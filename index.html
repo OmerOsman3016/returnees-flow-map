@@ -1,520 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
+ <div id="map"></div>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <meta name="description" content="Sudan | Displacement Tracking Matrix-Returnees Flow" />
-  <title>Sudan | Displacement Tracking Matrix - Returnees Flow</title>
-
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-
-  <!-- Chart.js CSS (optional) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.css" />
-
-  <style>
-    /* Your CSS styles here */
-  </style>
-</head>
-
-<body>
-  <div id="title-container">
-    <img src="./data/IOM logo.png" alt="IOM Logo" class="title-image">
-    <div id="title">
-      <h1>Sudan | Displacement Tracking Matrix - Returnees Flow</h1>
-      <h2><strong>RETURN MONITORING SNAPSHOT</strong></h2>
-    </div>
-    <div id="infoCard">
-      <p><strong>Latest Update:</strong> March 2025</p>
-      <p><strong>Total Returnees:</strong> 396,738</p>
-    </div>
-  </div>
-
-  <!-- Content Container for Paragraph and Timeline -->
-  <div class="content-container">
-    <!-- BPR Paragraph -->
-    <div id="bpr-paragraph">
-      <h2>Displacement and Returnee Movements in Sudan</h2>
-      <p>
-        <!-- Your paragraph content here -->
-      </p>
-    </div>
-
-    <!-- Bar Chart Container -->
-    <div id="bar-chart-container">
-      <h2>Total Returnees by Locality of Return</h2>
-      <canvas id="barChart"></canvas>
-    </div>
-
-    <!-- Timeline and Map Container -->
-    <div id="timeline-map-container">
-      <!-- Timeline Graph Container -->
-      <div id="timeline-container">
-        <h2>Returnees Over Time (October 2024 - June 2025)</h2>
-        <canvas id="timelineChart"></canvas>
-      </div>
-
-      <!-- Map Container -->
-      <div id="map-container">
-        <h2 id="map-title">Returnee Movements Across Sudan</h2>
-        <div id="map"></div>
-      </div>
-
-      <!-- Second Map Container -->
-      <div id="map-container">
-        <h2 id="map-title">Additional Map</h2>
-        <div id="map2"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Add image above the footer -->
-  <img src="./data/doner.png" alt="Donor Logo" style="width: 100%; height: auto; display: block; margin: 0 auto;">
-
-  <footer>
-    <p>&copy; 2025 International Organization for Migration | IOM, UN Migration. Sudan | Displacement Tracking Matrix</p>
-    <div class="footer-links">
-      <a href="https://dtm.iom.int/sudan" target="_blank">Visit IOM Sudan Website</a> |
-      <a href="https://displacement.iom.int/" target="_blank">DTM Global Website</a> |
-    </div>
-    <div class="footer-info">
-      <p>For more information, please contact <a href="mailto:dtmsudan@iom.int">dtmsudan@iom.int</a>.</p>
-    </div>
-  </footer>
-
-  <!-- External Scripts -->
+  <!-- first load LeafletJS -->
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+  <!-- load Esri Leaflet because we want to use an Esri basemap -->
   <script src="https://unpkg.com/esri-leaflet@3.0.0/dist/esri-leaflet.js"></script>
+
+  <!-- load animation tweening lib requirement for CanvasFlowMapLayer -->
   <script src="https://unpkg.com/@tweenjs/tween.js@18.6.4/dist/tween.umd.js"></script>
+
+  <!-- then load CanvasFlowMapLayer -->
   <script src="./src/CanvasFlowmapLayer.js"></script>
+
+  <!-- also load 3rd-party CSV parsing libary just for this demo  -->
   <script src="https://unpkg.com/papaparse@5.3.0/papaparse.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-
+  
   <script>
-    // Initialize the first map
-    const map = L.map('map').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
+    var map = L.map('map');
 
-    // Define multiple base layers
-    const cartoDBLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
+    if (L.Browser.mobile) {
+      map.setView([16, 32], 3);
+    } else {
+      map.setView([16, 31], 6);
+    }
 
-    const openStreetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
+    L.esri.basemapLayer('Gray').addTo(map);
 
-    const esriWorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
-    });
+    var admn1 = L.esri
+        .featureLayer({
+          url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
+          where: "ADMLEVEL = 1",
+          style: { color: "gray", weight: 1,  dashArray: "2, 3", dashOffset: "2" }
+        });
 
-    const stamenToner = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
-      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
-    });
+        admn1.addTo(map);
+    
+    var admn2 = L.esri
+        .featureLayer({
+          url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
+          where: "ADMLEVEL = 2",
+          //style: { color: "gray", weight: 1,  dashArray: "2, 3", dashOffset: "2" }
+          style: { color: "gray", weight: 0.25 }
+        });
 
-    // Add default base layer
-    cartoDBLight.addTo(map);
+        admn2.addTo(map);
+    
+   
 
-    const admn1 = L.esri.featureLayer({
-      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/1",
-      where: "ADMLEVEL = 1",
-      style: {
-        color: "#0033A0",
-        weight: 2,
-        dashArray: "2, 2"
-      }
-    }).addTo(map);
-
-    const admn2 = L.esri.featureLayer({
-      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
-      where: "ADMLEVEL = 2",
-      style: {
-        color: "#0033A0",
-        weight: 1,
-        dashArray: "1, 1"
-      }
-    }).addTo(map);
-
-    // Add layer control
-    const baseLayers = {
-      "CartoDB Light": cartoDBLight,
-      "OpenStreetMap": openStreetMap,
-      "Esri World Imagery": esriWorldImagery,
-      "Stamen Toner": stamenToner
-    };
-
-    L.control.layers(baseLayers).addTo(map);
-
-    // Store the flowmap layer globally
-    let flowmapLayer;
-
-    // Parse CSV data and create flow map layer
     Papa.parse('./data/data.csv', {
       download: true,
       header: true,
       dynamicTyping: true,
       skipEmptyLines: true,
-      complete: (results) => {
-        const geoJsonFeatureCollection = {
-          type: 'FeatureCollection',
-          features: results.data.map(datum => ({
-            type: 'Feature',
-            geometry: { type: 'Point', coordinates: [datum.s_lon, datum.s_lat] },
-            properties: datum
-          }))
-        };
-
-        flowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
-          originAndDestinationFieldIds: {
-            originUniqueIdField: 's_state_id',
-            originGeometry: { x: 's_lon', y: 's_lat' },
-            destinationUniqueIdField: 'e_locality_id',
-            destinationGeometry: { x: 'e_lon', y: 'e_lat' }
-          },
-          style: (feature) => {
-            const baseRadius = 6;
-            const maxRadius = 20;
-            const volume = feature.properties.e_Volume || 0;
-
-            const radius = feature.properties.isOrigin
-              ? baseRadius
-              : Math.min(baseRadius + (volume / 5000), maxRadius);
-
-            return {
-              radius: radius,
-              weight: 1,
-              color: feature.properties.isOrigin ? 'rgb(17, 142, 170)' : 'rgb(195, 255, 62)',
-              fillColor: feature.properties.isOrigin ? 'rgba(0, 51, 160)' : 'rgb(255, 103, 31)',
-              fillOpacity: feature.properties.isOrigin ? 0.8 : 0.7
-            };
-          },
-          canvasBezierStyle: {
-            type: 'classBreaks',
-            field: 'e_Volume',
-            classBreakInfos: [
-              { classMinValue: 1, classMaxValue: 10000, symbol: { strokeStyle: '#ffb81c', lineWidth: 0.5, lineCap: 'round', shadowColor: '#fee8c8', shadowBlur: 2.0 } },
-              { classMinValue: 10001, classMaxValue: 20000, symbol: { strokeStyle: '#ff671f', lineWidth: 1.5, lineCap: 'round', shadowColor: '#fdbb84', shadowBlur: 2.0 } },
-              { classMinValue: 20001, classMaxValue: 200000, symbol: { strokeStyle: '#d22630', lineWidth: 3, lineCap: 'round', shadowColor: '#e34a33', shadowBlur: 2.0 } }
-            ],
-            defaultSymbol: { strokeStyle: '#e7e1ef', lineWidth: 0.5, lineCap: 'round', shadowColor: '#e7e1ef', shadowBlur: 1.5 }
-          },
-          pathDisplayMode: 'all',
-          animationStarted: true,
-          animationEasingFamily: 'Linear',
-          animationEasingType: 'None',
-          animationDuration: 3000,
-          onEachFeature: addTooltip
-        }).addTo(map);
-
-        // Add tooltip and popup to features
-        function addTooltip(feature, layer) {
-          const tooltipContent = feature.properties.isOrigin
-            ? `State of Displacement: ${feature.properties.s_State}`
-            : `State of Return: ${feature.properties.e_locality}`;
-
-          layer.bindTooltip(tooltipContent);
-          layer.on('mouseover', () => layer.openTooltip());
-          layer.on('mouseout', () => layer.closeTooltip());
-
-          // Add popup
-          const popupContent = feature.properties.isOrigin
-            ? `<b>State of Displacement:</b> ${feature.properties.s_State}`
-            : `<b>State of Return:</b> ${feature.properties.e_locality}`;
-
-          layer.bindPopup(popupContent);
-        }
-
-        // Highlight paths on mouseover
-        flowmapLayer.on('mouseover', (e) => {
-          if (e.sharedOriginFeatures.length) {
-            flowmapLayer.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
-          }
-          if (e.sharedDestinationFeatures.length) {
-            flowmapLayer.selectFeaturesForPathDisplay(e.sharedDestinationFeatures, 'SELECTION_NEW');
-          }
-        });
-
-        // Select initial feature for path display
-        flowmapLayer.selectFeaturesForPathDisplayById('s_state_id', "SD15", true, 'SELECTION_NEW');
-      }
-    });
-
-    // Add legend to the map
-    const legend = L.control({ position: 'bottomleft' });
-    legend.onAdd = () => {
-      const div = L.DomUtil.create('div', 'legend');
-      div.innerHTML = `
-        <span style="font-size:14px">Returnee Flow Volume:</span><br/>
-        <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> < 10000</span><br/>
-        <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold">10,001 - 20,000</span><br/>
-        <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> > 20,000</span><br/>
-      `;
-      return div;
-    };
-    legend.addTo(map);
-
-    // Initialize Timeline Graph
-    const ctx = document.getElementById('timelineChart').getContext('2d');
-    const gradient = ctx.createLinearGradient(0, 0, 0, 200);
-    gradient.addColorStop(0, 'rgba(0, 51, 160, 0.8)');
-    gradient.addColorStop(1, 'rgba(0, 51, 160, 0.2)');
-
-    const timelineChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Oct-24','Nov-24','Dec-24', 'Jan-25', 'Feb-25', 'Mar-25', 'Apr-25', 'May-25', 'Jun-25'],
-        datasets: [{
-          label: 'Returnees Over Time',
-          data: [0,0,53517, 32240, 282217, 9430, 0, 0, 0],
-          borderColor: '#0033A0',
-          backgroundColor: gradient,
-          borderWidth: 3,
-          fill: true,
-          pointBackgroundColor: '#0033A0',
-          pointBorderColor: '#fff',
-          pointRadius: 5,
-          pointHoverRadius: 7,
-          tension: 0.4
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          tooltip: {
-            backgroundColor: '#0033A0',
-            titleColor: '#fff',
-            bodyColor: '#fff',
-            borderColor: '#fff',
-            borderWidth: 1,
-            displayColors: false
-          },
-          legend: {
-            display: false
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Number of Returnees',
-              color: '#0033A0',
-              font: {
-                size: 14,
-                weight: 'bold'
-              }
-            },
-            grid: {
-              color: '#e0e0e0'
-            }
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'Month',
-              color: '#0033A0',
-              font: {
-                size: 14,
-                weight: 'bold'
-              }
-            },
-            grid: {
-              color: '#e0e0e0'
-            }
-          }
-        },
-        animation: {
-          duration: 15000,
-          easing: 'easeInOutQuart'
-        }
-      }
-    });
-
-    // Initialize Bar Chart
-    const barCtx = document.getElementById('barChart').getContext('2d');
-    const barChart = new Chart(barCtx, {
-      type: 'bar',
-      data: {
-        labels: [
-          "Madani Alkubra", "Um Algura", "Janoub Aj Jazirah", "Al Hassahisa", 
-          "Sharg Aj Jazirah", "Abu Hujar", "Ad Dinder", "As Suki", 
-          "Sennar", "Sharg Sennar", "Sinja"
-        ],
-        datasets: [{
-          label: 'Total Returnees',
-          data: [10960, 84575, 20455, 12705, 133950, 4690, 6935, 74509, 15725, 3305, 9595],
-          backgroundColor: [
-            // Aj Jazirah localities (first 5 items)
-            'rgba(0, 51, 160, 0.6)', // Madani Alkubra
-            'rgba(0, 51, 160, 0.6)', // Um Algura
-            'rgba(0, 51, 160, 0.6)', // Janoub Aj Jazirah
-            'rgba(0, 51, 160, 0.6)', // Al Hassahisa
-            'rgba(0, 51, 160, 0.6)', // Sharg Aj Jazirah
-            // Sennar localities (remaining items)
-            'rgba(255, 103, 31, 0.6)', // Abu Hujar
-            'rgba(255, 103, 31, 0.6)', // Ad Dinder
-            'rgba(255, 103, 31, 0.6)', // As Suki
-            'rgba(255, 103, 31, 0.6)', // Sennar
-            'rgba(255, 103, 31, 0.6)', // Sharg Sennar
-            'rgba(255, 103, 31, 0.6)'  // Sinja
-          ],
-          borderColor: [
-            // Aj Jazirah localities (first 5 items)
-            '#0033A0', // Madani Alkubra
-            '#0033A0', // Um Algura
-            '#0033A0', // Janoub Aj Jazirah
-            '#0033A0', // Al Hassahisa
-            '#0033A0', // Sharg Aj Jazirah
-            // Sennar localities (remaining items)
-            '#FF671F', // Abu Hujar
-            '#FF671F', // Ad Dinder
-            '#FF671F', // As Suki
-            '#FF671F', // Sennar
-            '#FF671F', // Sharg Sennar
-            '#FF671F'  // Sinja
-          ],
-          borderWidth: 2,
-          hoverBackgroundColor: [
-            // Aj Jazirah localities (first 5 items)
-            'rgba(0, 51, 160, 0.8)', // Madani Alkubra
-            'rgba(0, 51, 160, 0.8)', // Um Algura
-            'rgba(0, 51, 160, 0.8)', // Janoub Aj Jazirah
-            'rgba(0, 51, 160, 0.8)', // Al Hassahisa
-            'rgba(0, 51, 160, 0.8)', // Sharg Aj Jazirah
-            // Sennar localities (remaining items)
-            'rgba(255, 103, 31, 0.8)', // Abu Hujar
-            'rgba(255, 103, 31, 0.8)', // Ad Dinder
-            'rgba(255, 103, 31, 0.8)', // As Suki
-            'rgba(255, 103, 31, 0.8)', // Sennar
-            'rgba(255, 103, 31, 0.8)', // Sharg Sennar
-            'rgba(255, 103, 31, 0.8)'  // Sinja
-          ],
-          hoverBorderColor: [
-            // Aj Jazirah localities (first 5 items)
-            '#0033A0', // Madani Alkubra
-            '#0033A0', // Um Algura
-            '#0033A0', // Janoub Aj Jazirah
-            '#0033A0', // Al Hassahisa
-            '#0033A0', // Sharg Aj Jazirah
-            // Sennar localities (remaining items)
-            '#FF671F', // Abu Hujar
-            '#FF671F', // Ad Dinder
-            '#FF671F', // As Suki
-            '#FF671F', // Sennar
-            '#FF671F', // Sharg Sennar
-            '#FF671F'  // Sinja
-          ]
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          tooltip: {
-            backgroundColor: '#0033A0',
-            titleColor: '#fff',
-            bodyColor: '#fff',
-            borderColor: '#fff',
-            borderWidth: 1,
-            displayColors: false
-          },
-          legend: {
-            display: true,
-            position: 'top',
-            labels: {
-              generateLabels: (chart) => {
-                const datasets = chart.data.datasets;
-                return [
-                  {
-                    text: 'Aj Jazirah Localities',
-                    fillStyle: 'rgba(0, 51, 160, 0.6)',
-                    strokeStyle: '#0033A0',
-                    lineWidth: 2,
-                    hidden: false
-                  },
-                  {
-                    text: 'Sennar Localities',
-                    fillStyle: 'rgba(255, 103, 31, 0.6)',
-                    strokeStyle: '#FF671F',
-                    lineWidth: 2,
-                    hidden: false
-                  }
-                ];
-              }
-            }
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Total Returnees',
-              color: '#0033A0',
-              font: {
-                size: 14,
-                weight: 'bold'
-              }
-            },
-            grid: {
-              color: '#e0e0e0'
-            }
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'Locality of Return',
-              color: '#0033A0',
-              font: {
-                size: 14,
-                weight: 'bold'
-              }
-            },
-            grid: {
-              display: false
-            },
-            ticks: {
-              autoSkip: false,
-              maxRotation: 45,
-              minRotation: 45
-            }
-          }
-        },
-        animation: {
-          duration: 15000,
-          easing: 'easeInOutQuart'
-        }
-      }
-    });
-
-    // Initialize the second map
-    const map2 = L.map('map2').setView([16, 32], L.Browser.mobile ? 3 : 6);
-
-    L.esri.basemapLayer('Gray').addTo(map2);
-
-    const admn1Map2 = L.esri.featureLayer({
-      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
-      where: "ADMLEVEL = 1",
-      style: { color: "gray", weight: 1,  dashArray: "2, 3", dashOffset: "2" }
-    }).addTo(map2);
-
-    const admn2Map2 = L.esri.featureLayer({
-      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
-      where: "ADMLEVEL = 2",
-      style: { color: "gray", weight: 0.25 }
-    }).addTo(map2);
-
-    Papa.parse('./data/data_idps.csv', {
-      download: true,
-      header: true,
-      dynamicTyping: true,
-      skipEmptyLines: true,
       complete: function(results) {
-        const geoJsonFeatureCollection = {
+        var geoJsonFeatureCollection = {
           type: 'FeatureCollection',
           features: results.data.map(function(datum) {
             return {
@@ -528,7 +67,7 @@
           })
         };
 
-        const oneToManyFlowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
+        var oneToManyFlowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
           originAndDestinationFieldIds: {
             originUniqueIdField: 's_state_id',
             originGeometry: {
@@ -608,22 +147,25 @@
           animationEasingType: 'None',
           animationDuration: 2000,
           onEachFeature: TooltipName,
-        }).addTo(map2);
-
+        }).addTo(map);
+                
         //create tooltip function on hover
         function TooltipName(feature, layer){
-          layer.on('mouseover', function (e) {
-            this.openPopup();
-          });
-          layer.on('mouseout', function (e) {
-            this.closePopup();
-          });
-          if (layer._radius===6){
-            layer.bindTooltip("State of Origin: "+feature.properties.s_State );
-          }else {
-            layer.bindTooltip("Locality of Displacement: "+feature.properties.e_locality);
-          }
+        layer.on('mouseover', function (e) {
+        this.openPopup();
+        });
+        layer.on('mouseout', function (e) {
+        this.closePopup();
+        });
+        if (layer._radius===6){
+          layer.bindTooltip("State of Origin: "+feature.properties.s_State );
+        }else {
+          layer.bindTooltip("Locality of Displacement: "+feature.properties.e_locality);
+
+        }
+       
         };
+        
 
         // since this demo is using the optional "pathDisplayMode" as "selection",
         // it is up to the developer to wire up a click or mouseover listener
@@ -644,21 +186,17 @@
       }
     });
 
-    //Adding Legend to the map
-    const legend2 = L.control({position: 'bottomleft'});
-    legend2.onAdd = function (map2) {
-      const div = L.DomUtil.create('div', 'legend');
-      div.innerHTML = 
-        '<div style="width:17px;height:17px;background:rgba(255, 103, 31, 0.8) ;float:left;margin-right:10px;border-radius:30px"></div>'+ '<span style="float:left;margin-top:1px; font-weight:bold"> State of origin </span>'+'<br/>'+'<br/>'+
-        '<div style="width:17px;height:17px;background:rgba(0, 51, 160, 0.8) ;float:left;margin-right:10px;border-radius:30px"></div>'+ '<span style="float:left;margin-top:1px; font-weight:bold"> Locality of diplacement </span>'+'<br/>'+'<br/>'+
-        '<span style="font-size: 14px">Displacement flow:</span>'+'<br/>'+
-        '<div style="width:70px;height:3px;background:#ffb81c ;float:left;margin-right:10px;margin-top:10px"></div><span style="float:left; font-weight:bold"> < 80,000</span>'+'<br/>'+
-        '<div style="width:70px;height:4px;background:#ff671f ;float:left;margin-right:10px;;margin-top:10px"></div><span style="float:left; font-weight:bold">80,001 - 160,000</span>'+'<br/>'+
-        '<div style="width:70px;height:7px;background:#e34a33 ;float:left;margin-right:10px;;margin-top:10px"></div><span style="float:left; font-weight:bold"> > 160,000</span>'+'<br/>'
-      return div;
-    };
-    legend2.addTo(map2);
-  </script>
-</body>
-
-</html>
+    	//Adding Legend to the map
+	var legend = L.control({position: 'bottomleft'});
+	legend.onAdd = function (map) {
+    var legend = L.DomUtil.create('div', 'legend');
+	legend.innerHTML = 
+  '<div style="width:17px;height:17px;background:rgba(255, 103, 31, 0.8) ;float:left;margin-right:10px;border-radius:30px"></div>'+ '<span style="float:left;margin-top:1px; font-weight:bold"> State of origin </span>'+'<br/>'+'<br/>'+
+  '<div style="width:17px;height:17px;background:rgba(0, 51, 160, 0.8) ;float:left;margin-right:10px;border-radius:30px"></div>'+ '<span style="float:left;margin-top:1px; font-weight:bold"> Locality of diplacement </span>'+'<br/>'+'<br/>'+
+  '<span style="font-size: 14px">Displacement flow:</span>'+'<br/>'+
+	'<div style="width:70px;height:3px;background:#ffb81c ;float:left;margin-right:10px;margin-top:10px"></div><span style="float:left; font-weight:bold"> < 80,000</span>'+'<br/>'+
+	'<div style="width:70px;height:4px;background:#ff671f ;float:left;margin-right:10px;;margin-top:10px"></div><span style="float:left; font-weight:bold">80,001 - 160,000</span>'+'<br/>'+
+	'<div style="width:70px;height:7px;background:#e34a33 ;float:left;margin-right:10px;;margin-top:10px"></div><span style="float:left; font-weight:bold"> > 160,000</span>'+'<br/>'
+    return legend;
+	};
+	legend.addTo(map);
