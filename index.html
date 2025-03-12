@@ -403,27 +403,6 @@
     // Add default base layer to the first map
     cartoDBLight.addTo(map);
 
-    // Add administrative layers to the first map
-    const admn1 = L.esri.featureLayer({
-      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/1",
-      where: "ADMLEVEL = 1",
-      style: {
-        color: "#0033A0",
-        weight: 2,
-        dashArray: "2, 2"
-      }
-    }).addTo(map);
-
-    const admn2 = L.esri.featureLayer({
-      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
-      where: "ADMLEVEL = 2",
-      style: {
-        color: "#0033A0",
-        weight: 1,
-        dashArray: "1, 1"
-      }
-    }).addTo(map);
-
     // Add layer control to the first map
     const baseLayers = {
       "CartoDB Light": cartoDBLight,
@@ -550,27 +529,6 @@
 
     // Add default base layer to the second map
     cartoDBLight.addTo(map2);
-
-    // Add administrative layers to the second map
-    const admn1_2 = L.esri.featureLayer({
-      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/1",
-      where: "ADMLEVEL = 1",
-      style: {
-        color: "#0033A0",
-        weight: 2,
-        dashArray: "2, 2"
-      }
-    }).addTo(map2);
-
-    const admn2_2 = L.esri.featureLayer({
-      url: "https://codgis.itos.uga.edu/arcgis/rest/services/COD_External/SDN_EN/MapServer/2",
-      where: "ADMLEVEL = 2",
-      style: {
-        color: "#0033A0",
-        weight: 1,
-        dashArray: "1, 1"
-      }
-    }).addTo(map2);
 
     // Add layer control to the second map
     L.control.layers(baseLayers).addTo(map2);
