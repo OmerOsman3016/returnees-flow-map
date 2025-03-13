@@ -773,7 +773,8 @@
             layer.bindPopup(popupContent);
 
             // Add tooltip
-            const tooltipContent = `<b>${feature.properties.state}</b>`;
+            const tooltipContent = `<b>${feature.properties.state}</b><br/>
+    <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}`;
             layer.bindTooltip(tooltipContent);
           }
         }).addTo(map3);
