@@ -733,53 +733,81 @@
     L.control.layers(baseLayers3).addTo(map3);
 
 
-    // Parse CSV data and create markers for the third map
-    Papa.parse('./data/total_idps.csv', {
-      download: true,
-      header: true,
-      dynamicTyping: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        const geoJsonFeatureCollection3 = {
-          type: 'FeatureCollection',
-          features: results.data.map(datum => ({
-            type: 'Feature',
-            geometry: { type: 'Point', coordinates: [datum.lon, datum.lat] },
-            properties: datum
-          }))
-        };
-       // Find the maximum total_idps value for normalization
+   // Parse CSV data and create animated markers for the third map
+Papa.parse('./data/total_idps.csv', {
+  download: true,
+  header: true,
+  dynamicTyping: true,
+  skipEmptyLines: true,
+  complete: (results) => {
+    const geoJsonFeatureCollection3 = {
+      type: 'FeatureCollection',
+      features: results.data.map(datum => ({
+        type: 'Feature',
+        geometry: { type: 'Point', coordinates: [datum.lon, datum.lat] },
+        properties: datum
+      }))
+    };
+
+    // Find the maximum total_idps value for normalization
     const maxTotalIdps = Math.max(...results.data.map(d => d.total_idps));
 
-        // Add markers to the third map
-        L.geoJSON(geoJsonFeatureCollection3, {
-          pointToLayer: (feature, latlng) => {
-           // Normalize the total_idps value to determine the marker size
-        const radius = 8 + (feature.properties.total_idps / maxTotalIdps) * 20; // Adjust scalin
-            return L.circleMarker(latlng, {
-              radius: radius, // Fixed size for all markers
-              fillColor: '#d22630', // Red color for IDPs
-              color: '#fff',
-              weight: 1,
-              opacity: 1,
-              fillOpacity: 0.7
-            });
-          },
-          onEachFeature: (feature, layer) => {
-            const popupContent = `
-              <b>State:</b> ${feature.properties.state}<br/>
-              <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}
-            `;
-            layer.bindPopup(popupContent);
+    // Function to animate circle markers
+    function animateCircleMarker(marker, baseRadius) {
+      const tween = new TWEEN.Tween({ radius: baseRadius })
+        .to({ radius: baseRadius * 1.5 }, 1000) // Animate to 1.5x the base radius
+        .easing(TWEEN.Easing.Sinusoidal.InOut) // Smooth easing
+        .yoyo(true) // Reverse the animation
+        .repeat(Infinity) // Repeat indefinitely
+        .onUpdate(({ radius }) => {
+          marker.setRadius(radius); // Update the marker's radius
+        })
+        .start(); // Start the animation
+    }
 
-            // Add tooltip
-            const tooltipContent = `<b>${feature.properties.state}</b><br/>
-    <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}`;
-            layer.bindTooltip(tooltipContent);
-          }
-        }).addTo(map3);
+    // Add animated markers to the third map
+    L.geoJSON(geoJsonFeatureCollection3, {
+      pointToLayer: (feature, latlng) => {
+        // Normalize the total_idps value to determine the base radius
+        const baseRadius = 8 + (feature.properties.total_idps / maxTotalIdps) * 20;
+
+        // Create a circle marker
+        const marker = L.circleMarker(latlng, {
+          radius: baseRadius, // Initial radius
+          fillColor: '#d22630', // Red color for IDPs
+          color: '#fff',
+          weight: 1,
+          opacity: 1,
+          fillOpacity: 0.7
+        });
+
+        // Animate the marker
+        animateCircleMarker(marker, baseRadius);
+
+        return marker;
+      },
+      onEachFeature: (feature, layer) => {
+        const popupContent = `
+          <b>State:</b> ${feature.properties.state}<br/>
+          <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}
+        `;
+        layer.bindPopup(popupContent);
+
+        // Add tooltip
+        const tooltipContent = `<b>${feature.properties.state}</b><br/>
+          <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}`;
+        layer.bindTooltip(tooltipContent);
       }
-    });
+    }).addTo(map3);
+  }
+});
+
+// Update Tween.js animations on each frame
+function animate() {
+  requestAnimationFrame(animate);
+  TWEEN.update();
+}
+animate(); // Start the animation loop
 
     // Add legend to the third map
     const legend3 = L.control({ position: 'bottomleft' });
