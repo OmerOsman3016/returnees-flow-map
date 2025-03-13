@@ -748,12 +748,16 @@
             properties: datum
           }))
         };
+       // Find the maximum total_idps value for normalization
+    const maxTotalIdps = Math.max(...results.data.map(d => d.total_idps));
 
         // Add markers to the third map
         L.geoJSON(geoJsonFeatureCollection3, {
           pointToLayer: (feature, latlng) => {
+           // Normalize the total_idps value to determine the marker size
+        const radius = 8 + (feature.properties.total_idps / maxTotalIdps) * 20; // Adjust scalin
             return L.circleMarker(latlng, {
-              radius: 8, // Fixed size for all markers
+              radius: radius, // Fixed size for all markers
               fillColor: '#d22630', // Red color for IDPs
               color: '#fff',
               weight: 1,
