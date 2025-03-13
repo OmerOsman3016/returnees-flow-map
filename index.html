@@ -419,38 +419,35 @@
     // Initialize the first map
     const map = L.map('map').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
 
-    // Define multiple base layers
-    const cartoDBLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    // Define multiple base layers for the first map
+    const cartoDBLight1 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
 
-    const openStreetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    const openStreetMap1 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
 
-    const esriWorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    const esriWorldImagery1 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
     });
 
-    const stamenToner = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+    const stamenToner1 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
       attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
     });
 
     // Add default base layer to the first map
-    cartoDBLight.addTo(map);
+    cartoDBLight1.addTo(map);
 
     // Add layer control to the first map
-    const baseLayers = {
-      "CartoDB Light": cartoDBLight,
-      "OpenStreetMap": openStreetMap,
-      "Esri World Imagery": esriWorldImagery,
-      "Stamen Toner": stamenToner
+    const baseLayers1 = {
+      "CartoDB Light": cartoDBLight1,
+      "OpenStreetMap": openStreetMap1,
+      "Esri World Imagery": esriWorldImagery1,
+      "Stamen Toner": stamenToner1
     };
 
-    L.control.layers(baseLayers).addTo(map);
-
-    // Store the flowmap layer globally
-    let flowmapLayer;
+    L.control.layers(baseLayers1).addTo(map);
 
     // Parse CSV data and create flow map layer for the first map
     Papa.parse('./data/data.csv', {
@@ -560,14 +557,39 @@
     };
     legend.addTo(map);
 
-    // Initialize the second map
+     // Initialize the second map
     const map2 = L.map('map2').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
 
+    // Define multiple base layers for the second map
+    const cartoDBLight2 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const openStreetMap2 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const esriWorldImagery2 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
+    });
+
+    const stamenToner2 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
+    });
+
     // Add default base layer to the second map
-  cartoDBLight.addTo(map2);
+    cartoDBLight2.addTo(map2);
 
     // Add layer control to the second map
-    L.control.layers(baseLayers).addTo(map2);
+    const baseLayers2 = {
+      "CartoDB Light": cartoDBLight2,
+      "OpenStreetMap": openStreetMap2,
+      "Esri World Imagery": esriWorldImagery2,
+      "Stamen Toner": stamenToner2
+    };
+
+    L.control.layers(baseLayers2).addTo(map2);
+
     
     // Add legend to the second map
     const legend2 = L.control({ position: 'bottomleft' });
@@ -677,14 +699,39 @@
       }
     });
 
-    // Initialize the third map
+   // Initialize the third map
     const map3 = L.map('map3').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
 
+    // Define multiple base layers for the third map
+    const cartoDBLight3 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const openStreetMap3 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const esriWorldImagery3 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
+    });
+
+    const stamenToner3 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
+    });
+
     // Add default base layer to the third map
-  cartoDBLight.addTo(map3);
+    cartoDBLight3.addTo(map3);
 
     // Add layer control to the third map
-    L.control.layers(baseLayers).addTo(map3);
+    const baseLayers3 = {
+      "CartoDB Light": cartoDBLight3,
+      "OpenStreetMap": openStreetMap3,
+      "Esri World Imagery": esriWorldImagery3,
+      "Stamen Toner": stamenToner3
+    };
+
+    L.control.layers(baseLayers3).addTo(map3);
+
 
     // Parse CSV data and create markers for the third map
     Papa.parse('./data/total_idps.csv', {
