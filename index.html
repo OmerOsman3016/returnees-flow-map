@@ -199,6 +199,21 @@
       border-bottom: 2px solid #0033A0;
       padding-bottom: 10px;
     }
+     .map-button {
+      background-color: #0033A0;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+    }
+
+    .map-button:hover {
+      background-color: #002366;
+    }
 
     #map-container {
       background-color: #fff;
@@ -399,6 +414,15 @@
         <h2>Returnees Over Time (October 2024 - June 2025)</h2>
         <canvas id="timelineChart"></canvas>
       </div>
+       <!-- ... (your existing title-container and content-container remain unchanged) ... -->
+
+  <!-- Add this button container above the maps -->
+  <div id="map-buttons" style="text-align: center; margin-bottom: 20px;">
+    <button id="map1-button" class="map-button">Show Map 1</button>
+    <button id="map2-button" class="map-button">Show Map 2</button>
+    <button id="map3-button" class="map-button">Show Map 3</button>
+    <button id="map4-button" class="map-button">Show Map 4</button>
+  </div>
 
       <!-- Map Container -->
       <div id="map-container">
@@ -449,6 +473,32 @@
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
 
   <script>
+    // Function to toggle map visibility
+    function toggleMap(mapId, buttonId) {
+      const mapContainer = document.getElementById(mapId);
+      const button = document.getElementById(buttonId);
+
+      if (mapContainer.style.display === "none" || mapContainer.style.display === "") {
+        mapContainer.style.display = "block";
+        button.textContent = `Hide ${button.textContent.replace("Show ", "")}`;
+      } else {
+        mapContainer.style.display = "none";
+        button.textContent = `Show ${button.textContent.replace("Hide ", "")}`;
+      }
+    }
+
+    // Add event listeners to the buttons
+    document.getElementById("map1-button").addEventListener("click", () => toggleMap("map-container", "map1-button"));
+    document.getElementById("map2-button").addEventListener("click", () => toggleMap("map-container-2", "map2-button"));
+    document.getElementById("map3-button").addEventListener("click", () => toggleMap("map-container-3", "map3-button"));
+    document.getElementById("map4-button").addEventListener("click", () => toggleMap("map-container-4", "map4-button"));
+
+    // Initially hide all maps except the first one
+    document.getElementById("map-container-2").style.display = "none";
+    document.getElementById("map-container-3").style.display = "none";
+    document.getElementById("map-container-4").style.display = "none";
+
+    // ... (your existing JavaScript code for initializing maps, charts, etc., remains unchanged) ...
     // Initialize the first map
     const map = L.map('map').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
 
