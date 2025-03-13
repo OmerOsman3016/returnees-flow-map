@@ -252,6 +252,33 @@
       border-radius: 8px;
     }
 
+    /* Third Map Container */
+    #map-container-3 {
+      background-color: #fff;
+      border: 2px solid #0033A0;
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-top: 20px; /* Add some space between the maps */
+    }
+
+    #map-title-3 {
+      margin: 0;
+      color: #0033A0;
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      border-bottom: 2px solid #0033A0;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+    }
+
+    #map3 {
+      height: 90vh; /* Use viewport height for dynamic sizing */
+      width: 100%;
+      border-radius: 8px;
+    }
+
     footer {
       background-color: #0033A0;
       color: #FFFFFF;
@@ -284,12 +311,14 @@
       #timeline-container,
       #map-container,
       #map-container-2,
+      #map-container-3,
       #bar-chart-container {
         width: 100%;
       }
 
       #map,
-      #map2 {
+      #map2,
+      #map3 {
         height: 50vh; /* Adjust height for mobile */
       }
     }
@@ -353,6 +382,12 @@
       <div id="map-container-2">
         <h2 id="map-title-2">Second Map: Returnee Movements Across Sudan</h2>
         <div id="map2"></div>
+      </div>
+
+      <!-- Third Map Container -->
+      <div id="map-container-3">
+        <h2 id="map-title-3">Total Number of IDPs by State (Admin1)</h2>
+        <div id="map3"></div>
       </div>
     </div>
   </div>
@@ -641,6 +676,70 @@
         flowmapLayer2.selectFeaturesForPathDisplayById('s_state_id', "SD15", true, 'SELECTION_NEW');
       }
     });
+
+    // Initialize the third map
+    const map3 = L.map('map3').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
+
+    // Add default base layer to the third map
+    cartoDBLight.addTo(map3);
+
+    // Add layer control to the third map
+    L.control.layers(baseLayers).addTo(map3);
+
+    // Parse CSV data and create proportional symbols for the third map
+    Papa.parse('./data/total_idps.csv', {
+      download: true,
+      header: true,
+      dynamicTyping: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        const geoJsonFeatureCollection3 = {
+          type: 'FeatureCollection',
+          features: results.data.map(datum => ({
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: [datum.lon, datum.lat] },
+            properties: datum
+          }))
+        };
+
+        // Add proportional symbols to the third map
+        L.geoJSON(geoJsonFeatureCollection3, {
+          pointToLayer: (feature, latlng) => {
+            const idpCount = feature.properties.total_idps;
+            const radius = Math.sqrt(idpCount) * 0.5; // Adjust scaling factor as needed
+
+            return L.circleMarker(latlng, {
+              radius: radius,
+              fillColor: '#d22630', // Red color for IDPs
+              color: '#fff',
+              weight: 1,
+              opacity: 1,
+              fillOpacity: 0.7
+            });
+          },
+          onEachFeature: (feature, layer) => {
+            const popupContent = `
+              <b>State:</b> ${feature.properties.state}<br/>
+              <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}
+            `;
+            layer.bindPopup(popupContent);
+          }
+        }).addTo(map3);
+      }
+    });
+
+    // Add legend to the third map
+    const legend3 = L.control({ position: 'bottomleft' });
+    legend3.onAdd = () => {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = `
+        <span style="font-size:14px">Total IDPs by State:</span><br/>
+        <div style="width:20px;height:20px;background:#d22630;border-radius:50%;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold">Proportional to IDP Count</span><br/>
+      `;
+      return div;
+    };
+    legend3.addTo(map3);
 
     // Initialize Timeline Graph
     const ctx = document.getElementById('timelineChart').getContext('2d');
