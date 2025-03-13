@@ -681,7 +681,7 @@
     const map3 = L.map('map3').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
 
     // Add default base layer to the third map
-    cartoDBLight.addTo(map3);
+   esriWorldImagery.addTo(map3);
 
     // Add layer control to the third map
     L.control.layers(baseLayers).addTo(map3);
