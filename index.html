@@ -681,12 +681,12 @@
     const map3 = L.map('map3').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
 
     // Add default base layer to the third map
-   esriWorldImagery.addTo(map3);
+    cartoDBLight.addTo(map3);
 
     // Add layer control to the third map
     L.control.layers(baseLayers).addTo(map3);
 
-    // Parse CSV data and create proportional symbols for the third map
+    // Parse CSV data and create markers for the third map
     Papa.parse('./data/total_idps.csv', {
       download: true,
       header: true,
@@ -702,14 +702,11 @@
           }))
         };
 
-        // Add proportional symbols to the third map
+        // Add markers to the third map
         L.geoJSON(geoJsonFeatureCollection3, {
           pointToLayer: (feature, latlng) => {
-            const idpCount = feature.properties.total_idps;
-            const radius = Math.sqrt(idpCount) * 0.5; // Adjust scaling factor as needed
-
             return L.circleMarker(latlng, {
-              radius: radius,
+              radius: 8, // Fixed size for all markers
               fillColor: '#d22630', // Red color for IDPs
               color: '#fff',
               weight: 1,
@@ -723,6 +720,10 @@
               <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}
             `;
             layer.bindPopup(popupContent);
+
+            // Add tooltip
+            const tooltipContent = `<b>${feature.properties.state}</b>`;
+            layer.bindTooltip(tooltipContent);
           }
         }).addTo(map3);
       }
@@ -735,7 +736,7 @@
       div.innerHTML = `
         <span style="font-size:14px">Total IDPs by State:</span><br/>
         <div style="width:20px;height:20px;background:#d22630;border-radius:50%;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold">Proportional to IDP Count</span><br/>
+        <span style="float:left;font-weight:bold">Click on a state to see total IDPs</span><br/>
       `;
       return div;
     };
