@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -278,7 +278,6 @@
       width: 100%;
       border-radius: 8px;
     }
-    /* ... (previous styles remain unchanged) ... */
 
     /* Fourth Map Container */
     #map-container-4 {
@@ -416,11 +415,12 @@
       <div id="map-container-3">
         <h2 id="map-title-3">Total Number of IDPs by State (Admin1)</h2>
         <div id="map3"></div>
-        <!-- Fourth Map Container -->
-  <div id="map-container-4">
-    <h2 id="map-title-4">Total Number of Returnees by State (Admin1)</h2>
-    <div id="map4"></div>
-  </div>
+      </div>
+
+      <!-- Fourth Map Container -->
+      <div id="map-container-4">
+        <h2 id="map-title-4">Total Number of Returnees by State (Admin1)</h2>
+        <div id="map4"></div>
       </div>
     </div>
   </div>
@@ -590,7 +590,7 @@
     };
     legend.addTo(map);
 
-     // Initialize the second map
+    // Initialize the second map
     const map2 = L.map('map2').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
 
     // Define multiple base layers for the second map
@@ -622,24 +622,6 @@
     };
 
     L.control.layers(baseLayers2).addTo(map2);
-
-    
-    // Add legend to the second map
-    const legend2 = L.control({ position: 'bottomleft' });
-    legend2.onAdd = () => {
-      const div = L.DomUtil.create('div', 'legend');
-      div.innerHTML = `
-        <span style="font-size:14px">Returnee Flow Volume:</span><br/>
-        <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> < 10000</span><br/>
-        <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold">10,001 - 20,000</span><br/>
-        <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> > 20,000</span><br/>
-      `;
-      return div;
-    };
-    legend2.addTo(map2);
 
     // Parse CSV data and create flow map layer for the second map
     Papa.parse('./data/data_idps.csv', {
@@ -732,7 +714,7 @@
       }
     });
 
-   // Initialize the third map
+    // Initialize the third map
     const map3 = L.map('map3').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
 
     // Define multiple base layers for the third map
@@ -765,106 +747,81 @@
 
     L.control.layers(baseLayers3).addTo(map3);
 
+    // Fetch GeoJSON data for Map 3
+    fetch('./data/ADMIN1.json')
+      .then(response => response.json())
+      .then(data => {
+        L.geoJSON(data, {
+          style: {
+            color: '#0033A0',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.1
+          },
+          onEachFeature: (feature, layer) => {
+            const popupContent = `<b>State:</b> ${feature.properties.ADMIN1}<br/>`;
+            layer.bindPopup(popupContent);
 
-   // Parse CSV data and create animated markers for the third map
-Papa.parse('./data/total_idps.csv', {
-  download: true,
-  header: true,
-  dynamicTyping: true,
-  skipEmptyLines: true,
-  complete: (results) => {
-    const geoJsonFeatureCollection3 = {
-      type: 'FeatureCollection',
-      features: results.data.map(datum => ({
-        type: 'Feature',
-        geometry: { type: 'Point', coordinates: [datum.lon, datum.lat] },
-        properties: datum
-      }))
+            const tooltipContent = `<b>${feature.properties.ADMIN1}</b>`;
+            layer.bindTooltip(tooltipContent);
+          }
+        }).addTo(map3);
+      });
+
+    // Initialize the fourth map
+    const map4 = L.map('map4').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
+
+    // Define multiple base layers for the fourth map
+    const cartoDBLight4 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const openStreetMap4 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const esriWorldImagery4 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
+    });
+
+    const stamenToner4 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
+    });
+
+    // Add default base layer to the fourth map
+    cartoDBLight4.addTo(map4);
+
+    // Add layer control to the fourth map
+    const baseLayers4 = {
+      "CartoDB Light": cartoDBLight4,
+      "OpenStreetMap": openStreetMap4,
+      "Esri World Imagery": esriWorldImagery4,
+      "Stamen Toner": stamenToner4
     };
 
-    // Find the maximum total_idps value for normalization
-    const maxTotalIdps = Math.max(...results.data.map(d => d.total_idps));
+    L.control.layers(baseLayers4).addTo(map4);
 
-    // Function to animate circle markers
-    function animateCircleMarker(marker, baseRadius) {
-      const tween = new TWEEN.Tween({ radius: baseRadius })
-        .to({ radius: baseRadius * 1.5 }, 1000) // Animate to 1.5x the base radius
-        .easing(TWEEN.Easing.Sinusoidal.InOut) // Smooth easing
-        .yoyo(true) // Reverse the animation
-        .repeat(Infinity) // Repeat indefinitely
-        .onUpdate(({ radius }) => {
-          marker.setRadius(radius); // Update the marker's radius
-        })
-        .start(); // Start the animation
-    }
+    // Fetch GeoJSON data for Map 4
+    fetch('./data/ADMIN1.json')
+      .then(response => response.json())
+      .then(data => {
+        L.geoJSON(data, {
+          style: {
+            color: '#FF671F',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.1
+          },
+          onEachFeature: (feature, layer) => {
+            const popupContent = `<b>State:</b> ${feature.properties.ADMIN1}<br/>`;
+            layer.bindPopup(popupContent);
 
-    // Add animated markers to the third map
-    L.geoJSON(geoJsonFeatureCollection3, {
-      pointToLayer: (feature, latlng) => {
-        // Normalize the total_idps value to determine the base radius
-        const baseRadius = 8 + (feature.properties.total_idps / maxTotalIdps) * 20;
+            const tooltipContent = `<b>${feature.properties.ADMIN1}</b>`;
+            layer.bindTooltip(tooltipContent);
+          }
+        }).addTo(map4);
+      });
 
-        // Create a circle marker
-        const marker = L.circleMarker(latlng, {
-          radius: baseRadius, // Initial radius
-          fillColor: '#0033A0', // Bule color for IDPs
-          color: '#fff',
-          weight: 1,
-          opacity: 1,
-          fillOpacity: 0.7
-        });
-
-        // Animate the marker
-        animateCircleMarker(marker, baseRadius);
-
-        return marker;
-      },
-      onEachFeature: (feature, layer) => {
-        const popupContent = `
-          <b>State:</b> ${feature.properties.state}<br/>
-          <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}
-        `;
-        layer.bindPopup(popupContent);
-
-        // Add tooltip
-        const tooltipContent = `<b>${feature.properties.state}</b><br/>
-          <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}`;
-        layer.bindTooltip(tooltipContent);
-      }
-    }).addTo(map3);
-  }
-});
-
-// Update Tween.js animations on each frame
-function animate() {
-  requestAnimationFrame(animate);
-  TWEEN.update();
-}
-animate(); // Start the animation loop
-
-// Add legend to the third map
-const legend3 = L.control({ position: 'bottomleft' });
-legend3.onAdd = () => {
-  const div = L.DomUtil.create('div', 'legend');
-  div.innerHTML = `
-    <span style="font-size:14px; font-weight:bold;">Total IDPs by State:</span><br/>
-    <div style="display: flex; align-items: center; margin-top: 10px;">
-      <div style="width: 10px; height: 10px; background: #0033A0; border-radius: 50%; margin-right: 10px;"></div>
-      <span style="font-size:12px;">Small Circle: < 10,000 IDPs</span>
-    </div>
-    <div style="display: flex; align-items: center; margin-top: 5px;">
-      <div style="width: 20px; height: 20px; background: #0033A0; border-radius: 50%; margin-right: 10px;"></div>
-      <span style="font-size:12px;">Medium Circle: 10,000 - 50,000 IDPs</span>
-    </div>
-    <div style="display: flex; align-items: center; margin-top: 5px;">
-      <div style="width: 30px; height: 30px; background: #0033A0; border-radius: 50%; margin-right: 10px;"></div>
-      <span style="font-size:12px;">Large Circle: > 50,000 IDPs</span>
-    </div>
-  `;
-  return div;
-};
-legend3.addTo(map3);
-     
     // Initialize Timeline Graph
     const ctx = document.getElementById('timelineChart').getContext('2d');
     const gradient = ctx.createLinearGradient(0, 0, 0, 200);
@@ -942,176 +899,6 @@ legend3.addTo(map3);
         }
       }
     });
- 
-
-  <!-- ... (previous HTML content remains unchanged) ... -->
-
-
-    // ... (previous JavaScript code remains unchanged) ...
-
-    // Initialize the fourth map
-    const map4 = L.map('map4').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
-
-    // Define multiple base layers for the fourth map
-    const cartoDBLight4 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
-
-    const openStreetMap4 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
-
-    const esriWorldImagery4 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
-    });
-
-    const stamenToner4 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
-      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
-    });
-
-    // Add default base layer to the fourth map
-    cartoDBLight4.addTo(map4);
-
-    // Add layer control to the fourth map
-    const baseLayers4 = {
-      "CartoDB Light": cartoDBLight4,
-      "OpenStreetMap": openStreetMap4,
-      "Esri World Imagery": esriWorldImagery4,
-      "Stamen Toner": stamenToner4
-    };
-
-    L.control.layers(baseLayers4).addTo(map4);
-
-    // Parse CSV data and create animated markers for the fourth map
-    Papa.parse('./data/total_return.csv', {
-      download: true,
-      header: true,
-      dynamicTyping: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        const geoJsonFeatureCollection4 = {
-          type: 'FeatureCollection',
-          features: results.data.map(datum => ({
-            type: 'Feature',
-            geometry: { type: 'Point', coordinates: [datum.lon, datum.lat] },
-            properties: datum
-          }))
-        };
-
-        // Find the maximum total_return value for normalization
-        const maxTotalReturn = Math.max(...results.data.map(d => d.total_return));
-
-        // Function to animate circle markers
-        function animateCircleMarker(marker, baseRadius) {
-          const tween = new TWEEN.Tween({ radius: baseRadius })
-            .to({ radius: baseRadius * 1.5 }, 1000) // Animate to 1.5x the base radius
-            .easing(TWEEN.Easing.Sinusoidal.InOut) // Smooth easing
-            .yoyo(true) // Reverse the animation
-            .repeat(Infinity) // Repeat indefinitely
-            .onUpdate(({ radius }) => {
-              marker.setRadius(radius); // Update the marker's radius
-            })
-            .start(); // Start the animation
-        }
-
-        // Add animated markers to the fourth map
-        L.geoJSON(geoJsonFeatureCollection4, {
-          pointToLayer: (feature, latlng) => {
-            // Normalize the total_return value to determine the base radius
-            const baseRadius = 8 + (feature.properties.total_return / maxTotalReturn) * 20;
-
-            // Create a circle marker
-            const marker = L.circleMarker(latlng, {
-              radius: baseRadius, // Initial radius
-              fillColor: 'rgba(255, 103, 31, 0.8)', // orange color for returnees
-              color: '#fff',
-              weight: 1,
-              opacity: 1,
-              fillOpacity: 0.7
-            });
-
-            // Animate the marker
-            animateCircleMarker(marker, baseRadius);
-
-            return marker;
-          },
-          onEachFeature: (feature, layer) => {
-            const popupContent = `
-              <b>State:</b> ${feature.properties.state}<br/>
-              <b>Total Returnees:</b> ${feature.properties.total_return.toLocaleString()}
-            `;
-            layer.bindPopup(popupContent);
-
-            // Add tooltip
-            const tooltipContent = `<b>${feature.properties.state}</b><br/>
-              <b>Total Returnees:</b> ${feature.properties.total_return.toLocaleString()}`;
-            layer.bindTooltip(tooltipContent);
-          }
-        }).addTo(map4);
-      }
-    });
-
-   // Add legend to the fourth map
-const legend4 = L.control({ position: 'bottomleft' });
-legend4.onAdd = () => {
-  const div = L.DomUtil.create('div', 'legend');
-  div.innerHTML = `
-    <span style="font-size:14px; font-weight:bold;">Total Returnees by State:</span><br/>
-    <div style="display: flex; align-items: center; margin-top: 10px;">
-      <div style="width: 10px; height: 10px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
-      <span style="font-size:12px;">Small Circle: < 10,000 Returnees</span>
-    </div>
-    <div style="display: flex; align-items: center; margin-top: 5px;">
-      <div style="width: 20px; height: 20px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
-      <span style="font-size:12px;">Medium Circle: 10,000 - 50,000 Returnees</span>
-    </div>
-    <div style="display: flex; align-items: center; margin-top: 5px;">
-      <div style="width: 30px; height: 30px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
-      <span style="font-size:12px;">Large Circle: > 50,000 Returnees</span>
-    </div>
-  `;
-  return div;
-};
-legend4.addTo(map4);
-     // Add animation to the info card
-  const infoCard = document.getElementById('infoCard');
-
-  infoCard.addEventListener('mouseenter', () => {
-    // Animate the card on hover
-    infoCard.animate(
-      [
-        { transform: 'scale(1)', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' },
-        { transform: 'scale(1.05)', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' },
-        { transform: 'scale(1)', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }
-      ],
-      {
-        duration: 500, // Animation duration in milliseconds
-        easing: 'ease-in-out', // Smooth easing
-        iterations: 1 // Run once
-      }
-    );
-  });
-
-  // Add a "shake" effect on click
-  infoCard.addEventListener('click', () => {
-    infoCard.animate(
-      [
-        { transform: 'translateX(0)' },
-        { transform: 'translateX(-5px)' },
-        { transform: 'translateX(5px)' },
-        { transform: 'translateX(-5px)' },
-        { transform: 'translateX(5px)' },
-        { transform: 'translateX(0)' }
-      ],
-      {
-        duration: 1500, // Shake duration
-        easing: 'ease-in-out', // Smooth easing
-        iterations: 5 // Run once
-      }
-    );
-  });
-
-    // ... (rest of the JavaScript code remains unchanged) ...
 
     // Initialize Bar Chart
     const barCtx = document.getElementById('barChart').getContext('2d');
