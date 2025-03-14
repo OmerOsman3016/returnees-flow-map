@@ -842,11 +842,7 @@ function animate() {
 }
 animate(); // Start the animation loop
 
- // Calculate dynamic ranges for the legend
-const smallRange = Math.floor(maxTotalIdps * 0.2); // Small circle range (e.g., < 20% of max)
-const mediumRange = Math.floor(maxTotalIdps * 0.5); // Medium circle range (e.g., 20% - 50% of max)
-
-// Add dynamic legend to the third map
+// Add legend to the third map
 const legend3 = L.control({ position: 'bottomleft' });
 legend3.onAdd = () => {
   const div = L.DomUtil.create('div', 'legend');
@@ -854,20 +850,21 @@ legend3.onAdd = () => {
     <span style="font-size:14px; font-weight:bold;">Total IDPs by State:</span><br/>
     <div style="display: flex; align-items: center; margin-top: 10px;">
       <div style="width: 10px; height: 10px; background: #d22630; border-radius: 50%; margin-right: 10px;"></div>
-      <span style="font-size:12px;">Small Circle: < ${smallRange.toLocaleString()} IDPs</span>
+      <span style="font-size:12px;">Small Circle: < 10,000 IDPs</span>
     </div>
     <div style="display: flex; align-items: center; margin-top: 5px;">
       <div style="width: 20px; height: 20px; background: #d22630; border-radius: 50%; margin-right: 10px;"></div>
-      <span style="font-size:12px;">Medium Circle: ${smallRange.toLocaleString()} - ${mediumRange.toLocaleString()} IDPs</span>
+      <span style="font-size:12px;">Medium Circle: 10,000 - 50,000 IDPs</span>
     </div>
     <div style="display: flex; align-items: center; margin-top: 5px;">
       <div style="width: 30px; height: 30px; background: #d22630; border-radius: 50%; margin-right: 10px;"></div>
-      <span style="font-size:12px;">Large Circle: > ${mediumRange.toLocaleString()} IDPs</span>
+      <span style="font-size:12px;">Large Circle: > 50,000 IDPs</span>
     </div>
   `;
   return div;
 };
 legend3.addTo(map3);
+     
     // Initialize Timeline Graph
     const ctx = document.getElementById('timelineChart').getContext('2d');
     const gradient = ctx.createLinearGradient(0, 0, 0, 200);
