@@ -1053,6 +1053,43 @@ animate(); // Start the animation loop
       return div;
     };
     legend4.addTo(map4);
+     // Add animation to the info card
+  const infoCard = document.getElementById('infoCard');
+
+  infoCard.addEventListener('mouseenter', () => {
+    // Animate the card on hover
+    infoCard.animate(
+      [
+        { transform: 'scale(1)', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' },
+        { transform: 'scale(1.05)', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' },
+        { transform: 'scale(1)', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }
+      ],
+      {
+        duration: 500, // Animation duration in milliseconds
+        easing: 'ease-in-out', // Smooth easing
+        iterations: 1 // Run once
+      }
+    );
+  });
+
+  // Add a "shake" effect on click
+  infoCard.addEventListener('click', () => {
+    infoCard.animate(
+      [
+        { transform: 'translateX(0)' },
+        { transform: 'translateX(-5px)' },
+        { transform: 'translateX(5px)' },
+        { transform: 'translateX(-5px)' },
+        { transform: 'translateX(5px)' },
+        { transform: 'translateX(0)' }
+      ],
+      {
+        duration: 300, // Shake duration
+        easing: 'ease-in-out', // Smooth easing
+        iterations: 1 // Run once
+      }
+    );
+  });
 
     // ... (rest of the JavaScript code remains unchanged) ...
 
