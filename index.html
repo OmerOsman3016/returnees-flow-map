@@ -1,4 +1,4 @@
-     <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -14,342 +14,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.css" />
 
   <style>
-    body {
-      margin: 20px;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
-    }
-
-    a {
-      color: white;
-      text-decoration: none; /* Remove underline by default */
-    }
-
-    #title-container {
-      display: flex;
-      align-items: center;
-      background-color: #0033A0;
-      padding: 10px 20px;
-      color: white;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      flex-wrap: wrap; /* Allow wrapping on smaller screens */
-    }
-
-    .title-image {
-      width: 140px; /* Adjust the width of the image */
-      height: 80px; /* Maintain aspect ratio */
-      margin-right: 20px; /* Add space between the image and text */
-      border-radius: 5px; /* Rounded corners for the image */
-    }
-
-    #title {
-      flex: 1; /* Allow the title to take up remaining space */
-      text-align: left; /* Align text to the left */
-    }
-
-    #title h1 {
-      margin: 0;
-      font-size: 24px;
-      font-weight: bold;
-      border-bottom: 3px solid white; /* Add a white line below the title */
-      padding-bottom: 5px; /* Add some spacing between the title and the line */
-     position: relative; /* Required for pseudo-element positioning */
-    display: inline-block; /* Ensures the line only spans the title's width */
-    }
-
-    #title h2 {
-      margin: 0;
-      font-size: 22px;
-      font-weight: normal;
-      color: #f0f0f0;
-    }
-
-    #infoCard {
-      background: #fff;
-      color: #0033A0;
-      padding: 10px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      font-size: 15px;
-      width: 250px;
-      transition: all 0.2s ease;
-      border: 1px solid #e0e0e0;
-      margin-top: 10px; /* Add margin on smaller screens */
-    }
-
-    #infoCard:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      background: #f9f9f9;
-    }
-
-    /* Content Container */
-    .content-container {
-      display: flex;
-      gap: 20px;
-      margin-bottom: 20px;
-      flex-wrap: wrap; /* Allow wrapping on smaller screens */
-    }
-
-    /* Enhanced Paragraph Section */
-    #bpr-paragraph {
-      flex: 1;
-      background-color: #fff;
-      border: 2px solid #0033A0;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-      min-width: 300px; /* Ensure it doesn't get too small */
-    }
-
-    #bpr-paragraph h2 {
-      margin-top: 0;
-      color: #0033A0;
-      font-size: 22px;
-      margin-bottom: 20px;
-      font-weight: 600;
-      border-bottom: 2px solid #0033A0;
-      padding-bottom: 10px;
-    }
-
-    #bpr-paragraph p {
-      font-size: 15px;
-      line-height: 1.8;
-      color: #444;
-      margin: 0 0 20px 0;
-    }
-
-    #bpr-paragraph p:last-child {
-      margin-bottom: 0;
-    }
-
-    #bpr-paragraph p strong {
-      color: #0033A0;
-      font-weight: 600;
-    }
-
-    #bpr-paragraph p em {
-      font-style: italic;
-      color: #555;
-    }
-
-    #bpr-paragraph p a {
-      color: #0033A0;
-      text-decoration: underline;
-      font-weight: 600;
-    }
-
-    #bpr-paragraph p a:hover {
-      color: #002366;
-    }
-
-    /* Bar Chart Container */
-    #bar-chart-container {
-      background-color: #fff;
-      border: 2px solid #0033A0;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-      width: 100%;
-      height: 300px; /* Set a fixed height for the bar chart container */
-    }
-
-    #bar-chart-container h2 {
-      margin-top: 0;
-      color: #0033A0;
-      font-size: 22px;
-      margin-bottom: 20px;
-      font-weight: 600;
-      border-bottom: 2px solid #0033A0;
-      padding-bottom: 10px;
-      text-align: center;
-    }
-
-    /* Timeline and Map Container */
-    #timeline-map-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      min-width: 300px; /* Ensure it doesn't get too small */
-    }
-
-    #timeline-container {
-      background-color: #fff;
-      border: 2px solid #0033A0;
-      border-radius: 8px;
-      padding: 30px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      height: 300px;
-    }
-
-    #timeline-container h2 {
-      margin-top: 0;
-      color: #0033A0;
-      font-size: 20px;
-      margin-bottom: 15px;
-      font-weight: bold;
-      text-align: center;
-      border-bottom: 2px solid #0033A0;
-      padding-bottom: 10px;
-    }
-
-    #map-container {
-      background-color: #fff;
-      border: 2px solid #0033A0;
-      border-radius: 8px;
-      padding: 10px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    #map-title {
-      margin: 0;
-      color: #0033A0;
-      font-size: 20px;
-      font-weight: bold;
-      text-align: center;
-      border-bottom: 2px solid #0033A0;
-      padding-bottom: 10px;
-      margin-bottom: 10px;
-    }
-
-    #map {
-      height: 90vh; /* Use viewport height for dynamic sizing */
-      width: 100%;
-      border-radius: 8px;
-    }
-
-    /* Second Map Container */
-    #map-container-2 {
-      background-color: #fff;
-      border: 2px solid #0033A0;
-      border-radius: 8px;
-      padding: 10px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      margin-top: 20px; /* Add some space between the two maps */
-    }
-
-    #map-title-2 {
-      margin: 0;
-      color: #0033A0;
-      font-size: 20px;
-      font-weight: bold;
-      text-align: center;
-      border-bottom: 2px solid #0033A0;
-      padding-bottom: 10px;
-      margin-bottom: 10px;
-    }
-
-    #map2 {
-      height: 90vh; /* Use viewport height for dynamic sizing */
-      width: 100%;
-      border-radius: 8px;
-    }
-
-    /* Third Map Container */
-    #map-container-3 {
-      background-color: #fff;
-      border: 2px solid #0033A0;
-      border-radius: 8px;
-      padding: 10px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      margin-top: 20px; /* Add some space between the maps */
-    }
-
-    #map-title-3 {
-      margin: 0;
-      color: #0033A0;
-      font-size: 20px;
-      font-weight: bold;
-      text-align: center;
-      border-bottom: 2px solid #0033A0;
-      padding-bottom: 10px;
-      margin-bottom: 10px;
-    }
-
-    #map3 {
-      height: 90vh; /* Use viewport height for dynamic sizing */
-      width: 100%;
-      border-radius: 8px;
-    }
     /* ... (previous styles remain unchanged) ... */
-
-    /* Fourth Map Container */
-    #map-container-4 {
-      background-color: #fff;
-      border: 2px solid #0033A0;
-      border-radius: 8px;
-      padding: 10px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      margin-top: 20px; /* Add some space between the maps */
-    }
-
-    #map-title-4 {
-      margin: 0;
-      color: #0033A0;
-      font-size: 20px;
-      font-weight: bold;
-      text-align: center;
-      border-bottom: 2px solid #0033A0;
-      padding-bottom: 10px;
-      margin-bottom: 10px;
-    }
-
-    #map4 {
-      height: 90vh; /* Use viewport height for dynamic sizing */
-      width: 100%;
-      border-radius: 8px;
-    }
-
-    footer {
-      background-color: #0033A0;
-      color: #FFFFFF;
-      text-align: center;
-      padding: 10px;
-      margin-top: 20px;
-      font-size: 12px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      background: linear-gradient(145deg, #0033A0, #002366); /* Add gradient */
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      #title-container {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      #infoCard {
-        width: 100%;
-        margin-top: 10px;
-      }
-
-      .content-container {
-        flex-direction: column;
-      }
-
-      #bpr-paragraph,
-      #timeline-container,
-      #map-container,
-      #map-container-2,
-      #map-container-3,
-      #bar-chart-container {
-        width: 100%;
-      }
-
-      #map,
-      #map2,
-      #map3 {
-        height: 50vh; /* Adjust height for mobile */
-      }
-    }
   </style>
 </head>
 
@@ -416,11 +81,12 @@
       <div id="map-container-3">
         <h2 id="map-title-3">Total Number of IDPs by State (Admin1)</h2>
         <div id="map3"></div>
-        <!-- Fourth Map Container -->
-  <div id="map-container-4">
-    <h2 id="map-title-4">Total Number of Returnees by State (Admin1)</h2>
-    <div id="map4"></div>
-  </div>
+      </div>
+
+      <!-- Fourth Map Container -->
+      <div id="map-container-4">
+        <h2 id="map-title-4">Total Number of Returnees by State (Admin1)</h2>
+        <div id="map4"></div>
       </div>
     </div>
   </div>
@@ -590,7 +256,7 @@
     };
     legend.addTo(map);
 
-     // Initialize the second map
+    // Initialize the second map
     const map2 = L.map('map2').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
 
     // Define multiple base layers for the second map
@@ -623,7 +289,6 @@
 
     L.control.layers(baseLayers2).addTo(map2);
 
-    
     // Add legend to the second map
     const legend2 = L.control({ position: 'bottomleft' });
     legend2.onAdd = () => {
@@ -732,7 +397,7 @@
       }
     });
 
-   // Initialize the third map
+    // Initialize the third map
     const map3 = L.map('map3').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
 
     // Define multiple base layers for the third map
@@ -765,106 +430,230 @@
 
     L.control.layers(baseLayers3).addTo(map3);
 
+    // Parse CSV data and create animated markers for the third map
+    Papa.parse('./data/total_idps.csv', {
+      download: true,
+      header: true,
+      dynamicTyping: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        const geoJsonFeatureCollection3 = {
+          type: 'FeatureCollection',
+          features: results.data.map(datum => ({
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: [datum.lon, datum.lat] },
+            properties: datum
+          }))
+        };
 
-   // Parse CSV data and create animated markers for the third map
-Papa.parse('./data/total_idps.csv', {
-  download: true,
-  header: true,
-  dynamicTyping: true,
-  skipEmptyLines: true,
-  complete: (results) => {
-    const geoJsonFeatureCollection3 = {
-      type: 'FeatureCollection',
-      features: results.data.map(datum => ({
-        type: 'Feature',
-        geometry: { type: 'Point', coordinates: [datum.lon, datum.lat] },
-        properties: datum
-      }))
+        // Find the maximum total_idps value for normalization
+        const maxTotalIdps = Math.max(...results.data.map(d => d.total_idps));
+
+        // Function to animate circle markers
+        function animateCircleMarker(marker, baseRadius) {
+          const tween = new TWEEN.Tween({ radius: baseRadius })
+            .to({ radius: baseRadius * 1.5 }, 1000) // Animate to 1.5x the base radius
+            .easing(TWEEN.Easing.Sinusoidal.InOut) // Smooth easing
+            .yoyo(true) // Reverse the animation
+            .repeat(Infinity) // Repeat indefinitely
+            .onUpdate(({ radius }) => {
+              marker.setRadius(radius); // Update the marker's radius
+            })
+            .start(); // Start the animation
+        }
+
+        // Add animated markers to the third map
+        L.geoJSON(geoJsonFeatureCollection3, {
+          pointToLayer: (feature, latlng) => {
+            // Normalize the total_idps value to determine the base radius
+            const baseRadius = 8 + (feature.properties.total_idps / maxTotalIdps) * 20;
+
+            // Create a circle marker
+            const marker = L.circleMarker(latlng, {
+              radius: baseRadius, // Initial radius
+              fillColor: '#0033A0', // Blue color for IDPs
+              color: '#fff',
+              weight: 1,
+              opacity: 1,
+              fillOpacity: 0.7
+            });
+
+            // Animate the marker
+            animateCircleMarker(marker, baseRadius);
+
+            return marker;
+          },
+          onEachFeature: (feature, layer) => {
+            const popupContent = `
+              <b>State:</b> ${feature.properties.state}<br/>
+              <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}
+            `;
+            layer.bindPopup(popupContent);
+
+            // Add tooltip
+            const tooltipContent = `<b>${feature.properties.state}</b><br/>
+              <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}`;
+            layer.bindTooltip(tooltipContent);
+          }
+        }).addTo(map3);
+      }
+    });
+
+    // Update Tween.js animations on each frame
+    function animate() {
+      requestAnimationFrame(animate);
+      TWEEN.update();
+    }
+    animate(); // Start the animation loop
+
+    // Add legend to the third map
+    const legend3 = L.control({ position: 'bottomleft' });
+    legend3.onAdd = () => {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = `
+        <span style="font-size:14px; font-weight:bold;">Total IDPs by State:</span><br/>
+        <div style="display: flex; align-items: center; margin-top: 10px;">
+          <div style="width: 10px; height: 10px; background: #0033A0; border-radius: 50%; margin-right: 10px;"></div>
+          <span style="font-size:12px;">Small Circle: < 10,000 IDPs</span>
+        </div>
+        <div style="display: flex; align-items: center; margin-top: 5px;">
+          <div style="width: 20px; height: 20px; background: #0033A0; border-radius: 50%; margin-right: 10px;"></div>
+          <span style="font-size:12px;">Medium Circle: 10,000 - 50,000 IDPs</span>
+        </div>
+        <div style="display: flex; align-items: center; margin-top: 5px;">
+          <div style="width: 30px; height: 30px; background: #0033A0; border-radius: 50%; margin-right: 10px;"></div>
+          <span style="font-size:12px;">Large Circle: > 50,000 IDPs</span>
+        </div>
+      `;
+      return div;
+    };
+    legend3.addTo(map3);
+
+    // Initialize the fourth map
+    const map4 = L.map('map4').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
+
+    // Define multiple base layers for the fourth map
+    const cartoDBLight4 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const openStreetMap4 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const esriWorldImagery4 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
+    });
+
+    const stamenToner4 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
+    });
+
+    // Add default base layer to the fourth map
+    cartoDBLight4.addTo(map4);
+
+    // Add layer control to the fourth map
+    const baseLayers4 = {
+      "CartoDB Light": cartoDBLight4,
+      "OpenStreetMap": openStreetMap4,
+      "Esri World Imagery": esriWorldImagery4,
+      "Stamen Toner": stamenToner4
     };
 
-    // Find the maximum total_idps value for normalization
-    const maxTotalIdps = Math.max(...results.data.map(d => d.total_idps));
+    L.control.layers(baseLayers4).addTo(map4);
 
-    // Function to animate circle markers
-    function animateCircleMarker(marker, baseRadius) {
-      const tween = new TWEEN.Tween({ radius: baseRadius })
-        .to({ radius: baseRadius * 1.5 }, 1000) // Animate to 1.5x the base radius
-        .easing(TWEEN.Easing.Sinusoidal.InOut) // Smooth easing
-        .yoyo(true) // Reverse the animation
-        .repeat(Infinity) // Repeat indefinitely
-        .onUpdate(({ radius }) => {
-          marker.setRadius(radius); // Update the marker's radius
-        })
-        .start(); // Start the animation
-    }
+    // Parse CSV data and create animated markers for the fourth map
+    Papa.parse('./data/total_return.csv', {
+      download: true,
+      header: true,
+      dynamicTyping: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        const geoJsonFeatureCollection4 = {
+          type: 'FeatureCollection',
+          features: results.data.map(datum => ({
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: [datum.lon, datum.lat] },
+            properties: datum
+          }))
+        };
 
-    // Add animated markers to the third map
-    L.geoJSON(geoJsonFeatureCollection3, {
-      pointToLayer: (feature, latlng) => {
-        // Normalize the total_idps value to determine the base radius
-        const baseRadius = 8 + (feature.properties.total_idps / maxTotalIdps) * 20;
+        // Find the maximum total_return value for normalization
+        const maxTotalReturn = Math.max(...results.data.map(d => d.total_return));
 
-        // Create a circle marker
-        const marker = L.circleMarker(latlng, {
-          radius: baseRadius, // Initial radius
-          fillColor: '#0033A0', // Bule color for IDPs
-          color: '#fff',
-          weight: 1,
-          opacity: 1,
-          fillOpacity: 0.7
-        });
+        // Function to animate circle markers
+        function animateCircleMarker(marker, baseRadius) {
+          const tween = new TWEEN.Tween({ radius: baseRadius })
+            .to({ radius: baseRadius * 1.5 }, 1000) // Animate to 1.5x the base radius
+            .easing(TWEEN.Easing.Sinusoidal.InOut) // Smooth easing
+            .yoyo(true) // Reverse the animation
+            .repeat(Infinity) // Repeat indefinitely
+            .onUpdate(({ radius }) => {
+              marker.setRadius(radius); // Update the marker's radius
+            })
+            .start(); // Start the animation
+        }
 
-        // Animate the marker
-        animateCircleMarker(marker, baseRadius);
+        // Add animated markers to the fourth map
+        L.geoJSON(geoJsonFeatureCollection4, {
+          pointToLayer: (feature, latlng) => {
+            // Normalize the total_return value to determine the base radius
+            const baseRadius = 8 + (feature.properties.total_return / maxTotalReturn) * 20;
 
-        return marker;
-      },
-      onEachFeature: (feature, layer) => {
-        const popupContent = `
-          <b>State:</b> ${feature.properties.state}<br/>
-          <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}
-        `;
-        layer.bindPopup(popupContent);
+            // Create a circle marker
+            const marker = L.circleMarker(latlng, {
+              radius: baseRadius, // Initial radius
+              fillColor: 'rgba(255, 103, 31, 0.8)', // Orange color for returnees
+              color: '#fff',
+              weight: 1,
+              opacity: 1,
+              fillOpacity: 0.7
+            });
 
-        // Add tooltip
-        const tooltipContent = `<b>${feature.properties.state}</b><br/>
-          <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}`;
-        layer.bindTooltip(tooltipContent);
+            // Animate the marker
+            animateCircleMarker(marker, baseRadius);
+
+            return marker;
+          },
+          onEachFeature: (feature, layer) => {
+            const popupContent = `
+              <b>State:</b> ${feature.properties.state}<br/>
+              <b>Total Returnees:</b> ${feature.properties.total_return.toLocaleString()}
+            `;
+            layer.bindPopup(popupContent);
+
+            // Add tooltip
+            const tooltipContent = `<b>${feature.properties.state}</b><br/>
+              <b>Total Returnees:</b> ${feature.properties.total_return.toLocaleString()}`;
+            layer.bindTooltip(tooltipContent);
+          }
+        }).addTo(map4);
       }
-    }).addTo(map3);
-  }
-});
+    });
 
-// Update Tween.js animations on each frame
-function animate() {
-  requestAnimationFrame(animate);
-  TWEEN.update();
-}
-animate(); // Start the animation loop
+    // Add legend to the fourth map
+    const legend4 = L.control({ position: 'bottomleft' });
+    legend4.onAdd = () => {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = `
+        <span style="font-size:14px; font-weight:bold;">Total Returnees by State:</span><br/>
+        <div style="display: flex; align-items: center; margin-top: 10px;">
+          <div style="width: 10px; height: 10px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
+          <span style="font-size:12px;">Small Circle: < 10,000 Returnees</span>
+        </div>
+        <div style="display: flex; align-items: center; margin-top: 5px;">
+          <div style="width: 20px; height: 20px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
+          <span style="font-size:12px;">Medium Circle: 10,000 - 50,000 Returnees</span>
+        </div>
+        <div style="display: flex; align-items: center; margin-top: 5px;">
+          <div style="width: 30px; height: 30px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
+          <span style="font-size:12px;">Large Circle: > 50,000 Returnees</span>
+        </div>
+      `;
+      return div;
+    };
+    legend4.addTo(map4);
 
-// Add legend to the third map
-const legend3 = L.control({ position: 'bottomleft' });
-legend3.onAdd = () => {
-  const div = L.DomUtil.create('div', 'legend');
-  div.innerHTML = `
-    <span style="font-size:14px; font-weight:bold;">Total IDPs by State:</span><br/>
-    <div style="display: flex; align-items: center; margin-top: 10px;">
-      <div style="width: 10px; height: 10px; background: #0033A0; border-radius: 50%; margin-right: 10px;"></div>
-      <span style="font-size:12px;">Small Circle: < 10,000 IDPs</span>
-    </div>
-    <div style="display: flex; align-items: center; margin-top: 5px;">
-      <div style="width: 20px; height: 20px; background: #0033A0; border-radius: 50%; margin-right: 10px;"></div>
-      <span style="font-size:12px;">Medium Circle: 10,000 - 50,000 IDPs</span>
-    </div>
-    <div style="display: flex; align-items: center; margin-top: 5px;">
-      <div style="width: 30px; height: 30px; background: #0033A0; border-radius: 50%; margin-right: 10px;"></div>
-      <span style="font-size:12px;">Large Circle: > 50,000 IDPs</span>
-    </div>
-  `;
-  return div;
-};
-legend3.addTo(map3);
-     
     // Initialize Timeline Graph
     const ctx = document.getElementById('timelineChart').getContext('2d');
     const gradient = ctx.createLinearGradient(0, 0, 0, 200);
@@ -942,176 +731,6 @@ legend3.addTo(map3);
         }
       }
     });
- 
-
-  <!-- ... (previous HTML content remains unchanged) ... -->
-
-
-    // ... (previous JavaScript code remains unchanged) ...
-
-    // Initialize the fourth map
-    const map4 = L.map('map4').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
-
-    // Define multiple base layers for the fourth map
-    const cartoDBLight4 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
-
-    const openStreetMap4 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
-
-    const esriWorldImagery4 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
-    });
-
-    const stamenToner4 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
-      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
-    });
-
-    // Add default base layer to the fourth map
-    cartoDBLight4.addTo(map4);
-
-    // Add layer control to the fourth map
-    const baseLayers4 = {
-      "CartoDB Light": cartoDBLight4,
-      "OpenStreetMap": openStreetMap4,
-      "Esri World Imagery": esriWorldImagery4,
-      "Stamen Toner": stamenToner4
-    };
-
-    L.control.layers(baseLayers4).addTo(map4);
-
-    // Parse CSV data and create animated markers for the fourth map
-    Papa.parse('./data/total_return.csv', {
-      download: true,
-      header: true,
-      dynamicTyping: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        const geoJsonFeatureCollection4 = {
-          type: 'FeatureCollection',
-          features: results.data.map(datum => ({
-            type: 'Feature',
-            geometry: { type: 'Point', coordinates: [datum.lon, datum.lat] },
-            properties: datum
-          }))
-        };
-
-        // Find the maximum total_return value for normalization
-        const maxTotalReturn = Math.max(...results.data.map(d => d.total_return));
-
-        // Function to animate circle markers
-        function animateCircleMarker(marker, baseRadius) {
-          const tween = new TWEEN.Tween({ radius: baseRadius })
-            .to({ radius: baseRadius * 1.5 }, 1000) // Animate to 1.5x the base radius
-            .easing(TWEEN.Easing.Sinusoidal.InOut) // Smooth easing
-            .yoyo(true) // Reverse the animation
-            .repeat(Infinity) // Repeat indefinitely
-            .onUpdate(({ radius }) => {
-              marker.setRadius(radius); // Update the marker's radius
-            })
-            .start(); // Start the animation
-        }
-
-        // Add animated markers to the fourth map
-        L.geoJSON(geoJsonFeatureCollection4, {
-          pointToLayer: (feature, latlng) => {
-            // Normalize the total_return value to determine the base radius
-            const baseRadius = 8 + (feature.properties.total_return / maxTotalReturn) * 20;
-
-            // Create a circle marker
-            const marker = L.circleMarker(latlng, {
-              radius: baseRadius, // Initial radius
-              fillColor: 'rgba(255, 103, 31, 0.8)', // orange color for returnees
-              color: '#fff',
-              weight: 1,
-              opacity: 1,
-              fillOpacity: 0.7
-            });
-
-            // Animate the marker
-            animateCircleMarker(marker, baseRadius);
-
-            return marker;
-          },
-          onEachFeature: (feature, layer) => {
-            const popupContent = `
-              <b>State:</b> ${feature.properties.state}<br/>
-              <b>Total Returnees:</b> ${feature.properties.total_return.toLocaleString()}
-            `;
-            layer.bindPopup(popupContent);
-
-            // Add tooltip
-            const tooltipContent = `<b>${feature.properties.state}</b><br/>
-              <b>Total Returnees:</b> ${feature.properties.total_return.toLocaleString()}`;
-            layer.bindTooltip(tooltipContent);
-          }
-        }).addTo(map4);
-      }
-    });
-
-   // Add legend to the fourth map
-const legend4 = L.control({ position: 'bottomleft' });
-legend4.onAdd = () => {
-  const div = L.DomUtil.create('div', 'legend');
-  div.innerHTML = `
-    <span style="font-size:14px; font-weight:bold;">Total Returnees by State:</span><br/>
-    <div style="display: flex; align-items: center; margin-top: 10px;">
-      <div style="width: 10px; height: 10px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
-      <span style="font-size:12px;">Small Circle: < 10,000 Returnees</span>
-    </div>
-    <div style="display: flex; align-items: center; margin-top: 5px;">
-      <div style="width: 20px; height: 20px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
-      <span style="font-size:12px;">Medium Circle: 10,000 - 50,000 Returnees</span>
-    </div>
-    <div style="display: flex; align-items: center; margin-top: 5px;">
-      <div style="width: 30px; height: 30px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
-      <span style="font-size:12px;">Large Circle: > 50,000 Returnees</span>
-    </div>
-  `;
-  return div;
-};
-legend4.addTo(map4);
-     // Add animation to the info card
-  const infoCard = document.getElementById('infoCard');
-
-  infoCard.addEventListener('mouseenter', () => {
-    // Animate the card on hover
-    infoCard.animate(
-      [
-        { transform: 'scale(1)', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' },
-        { transform: 'scale(1.05)', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' },
-        { transform: 'scale(1)', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }
-      ],
-      {
-        duration: 500, // Animation duration in milliseconds
-        easing: 'ease-in-out', // Smooth easing
-        iterations: 1 // Run once
-      }
-    );
-  });
-
-  // Add a "shake" effect on click
-  infoCard.addEventListener('click', () => {
-    infoCard.animate(
-      [
-        { transform: 'translateX(0)' },
-        { transform: 'translateX(-5px)' },
-        { transform: 'translateX(5px)' },
-        { transform: 'translateX(-5px)' },
-        { transform: 'translateX(5px)' },
-        { transform: 'translateX(0)' }
-      ],
-      {
-        duration: 1500, // Shake duration
-        easing: 'ease-in-out', // Smooth easing
-        iterations: 5 // Run once
-      }
-    );
-  });
-
-    // ... (rest of the JavaScript code remains unchanged) ...
 
     // Initialize Bar Chart
     const barCtx = document.getElementById('barChart').getContext('2d');
