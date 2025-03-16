@@ -1,4 +1,4 @@
-     <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -87,34 +87,6 @@
       background: #f9f9f9;
     }
 
-         /* Timeline and Map Container */
-    #timeline-map-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      min-width: 300px; /* Ensure it doesn't get too small */
-    }
-
-    #timeline-container {
-      background-color: #fff;
-      border: 2px solid #0033A0;
-      border-radius: 8px;
-      padding: 30px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      height: 300px;
-    }
-
-    #timeline-container h2 {
-      margin-top: 0;
-      color: #0033A0;
-      font-size: 20px;
-      margin-bottom: 15px;
-      font-weight: bold;
-      text-align: center;
-      border-bottom: 2px solid #0033A0;
-      padding-bottom: 10px;
-    }
     /* Content Container */
     .content-container {
       display: flex;
@@ -199,7 +171,34 @@
       text-align: center;
     }
 
-  
+    /* Timeline and Map Container */
+    #timeline-map-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 300px; /* Ensure it doesn't get too small */
+    }
+
+    #timeline-container {
+      background-color: #fff;
+      border: 2px solid #0033A0;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      height: 300px;
+    }
+
+    #timeline-container h2 {
+      margin-top: 0;
+      color: #0033A0;
+      font-size: 20px;
+      margin-bottom: 15px;
+      font-weight: bold;
+      text-align: center;
+      border-bottom: 2px solid #0033A0;
+      padding-bottom: 10px;
+    }
 
     #map-container {
       background-color: #fff;
@@ -369,23 +368,6 @@
 
   <!-- Content Container for Paragraph and Timeline -->
   <div class="content-container">
-          <!-- Timeline and Map Container -->
-    <div id="timeline-map-container">
-      <!-- Timeline Graph Container -->
-      <div id="timeline-container">
-        <h2>Returnees Over Time (October 2024 - June 2025)</h2>
-        <canvas id="timelineChart"></canvas>
-      </div>
-          <!-- Third Map Container -->
-      <div id="map-container-3">
-        <h2 id="map-title-3">Total Number of IDPs by State (Admin1)</h2>
-           <!-- Second Map Container -->
-      <div id="map-container-2">
-        <h2 id="map-title-2">Second Map: Returnee Movements Across Sudan</h2>
-        <div id="map2"></div>
-      </div>
-        <div id="map3"></div>
-           
     <!-- BPR Paragraph -->
     <div id="bpr-paragraph">
       <h2>Displacement and Returnee Movements in Sudan</h2>
@@ -410,7 +392,13 @@
       <canvas id="barChart"></canvas>
     </div>
 
- 
+    <!-- Timeline and Map Container -->
+    <div id="timeline-map-container">
+      <!-- Timeline Graph Container -->
+      <div id="timeline-container">
+        <h2>Returnees Over Time (October 2024 - June 2025)</h2>
+        <canvas id="timelineChart"></canvas>
+      </div>
 
       <!-- Map Container -->
       <div id="map-container">
@@ -418,9 +406,16 @@
         <div id="map"></div>
       </div>
 
-      
+      <!-- Second Map Container -->
+      <div id="map-container-2">
+        <h2 id="map-title-2">Second Map: Returnee Movements Across Sudan</h2>
+        <div id="map2"></div>
+      </div>
 
-     
+      <!-- Third Map Container -->
+      <div id="map-container-3">
+        <h2 id="map-title-3">Total Number of IDPs by State (Admin1)</h2>
+        <div id="map3"></div>
         <!-- Fourth Map Container -->
   <div id="map-container-4">
     <h2 id="map-title-4">Total Number of Returnees by State (Admin1)</h2>
@@ -870,110 +865,83 @@ legend3.onAdd = () => {
 };
 legend3.addTo(map3);
      
-   // Initialize Timeline Graph
-const ctx = document.getElementById('timelineChart').getContext('2d');
-const gradient = ctx.createLinearGradient(0, 0, 0, 200);
-gradient.addColorStop(0, 'rgba(0, 51, 160, 0.8)');
-gradient.addColorStop(1, 'rgba(0, 51, 160, 0.2)');
+    // Initialize Timeline Graph
+    const ctx = document.getElementById('timelineChart').getContext('2d');
+    const gradient = ctx.createLinearGradient(0, 0, 0, 200);
+    gradient.addColorStop(0, 'rgba(0, 51, 160, 0.8)');
+    gradient.addColorStop(1, 'rgba(0, 51, 160, 0.2)');
 
-const gradientIDPs = ctx.createLinearGradient(0, 0, 0, 200);
-gradientIDPs.addColorStop(0, 'rgba(255, 103, 31, 0.8)'); // Orange gradient for IDPs
-gradientIDPs.addColorStop(1, 'rgba(255, 103, 31, 0.2)');
-
-const timelineChart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: ['Oct-24', 'Nov-24', 'Dec-24', 'Jan-25', 'Feb-25', 'Mar-25', 'Apr-25', 'May-25', 'Jun-25'],
-    datasets: [
-      {
-        label: 'Returnees Over Time',
-        data: [0, 0, 53517, 32240, 282217, 9430, 0, 0, 0],
-        borderColor: '#0033A0', // Blue for returnees
-        backgroundColor: gradient,
-        borderWidth: 3,
-        fill: true,
-        pointBackgroundColor: '#0033A0',
-        pointBorderColor: '#fff',
-        pointRadius: 5,
-        pointHoverRadius: 7,
-        tension: 0.4
+    const timelineChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Oct-24','Nov-24','Dec-24', 'Jan-25', 'Feb-25', 'Mar-25', 'Apr-25', 'May-25', 'Jun-25'],
+        datasets: [{
+          label: 'Returnees Over Time',
+          data: [0,0,53517, 32240, 282217, 9430, 0, 0, 0],
+          borderColor: '#0033A0',
+          backgroundColor: gradient,
+          borderWidth: 3,
+          fill: true,
+          pointBackgroundColor: '#0033A0',
+          pointBorderColor: '#fff',
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          tension: 0.4
+        }]
       },
-      {
-        label: 'Total IDPs Over Time',
-        data: [50000, 55000, 60000, 65000, 70000, 75000, 80000, 85000, 90000], // Example data for IDPs
-        borderColor: '#FF671F', // Orange for IDPs
-        backgroundColor: gradientIDPs,
-        borderWidth: 3,
-        fill: true,
-        pointBackgroundColor: '#FF671F',
-        pointBorderColor: '#fff',
-        pointRadius: 5,
-        pointHoverRadius: 7,
-        tension: 0.4
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      tooltip: {
-        backgroundColor: '#0033A0',
-        titleColor: '#fff',
-        bodyColor: '#fff',
-        borderColor: '#fff',
-        borderWidth: 1,
-        displayColors: false
-      },
-      legend: {
-        display: true,
-        position: 'top',
-        labels: {
-          color: '#0033A0',
-          font: {
-            size: 14,
-            weight: 'bold'
-          }
-        }
-      }
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: 'Number of Individuals',
-          color: '#0033A0',
-          font: {
-            size: 14,
-            weight: 'bold'
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          tooltip: {
+            backgroundColor: '#0033A0',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            borderColor: '#fff',
+            borderWidth: 1,
+            displayColors: false
+          },
+          legend: {
+            display: false
           }
         },
-        grid: {
-          color: '#e0e0e0'
-        }
-      },
-      x: {
-        title: {
-          display: true,
-          text: 'Month',
-          color: '#0033A0',
-          font: {
-            size: 14,
-            weight: 'bold'
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Number of Returnees',
+              color: '#0033A0',
+              font: {
+                size: 14,
+                weight: 'bold'
+              }
+            },
+            grid: {
+              color: '#e0e0e0'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Month',
+              color: '#0033A0',
+              font: {
+                size: 14,
+                weight: 'bold'
+              }
+            },
+            grid: {
+              color: '#e0e0e0'
+            }
           }
         },
-        grid: {
-          color: '#e0e0e0'
+        animation: {
+          duration: 15000,
+          easing: 'easeInOutQuart'
         }
       }
-    },
-    animation: {
-      duration: 15000,
-      easing: 'easeInOutQuart'
-    }
-  }
-});
+    });
  
 
   <!-- ... (previous HTML content remains unchanged) ... -->
@@ -1304,4 +1272,4 @@ legend4.addTo(map4);
   </script>
 </body>
 
-</html> 
+</html>
