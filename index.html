@@ -219,50 +219,32 @@
       padding-bottom: 10px;
     }
 
-    /* Map container styling */
-    #map-container {
+     /* Flexbox container for map1 and map2 */
+    .maps-container {
+      display: flex;
+      gap: 20px; /* Add spacing between maps */
+      margin-bottom: 20px; /* Add some space below the maps */
+    }
+
+    /* Map containers */
+    #map-container, #map-container-2 {
+      flex: 1; /* Each container takes equal space */
       background-color: #fff;
       border: 2px solid #0033A0;
       border-radius: 8px;
-      padding: 10px;
+      padding: 20px; /* Space between the map and the border */
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-       width: 50%; /* 50% of the container's width */
-     height: 90vh; /* Maintain height */
-    }
-
-    /* Map title styling */
-    #map-title {
-      margin: 0;
-      color: #0033A0;
-      font-size: 20px;
-      font-weight: bold;
-      text-align: center;
-      border-bottom: 2px solid #0033A0;
-      padding-bottom: 10px;
-      margin-bottom: 10px;
     }
 
     /* Map styling */
-    #map {
-      height: 90vh; /* Use viewport height for dynamic sizing */
-      width: 100%;
-      border-radius: 8px;
-    }
-
-    /* Second map container styling */
-    #map-container-2 {
-      background-color: #fff;
-      border: 2px solid #0033A0;
-      border-radius: 8px;
-      padding: 10px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      margin-top: 20px; /* Add some space between the two maps */
-       width: 50%; /* 50% of the container's width */
+    #map1, #map2 {
+      width: 100%; /* Maps take up full width of their container */
       height: 90vh; /* Maintain height */
+      border-radius: 8px;
     }
 
-    /* Second map title styling */
-    #map-title-2 {
+    /* Map title styling */
+    #map-title, #map-title-2 {
       margin: 0;
       color: #0033A0;
       font-size: 20px;
@@ -271,16 +253,7 @@
       border-bottom: 2px solid #0033A0;
       padding-bottom: 10px;
       margin-bottom: 10px;
-      
     }
-
-    /* Second map styling */
-    #map2 {
-      height: 90vh; /* Use viewport height for dynamic sizing */
-      width: 100%;
-      border-radius: 8px;
-    }
-
  
    /* Flexbox container for map3 and map4 */
     .maps-container {
