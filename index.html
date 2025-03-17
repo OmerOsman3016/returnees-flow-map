@@ -286,37 +286,32 @@
       margin-top: 20px; /* Add some space between the maps */
     }
 
-    /* Third map title styling */
-    #map-title-3 {
-      margin: 0;
-      color: #0033A0;
-      font-size: 20px;
-      font-weight: bold;
-      text-align: center;
-      border-bottom: 2px solid #0033A0;
-      padding-bottom: 10px;
-      margin-bottom: 10px;
+   /* Flexbox container for map3 and map4 */
+    .maps-container {
+      display: flex;
+      gap: 20px; /* Add spacing between maps */
+      margin-bottom: 20px; /* Add some space below the maps */
     }
 
-    /* Third map styling */
-    #map3 {
-      height: 90vh; /* Use viewport height for dynamic sizing */
-      width: 100%;
-      border-radius: 8px;
-    }
-
-    /* Fourth map container styling */
-    #map-container-4 {
+    /* Map containers */
+    #map-container-3, #map-container-4 {
+      flex: 1; /* Each container takes equal space */
       background-color: #fff;
       border: 2px solid #0033A0;
       border-radius: 8px;
       padding: 10px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      margin-top: 20px; /* Add some space between the maps */
     }
 
-    /* Fourth map title styling */
-    #map-title-4 {
+    /* Map styling */
+    #map3, #map4 {
+      width: 100%; /* Maps take up full width of their container */
+      height: 90vh; /* Maintain height */
+      border-radius: 8px;
+    }
+
+    /* Map title styling */
+    #map-title-3, #map-title-4 {
       margin: 0;
       color: #0033A0;
       font-size: 20px;
@@ -326,13 +321,7 @@
       padding-bottom: 10px;
       margin-bottom: 10px;
     }
-
-    /* Fourth map styling */
-    #map4 {
-      height: 90vh; /* Use viewport height for dynamic sizing */
-      width: 100%;
-      border-radius: 8px;
-    }
+ 
 
     /* Footer styling */
     footer {
