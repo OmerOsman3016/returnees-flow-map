@@ -1,19 +1,20 @@
-     <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
+  <!-- Meta tags for character encoding, viewport settings, and page description -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <meta name="description" content="Sudan | Displacement Tracking Matrix-Returnees Flow" />
   <title>Sudan | Displacement Tracking Matrix - Returnees Flow</title>
 
-  <!-- Leaflet CSS -->
+  <!-- External CSS libraries -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-
-  <!-- Chart.js CSS (optional) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.css" />
 
+  <!-- Internal CSS styles -->
   <style>
+    /* General body styling */
     body {
       margin: 20px;
       padding: 0;
@@ -21,11 +22,13 @@
       background-color: #f5f5f5;
     }
 
+    /* Link styling */
     a {
       color: white;
       text-decoration: none; /* Remove underline by default */
     }
 
+    /* Title container styling */
     #title-container {
       display: flex;
       align-items: center;
@@ -38,6 +41,7 @@
       flex-wrap: wrap; /* Allow wrapping on smaller screens */
     }
 
+    /* Image styling within the title container */
     .title-image {
       width: 140px; /* Adjust the width of the image */
       height: 80px; /* Maintain aspect ratio */
@@ -45,21 +49,24 @@
       border-radius: 5px; /* Rounded corners for the image */
     }
 
+    /* Title text styling */
     #title {
       flex: 1; /* Allow the title to take up remaining space */
       text-align: left; /* Align text to the left */
     }
 
+    /* Main title styling */
     #title h1 {
       margin: 0;
       font-size: 24px;
       font-weight: bold;
       border-bottom: 3px solid white; /* Add a white line below the title */
       padding-bottom: 5px; /* Add some spacing between the title and the line */
-     position: relative; /* Required for pseudo-element positioning */
-    display: inline-block; /* Ensures the line only spans the title's width */
+      position: relative; /* Required for pseudo-element positioning */
+      display: inline-block; /* Ensures the line only spans the title's width */
     }
 
+    /* Subtitle styling */
     #title h2 {
       margin: 0;
       font-size: 22px;
@@ -67,6 +74,7 @@
       color: #f0f0f0;
     }
 
+    /* Info card styling */
     #infoCard {
       background: #fff;
       color: #0033A0;
@@ -81,13 +89,14 @@
       margin-top: 10px; /* Add margin on smaller screens */
     }
 
+    /* Info card hover effect */
     #infoCard:hover {
       transform: translateY(-5px);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       background: #f9f9f9;
     }
 
-    /* Content Container */
+    /* Content container styling */
     .content-container {
       display: flex;
       gap: 20px;
@@ -95,7 +104,7 @@
       flex-wrap: wrap; /* Allow wrapping on smaller screens */
     }
 
-    /* Enhanced Paragraph Section */
+    /* Enhanced paragraph section styling */
     #bpr-paragraph {
       flex: 1;
       background-color: #fff;
@@ -107,6 +116,7 @@
       min-width: 300px; /* Ensure it doesn't get too small */
     }
 
+    /* Paragraph heading styling */
     #bpr-paragraph h2 {
       margin-top: 0;
       color: #0033A0;
@@ -117,6 +127,7 @@
       padding-bottom: 10px;
     }
 
+    /* Paragraph text styling */
     #bpr-paragraph p {
       font-size: 15px;
       line-height: 1.8;
@@ -124,31 +135,36 @@
       margin: 0 0 20px 0;
     }
 
+    /* Last paragraph text styling */
     #bpr-paragraph p:last-child {
       margin-bottom: 0;
     }
 
+    /* Strong text styling */
     #bpr-paragraph p strong {
       color: #0033A0;
       font-weight: 600;
     }
 
+    /* Italic text styling */
     #bpr-paragraph p em {
       font-style: italic;
       color: #555;
     }
 
+    /* Link styling within paragraphs */
     #bpr-paragraph p a {
       color: #0033A0;
       text-decoration: underline;
       font-weight: 600;
     }
 
+    /* Link hover effect */
     #bpr-paragraph p a:hover {
       color: #002366;
     }
 
-    /* Bar Chart Container */
+    /* Bar chart container styling */
     #bar-chart-container {
       background-color: #fff;
       border: 2px solid #0033A0;
@@ -160,6 +176,7 @@
       height: 300px; /* Set a fixed height for the bar chart container */
     }
 
+    /* Bar chart heading styling */
     #bar-chart-container h2 {
       margin-top: 0;
       color: #0033A0;
@@ -171,7 +188,7 @@
       text-align: center;
     }
 
-    /* Timeline and Map Container */
+    /* Timeline and map container styling */
     #timeline-map-container {
       flex: 1;
       display: flex;
@@ -180,6 +197,7 @@
       min-width: 300px; /* Ensure it doesn't get too small */
     }
 
+    /* Timeline container styling */
     #timeline-container {
       background-color: #fff;
       border: 2px solid #0033A0;
@@ -189,6 +207,7 @@
       height: 300px;
     }
 
+    /* Timeline heading styling */
     #timeline-container h2 {
       margin-top: 0;
       color: #0033A0;
@@ -200,6 +219,7 @@
       padding-bottom: 10px;
     }
 
+    /* Map container styling */
     #map-container {
       background-color: #fff;
       border: 2px solid #0033A0;
@@ -208,6 +228,7 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
+    /* Map title styling */
     #map-title {
       margin: 0;
       color: #0033A0;
@@ -219,13 +240,14 @@
       margin-bottom: 10px;
     }
 
+    /* Map styling */
     #map {
       height: 90vh; /* Use viewport height for dynamic sizing */
       width: 100%;
       border-radius: 8px;
     }
 
-    /* Second Map Container */
+    /* Second map container styling */
     #map-container-2 {
       background-color: #fff;
       border: 2px solid #0033A0;
@@ -235,6 +257,7 @@
       margin-top: 20px; /* Add some space between the two maps */
     }
 
+    /* Second map title styling */
     #map-title-2 {
       margin: 0;
       color: #0033A0;
@@ -246,13 +269,14 @@
       margin-bottom: 10px;
     }
 
+    /* Second map styling */
     #map2 {
       height: 90vh; /* Use viewport height for dynamic sizing */
       width: 100%;
       border-radius: 8px;
     }
 
-    /* Third Map Container */
+    /* Third map container styling */
     #map-container-3 {
       background-color: #fff;
       border: 2px solid #0033A0;
@@ -262,6 +286,7 @@
       margin-top: 20px; /* Add some space between the maps */
     }
 
+    /* Third map title styling */
     #map-title-3 {
       margin: 0;
       color: #0033A0;
@@ -273,14 +298,14 @@
       margin-bottom: 10px;
     }
 
+    /* Third map styling */
     #map3 {
       height: 90vh; /* Use viewport height for dynamic sizing */
       width: 100%;
       border-radius: 8px;
     }
-    /* ... (previous styles remain unchanged) ... */
 
-    /* Fourth Map Container */
+    /* Fourth map container styling */
     #map-container-4 {
       background-color: #fff;
       border: 2px solid #0033A0;
@@ -290,6 +315,7 @@
       margin-top: 20px; /* Add some space between the maps */
     }
 
+    /* Fourth map title styling */
     #map-title-4 {
       margin: 0;
       color: #0033A0;
@@ -301,12 +327,14 @@
       margin-bottom: 10px;
     }
 
+    /* Fourth map styling */
     #map4 {
       height: 90vh; /* Use viewport height for dynamic sizing */
       width: 100%;
       border-radius: 8px;
     }
 
+    /* Footer styling */
     footer {
       background-color: #0033A0;
       color: #FFFFFF;
@@ -319,7 +347,7 @@
       background: linear-gradient(145deg, #0033A0, #002366); /* Add gradient */
     }
 
-    /* Responsive Design */
+    /* Responsive design for smaller screens */
     @media (max-width: 768px) {
       #title-container {
         flex-direction: column;
@@ -354,6 +382,7 @@
 </head>
 
 <body>
+  <!-- Title container with logo, title, and info card -->
   <div id="title-container">
     <img src="./data/IOM logo.png" alt="IOM Logo" class="title-image">
     <div id="title">
@@ -366,7 +395,7 @@
     </div>
   </div>
 
-  <!-- Content Container for Paragraph and Timeline -->
+  <!-- Content container for paragraph and timeline -->
   <div class="content-container">
     <!-- BPR Paragraph -->
     <div id="bpr-paragraph">
