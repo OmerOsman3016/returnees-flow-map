@@ -385,13 +385,15 @@
       flex-direction: column;
     }
     .card-icon {
-  width: 5px; /* Adjust icon size */
-  height: 5px; /* Adjust icon size */
-  margin-bottom: 0px; /* Space below the icon */
-  display: block; /* Ensure the icon is on its own line */
-  margin-left: auto; /* Center the icon horizontally */
-  margin-right: auto; /* Center the icon horizontally */
- 
+  width: 5px;
+  height: 5px;
+  max-width: 5px;
+  max-height: 5px;
+  margin-bottom: 0px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  object-fit: contain; /* Ensures the image scales properly */
 }
 
     #bpr-paragraph,
