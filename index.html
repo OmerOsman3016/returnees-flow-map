@@ -30,6 +30,7 @@
 
     /* Title container styling */
     #title-container {
+      display: flex;
       align-items: center;
       background-color: #0033A0;
       padding: 10px 20px;
@@ -220,14 +221,13 @@
 
     /* Map container styling */
     #map-container {
-       display: flex;
-  justify-content: space-between; /* Space between the two maps */
       background-color: #fff;
       border: 2px solid #0033A0;
       border-radius: 8px;
       padding: 10px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-       
+       width: 50%; /* 50% of the container's width */
+     height: 90vh; /* Maintain height */
     }
 
     /* Map title styling */
@@ -251,15 +251,12 @@
 
     /* Second map container styling */
     #map-container-2 {
-       display: flex;
-  justify-content: space-between; /* Space between the two maps */
       background-color: #fff;
       border: 2px solid #0033A0;
       border-radius: 8px;
       padding: 10px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       margin-top: 20px; /* Add some space between the two maps */
-    
     }
 
     /* Second map title styling */
@@ -272,7 +269,8 @@
       border-bottom: 2px solid #0033A0;
       padding-bottom: 10px;
       margin-bottom: 10px;
-      
+       width: 50%; /* 50% of the container's width */
+      height: 90vh; /* Maintain height */
     }
 
     /* Second map styling */
@@ -478,11 +476,6 @@
         <h2 id="map-title-2">Second Map: Returnee Movements Across Sudan</h2>
         <div id="map2"></div>
       </div>
-         <!-- Map Container -->
-      <div id="map-container">
-        <h2 id="map-title">Returnee Movements Across Sudan</h2>
-        <div id="map"></div>
-      </div>
 
   <!-- Content container for paragraph and timeline -->
   <div class="content-container">
@@ -512,7 +505,11 @@
 
   
 
-   
+      <!-- Map Container -->
+      <div id="map-container">
+        <h2 id="map-title">Returnee Movements Across Sudan</h2>
+        <div id="map"></div>
+      </div>
 
    
 
