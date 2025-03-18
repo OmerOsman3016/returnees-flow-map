@@ -331,8 +331,6 @@
     </div>
   </div>
 
- 
-
   <!-- Maps Container for map3 and map4 -->
   <div class="maps-container">
     <div id="map-container-3">
@@ -365,7 +363,8 @@
       <canvas id="timelineChart"></canvas>
     </div>
   </div>
-   <!-- Chart Container -->
+
+  <!-- Chart Container -->
   <div id="chart-container">
     <h2>Number of Population Affected by Displacement</h2>
     <canvas id="displacementChart"></canvas>
@@ -395,6 +394,22 @@
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
 
   <script>
+    // Function to create a dynamic legend
+    function createDynamicLegend(legend, classBreakInfos) {
+      let legendHTML = `<span style="font-size:14px">Returnee Flow Volume:</span><br/>`;
+      classBreakInfos.forEach((breakInfo) => {
+        legendHTML += `
+          <div style="width:70px;height:${breakInfo.lineWidth}px;background:${breakInfo.symbol.strokeStyle};float:left;margin-right:10px;margin-top:10px"></div>
+          <span style="float:left;font-weight:bold">${breakInfo.classMinValue} - ${breakInfo.classMaxValue}</span><br/>
+        `;
+      });
+      legendHTML += `
+        <div style="width:70px;height:1px;background:#e7e1ef;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold">Other</span><br/>
+      `;
+      legend._div.innerHTML = legendHTML;
+    }
+
     // Initialize the first map
     const map = L.map('map').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
 
@@ -444,6 +459,12 @@
           }))
         };
 
+        const classBreakInfos = [
+          { classMinValue: 1, classMaxValue: 10000, symbol: { strokeStyle: '#ffb81c', lineWidth: 0.5 } },
+          { classMinValue: 10001, classMaxValue: 20000, symbol: { strokeStyle: '#ff671f', lineWidth: 1.5 } },
+          { classMinValue: 20001, classMaxValue: 200000, symbol: { strokeStyle: '#d22630', lineWidth: 3 } }
+        ];
+
         flowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
           originAndDestinationFieldIds: {
             originUniqueIdField: 's_state_id',
@@ -471,12 +492,8 @@
           canvasBezierStyle: {
             type: 'classBreaks',
             field: 'e_Volume',
-            classBreakInfos: [
-              { classMinValue: 1, classMaxValue: 10000, symbol: { strokeStyle: '#ffb81c', lineWidth: 0.5, lineCap: 'round', shadowColor: '#fee8c8', shadowBlur: 2.0 } },
-              { classMinValue: 10001, classMaxValue: 20000, symbol: { strokeStyle: '#ff671f', lineWidth: 1.5, lineCap: 'round', shadowColor: '#fdbb84', shadowBlur: 2.0 } },
-              { classMinValue: 20001, classMaxValue: 200000, symbol: { strokeStyle: '#d22630', lineWidth: 3, lineCap: 'round', shadowColor: '#e34a33', shadowBlur: 2.0 } }
-            ],
-            defaultSymbol: { strokeStyle: '#e7e1ef', lineWidth: 0.5, lineCap: 'round', shadowColor: '#e7e1ef', shadowBlur: 1.5 }
+            classBreakInfos: classBreakInfos,
+            defaultSymbol: { strokeStyle: '#e7e1ef', lineWidth: 0.5 }
           },
           pathDisplayMode: 'all',
           animationStarted: true,
@@ -516,25 +533,17 @@
 
         // Select initial feature for path display
         flowmapLayer.selectFeaturesForPathDisplayById('s_state_id', "SD15", true, 'SELECTION_NEW');
+
+        // Add dynamic legend to the first map
+        const legend = L.control({ position: 'bottomleft' });
+        legend.onAdd = () => {
+          const div = L.DomUtil.create('div', 'legend');
+          createDynamicLegend({ _div: div }, classBreakInfos);
+          return div;
+        };
+        legend.addTo(map);
       }
     });
-
-    // Add legend to the first map
-    const legend = L.control({ position: 'bottomleft' });
-    legend.onAdd = () => {
-      const div = L.DomUtil.create('div', 'legend');
-      div.innerHTML = `
-        <span style="font-size:14px">Returnee Flow Volume:</span><br/>
-        <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> < 10000</span><br/>
-        <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold">10,001 - 20,000</span><br/>
-        <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> > 20,000</span><br/>
-      `;
-      return div;
-    };
-    legend.addTo(map);
 
     // Initialize the second map
     const map2 = L.map('map2').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
@@ -585,6 +594,12 @@
           }))
         };
 
+        const classBreakInfos = [
+          { classMinValue: 1, classMaxValue: 10000, symbol: { strokeStyle: '#ffb81c', lineWidth: 0.5 } },
+          { classMinValue: 10001, classMaxValue: 20000, symbol: { strokeStyle: '#ff671f', lineWidth: 1.5 } },
+          { classMinValue: 20001, classMaxValue: 200000, symbol: { strokeStyle: '#d22630', lineWidth: 3 } }
+        ];
+
         const flowmapLayer2 = L.canvasFlowmapLayer(geoJsonFeatureCollection2, {
           originAndDestinationFieldIds: {
             originUniqueIdField: 's_state_id',
@@ -612,12 +627,8 @@
           canvasBezierStyle: {
             type: 'classBreaks',
             field: 'e_Volume',
-            classBreakInfos: [
-              { classMinValue: 1, classMaxValue: 10000, symbol: { strokeStyle: '#ffb81c', lineWidth: 0.5, lineCap: 'round', shadowColor: '#fee8c8', shadowBlur: 2.0 } },
-              { classMinValue: 10001, classMaxValue: 20000, symbol: { strokeStyle: '#ff671f', lineWidth: 1.5, lineCap: 'round', shadowColor: '#fdbb84', shadowBlur: 2.0 } },
-              { classMinValue: 20001, classMaxValue: 200000, symbol: { strokeStyle: '#d22630', lineWidth: 3, lineCap: 'round', shadowColor: '#e34a33', shadowBlur: 2.0 } }
-            ],
-            defaultSymbol: { strokeStyle: '#e7e1ef', lineWidth: 0.5, lineCap: 'round', shadowColor: '#e7e1ef', shadowBlur: 1.5 }
+            classBreakInfos: classBreakInfos,
+            defaultSymbol: { strokeStyle: '#e7e1ef', lineWidth: 0.5 }
           },
           pathDisplayMode: 'all',
           animationStarted: true,
@@ -657,25 +668,17 @@
 
         // Select initial feature for path display
         flowmapLayer2.selectFeaturesForPathDisplayById('s_state_id', "SD15", true, 'SELECTION_NEW');
+
+        // Add dynamic legend to the second map
+        const legend2 = L.control({ position: 'bottomleft' });
+        legend2.onAdd = () => {
+          const div = L.DomUtil.create('div', 'legend');
+          createDynamicLegend({ _div: div }, classBreakInfos);
+          return div;
+        };
+        legend2.addTo(map2);
       }
     });
-
-    // Add legend to the second map
-    const legend2 = L.control({ position: 'bottomleft' });
-    legend2.onAdd = () => {
-      const div = L.DomUtil.create('div', 'legend');
-      div.innerHTML = `
-        <span style="font-size:14px">Returnee Flow Volume:</span><br/>
-        <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> < 10000</span><br/>
-        <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold">10,001 - 20,000</span><br/>
-        <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> > 20,000</span><br/>
-      `;
-      return div;
-    };
-    legend2.addTo(map2);
 
     // Initialize the third map
     const map3 = L.map('map3').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
