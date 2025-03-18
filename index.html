@@ -112,36 +112,7 @@
       padding-bottom: 10px;
     }
 
-    /* Map container styling */
-    #map-container, #map-container-2 {
-      background-color: #fff;
-      border: 2px solid #0033A0;
-      border-radius: 8px;
-      padding: 10px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      width: 48%; /* Adjusted width for side-by-side layout */
-      height: 90vh;
-    }
-
-    /* Map title styling */
-    #map-title, #map-title-2 {
-      margin: 0 0 10px 0;
-      color: #0033A0;
-      font-size: 20px;
-      font-weight: bold;
-      text-align: center;
-      border-bottom: 2px solid #0033A0;
-      padding-bottom: 10px;
-    }
-
-    /* Map element styling */
-    #map, #map2 {
-      height: calc(90vh - 52px);
-      width: 100%;
-      border-radius: 8px;
-    }
-
-    /* Flexbox container for map1 and map2 */
+    /* Flexbox container for maps */
     .maps-container {
       display: flex;
       gap: 20px;
@@ -149,7 +120,7 @@
     }
 
     /* Map containers */
-    #map-container-3, #map-container-4 {
+    #map-container, #map-container-2, #map-container-3, #map-container-4 {
       flex: 1;
       background-color: #fff;
       border: 2px solid #0033A0;
@@ -159,14 +130,14 @@
     }
 
     /* Map styling */
-    #map3, #map4 {
+    #map, #map2, #map3, #map4 {
       width: 100%;
       height: 70vh;
       border-radius: 8px;
     }
 
     /* Map title styling */
-    #map-title-3, #map-title-4 {
+    #map-title, #map-title-2, #map-title-3, #map-title-4 {
       margin: 0;
       color: #0033A0;
       font-size: 20px;
@@ -245,11 +216,11 @@
         flex-direction: column;
       }
 
-      #map-container, #map-container-2 {
-        width: 100%; /* Full width on smaller screens */
+      .maps-container {
+        flex-direction: column;
       }
 
-      #map, #map2, #map3 {
+      #map, #map2, #map3, #map4 {
         height: 50vh;
       }
     }
@@ -286,7 +257,19 @@
     </div>
   </div>
 
-  <!-- Maps Container -->
+  <!-- Maps Container for map1 and map2 -->
+  <div class="maps-container">
+    <div id="map-container">
+      <h2 id="map-title">Returnee Movements Across Sudan</h2>
+      <div id="map"></div>
+    </div>
+    <div id="map-container-2">
+      <h2 id="map-title-2">Second Map: Returnee Movements Across Sudan</h2>
+      <div id="map2"></div>
+    </div>
+  </div>
+
+  <!-- Maps Container for map3 and map4 -->
   <div class="maps-container">
     <div id="map-container-3">
       <h2 id="map-title-3">Total Number of IDPs by State (Admin1)</h2>
@@ -304,18 +287,6 @@
     <div id="timeline-container">
       <h2>Returnees Over Time (October 2024 - June 2025)</h2>
       <canvas id="timelineChart"></canvas>
-    </div>
-
-    <!-- Map 2 (Left Side) -->
-    <div id="map-container-2">
-      <h2 id="map-title-2">Second Map: Returnee Movements Across Sudan</h2>
-      <div id="map2"></div>
-    </div>
-
-    <!-- Map 1 (Right Side) -->
-    <div id="map-container">
-      <h2 id="map-title">Returnee Movements Across Sudan</h2>
-      <div id="map"></div>
     </div>
   </div>
 
@@ -517,23 +488,6 @@
 
     L.control.layers(baseLayers2).addTo(map2);
 
-    // Add legend to the second map
-    const legend2 = L.control({ position: 'bottomleft' });
-    legend2.onAdd = () => {
-      const div = L.DomUtil.create('div', 'legend');
-      div.innerHTML = `
-        <span style="font-size:14px">Returnee Flow Volume:</span><br/>
-        <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> < 10000</span><br/>
-        <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold">10,001 - 20,000</span><br/>
-        <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> > 20,000</span><br/>
-      `;
-      return div;
-    };
-    legend2.addTo(map2);
-
     // Parse CSV data and create flow map layer for the second map
     Papa.parse('./data/data_idps.csv', {
       download: true,
@@ -624,6 +578,23 @@
         flowmapLayer2.selectFeaturesForPathDisplayById('s_state_id', "SD15", true, 'SELECTION_NEW');
       }
     });
+
+    // Add legend to the second map
+    const legend2 = L.control({ position: 'bottomleft' });
+    legend2.onAdd = () => {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = `
+        <span style="font-size:14px">Returnee Flow Volume:</span><br/>
+        <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold"> < 10000</span><br/>
+        <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold">10,001 - 20,000</span><br/>
+        <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold"> > 20,000</span><br/>
+      `;
+      return div;
+    };
+    legend2.addTo(map2);
 
     // Initialize the third map
     const map3 = L.map('map3').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
