@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -15,54 +15,54 @@
   <!-- Internal CSS styles -->
   <style>
     /* General body styling */
-   body {
-  margin: 20px;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(145deg, #f5f5f5, #e0e0e0);
-  scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  line-height: 1.6;
-  letter-spacing: 0.5px;
-  font-size: 16px;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
+    body {
+      margin: 20px;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(145deg, #f5f5f5, #e0e0e0);
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.6;
+      letter-spacing: 0.5px;
+      font-size: 16px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
 
-*, *::before, *::after {
-  box-sizing: inherit;
-}
+    *, *::before, *::after {
+      box-sizing: inherit;
+    }
 
-a {
-  color: #0033A0;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
+    a {
+      color: #0033A0;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
 
-a:hover {
-  color: #ff671f;
-}
+    a:hover {
+      color: #ff671f;
+    }
 
-/* Custom scrollbar */
-body::-webkit-scrollbar {
-  width: 10px;
-}
+    /* Custom scrollbar */
+    body::-webkit-scrollbar {
+      width: 10px;
+    }
 
-body::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
+    body::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
 
-body::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 5px;
-}
+    body::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 5px;
+    }
 
-body::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
+    body::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
 
     /* Link styling */
     a {
@@ -247,6 +247,38 @@ body::-webkit-scrollbar-thumb:hover {
       border-radius: 5px;
     }
 
+    /* Chart container styling */
+    #chart-container {
+      background-color: #fff;
+      border: 2px solid #0033A0;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      height: 80vh;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Chart heading styling */
+    #chart-container h2 {
+      margin-top: 0;
+      color: #0033A0;
+      font-size: 20px;
+      margin-bottom: 15px;
+      font-weight: bold;
+      text-align: center;
+      border-bottom: 2px solid #0033A0;
+      padding-bottom: 10px;
+    }
+
+    /* Chart canvas styling */
+    #displacementChart {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
     /* Responsive design for smaller screens */
     @media (max-width: 768px) {
       #title-container {
@@ -298,7 +330,14 @@ body::-webkit-scrollbar-thumb:hover {
       <p>This is the content of card 4.</p>
     </div>
   </div>
-    <!-- Maps Container for map3 and map4 -->
+
+  <!-- Chart Container -->
+  <div id="chart-container">
+    <h2>Number of Population Affected by Displacement</h2>
+    <canvas id="displacementChart"></canvas>
+  </div>
+
+  <!-- Maps Container for map3 and map4 -->
   <div class="maps-container">
     <div id="map-container-3">
       <h2 id="map-title-3">Total Number of IDPs by State (Admin1)</h2>
@@ -321,6 +360,7 @@ body::-webkit-scrollbar-thumb:hover {
       <div id="map2"></div>
     </div>
   </div>
+
   <!-- Timeline and Map Container -->
   <div id="timeline-map-container">
     <!-- Timeline Graph Container -->
@@ -970,6 +1010,87 @@ body::-webkit-scrollbar-thumb:hover {
       return div;
     };
     legend4.addTo(map4);
+
+    // Initialize the Displacement Chart
+    const states = [
+      "Aj Jazirah", "Blue Nile", "Central Darfur", "East Darfur", "Gedaref", 
+      "Kassala", "Khartoum", "North Darfur", "North Kordofan", "Northern", 
+      "Red Sea", "River Nile", "Sennar", "South Darfur", "South Kordofan", 
+      "West Darfur", "West Kordofan", "White Nile"
+    ];
+    const displaced = [
+      876156, 270810, 749491, 247874, 14327, 6211, 3500400, 1844175, 
+      91161, 12052, 30480, 53683, 244250, 2082537, 414734, 368971, 
+      314484, 179544
+    ];
+    const population = [
+      5687557, 1344267, 1786503, 1213951, 2545604, 2811446, 9146191, 
+      2775652, 2160476, 1023194, 1549857, 1651873, 2170863, 3912372, 
+      2017962, 1940860, 1713462, 3046811
+    ];
+
+    // Calculate the non-displaced population
+    const nonDisplaced = population.map((pop, index) => pop - displaced[index]);
+
+    // Chart configuration
+    const ctx2 = document.getElementById('displacementChart').getContext('2d');
+    const displacementChart = new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: states,
+        datasets: [
+          {
+            label: 'Non-Displaced Population',
+            data: nonDisplaced,
+            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+          },
+          {
+            label: '# of Displaced People',
+            data: displaced,
+            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false, // Ensure the chart fits the container
+        scales: {
+          x: {
+            stacked: true, // Stack bars on the x-axis
+          },
+          y: {
+            stacked: true, // Stack bars on the y-axis
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Population'
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          tooltip: {
+            callbacks: {
+              afterBody: (tooltipItems) => {
+                // Get the index of the hovered item
+                const index = tooltipItems[0].dataIndex;
+                // Return population and percentage for the hovered state
+                return [
+                  `Total Population: ${population[index].toLocaleString()}`,
+                  `% Displaced: ${((displaced[index] / population[index]) * 100).toFixed(2)}%`
+                ];
+              }
+            }
+          }
+        }
+      }
+    });
   </script>
 </body>
 
