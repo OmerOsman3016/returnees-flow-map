@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -15,56 +15,54 @@
   <!-- Internal CSS styles -->
   <style>
     /* General body styling */
-    body {
-      margin: 20px;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(145deg, #f5f5f5, #e0e0e0);
-      scroll-behavior: smooth;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      line-height: 1.6;
-      letter-spacing: 0.5px;
-      font-size: 16px;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      box-sizing: border-box;
-    }
+   body {
+  margin: 20px;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(145deg, #f5f5f5, #e0e0e0);
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+  font-size: 16px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
 
-    *,
-    *::before,
-    *::after {
-      box-sizing: inherit;
-    }
+*, *::before, *::after {
+  box-sizing: inherit;
+}
 
-    a {
-      color: #0033A0;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
+a {
+  color: #0033A0;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
 
-    a:hover {
-      color: #ff671f;
-    }
+a:hover {
+  color: #ff671f;
+}
 
-    /* Custom scrollbar */
-    body::-webkit-scrollbar {
-      width: 10px;
-    }
+/* Custom scrollbar */
+body::-webkit-scrollbar {
+  width: 10px;
+}
 
-    body::-webkit-scrollbar-track {
-      background: #f1f1f1;
-    }
+body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
 
-    body::-webkit-scrollbar-thumb {
-      background: #888;
-      border-radius: 5px;
-    }
+body::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
 
-    body::-webkit-scrollbar-thumb:hover {
-      background: #555;
-    }
+body::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 
     /* Link styling */
     a {
@@ -164,10 +162,7 @@
     }
 
     /* Map containers */
-    #map-container-2,
-    #map-container,
-    #map-container-3,
-    #map-container-4 {
+    #map-container-2, #map-container, #map-container-3, #map-container-4 {
       flex: 1;
       background-color: #fff;
       border: 2px solid #0033A0;
@@ -177,20 +172,14 @@
     }
 
     /* Map styling */
-    #map2,
-    #map,
-    #map3,
-    #map4 {
+    #map2, #map, #map3, #map4 {
       width: 100%;
       height: 80vh;
       border-radius: 8px;
     }
 
     /* Map title styling */
-    #map-title,
-    #map-title-2,
-    #map-title-3,
-    #map-title-4 {
+    #map-title, #map-title-2, #map-title-3, #map-title-4 {
       margin: 0;
       color: #0033A0;
       font-size: 20px;
@@ -258,66 +247,6 @@
       border-radius: 5px;
     }
 
-    /* Table Styling */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 20px 0;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    th,
-    td {
-      padding: 12px 15px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-
-    th {
-      background-color: #0033A0;
-      color: white;
-      font-weight: bold;
-    }
-
-    tr:hover {
-      background-color: #f5f5f5;
-    }
-
-    td:nth-child(3),
-    td:nth-child(4) {
-      font-weight: bold;
-      color: #d22630;
-      /* Highlight affected population numbers */
-    }
-
-    td:nth-child(4) {
-      color: #0033A0;
-      /* Highlight percentage values */
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 10px;
-      background-color: #e0e0e0;
-      border-radius: 5px;
-      overflow: hidden;
-      display: inline-block;
-      margin-right: 10px;
-    }
-
-    .progress {
-      height: 100%;
-      background-color: #0033A0;
-      border-radius: 5px;
-    }
-
-    canvas {
-      margin-top: 20px;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
     /* Responsive design for smaller screens */
     @media (max-width: 768px) {
       #title-container {
@@ -333,10 +262,7 @@
         flex-direction: column;
       }
 
-      #map2,
-      #map,
-      #map3,
-      #map4 {
+      #map2, #map, #map3, #map4 {
         height: 50vh;
       }
     }
@@ -372,223 +298,7 @@
       <p>This is the content of card 4.</p>
     </div>
   </div>
-
-  <!-- Table -->
-  <table>
-    <thead>
-      <tr>
-        <th>State</th>
-        <th>Population</th>
-        <th># Affected Population by Displacement</th>
-        <th>% of Affected Population by State</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Aj Jazirah</td>
-        <td>5,687,557</td>
-        <td>876,156</td>
-        <td>
-          <div class="progress-bar">
-            <div class="progress" style="width: 15%;"></div>
-          </div>
-          <span>15%</span>
-        </td>
-      </tr>
-      <tr>
-        <td>Blue Nile</td>
-        <td>1,344,267</td>
-        <td>270,810</td>
-        <td>
-          <div class="progress-bar">
-            <div class="progress" style="width: 20%;"></div>
-          </div>
-          <span>20%</span>
-        </td>
-      </tr>
-      <tr>
-        <td>Central Darfur</td>
-        <td>1,786,503</td>
-        <td>749,491</td>
-        <td>
-          <div class="progress-bar">
-            <div class="progress" style="width: 42%;"></div>
-          </div>
-          <span>42%</span>
-        </td>
-      </tr>
-      <tr>
-        <td>East Darfur</td>
-        <td>1,213,951</td>
-        <td>247,874</td>
-        <td>
-          <div class="progress-bar">
-            <div class="progress" style="width: 20%;"></div>
-          </div>
-          <span>20%</span>
-        </td>
-      </tr>
-      <tr>
-        <td>Gedaref</td>
-        <td>2,545,604</td>
-        <td>14,327</td>
-        <td>
-          <div class="progress-bar">
-            <div class="progress" style="width: 1%;"></div>
-          </div>
-          <span>1%</span>
-        </td>
-      </tr>
-      <tr>
-        <td>Kassala</td>
-        <td>2,811,446</td>
-        <td>6,211</td>
-        <td>
-          <div class="progress-bar">
-            <div class="progress" style="width: 0%;"></div>
-          </div>
-          <span>0%</span>
-        </td>
-      </tr>
-      <tr>
-        <td>Khartoum</td>
-        <td>9,146,191</td>
-        <td>3,500,400</td>
-        <td>
-          <div class="progress-bar">
-            <div class="progress" style="width: 38%;"></div>
-          </div>
-          <span>38%</span>
-        </td>
-      </tr>
-      <tr>
-        <td>North Darfur</td>
-        <td>2,775,652</td>
-        <td>1,844,175</td>
-        <td>
-          <div class="progress-bar">
-            <div class="progress" style="width: 66%;"></div>
-          </div>
-          <span>66%</span>
-        </td>
-      </tr>
-      <tr>
-        <td>North Kordofan</td>
-        <td>2,160,476</td>
-        <td>91,161</td>
-        <td>
-          <div class="progress-bar">
-            <div class="progress" style="width: 4%;"></div>
-          </div>
-          <span>4%</span>
-        </td>
-      </tr>
-      <tr>
-        <td>Northern</td>
-        <td>1,023,194</td>
-        <td>12,052</td>
-        <td>
-          <div class="progress-bar">
-            <div class="progress" style="width: 1%;"></div>
-          </div>
-          <span>1%</span>
-        </td>
-      </tr>
-      <tr>
-        <td>Red Sea</td>
-        <td>1,549,857</td>
-        <td>30,480</td>
-        <td>
-          <div class="progress-bar">
-            <div class="progress" style="width: 2%;"></div>
-          </div>
-          <span>2%</span>
-        </td>
-      </tr>
-      <tr>
-        <td>River Nile</td>
-        <td>1,651,873</td>
-        <td>53,683</td>
-        <td>
-          <div class="progress-bar">
-            <div class="progress" style="width: 3%;"></div>
-          </div>
-          <span>3%</span>
-        </td>
-      </tr>
-      <tr>
-        <td>Sennar</td>
-        <td>2,170,863</td>
-        <td>244,250</td>
-        <td>
-          <div class="progress-bar">
-            <div class="progress" style="width: 11%;"></div>
-          </div>
-          <span>11%</span>
-        </td>
-      </tr>
-      <tr>
-        <td>South Darfur</td>
-        <td>3,912,372</td>
-        <td>2,082,537</td>
-        <td>
-          <div class="progress-bar">
-            <div class="progress" style="width: 53%;"></div>
-          </div>
-          <span>53%</span>
-        </td>
-      </tr>
-      <tr>
-        <td>South Kordofan</td>
-        <td>2,017,962</td>
-        <td>414,734</td>
-        <td>
-          <div class="progress-bar">
-            <div class="progress" style="width: 21%;"></div>
-          </div>
-          <span>21%</span>
-        </td>
-      </tr>
-      <tr>
-        <td>West Darfur</td>
-        <td>1,940,860</td>
-        <td>368,971</td>
-        <td>
-          <div class="progress-bar">
-            <div class="progress" style="width: 19%;"></div>
-          </div>
-          <span>19%</span>
-        </td>
-      </tr>
-      <tr>
-        <td>West Kordofan</td>
-        <td>1,713,462</td>
-        <td>314,484</td>
-        <td>
-          <div class="progress-bar">
-            <div class="progress" style="width: 18%;"></div>
-          </div>
-          <span>18%</span>
-        </td>
-      </tr>
-      <tr>
-        <td>White Nile</td>
-        <td>3,046,811</td>
-        <td>179,544</td>
-        <td>
-          <div class="progress-bar">
-            <div class="progress" style="width: 6%;"></div>
-          </div>
-          <span>6%</span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- Bar Chart -->
-  <canvas id="barChart"></canvas>
-
-  <!-- Maps Container for map3 and map4 -->
+    <!-- Maps Container for map3 and map4 -->
   <div class="maps-container">
     <div id="map-container-3">
       <h2 id="map-title-3">Total Number of IDPs by State (Admin1)</h2>
@@ -1260,46 +970,6 @@
       return div;
     };
     legend4.addTo(map4);
-
-    // Initialize Bar Chart
-    const barCtx = document.getElementById('barChart').getContext('2d');
-    const barChart = new Chart(barCtx, {
-      type: 'bar',
-      data: {
-        labels: [
-          'Aj Jazirah', 'Blue Nile', 'Central Darfur', 'East Darfur', 'Gedaref', 'Kassala', 'Khartoum',
-          'North Darfur', 'North Kordofan', 'Northern', 'Red Sea', 'River Nile', 'Sennar', 'South Darfur',
-          'South Kordofan', 'West Darfur', 'West Kordofan', 'White Nile'
-        ],
-        datasets: [{
-          label: '# Affected Population by Displacement',
-          data: [
-            876156, 270810, 749491, 247874, 14327, 6211, 3500400, 1844175, 91161, 12052, 30480, 53683,
-            244250, 2082537, 414734, 368971, 314484, 179544
-          ],
-          backgroundColor: 'rgba(0, 51, 160, 0.8)',
-          borderColor: 'rgba(0, 51, 160, 1)',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Affected Population'
-            }
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'State'
-            }
-          }
-        }
-      }
-    });
   </script>
 </body>
 
