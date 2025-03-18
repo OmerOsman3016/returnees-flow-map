@@ -528,6 +528,12 @@
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
 
   <script>
+    
+     // Add an event listener to the button
+    document.getElementById('changeColorBtn').addEventListener('click', function() {
+      document.querySelector('.card-icon').style.backgroundColor = '#0033A0';
+    });
+    
     // Initialize the first map
     const map = L.map('map').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
 
