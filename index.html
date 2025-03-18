@@ -15,12 +15,54 @@
   <!-- Internal CSS styles -->
   <style>
     /* General body styling */
-    body {
-      margin: 20px;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background-color: #ffffff;
-    }
+   body {
+  margin: 20px;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(145deg, #f5f5f5, #e0e0e0);
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+  font-size: 16px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+a {
+  color: #0033A0;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #ff671f;
+}
+
+/* Custom scrollbar */
+body::-webkit-scrollbar {
+  width: 10px;
+}
+
+body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 
     /* Link styling */
     a {
