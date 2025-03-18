@@ -114,7 +114,6 @@
 
     /* Map container styling */
     #map-container, #map-container-2 {
-  
       background-color: #fff;
       border: 2px solid #0033A0;
       border-radius: 8px;
@@ -137,8 +136,8 @@
 
     /* Map element styling */
     #map, #map2 {
-     width: 100%;
-      height: 70vh;
+      height: calc(90vh - 52px);
+      width: 100%;
       border-radius: 8px;
     }
 
@@ -306,13 +305,13 @@
       <h2>Returnees Over Time (October 2024 - June 2025)</h2>
       <canvas id="timelineChart"></canvas>
     </div>
-<div class="maps-container">
+
     <!-- Map 2 (Left Side) -->
     <div id="map-container-2">
       <h2 id="map-title-2">Second Map: Returnee Movements Across Sudan</h2>
       <div id="map2"></div>
     </div>
-  </div>
+
     <!-- Map 1 (Right Side) -->
     <div id="map-container">
       <h2 id="map-title">Returnee Movements Across Sudan</h2>
