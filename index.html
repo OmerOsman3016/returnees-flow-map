@@ -15,54 +15,54 @@
   <!-- Internal CSS styles -->
   <style>
     /* General body styling */
-   body {
-  margin: 20px;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(145deg, #f5f5f5, #e0e0e0);
-  scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  line-height: 1.6;
-  letter-spacing: 0.5px;
-  font-size: 16px;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
+    body {
+      margin: 20px;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(145deg, #f5f5f5, #e0e0e0);
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.6;
+      letter-spacing: 0.5px;
+      font-size: 16px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
 
-*, *::before, *::after {
-  box-sizing: inherit;
-}
+    *, *::before, *::after {
+      box-sizing: inherit;
+    }
 
-a {
-  color: #0033A0;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
+    a {
+      color: #0033A0;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
 
-a:hover {
-  color: #ff671f;
-}
+    a:hover {
+      color: #ff671f;
+    }
 
-/* Custom scrollbar */
-body::-webkit-scrollbar {
-  width: 10px;
-}
+    /* Custom scrollbar */
+    body::-webkit-scrollbar {
+      width: 10px;
+    }
 
-body::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
+    body::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
 
-body::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 5px;
-}
+    body::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 5px;
+    }
 
-body::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
+    body::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
 
     /* Link styling */
     a {
@@ -266,6 +266,26 @@ body::-webkit-scrollbar-thumb:hover {
         height: 50vh;
       }
     }
+
+    /* Chart container styling */
+    #chartContainer {
+      background-color: #fff;
+      border: 2px solid #0033A0;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      height: 300px;
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 
@@ -298,7 +318,14 @@ body::-webkit-scrollbar-thumb:hover {
       <p>This is the content of card 4.</p>
     </div>
   </div>
-    <!-- Maps Container for map3 and map4 -->
+
+  <!-- Chart Container -->
+  <div id="chartContainer">
+    <h1>Population Displacement by State</h1>
+    <canvas id="populationChart"></canvas>
+  </div>
+
+  <!-- Maps Container for map3 and map4 -->
   <div class="maps-container">
     <div id="map-container-3">
       <h2 id="map-title-3">Total Number of IDPs by State (Admin1)</h2>
@@ -321,6 +348,7 @@ body::-webkit-scrollbar-thumb:hover {
       <div id="map2"></div>
     </div>
   </div>
+
   <!-- Timeline and Map Container -->
   <div id="timeline-map-container">
     <!-- Timeline Graph Container -->
@@ -970,6 +998,152 @@ body::-webkit-scrollbar-thumb:hover {
       return div;
     };
     legend4.addTo(map4);
+
+    // Initialize Population Displacement Chart
+    const populationChartCtx = document.getElementById('populationChart').getContext('2d');
+    const populationData = {
+      labels: [
+        "Aj Jazirah", "Blue Nile", "Central Darfur", "East Darfur", "Gedaref", 
+        "Kassala", "Khartoum", "North Darfur", "North Kordofan", "Northern", 
+        "Red Sea", "River Nile", "Sennar", "South Darfur", "South Kordofan", 
+        "West Darfur", "West Kordofan", "White Nile"
+      ],
+      datasets: [
+        {
+          label: 'Affected Population (Displacement)',
+          data: [876156, 270810, 749491, 247874, 14327, 6211, 3500400, 1844175, 91161, 12052, 30480, 53683, 244250, 2082537, 414734, 368971, 314484, 179544],
+          backgroundColor: 'rgba(75, 192, 192, 0.6)', // Teal with transparency
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1,
+          yAxisID: 'y1'
+        },
+        {
+          label: 'Total Population',
+          data: [5687557, 1344267, 1786503, 1213951, 2545604, 2811446, 9146191, 2775652, 2160476, 1023194, 1549857, 1651873, 2170863, 3912372, 2017962, 1940860, 1713462, 3046811],
+          borderColor: 'rgba(54, 162, 235, 1)', // Blue
+          borderWidth: 2,
+          type: 'line',
+          yAxisID: 'y1',
+          pointBackgroundColor: 'rgba(54, 162, 235, 1)', // Blue points
+          pointRadius: 4, // Larger points
+          pointHoverRadius: 6 // Larger points on hover
+        }
+      ]
+    };
+
+    const populationConfig = {
+      type: 'bar',
+      data: populationData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+          duration: 1000, // Smooth animations
+          easing: 'easeInOutQuart'
+        },
+        scales: {
+          y1: {
+            type: 'linear',
+            display: true,
+            position: 'left',
+            title: {
+              display: true,
+              text: 'Population (People)',
+              font: {
+                size: 14,
+                weight: 'bold'
+              }
+            },
+            grid: {
+              color: 'rgba(0, 0, 0, 0.1)' // Light grid lines
+            },
+            ticks: {
+              font: {
+                size: 12
+              },
+              callback: function(value) {
+                return value.toLocaleString(); // Format numbers with commas
+              }
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'State',
+              font: {
+                size: 14,
+                weight: 'bold'
+              }
+            },
+            grid: {
+              display: false // Remove vertical grid lines
+            },
+            ticks: {
+              font: {
+                size: 12
+              }
+            }
+          }
+        },
+        plugins: {
+          tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Dark tooltip background
+            titleFont: {
+              size: 14,
+              weight: 'bold'
+            },
+            bodyFont: {
+              size: 12
+            },
+            callbacks: {
+              label: function(context) {
+                let label = context.dataset.label || '';
+                if (label) {
+                  label += ': ';
+                }
+                if (context.parsed.y !== null) {
+                  if (context.dataset.label === 'Affected Population (Displacement)') {
+                    // Calculate the percentage of affected population
+                    const totalPopulation = populationData.datasets[1].data[context.dataIndex];
+                    const affectedPopulation = context.parsed.y;
+                    const percentage = ((affectedPopulation / totalPopulation) * 100).toFixed(2);
+                    label += `${affectedPopulation.toLocaleString()} people (${percentage}%)`;
+                  } else if (context.dataset.label === 'Total Population') {
+                    label += context.parsed.y.toLocaleString() + ' people';
+                  }
+                }
+                return label;
+              }
+            }
+          },
+          legend: {
+            display: true,
+            position: 'top',
+            labels: {
+              font: {
+                size: 14,
+                weight: 'bold'
+              },
+              padding: 10
+            }
+          },
+          title: {
+            display: true,
+            text: 'Population Displacement by State',
+            font: {
+              size: 18,
+              weight: 'bold'
+            },
+            padding: {
+              top: 10,
+              bottom: 20
+            }
+          }
+        }
+      }
+    };
+
+    const populationChart = new Chart(populationChartCtx, populationConfig);
   </script>
 </body>
 
