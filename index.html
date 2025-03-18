@@ -113,18 +113,18 @@
     }
 
     /* Map container styling */
-    #map-container {
+    #map-container, #map-container-2 {
       background-color: #fff;
       border: 2px solid #0033A0;
       border-radius: 8px;
       padding: 10px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      width: 98%;
+      width: 48%; /* Adjusted width for side-by-side layout */
       height: 90vh;
     }
 
     /* Map title styling */
-    #map-title {
+    #map-title, #map-title-2 {
       margin: 0 0 10px 0;
       color: #0033A0;
       font-size: 20px;
@@ -135,42 +135,13 @@
     }
 
     /* Map element styling */
-    #map {
+    #map, #map2 {
       height: calc(90vh - 52px);
       width: 100%;
       border-radius: 8px;
     }
 
-    /* Second map container styling */
-    #map-container-2 {
-      background-color: #fff;
-      border: 2px solid #0033A0;
-      border-radius: 8px;
-      padding: 10px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      margin-top: 20px;
-    }
-
-    /* Second map title styling */
-    #map-title-2 {
-      margin: 0;
-      color: #0033A0;
-      font-size: 20px;
-      font-weight: bold;
-      text-align: center;
-      border-bottom: 2px solid #0033A0;
-      padding-bottom: 10px;
-      margin-bottom: 10px;
-    }
-
-    /* Second map styling */
-    #map2 {
-      height: 90vh;
-      width: 100%;
-      border-radius: 8px;
-    }
-
-    /* Flexbox container for map3 and map4 */
+    /* Flexbox container for map1 and map2 */
     .maps-container {
       display: flex;
       gap: 20px;
@@ -190,7 +161,7 @@
     /* Map styling */
     #map3, #map4 {
       width: 100%;
-      height: 90vh;
+      height: 70vh;
       border-radius: 8px;
     }
 
@@ -274,18 +245,11 @@
         flex-direction: column;
       }
 
-      #bpr-paragraph,
-      #timeline-container,
-      #map-container,
-      #map-container-2,
-      #map-container-3,
-      #bar-chart-container {
-        width: 100%;
+      #map-container, #map-container-2 {
+        width: 100%; /* Full width on smaller screens */
       }
 
-      #map,
-      #map2,
-      #map3 {
+      #map, #map2, #map3 {
         height: 50vh;
       }
     }
@@ -342,13 +306,13 @@
       <canvas id="timelineChart"></canvas>
     </div>
 
-    <!-- Second Map Container -->
+    <!-- Map 2 (Left Side) -->
     <div id="map-container-2">
       <h2 id="map-title-2">Second Map: Returnee Movements Across Sudan</h2>
       <div id="map2"></div>
     </div>
 
-    <!-- Map Container -->
+    <!-- Map 1 (Right Side) -->
     <div id="map-container">
       <h2 id="map-title">Returnee Movements Across Sudan</h2>
       <div id="map"></div>
