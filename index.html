@@ -268,25 +268,93 @@
       }
     }
 
-    /* Chart container styling */
-    #chartContainer {
-      background-color: #fff;
-      border: 2px solid #0033A0;
-      border-radius: 8px;
-      padding: 30px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      height: 300px;
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+   /* Chart container styling */
+.chart-container {
+  background-color: #fff;
+  border: 2px solid #0033A0;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 300px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 20px;
+}
 
-    h1 {
-      text-align: center;
-      color: #333;
-      font-size: 2rem;
-      margin-bottom: 20px;
-    }
+/* Chart canvas styling */
+.chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Tooltip styling */
+.chartjs-tooltip {
+  background-color: #0033A0;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  padding: 8px;
+  pointer-events: none;
+  position: absolute;
+  transition: all 0.1s ease;
+}
+
+/* Tooltip arrow styling */
+.chartjs-tooltip::before {
+  content: '';
+  position: absolute;
+  border: 6px solid transparent;
+  border-top-color: #0033A0;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Legend styling */
+.chartjs-legend {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.chartjs-legend ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 10px;
+}
+
+.chartjs-legend li {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.chartjs-legend span {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+/* Animation for chart */
+@keyframes chartAnimation {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chart-container canvas {
+  animation: chartAnimation 1s ease-out;
+}
   </style>
 </head>
 
