@@ -153,38 +153,6 @@ body::-webkit-scrollbar-thumb:hover {
       border-bottom: 2px solid #0033A0;
       padding-bottom: 10px;
     }
-   /* Chart container styling */
-    #chart-container {
-      background-color: #fff;
-      border: 2px solid #0033A0;
-      border-radius: 8px;
-      padding: 30px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      width: 90%;
-      max-width: 1200px;
-      height: 80vh;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    /* Chart heading styling */
-    #chart-container h2 {
-      margin-top: 0;
-      color: #0033A0;
-      font-size: 20px;
-      margin-bottom: 15px;
-      font-weight: bold;
-      text-align: center;
-      border-bottom: 2px solid #0033A0;
-      padding-bottom: 10px;
-    }
-
-    /* Chart canvas styling */
-    #displacementChart {
-      width: 100% !important;
-      height: 100% !important;
-    }
 
     /* Flexbox container for maps */
     .maps-container {
@@ -361,10 +329,6 @@ body::-webkit-scrollbar-thumb:hover {
       <canvas id="timelineChart"></canvas>
     </div>
   </div>
-   <div id="chart-container">
-    <h2>Number of Population Affected by Displacement</h2>
-    <canvas id="displacementChart"></canvas>
-  </div>
 
   <!-- Add image above the footer -->
   <img src="./data/doner.png" alt="Donor Logo" style="width: 100%; height: auto; display: block; margin: 0 auto;">
@@ -390,86 +354,6 @@ body::-webkit-scrollbar-thumb:hover {
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
 
   <script>
-     // Data
-    const states = [
-      "Aj Jazirah", "Blue Nile", "Central Darfur", "East Darfur", "Gedaref", 
-      "Kassala", "Khartoum", "North Darfur", "North Kordofan", "Northern", 
-      "Red Sea", "River Nile", "Sennar", "South Darfur", "South Kordofan", 
-      "West Darfur", "West Kordofan", "White Nile"
-    ];
-    const displaced = [
-      876156, 270810, 749491, 247874, 14327, 6211, 3500400, 1844175, 
-      91161, 12052, 30480, 53683, 244250, 2082537, 414734, 368971, 
-      314484, 179544
-    ];
-    const population = [
-      5687557, 1344267, 1786503, 1213951, 2545604, 2811446, 9146191, 
-      2775652, 2160476, 1023194, 1549857, 1651873, 2170863, 3912372, 
-      2017962, 1940860, 1713462, 3046811
-    ];
-
-    // Calculate the non-displaced population
-    const nonDisplaced = population.map((pop, index) => pop - displaced[index]);
-
-    // Chart configuration
-    const ctx = document.getElementById('displacementChart').getContext('2d');
-    const displacementChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: states,
-        datasets: [
-          {
-            label: 'Non-Displaced Population',
-            data: nonDisplaced,
-            backgroundColor: 'rgba(75, 192, 192, 0.6)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-          },
-          {
-            label: '# of Displaced People',
-            data: displaced,
-            backgroundColor: 'rgba(255, 99, 132, 0.6)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false, // Ensure the chart fits the container
-        scales: {
-          x: {
-            stacked: true, // Stack bars on the x-axis
-          },
-          y: {
-            stacked: true, // Stack bars on the y-axis
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Population'
-            }
-          }
-        },
-        plugins: {
-          legend: {
-            position: 'top',
-          },
-          tooltip: {
-            callbacks: {
-              afterBody: (tooltipItems) => {
-                // Get the index of the hovered item
-                const index = tooltipItems[0].dataIndex;
-                // Return population and percentage for the hovered state
-                return [
-                  `Total Population: ${population[index].toLocaleString()}`,
-                  `% Displaced: ${((displaced[index] / population[index]) * 100).toFixed(2)}%`
-                ];
-              }
-            }
-          }
-        }
-      }
-    });
     // Initialize the first map
     const map = L.map('map').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
 
