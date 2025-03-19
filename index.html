@@ -803,8 +803,8 @@
     // Initialize Timeline Graph
     const ctx = document.getElementById('timelineChart').getContext('2d');
     const gradient = ctx.createLinearGradient(0, 0, 0, 200);
-    gradient.addColorStop(0, 'rgba(0, 51, 160, 0.8)');
-    gradient.addColorStop(1, 'rgba(0, 51, 160, 0.2)');
+    gradient.addColorStop(0, '#FFFFFF');
+    gradient.addColorStop(1, '#418FDE');
 
     const timelineChart = new Chart(ctx, {
       type: 'line',
