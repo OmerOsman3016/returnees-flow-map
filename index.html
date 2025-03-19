@@ -669,62 +669,35 @@
     legend2.addTo(map2);
 
     // Initialize the third map
-   const cartoDBLight3 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-});
+     const map3 = L.map('map3').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
 
-const openStreetMap3 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-});
+    // Define multiple base layers for the third map
+    const cartoDBLight3 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
 
-const esriWorldImagery3 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-  attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
-});
+    const openStreetMap3 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
 
-const stamenToner3 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
-  attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
-});
+    const esriWorldImagery3 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
+    });
 
-const openTopoMap3 = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="https://opentopomap.org">OpenTopoMap</a> contributors'
-});
+    const stamenToner3 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
+    });
 
-const thunderforestOutdoors3 = L.tileLayer('https://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey=YOUR_API_KEY', {
-  attribution: '&copy; <a href="https://www.thunderforest.com">Thunderforest</a>'
-});
+    // Add default base layer to the third map
+    cartoDBLight3.addTo(map3);
 
-const wikimediaMaps3 = L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="https://wikimediafoundation.org">Wikimedia Maps</a>'
-});
-
-const hyddaBase3 = L.tileLayer('https://{s}.tile.openstreetmap.se/hydda/base/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="https://openstreetmap.se/">OpenStreetMap Sweden</a>'
-});
-
-const nasaGibs3 = L.tileLayer('https://gibs-{s}.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_ShadedRelief_Bathymetry/default//GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg', {
-  attribution: '&copy; <a href="https://earthdata.nasa.gov">NASA GIBS</a>'
-});
-
-const cyclOSM3 = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="https://www.cyclosm.org/">CyclOSM</a>'
-});
-
-// Add a default base layer to the map
-cartoDBLight3.addTo(map);
-
-// Create an object to hold the base layers
-const baseLayers = {
-  "CartoDB Light": cartoDBLight3,
-  "OpenStreetMap": openStreetMap3,
-  "Esri World Imagery": esriWorldImagery3,
-  "Stamen Toner": stamenToner3,
-  "OpenTopoMap": openTopoMap3,
-  "Thunderforest Outdoors": thunderforestOutdoors3,
-  "Wikimedia Maps": wikimediaMaps3,
-  "Hydda Base": hyddaBase3,
-  "NASA GIBS": nasaGibs3,
-  "CyclOSM": cyclOSM3
-};
+    // Add layer control to the third map
+    const baseLayers3 = {
+      "CartoDB Light": cartoDBLight3,
+      "OpenStreetMap": openStreetMap3,
+      "Esri World Imagery": esriWorldImagery3,
+      "Stamen Toner": stamenToner3
+    };
 
     L.control.layers(baseLayers3).addTo(map3);
 
