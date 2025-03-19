@@ -630,8 +630,8 @@
 
           // Add popup
           const popupContent = feature.properties.isOrigin
-            ? `<b>State of Displacement:</b> ${feature.properties.s_State}`
-            : `<b>State of Return:</b> ${feature.properties.e_locality}`;
+            ? `<b>Displacement From:</b> ${feature.properties.s_State}`
+            : `<b>Displacement To:</b> ${feature.properties.e_locality}`;
 
           layer.bindPopup(popupContent);
         }
