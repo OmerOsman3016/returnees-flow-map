@@ -44,10 +44,6 @@
       transition: color 0.3s ease;
     }
 
-    a:hover {
-      color: #ff671f;
-    }
-
     /* Custom scrollbar */
     body::-webkit-scrollbar {
       width: 10px;
@@ -1051,6 +1047,7 @@
       return div;
     };
     legend4.addTo(map4);
+    console.log(L.Browser.mobile ? "Mobile device detected" : "Desktop device detected");
 
     // Initialize the Displacement Chart
     const states = [
