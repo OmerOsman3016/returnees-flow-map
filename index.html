@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.css" />
 
 <head>
-  <style>
+ <style>
     /* General body styling */
     body {
       margin: 20px;
@@ -184,6 +184,9 @@
     }
 
     .dashboard-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       padding: 12px;
@@ -211,16 +214,34 @@
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 
-    .dashboard-card h2 {
+    .card-content {
+      flex: 1; /* Take up remaining space */
+    }
+
+    .card-content h2 {
       margin: 0;
       font-size: 2em;
       color: #ffffff;
     }
 
-    .dashboard-card p {
+    .card-content p {
       margin: 4px 0 0;
       color: #ffffff;
       font-size: 1em;
+    }
+
+    .card-image {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      width: 60px; /* Adjust as needed */
+      margin-left: 10px; /* Space between content and image */
+    }
+
+    .card-icon {
+      width: 40px; /* Adjust icon size */
+      height: 40px;
+      filter: brightness(0) invert(1); /* Make icons white */
     }
 
     /* Staggered delays for dashboard cards */
@@ -380,6 +401,24 @@
       #map, #map2, #map3, #map4 {
         height: 90vh;
       }
+
+      .dashboard-card {
+        flex-direction: column;
+        align-items: flex-start;
+        height: auto;
+        padding: 15px;
+      }
+
+      .card-image {
+        margin-left: 0;
+        margin-top: 10px;
+        justify-content: flex-start;
+      }
+
+      .card-icon {
+        width: 30px;
+        height: 30px;
+      }
     }
   </style>
 </head>
@@ -413,9 +452,13 @@
   <!-- Dashboard Cards Section -->
   <div class="dashboard-cards">
     <div class="dashboard-card" style="background-color: #418FDE; color: #fff;">
-    <img src="./data/IDPs.png" alt="IDP Icon" style="width: 24px; height: 24px;">
-  <h2>11,585,384</h2>
-  <p>Internally Displaced Persons</p>
+    <div class="card-content">
+      <h2>11,585,384</h2>
+      <p>Internally Displaced Persons</p>
+    </div>
+    <div class="card-image">
+      <img src="./data/idp-icon.png" alt="IDP Icon" class="card-icon">
+    </div>
 </div>
     <div class="dashboard-card" style="background-color: #418FDE; color: #FF6384;">
       <h2>396,738</h2>
