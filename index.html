@@ -13,6 +13,21 @@
 
 <head>
  
+ /* Add this to your existing CSS */
+body {
+  opacity: 0;
+  animation: fadeIn 1.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+ 
   <!-- Internal CSS styles -->
   <style>
     /* General body styling */
