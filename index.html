@@ -401,7 +401,20 @@
       #map, #map2, #map3, #map4 {
         height: 90vh;
       }
+@media print {
+  body {
+    font-size: 12pt;
+    color: #000;
+  }
 
+  .dashboard-cards, .maps-container {
+    page-break-inside: avoid;
+  }
+
+  footer {
+    display: none;
+  }
+}
      
     }
   </style>
