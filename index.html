@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
   <meta charset="utf-8" />
-  <!-- Meta tags for character encoding, viewport settings, and p -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <meta name="description" content="Sudan | Displacement Tracking Matrix-Returnees Flow" />
   <title>Sudan | Displacement Tracking Matrix - Returnees Flow</title>
@@ -10,9 +10,8 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.css" />
 
-<head>
- <style>
-    /* General body styling 1*/
+  <style>
+    /* General body styling */
     body {
       margin: 20px;
       padding: 0;
@@ -28,22 +27,16 @@
       display: flex;
       flex-direction: column;
       box-sizing: border-box;
-      opacity: 0; /* Initial state for fade-in animation */
-      animation: fadeIn 1.5s ease-in-out forwards; /* Fade-in animation */
+      opacity: 0;
+      animation: fadeIn 1.5s ease-in-out forwards;
     }
 
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
-    *, *::before, *::after {
-      box-sizing: inherit;
-    }
+    *, *::before, *::after { box-sizing: inherit; }
 
     a {
       color: #0033A0;
@@ -51,27 +44,13 @@
       transition: color 0.3s ease;
     }
 
-    a:hover {
-      color: #0056b3;
-    }
+    a:hover { color: #0056b3; }
 
     /* Custom scrollbar */
-    body::-webkit-scrollbar {
-      width: 10px;
-    }
-
-    body::-webkit-scrollbar-track {
-      background: #f1f1f1;
-    }
-
-    body::-webkit-scrollbar-thumb {
-      background: #888;
-      border-radius: 5px;
-    }
-
-    body::-webkit-scrollbar-thumb:hover {
-      background: #555;
-    }
+    body::-webkit-scrollbar { width: 10px; }
+    body::-webkit-scrollbar-track { background: #f1f1f1; }
+    body::-webkit-scrollbar-thumb { background: #888; border-radius: 5px; }
+    body::-webkit-scrollbar-thumb:hover { background: #555; }
 
     /* Title container styling */
     #title-container {
@@ -84,50 +63,22 @@
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       flex-wrap: wrap;
-      opacity: 0; /* Initial state for slide-up animation */
-      transform: translateY(20px); /* Initial state for slide-up animation */
-      animation: slideUp 0.8s ease-in-out forwards; /* Slide-up animation */
-      animation-delay: 0.2s; /* Staggered delay */
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 0.8s ease-in-out forwards;
+      animation-delay: 0.2s;
     }
 
     @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .title-image {
-      width: 170px;
-      height: 90px;
-      margin-right: 20px;
-      border-radius: 5px;
-    }
+    .title-image { width: 170px; height: 90px; margin-right: 20px; border-radius: 5px; }
 
-    #title {
-      flex: 1;
-      text-align: left;
-    }
-
-    #title h1 {
-      margin: 0;
-      font-size: 30px;
-      font-weight: bold;
-      border-bottom: 3px solid white;
-      padding-bottom: 5px;
-      display: inline-block;
-    }
-
-    #title h2 {
-      margin: 0;
-      font-size: 24px;
-      font-weight: normal;
-      color: #f0f0f0;
-    }
+    #title { flex: 1; text-align: left; }
+    #title h1 { margin: 0; font-size: 30px; font-weight: bold; border-bottom: 3px solid white; padding-bottom: 5px; display: inline-block; }
+    #title h2 { margin: 0; font-size: 24px; font-weight: normal; color: #f0f0f0; }
 
     /* Description container styling */
     #description-container {
@@ -138,38 +89,16 @@
       margin-bottom: 20px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       font-family: Arial, sans-serif;
-      opacity: 0; /* Initial state for slide-up animation */
-      transform: translateY(20px); /* Initial state for slide-up animation */
-      animation: slideUp 0.8s ease-in-out forwards; /* Slide-up animation */
-      animation-delay: 0.4s; /* Staggered delay */
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 0.8s ease-in-out forwards;
+      animation-delay: 0.4s;
     }
 
-    #description-container h2 {
-      color: #555;
-      font-size: 22px;
-      margin-top: 0;
-      margin-bottom: 10px;
-      border-bottom: 2px solid #418FDE;
-      padding-bottom: 5px;
-      font-weight: 600;
-    }
-
-    #description-container p {
-      font-size: 14px;
-      line-height: 1.6;
-      color: #555;
-      margin-bottom: 15px;
-    }
-
-    #description-container strong {
-      color: #333;
-      font-weight: 600;
-    }
-
-    #description-container .data-point {
-      color: #418FDE;
-      font-weight: 600;
-    }
+    #description-container h2 { color: #555; font-size: 22px; margin-top: 0; margin-bottom: 10px; border-bottom: 2px solid #418FDE; padding-bottom: 5px; font-weight: 600; }
+    #description-container p { font-size: 14px; line-height: 1.6; color: #555; margin-bottom: 15px; }
+    #description-container strong { color: #333; font-weight: 600; }
+    #description-container .data-point { color: #418FDE; font-weight: 600; }
 
     /* Dashboard Cards Styling */
     .dashboard-cards {
@@ -177,10 +106,10 @@
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 15px;
       margin-bottom: 20px;
-      opacity: 0; /* Initial state for slide-up animation */
-      transform: translateY(20px); /* Initial state for slide-up animation */
-      animation: slideUp 0.8s ease-in-out forwards; /* Slide-up animation */
-      animation-delay: 0.6s; /* Staggered delay */
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 0.8s ease-in-out forwards;
+      animation-delay: 0.6s;
     }
 
     .dashboard-card {
@@ -193,87 +122,39 @@
       transition: transform 0.2s ease, box-shadow 0.2s ease;
       height: 100px;
       background: #fff;
-      opacity: 0; /* Initial state for card animation */
-      transform: scale(0.9); /* Initial state for card animation */
-      animation: cardEntrance 0.5s ease-in-out forwards; /* Card animation */
+      opacity: 0;
+      transform: scale(0.9);
+      animation: cardEntrance 0.5s ease-in-out forwards;
     }
 
     @keyframes cardEntrance {
-      from {
-        opacity: 0;
-        transform: scale(0.9);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
     }
 
-    .dashboard-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .card-content {
-      flex: 1; /* Take up remaining space */
-    }
-
-    .card-content h2 {
-      margin: 0;
-      font-size: 2em;
-      color: #ffffff;
-    }
-
-    .card-content p {
-      margin: 4px 0 0;
-      color: #ffffff;
-      font-size: 1em;
-    }
-
-    .card-image {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      width: 60px; /* Adjust as needed */
-      margin-left: 10px; /* Space between content and image */
-    }
-
-    .card-icon {
-      width: 40px; /* Adjust icon size */
-      height: 40px;
-      
-    }
+    .dashboard-card:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); }
+    .card-content { flex: 1; }
+    .card-content h2 { margin: 0; font-size: 2em; color: #ffffff; }
+    .card-content p { margin: 4px 0 0; color: #ffffff; font-size: 1em; }
+    .card-image { display: flex; align-items: center; justify-content: flex-end; width: 60px; margin-left: 10px; }
+    .card-icon { width: 40px; height: 40px; }
 
     /* Staggered delays for dashboard cards */
-    .dashboard-card:nth-child(1) {
-      animation-delay: 1s;
-    }
-
-    .dashboard-card:nth-child(2) {
-      animation-delay: 1.5s;
-    }
-
-    .dashboard-card:nth-child(3) {
-      animation-delay: 2s;
-    }
-
-    .dashboard-card:nth-child(4) {
-      animation-delay: 2.5s;
-    }
-
-    .dashboard-card:nth-child(5) {
-      animation-delay: 3s;
-    }
+    .dashboard-card:nth-child(1) { animation-delay: 1s; }
+    .dashboard-card:nth-child(2) { animation-delay: 1.5s; }
+    .dashboard-card:nth-child(3) { animation-delay: 2s; }
+    .dashboard-card:nth-child(4) { animation-delay: 2.5s; }
+    .dashboard-card:nth-child(5) { animation-delay: 3s; }
 
     /* Maps and charts container styling */
     .maps-container {
       display: flex;
       gap: 20px;
       margin-bottom: 20px;
-      opacity: 0; /* Initial state for slide-up animation */
-      transform: translateY(20px); /* Initial state for slide-up animation */
-      animation: slideUp 0.8s ease-in-out forwards; /* Slide-up animation */
-      animation-delay: 0.8s; /* Staggered delay */
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 0.8s ease-in-out forwards;
+      animation-delay: 0.8s;
     }
 
     #map-container, #map-container-2, #map-container-3, #map-container-4 {
@@ -285,55 +166,13 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
-    #map, #map2, #map3, #map4 {
-      width: 100%;
-      height: 80vh;
-      border-radius: 8px;
-    }
-
-    #map-title, #map-title-2, #map-title-3, #map-title-4 {
-      margin: 0;
-      color: #555;
-      font-size: 20px;
-      font-weight: bold;
-      text-align: center;
-      border-bottom: 1px solid #d9e0f1;
-      padding-bottom: 10px;
-      margin-bottom: 10px;
-    }
+    #map, #map2, #map3, #map4 { width: 100%; height: 80vh; border-radius: 8px; }
+    #map-title, #map-title-2, #map-title-3, #map-title-4 { margin: 0; color: #555; font-size: 20px; font-weight: bold; text-align: center; border-bottom: 1px solid #d9e0f1; padding-bottom: 10px; margin-bottom: 10px; }
 
     /* Timeline container styling */
-    #timeline-map-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      min-width: 300px;
-      opacity: 0; /* Initial state for slide-up animation */
-      transform: translateY(20px); /* Initial state for slide-up animation */
-      animation: slideUp 0.8s ease-in-out forwards; /* Slide-up animation */
-      animation-delay: 1s; /* Staggered delay */
-    }
-
-    #timeline-container {
-      background-color: #ffffff;
-      border: 1px solid #d9e0f1;
-      border-radius: 8px;
-      padding: 30px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      height: 350px;
-    }
-
-    #timeline-container h2 {
-      margin-top: 0;
-      color: #84adec;
-      font-size: 20px;
-      margin-bottom: 15px;
-      font-weight: bold;
-      text-align: center;
-      border-bottom: 2px solid #418FDE;
-      padding-bottom: 5px;
-    }
+    #timeline-map-container { flex: 1; display: flex; flex-direction: column; gap: 20px; min-width: 300px; opacity: 0; transform: translateY(20px); animation: slideUp 0.8s ease-in-out forwards; animation-delay: 1s; }
+    #timeline-container { background-color: #ffffff; border: 1px solid #d9e0f1; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); height: 350px; }
+    #timeline-container h2 { margin-top: 0; color: #84adec; font-size: 20px; margin-bottom: 15px; font-weight: bold; text-align: center; border-bottom: 2px solid #418FDE; padding-bottom: 5px; }
 
     /* Chart container styling */
     #chart-container {
@@ -349,27 +188,14 @@
       flex-direction: column;
       gap: 10px;
       margin: 20px auto;
-      opacity: 0; /* Initial state for slide-up animation */
-      transform: translateY(20px); /* Initial state for slide-up animation */
-      animation: slideUp 0.8s ease-in-out forwards; /* Slide-up animation */
-      animation-delay: 1.2s; /* Staggered delay */
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 0.8s ease-in-out forwards;
+      animation-delay: 1.2s;
     }
 
-    #chart-container h2 {
-      margin-top: 0;
-      color: #84adec;
-      font-size: 20px;
-      margin-bottom: 15px;
-      font-weight: bold;
-      text-align: center;
-      border-bottom: 1px solid #d9e0f1;
-      padding-bottom: 10px;
-    }
-
-    #displacementChart {
-      width: 100% !important;
-      height: 80% !important;
-    }
+    #chart-container h2 { margin-top: 0; color: #84adec; font-size: 20px; margin-bottom: 15px; font-weight: bold; text-align: center; border-bottom: 1px solid #d9e0f1; padding-bottom: 10px; }
+    #displacementChart { width: 100% !important; height: 80% !important; }
 
     /* Footer styling */
     footer {
@@ -381,41 +207,22 @@
       font-size: 12px;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      opacity: 0; /* Initial state for slide-up animation */
-      transform: translateY(20px); /* Initial state for slide-up animation */
-      animation: slideUp 0.8s ease-in-out forwards; /* Slide-up animation */
-      animation-delay: 1.4s; /* Staggered delay */
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 0.8s ease-in-out forwards;
+      animation-delay: 1.4s;
     }
 
     /* Responsive design for smaller screens */
     @media (max-width: 768px) {
-      #title-container {
-        flex-direction: column;
-        align-items: flex-start;
+      #title-container { flex-direction: column; align-items: flex-start; }
+      .content-container { flex-direction: column; }
+      #map, #map2, #map3, #map4 { height: 90vh; }
+      @media print {
+        body { font-size: 12pt; color: #000; }
+        .dashboard-cards, .maps-container { page-break-inside: avoid; }
+        footer { display: none; }
       }
-
-      .content-container {
-        flex-direction: column;
-      }
-
-      #map, #map2, #map3, #map4 {
-        height: 90vh;
-      }
-@media print {
-  body {
-    font-size: 12pt;
-    color: #000;
-  }
-
-  .dashboard-cards, .maps-container {
-    page-break-inside: avoid;
-  }
-
-  footer {
-    display: none;
-  }
-}
-     
     }
   </style>
 </head>
