@@ -169,6 +169,55 @@
     #map, #map2, #map3, #map4 { width: 100%; height: 80vh; border-radius: 8px; }
     #map-title, #map-title-2, #map-title-3, #map-title-4 { margin: 0; color: #84adec; font-size: 20px; font-weight: bold; text-align: center; border-bottom: 1px solid #d9e0f1; padding-bottom: 10px; margin-bottom: 10px; }
 
+    /* Text Container Styling */
+    #text-container {
+      flex: 1;
+      background-color: #ffffff;
+      border: 1px solid #d9e0f1;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-right: 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 0.8s ease-in-out forwards;
+      animation-delay: 0.8s;
+    }
+
+    #text-container h2 {
+      color: #555;
+      font-size: 22px;
+      margin-top: 0;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #418FDE;
+      padding-bottom: 5px;
+      font-weight: 600;
+    }
+
+    #text-container p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #555;
+      margin-bottom: 15px;
+    }
+
+    #text-container ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    #text-container ul li {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    #text-container strong {
+      color: #333;
+      font-weight: 600;
+    }
+
     /* Timeline container styling */
     #timeline-map-container { flex: 1; display: flex; flex-direction: column; gap: 20px; min-width: 300px; opacity: 0; transform: translateY(20px); animation: slideUp 0.8s ease-in-out forwards; animation-delay: 1s; }
     #timeline-container { background-color: #ffffff; border: 1px solid #d9e0f1; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); height: 350px; }
@@ -218,6 +267,8 @@
       #title-container { flex-direction: column; align-items: flex-start; }
       .content-container { flex-direction: column; }
       #map, #map2, #map3, #map4 { height: 90vh; }
+      .maps-container { flex-direction: column; }
+      #text-container { margin-right: 0; margin-bottom: 20px; }
       @media print {
         body { font-size: 12pt; color: #000; }
         .dashboard-cards, .maps-container { page-break-inside: avoid; }
@@ -293,30 +344,43 @@
       </div>
     </div>
   </div>
-<!-- Maps Container for map3 and map4 -->
+
+  <!-- Maps Container for map3 and text container -->
   <div class="maps-container">
+    <!-- Text Container -->
+    <div id="text-container">
+      <h2>Key Insights</h2>
+      <p>
+        The map on the right displays the total number of Internally Displaced Persons (IDPs) by state in Sudan. The size of the circles represents the volume of IDPs in each state, with larger circles indicating higher numbers.
+      </p>
+      <p>
+        <strong>Key Observations:</strong>
+        <ul>
+          <li>South Darfur has the highest number of IDPs, with over 2 million displaced individuals.</li>
+          <li>Khartoum follows closely, with significant displacement due to ongoing conflict.</li>
+          <li>States like Aj Jazirah and Sennar also show notable displacement figures.</li>
+        </ul>
+      </p>
+    </div>
+
+    <!-- Map Container for map3 -->
     <div id="map-container-3">
       <h2 id="map-title-3">Total Number of IDPs by STATE</h2>
       <div id="map3"></div>
     </div>
   </div>
-   <div id="map-container">
+
+  <!-- Maps Container for map1 and map2 -->
+  <div class="maps-container">
+    <div id="map-container">
       <h2 id="map-title-2">IDPs Pathways Across Sudan</h2>
       <div id="map2"></div>
     </div>
-   <div id="map-container-4">
+    <div id="map-container-4">
       <h2 id="map-title-4">Total Number of Returnees by STATE</h2>
       <div id="map4"></div>
     </div>
-  <!-- Maps Container for map1 and map2 -->
-  <div class="maps-container">
-    <div id="map-container-2">
-      <h2 id="map-title">Returnee Pathways Across Sudan</h2>
-      <div id="map"></div>
-    </div>
-    
   </div>
- 
 
   <!-- Timeline and Map Container -->
   <div id="timeline-map-container">
@@ -332,9 +396,6 @@
     <h2>Number of Population Affected by Displacement</h2>
     <canvas id="displacementChart"></canvas>
   </div>
-
-  
- 
 
   <!-- Displacement and Returnee Movements Section -->
   <div id="description-container">
