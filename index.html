@@ -183,7 +183,52 @@
   .dashboard-card:nth-child(3) { animation-delay: 3s; }
   .dashboard-card:nth-child(4) { animation-delay: 4s; }
   .dashboard-card:nth-child(5) { animation-delay: 5s; }
+/* Text Container for Total Number of IDPs by STATE */
+#idps-text-container {
+  flex: 1;
+  background-color: #ffffff;
+  border: 1px solid #d9e0f1;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-right: 20px; /* Add space between text container and map */
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUp 0.8s ease-in-out forwards;
+  animation-delay: 0.8s;
+}
 
+#idps-text-container h2 {
+  color: #84adec;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: left;
+  border-bottom: 2px solid #418FDE;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+#idps-text-container p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+#idps-text-container ul {
+  list-style-type: disc;
+  margin-left: 20px;
+  color: #555;
+}
+
+#idps-text-container ul li {
+  margin-bottom: 5px;
+}
+
+#idps-text-container strong {
+  color: #333;
+  font-weight: 600;
+}
   /* Maps container styling */
   .maps-container {
     display: flex;
@@ -460,6 +505,22 @@
         <img src="./data/Location.png" alt="Location Icon" class="card-icon">
       </div>
     </div>
+  </div>
+  <div class="maps-container">
+  <!-- Text Container for Total Number of IDPs by STATE -->
+  <div id="idps-text-container">
+    <h2>Total Number of IDPs by STATE</h2>
+    <p>
+      The map on the right displays the total number of Internally Displaced Persons (IDPs) by state in Sudan. The size of the circles represents the volume of IDPs in each state, with larger circles indicating higher numbers. The data highlights the significant displacement in states like <strong>South Darfur</strong> and <strong>North Darfur</strong>, which have been heavily affected by conflict.
+    </p>
+    <p>
+      Key insights:
+      <ul>
+        <li><strong>South Darfur:</strong> 1.84 million IDPs</li>
+        <li><strong>North Darfur:</strong> 1.79 million IDPs</li>
+        <li><strong>Khartoum:</strong> 3.5 million IDPs</li>
+      </ul>
+    </p>
   </div>
 <!-- Maps Container for map3 and map4 -->
   <div class="maps-container">
