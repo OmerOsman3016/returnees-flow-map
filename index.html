@@ -11,6 +11,54 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.css" />
 
   <style>
+    /* Text Container Styling */
+#text-container {
+  flex: 1;
+  background-color: #ffffff;
+  border: 1px solid #d9e0f1;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-right: 20px; /* Add spacing between text and map */
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUp 0.8s ease-in-out forwards;
+  animation-delay: 0.8s;
+}
+
+#text-container h2 {
+  color: #555;
+  font-size: 22px;
+  margin-top: 0;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #418FDE;
+  padding-bottom: 5px;
+  font-weight: 600;
+}
+
+#text-container p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+#text-container ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+#text-container ul li {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+#text-container strong {
+  color: #333;
+  font-weight: 600;
+}
     /* General body styling */
     body {
       margin: 20px;
