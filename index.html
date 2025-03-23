@@ -395,75 +395,77 @@
 </head>
 
 <body>
-  <!-- Title container with logo, title, and info card -->
-  <div id="title-container">
-    <div id="title">
-      <h1>SUDAN | DISPLACEMENT TRACKING MATRIX - SUDAN MOBILITY</h1>
-      <h2><strong>Two Year Of Displacement</strong></h2>
+<!-- Title Container with Logo, Title, and Info Card -->
+<div id="title-container">
+  <div id="title">
+    <h1>SUDAN | DISPLACEMENT TRACKING MATRIX - SUDAN MOBILITY</h1>
+    <h2><strong>Two Years of Displacement</strong></h2>
+  </div>
+</div>
+
+<!-- Dashboard Cards Container -->
+<div class="dashboard-cards">
+  <!-- Card 1: Internally Displaced Persons -->
+  <div class="dashboard-card">
+    <div class="card-content">
+      <h2>11,585,384</h2>
+      <p>Internally Displaced</p>
+    </div>
+    <div class="card-image">
+      <img src="./data/Internally_displaced.png" alt="IDP Icon" class="card-icon">
     </div>
   </div>
 
-  <!-- Dashboard Cards Container -->
-  <div class="dashboard-cards">
-    <!-- Card 1: Internally Displaced Persons -->
-    <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
-      <div class="card-content">
-        <h2>11,585,384</h2>
-        <p>Internally Displaced </p>
-      </div>
-      <div class="card-image">
-        <img src="./data/Internally displaced.png" alt="IDP Icon" class="card-icon">
-      </div>
+  <!-- Card 2: Returnees -->
+  <div class="dashboard-card">
+    <div class="card-content">
+      <h2>396,738</h2>
+      <p>Returnees</p>
     </div>
-
-    <!-- Card 2: Returnees -->
-    <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
-      <div class="card-content">
-        <h2>396,738</h2>
-        <p>Returnees</p>
-      </div>
-      <div class="card-image">
-        <img src="./data/Returnees.png" alt="Returnee Icon" class="card-icon">
-      </div>
-    </div>
-
-    <!-- Card 3: Crossing Border -->
-    <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
-      <div class="card-content">
-        <h2>3,934,086</h2>
-        <p> Crossing Border</p>
-      </div>
-      <div class="card-image">
-        <img src="./data/Crossing Border.png" alt="Border Crossing Icon" class="card-icon">
-      </div>
-    </div>
-
-    <!-- Card 4: Migrants Affected -->
-    <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
-      <div class="card-content">
-        <h2>400,000</h2>
-        <p>Migrants Affected</p>
-      </div>
-      <div class="card-image">
-        <img src="./data/Migrants Affected.png" alt="Migrant Icon" class="card-icon">
-      </div>
-    </div>
-
-    <!-- Card 5: Locations Covered -->
-    <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
-      <div class="card-content">
-        <h2>10,285</h2>
-        <p>Locations Covered</p>
-      </div>
-      <div class="card-image">
-        <img src="./data/Location.png" alt="Location Icon" class="card-icon">
-      </div>
+    <div class="card-image">
+      <img src="./data/Returnees.png" alt="Returnee Icon" class="card-icon">
     </div>
   </div>
-  <div class="idps-frame-container">
-  <!-- Text Container for Total Number of IDPs by STATE -->
+
+  <!-- Card 3: Crossing Border -->
+  <div class="dashboard-card">
+    <div class="card-content">
+      <h2>3,934,086</h2>
+      <p>Crossing Border</p>
+    </div>
+    <div class="card-image">
+      <img src="./data/Crossing_Border.png" alt="Border Crossing Icon" class="card-icon">
+    </div>
+  </div>
+
+  <!-- Card 4: Migrants Affected -->
+  <div class="dashboard-card">
+    <div class="card-content">
+      <h2>400,000</h2>
+      <p>Migrants Affected</p>
+    </div>
+    <div class="card-image">
+      <img src="./data/Migrants_Affected.png" alt="Migrant Icon" class="card-icon">
+    </div>
+  </div>
+
+  <!-- Card 5: Locations Covered -->
+  <div class="dashboard-card">
+    <div class="card-content">
+      <h2>10,285</h2>
+      <p>Locations Covered</p>
+    </div>
+    <div class="card-image">
+      <img src="./data/Location.png" alt="Location Icon" class="card-icon">
+    </div>
+  </div>
+</div>
+
+<!-- IDPs Frame Container -->
+<div class="idps-frame-container">
+  <!-- Text Container for Total Number of IDPs by State -->
   <div id="idps-text-container">
-    <h2>Total Number of IDPs by STATE</h2>
+    <h2>Total Number of IDPs by State</h2>
     <p>
       The map on the right displays the total number of Internally Displaced Persons (IDPs) by state in Sudan. The size of the circles represents the volume of IDPs in each state, with larger circles indicating higher numbers. The data highlights the significant displacement in states like <strong>South Darfur</strong> and <strong>North Darfur</strong>, which have been heavily affected by conflict.
     </p>
@@ -477,21 +479,24 @@
     </p>
   </div>
 
-  <!-- Map Container for Total Number of IDPs by STATE -->
+  <!-- Map Container for Total Number of IDPs by State -->
   <div id="map-container-3">
-    <h2 id="map-title-3">Total Number of IDPs by STATE</h2>
+    <h2 id="map-title-3">Total Number of IDPs by State</h2>
     <div id="map3"></div>
   </div>
 </div>
-   <div id="map-container">
-      <h2 id="map-title-2">IDPs Pathways Across Sudan</h2>
-      <div id="map2"></div>
-    </div>
-  <!-- Total Number of Returnees by STATE Section -->
+
+<!-- IDPs Pathways Across Sudan Section -->
+<div id="map-container">
+  <h2 id="map-title-2">IDPs Pathways Across Sudan</h2>
+  <div id="map2"></div>
+</div>
+
+<!-- Total Number of Returnees by State Section -->
 <div class="idps-frame-container">
-  <!-- Map Container for Total Number of Returnees by STATE -->
+  <!-- Map Container for Total Number of Returnees by State -->
   <div id="map-container-4">
-    <h2 id="map-title-4">Total Number of Returnees by STATE</h2>
+    <h2 id="map-title-4">Total Number of Returnees by State</h2>
     <div id="map4"></div>
   </div>
 
@@ -512,31 +517,29 @@
     </p>
   </div>
 </div>
-  <!-- Maps Container for map1 and map2 -->
-  <div class="maps-container">
-    <div id="map-container-2">
-      <h2 id="map-title">Returnee Pathways Across Sudan</h2>
-      <div id="map"></div>
-    </div>
-    
-  </div>
- 
 
-  <!-- Timeline and Map Container -->
-  <div id="timeline-map-container">
-    <!-- Timeline Graph Container -->
-    <div id="timeline-container">
-      <h2>IDPs Over Time (2020 - 2025)</h2>
-      <canvas id="timelineChart"></canvas>
-    </div>
+<!-- Maps Container for Returnee Pathways -->
+<div class="maps-container">
+  <div id="map-container-2">
+    <h2 id="map-title">Returnee Pathways Across Sudan</h2>
+    <div id="map"></div>
   </div>
+</div>
 
-  <!-- Chart Container -->
-  <div id="chart-container">
-    <h2>Number of Population Affected by Displacement</h2>
-    <canvas id="displacementChart"></canvas>
+<!-- Timeline and Map Container -->
+<div id="timeline-map-container">
+  <!-- Timeline Graph Container -->
+  <div id="timeline-container">
+    <h2>IDPs Over Time (2020 - 2025)</h2>
+    <canvas id="timelineChart"></canvas>
   </div>
+</div>
 
+<!-- Chart Container -->
+<div id="chart-container">
+  <h2>Number of Population Affected by Displacement</h2>
+  <canvas id="displacementChart"></canvas>
+</div>
   
  
 
