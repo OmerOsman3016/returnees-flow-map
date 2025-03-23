@@ -360,72 +360,74 @@
 </head>
 
 <body>
-  <!-- Title container with logo, title, and info card -->
-  <div id="title-container">
-    <div id="title">
-      <h1>SUDAN | DISPLACEMENT TRACKING MATRIX - SUDAN MOBILITY</h1>
-      <h2><strong>Two Year Of Displacement</strong></h2>
+<!-- Title container with logo, title, and info card -->
+<div id="title-container">
+  <div id="title">
+    <h1>SUDAN | DISPLACEMENT TRACKING MATRIX - SUDAN MOBILITY</h1>
+    <h2><strong>Two Years of Displacement</strong></h2>
+  </div>
+</div>
+
+<!-- Dashboard Cards Container -->
+<div class="dashboard-cards">
+  <!-- Card 1: Internally Displaced Persons -->
+  <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
+    <div class="card-content">
+      <h2>11,585,384</h2>
+      <p>Internally Displaced</p>
+    </div>
+    <div class="card-image">
+      <img src="./data/Internally displaced.png" alt="IDP Icon" class="card-icon">
     </div>
   </div>
 
-  <!-- Dashboard Cards Container -->
-  <div class="dashboard-cards">
-    <!-- Card 1: Internally Displaced Persons -->
-    <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
-      <div class="card-content">
-        <h2>11,585,384</h2>
-        <p>Internally Displaced </p>
-      </div>
-      <div class="card-image">
-        <img src="./data/Internally displaced.png" alt="IDP Icon" class="card-icon">
-      </div>
+  <!-- Card 2: Returnees -->
+  <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
+    <div class="card-content">
+      <h2>396,738</h2>
+      <p>Returnees</p>
     </div>
-
-    <!-- Card 2: Returnees -->
-    <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
-      <div class="card-content">
-        <h2>396,738</h2>
-        <p>Returnees</p>
-      </div>
-      <div class="card-image">
-        <img src="./data/Returnees.png" alt="Returnee Icon" class="card-icon">
-      </div>
-    </div>
-
-    <!-- Card 3: Crossing Border -->
-    <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
-      <div class="card-content">
-        <h2>3,934,086</h2>
-        <p> Crossing Border</p>
-      </div>
-      <div class="card-image">
-        <img src="./data/Crossing Border.png" alt="Border Crossing Icon" class="card-icon">
-      </div>
-    </div>
-
-    <!-- Card 4: Migrants Affected -->
-    <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
-      <div class="card-content">
-        <h2>400,000</h2>
-        <p>Migrants Affected</p>
-      </div>
-      <div class="card-image">
-        <img src="./data/Migrants Affected.png" alt="Migrant Icon" class="card-icon">
-      </div>
-    </div>
-
-    <!-- Card 5: Locations Covered -->
-    <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
-      <div class="card-content">
-        <h2>10,285</h2>
-        <p>Locations Covered</p>
-      </div>
-      <div class="card-image">
-        <img src="./data/Location.png" alt="Location Icon" class="card-icon">
-      </div>
+    <div class="card-image">
+      <img src="./data/Returnees.png" alt="Returnee Icon" class="card-icon">
     </div>
   </div>
-  <div class="idps-frame-container">
+
+  <!-- Card 3: Crossing Border -->
+  <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
+    <div class="card-content">
+      <h2>3,934,086</h2>
+      <p>Crossing Border</p>
+    </div>
+    <div class="card-image">
+      <img src="./data/Crossing Border.png" alt="Border Crossing Icon" class="card-icon">
+    </div>
+  </div>
+
+  <!-- Card 4: Migrants Affected -->
+  <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
+    <div class="card-content">
+      <h2>400,000</h2>
+      <p>Migrants Affected</p>
+    </div>
+    <div class="card-image">
+      <img src="./data/Migrants Affected.png" alt="Migrant Icon" class="card-icon">
+    </div>
+  </div>
+
+  <!-- Card 5: Locations Covered -->
+  <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
+    <div class="card-content">
+      <h2>10,285</h2>
+      <p>Locations Covered</p>
+    </div>
+    <div class="card-image">
+      <img src="./data/Location.png" alt="Location Icon" class="card-icon">
+    </div>
+  </div>
+</div>
+
+<!-- IDPs and Map Section -->
+<div class="idps-frame-container">
   <!-- Text Container for Total Number of IDPs by STATE -->
   <div id="idps-text-container">
     <h2>Total Number of IDPs by STATE</h2>
@@ -448,31 +450,31 @@
     <div id="map3"></div>
   </div>
 </div>
-   <div id="map-container">
-      <h2 id="map-title-2">IDPs Pathways Across Sudan</h2>
-      <div id="map2"></div>
-    </div>
-   <div id="map-container-4">
-      <h2 id="map-title-4">Total Number of Returnees by STATE</h2>
-      <div id="map4"></div>
-    </div>
-  <!-- Maps Container for map1 and map2 -->
-  <div class="maps-container">
-    <div id="map-container-2">
-      <h2 id="map-title">Returnee Pathways Across Sudan</h2>
-      <div id="map"></div>
-    </div>
-    
-  </div>
- 
 
-  <!-- Timeline and Map Container -->
-  <div id="timeline-map-container">
-    <!-- Timeline Graph Container -->
-    <div id="timeline-container">
-      <h2>IDPs Over Time (2020 - 2025)</h2>
-      <canvas id="timelineChart"></canvas>
-    </div>
+<!-- Maps Container for IDPs and Returnees Pathways -->
+<div class="maps-container">
+  <div id="map-container">
+    <h2 id="map-title-2">IDPs Pathways Across Sudan</h2>
+    <div id="map2"></div>
+  </div>
+
+  <div id="map-container-4">
+    <h2 id="map-title-4">Total Number of Returnees by STATE</h2>
+    <div id="map4"></div>
+  </div>
+
+  <div id="map-container-2">
+    <h2 id="map-title">Returnee Pathways Across Sudan</h2>
+    <div id="map"></div>
+  </div>
+</div>
+
+<!-- Timeline and Chart Section -->
+<div id="timeline-map-container">
+  <!-- Timeline Graph Container -->
+  <div id="timeline-container">
+    <h2>IDPs Over Time (2020 - 2025)</h2>
+    <canvas id="timelineChart"></canvas>
   </div>
 
   <!-- Chart Container -->
@@ -480,26 +482,24 @@
     <h2>Number of Population Affected by Displacement</h2>
     <canvas id="displacementChart"></canvas>
   </div>
+</div>
 
-  
- 
-
-  <!-- Displacement and Returnee Movements Section -->
-  <div id="description-container">
-    <h2>Mobility in Sudan</h2>
-    <p>
-      The <strong>Displacement Tracking Matrix (DTM)</strong> is a system designed to monitor displacement and population mobility. Over two years, <span class="data-point">11.6 million</span> people were displaced within Sudan due to the conflict between the Sudanese Armed Forces (SAF) and the Rapid Support Forces (RSF). Additionally, <span class="data-point">2 million</span> individuals fled to neighboring countries, making Sudan the world’s largest displacement crisis.
-    </p>
-    <p>
-      The Darfur states (Central, East, North, South, and West Darfur) have the highest numbers of internally displaced persons (IDPs). South Darfur leads with <span class="data-point">1.84 million</span> IDPs, followed by North Darfur with <span class="data-point">1.79 million</span> IDPs, reflecting decades of conflict and violence. Since December, DTM teams monitored <span class="data-point">396,738</span> individuals returning to their places of origin in Sudan, with most returnees moving to Aj Jazirah (66%), Sennar (29%), and Khartoum (5%).
-    </p>
-    <p>
-      DTM also used <strong>Flow Monitoring</strong> to track movements across state borders. Aj Jazirah returnees were mostly from Gedaref (44%), Sennar (21%), and Kassala (11%). Sennar returnees primarily came from Gedaref (38%), Red Sea (19%), and Blue Nile (18%). Khartoum returnees mainly originated from River Nile (38%), Red Sea (34%), and White Nile (18%).
-    </p>
-    <p>
-      These movements highlight the ongoing challenges faced by displaced populations in Sudan, as well as the efforts to track and support their return to stability. The data underscores the scale of the crisis and the need for continued humanitarian assistance.
-    </p>
-  </div>
+<!-- Displacement and Returnee Movements Section -->
+<div id="description-container">
+  <h2>Mobility in Sudan</h2>
+  <p>
+    The <strong>Displacement Tracking Matrix (DTM)</strong> is a system designed to monitor displacement and population mobility. Over two years, <span class="data-point">11.6 million</span> people were displaced within Sudan due to the conflict between the Sudanese Armed Forces (SAF) and the Rapid Support Forces (RSF). Additionally, <span class="data-point">2 million</span> individuals fled to neighboring countries, making Sudan the world’s largest displacement crisis.
+  </p>
+  <p>
+    The Darfur states (Central, East, North, South, and West Darfur) have the highest numbers of internally displaced persons (IDPs). South Darfur leads with <span class="data-point">1.84 million</span> IDPs, followed by North Darfur with <span class="data-point">1.79 million</span> IDPs, reflecting decades of conflict and violence. Since December, DTM teams monitored <span class="data-point">396,738</span> individuals returning to their places of origin in Sudan, with most returnees moving to Aj Jazirah (66%), Sennar (29%), and Khartoum (5%).
+  </p>
+  <p>
+    DTM also used <strong>Flow Monitoring</strong> to track movements across state borders. Aj Jazirah returnees were mostly from Gedaref (44%), Sennar (21%), and Kassala (11%). Sennar returnees primarily came from Gedaref (38%), Red Sea (19%), and Blue Nile (18%). Khartoum returnees mainly originated from River Nile (38%), Red Sea (34%), and White Nile (18%).
+  </p>
+  <p>
+    These movements highlight the ongoing challenges faced by displaced populations in Sudan, as well as the efforts to track and support their return to stability. The data underscores the scale of the crisis and the need for continued humanitarian assistance.
+  </p>
+</div>
 
   <!-- Add image above the footer -->
   <img src="./data/doner.png" alt="Donor Logo" style="width: 100%; height: auto; display: block; margin: 0 auto;">
