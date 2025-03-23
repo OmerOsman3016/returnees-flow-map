@@ -104,6 +104,7 @@
 
   /* Description container styling */
   #description-container {
+    display: flex;
     background-color: #ffffff;
     border: 1px solid #d9e0f1;
     border-radius: 8px;
@@ -184,6 +185,86 @@
   .dashboard-card:nth-child(4) { animation-delay: 4s; }
   .dashboard-card:nth-child(5) { animation-delay: 5s; }
 
+  /* Parent Container for Text and Map */
+  .idps-frame-container {
+    display: flex;
+    gap: 20px; /* Space between text and map */
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUp 0.8s ease-in-out forwards;
+    animation-delay: 0.8s;
+  }
+
+  /* Text Container for Total Number of IDPs by STATE */
+  #idps-text-container {
+    flex: 1; /* Take up 1/3 of the available space */
+    background-color: #ffffff;
+    border: 1px solid #d9e0f1;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  #idps-text-container h2 {
+    color: #84adec;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: left;
+    border-bottom: 2px solid #418FDE;
+    padding-bottom: 10px;
+    margin: -20px;
+  }
+
+  #idps-text-container p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 15px;
+  }
+
+  #idps-text-container ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    color: #555;
+  }
+
+  #idps-text-container ul li {
+    margin-bottom: 5px;
+  }
+
+  #idps-text-container strong {
+    color: #333;
+    font-weight: 600;
+  }
+
+  /* Map Container for Total Number of IDPs by STATE */
+  #map-container-3 {
+    flex: 2; /* Take up 2/3 of the available space */
+    background-color: #ffffff;
+    border: 1px solid #d9e0f1;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  #map-title-3 {
+    margin: 0;
+    color: #84adec;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 1px solid #d9e0f1;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+
+  #map3 {
+    width: 100%;
+    height: 80vh;
+    border-radius: 8px;
+  }
+
   /* Maps container styling */
   .maps-container {
     display: flex;
@@ -237,32 +318,6 @@
   }
 
   #map-title-2 {
-    margin: 0;
-    color: #84adec;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    border-bottom: 1px solid #d9e0f1;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-  }
-
-  #map-container-3 {
-    flex: 1;
-    background-color: #ffffff;
-    border: 1px solid #d9e0f1;
-    border-radius: 8px;
-    padding: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  #map3 {
-    width: 100%;
-    height: 80vh;
-    border-radius: 8px;
-  }
-
-  #map-title-3 {
     margin: 0;
     color: #84adec;
     font-size: 20px;
@@ -385,6 +440,19 @@
     #title-container { flex-direction: column; align-items: flex-start; }
     .content-container { flex-direction: column; }
     #map, #map2, #map3, #map4 { height: 90vh; }
+
+    .idps-frame-container {
+      flex-direction: column; /* Stack text and map vertically on smaller screens */
+    }
+
+    #idps-text-container,
+    #map-container-3 {
+      flex: 1; /* Reset flex to full width */
+    }
+
+    #map3 {
+      height: 60vh; /* Adjust map height for smaller screens */
+    }
   }
 
   @media print {
@@ -461,13 +529,29 @@
       </div>
     </div>
   </div>
-<!-- Maps Container for map3 and map4 -->
-  <div class="maps-container">
-    <div id="map-container-3">
-      <h2 id="map-title-3">Total Number of IDPs by STATE</h2>
-      <div id="map3"></div>
-    </div>
+  <div class="idps-frame-container">
+  <!-- Text Container for Total Number of IDPs by STATE -->
+  <div id="idps-text-container">
+    <h2>Total Number of IDPs by STATE</h2>
+    <p>
+      The map on the right displays the total number of Internally Displaced Persons (IDPs) by state in Sudan. The size of the circles represents the volume of IDPs in each state, with larger circles indicating higher numbers. The data highlights the significant displacement in states like <strong>South Darfur</strong> and <strong>North Darfur</strong>, which have been heavily affected by conflict.
+    </p>
+    <p>
+      Key insights:
+      <ul>
+        <li><strong>South Darfur:</strong> 1.84 million IDPs</li>
+        <li><strong>North Darfur:</strong> 1.79 million IDPs</li>
+        <li><strong>Khartoum:</strong> 3.5 million IDPs</li>
+      </ul>
+    </p>
   </div>
+
+  <!-- Map Container for Total Number of IDPs by STATE -->
+  <div id="map-container-3">
+    <h2 id="map-title-3">Total Number of IDPs by STATE</h2>
+    <div id="map3"></div>
+  </div>
+</div>
    <div id="map-container">
       <h2 id="map-title-2">IDPs Pathways Across Sudan</h2>
       <div id="map2"></div>
