@@ -104,7 +104,6 @@
 
   /* Description container styling */
   #description-container {
-    display: flex;
     background-color: #ffffff;
     border: 1px solid #d9e0f1;
     border-radius: 8px;
@@ -185,86 +184,6 @@
   .dashboard-card:nth-child(4) { animation-delay: 4s; }
   .dashboard-card:nth-child(5) { animation-delay: 5s; }
 
-  /* Parent Container for Text and Map */
-  .idps-frame-container {
-    display: flex;
-    gap: 20px; /* Space between text and map */
-    margin-bottom: 20px;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: slideUp 0.8s ease-in-out forwards;
-    animation-delay: 0.8s;
-  }
-
-  /* Text Container for Total Number of IDPs by STATE */
-  #idps-text-container {
-    flex: 1; /* Take up 1/3 of the available space */
-    background-color: #ffffff;
-    border: 1px solid #d9e0f1;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  #idps-text-container h2 {
-     margin-top: -20px;
-    color: #84adec;
-    font-size: 20px;
-    margin-bottom: 15px;
-    font-weight: bold;
-    text-align: center;
-    border-bottom: 2px solid #418FDE;
-  }
-
-  #idps-text-container p {
-    font-size: 14px;
-    line-height: 1.6;
-    color: #555;
-    margin-bottom: 15px;
-  }
-
-  #idps-text-container ul {
-    list-style-type: disc;
-    margin-left: 20px;
-    color: #555;
-  }
-
-  #idps-text-container ul li {
-    margin-bottom: 5px;
-  }
-
-  #idps-text-container strong {
-    color: #333;
-    font-weight: 600;
-  }
-
-  /* Map Container for Total Number of IDPs by STATE */
-  #map-container-3 {
-    flex: 2; /* Take up 2/3 of the available space */
-    background-color: #ffffff;
-    border: 1px solid #d9e0f1;
-    border-radius: 8px;
-    padding: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  #map-title-3 {
-    margin: 0;
-    color: #84adec;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    border-bottom: 1px solid #d9e0f1;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-  }
-
-  #map3 {
-    width: 100%;
-    height: 80vh;
-    border-radius: 8px;
-  }
-
   /* Maps container styling */
   .maps-container {
     display: flex;
@@ -328,8 +247,34 @@
     margin-bottom: 10px;
   }
 
+  #map-container-3 {
+    flex: 1;
+    background-color: #ffffff;
+    border: 1px solid #d9e0f1;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  #map3 {
+    width: 100%;
+    height: 80vh;
+    border-radius: 8px;
+  }
+
+  #map-title-3 {
+    margin: 0;
+    color: #84adec;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 1px solid #d9e0f1;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+
   #map-container-4 {
-    flex: 2;
+    flex: 1;
     background-color: #ffffff;
     border: 1px solid #d9e0f1;
     border-radius: 8px;
@@ -440,85 +385,12 @@
     #title-container { flex-direction: column; align-items: flex-start; }
     .content-container { flex-direction: column; }
     #map, #map2, #map3, #map4 { height: 90vh; }
-
-    .idps-frame-container {
-      flex-direction: column; /* Stack text and map vertically on smaller screens */
-    }
-
-    #idps-text-container,
-    #map-container-3 {
-      flex: 1; /* Reset flex to full width */
-    }
-
-    #map3 {
-      height: 60vh; /* Adjust map height for smaller screens */
-    }
   }
 
   @media print {
     body { font-size: 12pt; color: #000; }
     .dashboard-cards, .maps-container { page-break-inside: avoid; }
     footer { display: none; }
-  }
-
-  /* New Layout for Paragraph and Timeline */
-  .content-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 20px;
-    margin-bottom: 20px;
-  }
-
-  #bpr-paragraph {
-    flex-shrink: 1;
-    max-width: 30%;
-    border: 2px solid #0033A0;
-    padding: 15px 30px; /* Reduced top and bottom padding to 20px, left and right remain 40px */
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    font-size: 14px;
-    line-height: 1.6;
-    color: #333;
-    margin: 0px 0;
-    text-align: left; /* Aligns text to the left */
-    display: flex; /* Enables Flexbox */
-    flex-direction: column; /* Stacks content vertically */
-    justify-content: flex-start; /* Aligns content to the top */
-  }
-
-  #bpr-paragraph h2 {
-    margin-top: 0;
-    color: #0033A0;
-    font-size: 20px;
-    margin-bottom: 15px;
-    text-align: left; /* Align title to the left */
-  }
-
-  /* Container for the second paragraph */
-  #second-paragraph-container {
-    flex-shrink: 1;
-    max-width: 30%;
-    border: 2px solid #0033A0;
-    padding: 15px 30px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    font-size: 14px;
-    line-height: 1.6;
-    color: #333;
-    margin: 0px 0;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
-
-  #second-paragraph-container h2 {
-    margin-top: 0;
-    color: #0033A0;
-    font-size: 20px;
-    margin-bottom: 15px;
-    text-align: left;
   }
 </style>
 </head>
@@ -589,45 +461,21 @@
       </div>
     </div>
   </div>
-  <div class="idps-frame-container">
-  <!-- Text Container for Total Number of IDPs by STATE -->
-  <div id="idps-text-container">
-    <h2>Total Number of IDPs by STATE</h2>
-    <p>
-      The map on the right displays the total number of Internally Displaced Persons (IDPs) by state in Sudan. The size of the circles represents the volume of IDPs in each state, with larger circles indicating higher numbers. The data highlights the significant displacement in states like <strong>South Darfur</strong> and <strong>North Darfur</strong>, which have been heavily affected by conflict.
-    </p>
-    <p>
-      Key insights:
-      <ul>
-        <li><strong>South Darfur:</strong> 1.84 million IDPs</li>
-        <li><strong>North Darfur:</strong> 1.79 million IDPs</li>
-        <li><strong>Khartoum:</strong> 3.5 million IDPs</li>
-      </ul>
-    </p>
+<!-- Maps Container for map3 and map4 -->
+  <div class="maps-container">
+    <div id="map-container-3">
+      <h2 id="map-title-3">Total Number of IDPs by STATE</h2>
+      <div id="map3"></div>
+    </div>
   </div>
-
-  <!-- Map Container for Total Number of IDPs by STATE -->
-  <div id="map-container-3">
-    <h2 id="map-title-3">Total Number of IDPs by STATE</h2>
-    <div id="map3"></div>
-  </div>
-</div>
-  <div class="map4-and-paragraph-container">
-  <!-- Map 4 Container -->
-  <div id="map-container-4">
-    <h2 id="map-title-4">Map 4 Title</h2>
-    <div id="map4"></div>
-  </div>
-
-  <!-- Second Paragraph Container -->
-  <div id="second-paragraph-container">
-    <h2>Second Paragraph Title</h2>
-    <p>
-      This is the second paragraph. It will appear to the right of Map 4.
-      You can add any content here, such as text, images, or links.
-    </p>
-  </div>
-</div>
+   <div id="map-container">
+      <h2 id="map-title-2">IDPs Pathways Across Sudan</h2>
+      <div id="map2"></div>
+    </div>
+   <div id="map-container-4">
+      <h2 id="map-title-4">Total Number of Returnees by STATE</h2>
+      <div id="map4"></div>
+    </div>
   <!-- Maps Container for map1 and map2 -->
   <div class="maps-container">
     <div id="map-container-2">
@@ -656,7 +504,22 @@
   
  
 
-
+  <!-- Displacement and Returnee Movements Section -->
+  <div id="description-container">
+    <h2>Mobility in Sudan</h2>
+    <p>
+      The <strong>Displacement Tracking Matrix (DTM)</strong> is a system designed to monitor displacement and population mobility. Over two years, <span class="data-point">11.6 million</span> people were displaced within Sudan due to the conflict between the Sudanese Armed Forces (SAF) and the Rapid Support Forces (RSF). Additionally, <span class="data-point">2 million</span> individuals fled to neighboring countries, making Sudan the world’s largest displacement crisis.
+    </p>
+    <p>
+      The Darfur states (Central, East, North, South, and West Darfur) have the highest numbers of internally displaced persons (IDPs). South Darfur leads with <span class="data-point">1.84 million</span> IDPs, followed by North Darfur with <span class="data-point">1.79 million</span> IDPs, reflecting decades of conflict and violence. Since December, DTM teams monitored <span class="data-point">396,738</span> individuals returning to their places of origin in Sudan, with most returnees moving to Aj Jazirah (66%), Sennar (29%), and Khartoum (5%).
+    </p>
+    <p>
+      DTM also used <strong>Flow Monitoring</strong> to track movements across state borders. Aj Jazirah returnees were mostly from Gedaref (44%), Sennar (21%), and Kassala (11%). Sennar returnees primarily came from Gedaref (38%), Red Sea (19%), and Blue Nile (18%). Khartoum returnees mainly originated from River Nile (38%), Red Sea (34%), and White Nile (18%).
+    </p>
+    <p>
+      These movements highlight the ongoing challenges faced by displaced populations in Sudan, as well as the efforts to track and support their return to stability. The data underscores the scale of the crisis and the need for continued humanitarian assistance.
+    </p>
+  </div>
 
   <!-- Add image above the footer -->
   <img src="./data/doner.png" alt="Donor Logo" style="width: 100%; height: auto; display: block; margin: 0 auto;">
