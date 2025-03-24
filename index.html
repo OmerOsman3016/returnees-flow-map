@@ -1217,6 +1217,103 @@
     };
     legend4.addTo(map4);
 
+     // Initialize dynamic legends for all maps
+
+  // Function to create gradient legend
+  function createGradientLegend(title, colors, labels) {
+    return `
+      <div class="legend">
+        <div class="legend-title">${title}</div>
+        <div class="legend-gradient" style="background: linear-gradient(to right, ${colors.join(', ')});"></div>
+        <div class="legend-scale">
+          ${labels.map(l => `<span>${l}</span>`).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  // Function to create circle size legend
+  function createCircleLegend(title, sizes, colors, labels) {
+    return `
+      <div class="legend">
+        <div class="legend-title">${title}</div>
+        ${sizes.map((size, i) => `
+          <div class="legend-item">
+            <div class="legend-color" style="width: ${size}px; height: ${size}px; background: ${colors[i]}"></div>
+            <span>${labels[i]}</span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  // Add dynamic legends to maps
+  function addDynamicLegends(map, data, type) {
+    const maxValue = Math.max(...data.map(d => d.value));
+    const midValue = Math.round(maxValue / 2);
+    
+    if(type === 'flow') {
+      const legendHTML = createGradientLegend(
+        'Movement Volume',
+        ['#ffb81c', '#ff671f', '#e34a33'],
+        ['Low', 'Medium', 'High']
+      );
+      L.control({position: 'bottomleft'}).onAdd = () => L.DomUtil.create('div', legendHTML);
+    }
+    else if(type === 'circles') {
+      const sizes = [10, 20, 30];
+      const labels = [
+        `< ${Math.round(maxValue * 0.3).toLocaleString()}`,
+        `${Math.round(maxValue * 0.3).toLocaleString()} - ${Math.round(maxValue * 0.6).toLocaleString()}`,
+        `> ${Math.round(maxValue * 0.6).toLocaleString()}`
+      ];
+      const legendHTML = createCircleLegend(
+        'Population Size',
+        sizes,
+        ['#418FDE', '#418FDE', '#418FDE'],
+        labels
+      );
+      L.control({position: 'bottomleft'}).onAdd = () => L.DomUtil.create('div', legendHTML);
+    }
+  }
+
+  // Update map initialization code to include dynamic legends
+  Papa.parse('./data/data.csv', {
+    download: true,
+    header: true,
+    complete: (results) => {
+      const volumes = results.data.map(d => parseInt(d.e_Volume));
+      addDynamicLegends(map, volumes, 'flow');
+    }
+  });
+
+  Papa.parse('./data/data_idps.csv', {
+    download: true,
+    header: true,
+    complete: (results) => {
+      const volumes = results.data.map(d => parseInt(d.e_Volume));
+      addDynamicLegends(map2, volumes, 'flow');
+    }
+  });
+
+  Papa.parse('./data/total_idps.csv', {
+    download: true,
+    header: true,
+    complete: (results) => {
+      const idpsData = results.data.map(d => ({value: parseInt(d.total_idps)}));
+      addDynamicLegends(map3, idpsData, 'circles');
+    }
+  });
+
+  Papa.parse('./data/total_return.csv', {
+    download: true,
+    header: true,
+    complete: (results) => {
+      const returnData = results.data.map(d => ({value: parseInt(d.total_return)}));
+      addDynamicLegends(map4, returnData, 'circles');
+    }
+  });
+
     // Initialize the Displacement Chart
     const states = [
       "Aj Jazirah", "Blue Nile", "Central Darfur", "East Darfur", "Gedaref", 
