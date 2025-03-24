@@ -1078,9 +1078,17 @@
           }
         },
         animation: {
-          duration: 10000,
-          easing: 'easeInOutQuart'
-        }
+  duration: 1500,
+  easing: 'easeOutElastic',
+  delay: 300,              // 300ms delay before starting
+  loop: true,             // Prevent repeating
+  onProgress: (ctx) => {   // Callback during animation
+    console.log(`${ctx.currentStep}/${ctx.numSteps}`);
+  },
+  onComplete: (ctx) => {   // Callback when done
+    console.log('Animation finished!');
+  }
+}
       }
     });
 
