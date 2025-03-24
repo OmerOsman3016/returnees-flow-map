@@ -1079,9 +1079,9 @@
         },
         animation: {
   duration: 1500,
-  easing: 'linear',
+  easing: 'easeOutSine',
   delay: 300,              // 300ms delay before starting
-  loop: true,             // Prevent repeating
+  loop: false,             // Prevent repeating
   onProgress: (ctx) => {   // Callback during animation
     console.log(`${ctx.currentStep}/${ctx.numSteps}`);
   },
