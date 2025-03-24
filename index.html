@@ -1023,20 +1023,27 @@ legend3.onAdd = () => {
     return div;
 };
 
-// Add update function to legend prototype
+// Update function with proper data validation
 legend3.update = function(maxValue) {
     const legendContent = this._container.querySelector('.legend-content');
     
-    if (maxValue === 0) {
+    // Handle invalid/empty values
+    if (isNaN(maxValue) {
+        legendContent.innerHTML = '<div class="legend-no-data">Data not available</div>';
+        return;
+    }
+
+    if (maxValue <= 0) {
         legendContent.innerHTML = '<div class="legend-no-data">No IDPs in current view</div>';
         return;
     }
 
+    // Calculate ranges with validation
     const ranges = [
         { value: Math.round(maxValue * 0.25), label: 'Low' },
         { value: Math.round(maxValue * 0.5), label: 'Medium' },
         { value: maxValue, label: 'High' }
-    ];
+    ].filter(range => !isNaN(range.value));
 
     legendContent.innerHTML = `
         <div class="legend-scale">
@@ -1061,9 +1068,49 @@ legend3.update = function(maxValue) {
     `;
 };
 
-// Add the legend to map
+// Add to map
 legend3.addTo(map3);
 
+// Modified data loading with CSV structure validation
+Papa.parse('./data/total_idps.csv', {
+    download: true,
+    header: true,
+    dynamicTyping: true,
+    complete: (results) => {
+        idpsData = results.data
+            .filter(d => d.state && !isNaN(d.total_idps) && !isNaN(d.lat) && !isNaN(d.lon))
+            .map(d => ({
+                state: d.state.trim(),
+                total_idps: parseInt(d.total_idps, 10),
+                lat: parseFloat(d.lat),
+                lon: parseFloat(d.lon)
+            }));
+
+        // Create markers with validation
+        idpsData.forEach(d => {
+            if (!isNaN(d.lat) && !isNaN(d.lon)) {
+                const marker = L.circleMarker([d.lat, d.lon], {
+                    radius: 8 + (d.total_idps/5000)*20,
+                    fillColor: '#418FDE',
+                    color: '#fff',
+                    weight: 1,
+                    fillOpacity: 0.7
+                }).bindPopup(`
+                    <b>${d.state}</b><br>
+                    IDPs: ${d.total_idps.toLocaleString()}
+                `);
+                
+                // Store numeric value properly
+                marker.options.idpsValue = d.total_idps;
+                marker.addTo(map3);
+            }
+        });
+
+        // Initialize legend
+        map3.on('moveend', updateLegend);
+        updateLegend();
+    }
+});
 // Add event listener for map moves
 map3.on('moveend', updateLegend);
     // Add this function to update legend based on current view
