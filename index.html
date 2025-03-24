@@ -1077,32 +1077,20 @@
             }
           }
         },
-      animation: {
+     animation: {
   duration: 1500,
-  easing: 'easeOutExpo',  // Smoother than linear for line drawing
-  delay: 300,
-  loop: false,
-  onProgress: (ctx) => {
-    // Visual feedback for line drawing progression
-    const progress = Math.min(ctx.currentStep / ctx.numSteps, 1);
-    ctx.chart.ctx.setLineDash([progress * 1000, 1000]);
-    ctx.chart.ctx.lineDashOffset = -progress * 1000;
-    
-    // Optional: Fade-in effect
-    ctx.chart.data.datasets[0].borderColor = `rgba(65, 143, 222, ${progress})`;
+  easing: 'linear',
+  delay: 300,              // 300ms delay before starting
+  loop: false,             // Prevent repeating
+  onProgress: (ctx) => {   // Callback during animation
+    console.log(`${ctx.currentStep}/${ctx.numSteps}`);
   },
-  onComplete: (ctx) => {
-    // Final cleanup
-    ctx.chart.ctx.setLineDash([]);
-    ctx.chart.data.datasets[0].borderColor = '#418FDE';
-    ctx.chart.update();
-    
-    // Trigger subsequent animations
-    if (window.startMapAnimations) {
-      window.startMapAnimations();
-    }
+  onComplete: (ctx) => {   // Callback when done
+    console.log('Animation finished!');
   }
 }
+      }
+    });
    
     // Initialize the fourth map
     const map4 = L.map('map4').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
