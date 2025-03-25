@@ -9,7 +9,6 @@
   <!-- External CSS libraries -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.css" />
-  <link href="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css" rel="stylesheet" />
 
   <style>
     /* General body styling */
@@ -570,12 +569,39 @@
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
 
   <script>
+    // Define Mapbox custom layers
+    const mapboxCustom1 = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
+        attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        tileSize: 512,
+        zoomOffset: -1,
+        maxZoom: 18
+    });
 
-    // Initialize the first map (Returnee Pathways)
+    const mapboxCustom2 = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
+        attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        tileSize: 512,
+        zoomOffset: -1,
+        maxZoom: 18
+    });
+
+    const mapboxCustom3 = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
+        attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        tileSize: 512,
+        zoomOffset: -1,
+        maxZoom: 18
+    });
+
+    const mapboxCustom4 = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
+        attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        tileSize: 512,
+        zoomOffset: -1,
+        maxZoom: 18
+    });
+
+    // Initialize the first map
     const map = L.map('map').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
-    mapboxCustom.addTo(map); // Set custom style as default
 
-    // Define other base layers for the first map
+    // Define multiple base layers for the first map
     const cartoDBLight1 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
@@ -591,7 +617,7 @@
     const stamenToner1 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
       attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
     });
-    // Define Mapbox layers (create them once to reuse across maps)
+
     const mapboxLight = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
         attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         tileSize: 512,
@@ -599,45 +625,41 @@
         maxZoom: 18
     });
 
-    const mapboxStreets1 = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
+    const mapboxStreets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
         attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         tileSize: 512,
         zoomOffset: -1,
         maxZoom: 18
     });
 
-    const mapboxSatellite1 = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
+    const mapboxSatellite = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
         attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         tileSize: 512,
         zoomOffset: -1,
         maxZoom: 18
     });
 
-    const mapboxOutdoors1 = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
+    const mapboxOutdoors = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
         attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         tileSize: 512,
         zoomOffset: -1,
         maxZoom: 18
     });
 
-    const mapboxCustom1 = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
-        attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        tileSize: 512,
-        zoomOffset: -1,
-        maxZoom: 18
-    });
+    // Add default base layer to the first map
+    mapboxCustom1.addTo(map);
 
     // Add layer control to the first map
     const baseLayers1 = {
-      "My Custom Style": mapboxCustom1,
-      "Mapbox Light": mapboxLight1,
-      "Mapbox Streets": mapboxStreets1,
-      "Mapbox Outdoors": mapboxOutdoors1,
-      "Mapbox Satellite": mapboxSatellite1,
+      "Mapbox Custom": mapboxCustom1,
       "CartoDB Light": cartoDBLight1,
       "OpenStreetMap": openStreetMap1,
       "Esri World Imagery": esriWorldImagery1,
-      "Stamen Toner": stamenToner1
+      "Stamen Toner": stamenToner1,
+      "Mapbox Light": mapboxLight,
+      "Mapbox Streets": mapboxStreets,
+      "Mapbox Outdoors": mapboxOutdoors,
+      "Mapbox Satellite": mapboxSatellite
     };
 
     L.control.layers(baseLayers1).addTo(map);
@@ -750,11 +772,10 @@
     };
     legend.addTo(map);
 
-    // Initialize the second map (IDPs Pathways)
+    // Initialize the second map
     const map2 = L.map('map2').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
-    mapboxCustom.addTo(map2); // Set custom style as default
 
-    // Define other base layers for the second map
+    // Define multiple base layers for the second map
     const cartoDBLight2 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
@@ -771,13 +792,12 @@
       attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
     });
 
+    // Add default base layer to the second map
+    mapboxCustom2.addTo(map2);
+
     // Add layer control to the second map
     const baseLayers2 = {
-      "My Custom Style": mapboxCustom,
-      "Mapbox Light": mapboxLight,
-      "Mapbox Streets": mapboxStreets,
-      "Mapbox Outdoors": mapboxOutdoors,
-      "Mapbox Satellite": mapboxSatellite,
+      "Mapbox Custom": mapboxCustom2,
       "CartoDB Light": cartoDBLight2,
       "OpenStreetMap": openStreetMap2,
       "Esri World Imagery": esriWorldImagery2,
@@ -882,7 +902,7 @@
     legend2.onAdd = () => {
       const div = L.DomUtil.create('div', 'legend');
       div.innerHTML = `
-        <span style="font-size:14px">IDPs Flow Volume:</span><br/>
+        <span style="font-size:14px">Returnee Flow Volume:</span><br/>
         <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
         <span style="float:left;font-weight:bold"> < 10000</span><br/>
         <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
@@ -894,11 +914,10 @@
     };
     legend2.addTo(map2);
 
-    // Initialize the third map (Total IDPs by State)
+    // Initialize the third map
     const map3 = L.map('map3').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
-    mapboxCustom.addTo(map3); // Set custom style as default
 
-    // Define other base layers for the third map
+    // Define multiple base layers for the third map
     const cartoDBLight3 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
@@ -915,13 +934,12 @@
       attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
     });
 
+    // Add default base layer to the third map
+    mapboxCustom3.addTo(map3);
+
     // Add layer control to the third map
     const baseLayers3 = {
-      "My Custom Style": mapboxCustom,
-      "Mapbox Light": mapboxLight,
-      "Mapbox Streets": mapboxStreets,
-      "Mapbox Outdoors": mapboxOutdoors,
-      "Mapbox Satellite": mapboxSatellite,
+      "Mapbox Custom": mapboxCustom3,
       "CartoDB Light": cartoDBLight3,
       "OpenStreetMap": openStreetMap3,
       "Esri World Imagery": esriWorldImagery3,
@@ -1029,134 +1047,6 @@
     };
     legend3.addTo(map3);
 
-    // Initialize the fourth map (Total Returnees by State)
-    const map4 = L.map('map4').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
-    mapboxCustom.addTo(map4); // Set custom style as default
-
-    // Define other base layers for the fourth map
-    const cartoDBLight4 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
-
-    const openStreetMap4 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
-
-    const esriWorldImagery4 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
-    });
-
-    const stamenToner4 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
-      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
-    });
-
-    // Add layer control to the fourth map
-    const baseLayers4 = {
-      "My Custom Style": mapboxCustom,
-      "Mapbox Light": mapboxLight,
-      "Mapbox Streets": mapboxStreets,
-      "Mapbox Outdoors": mapboxOutdoors,
-      "Mapbox Satellite": mapboxSatellite,
-      "CartoDB Light": cartoDBLight4,
-      "OpenStreetMap": openStreetMap4,
-      "Esri World Imagery": esriWorldImagery4,
-      "Stamen Toner": stamenToner4
-    };
-
-    L.control.layers(baseLayers4).addTo(map4);
-
-    // Parse CSV data and create animated markers for the fourth map
-    Papa.parse('./data/total_return.csv', {
-      download: true,
-      header: true,
-      dynamicTyping: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        const geoJsonFeatureCollection4 = {
-          type: 'FeatureCollection',
-          features: results.data.map(datum => ({
-            type: 'Feature',
-            geometry: { type: 'Point', coordinates: [datum.lon, datum.lat] },
-            properties: datum
-          }))
-        };
-
-        // Find the maximum total_return value for normalization
-        const maxTotalReturn = Math.max(...results.data.map(d => d.total_return));
-
-        // Function to animate circle markers
-        function animateCircleMarker(marker, baseRadius) {
-          const tween = new TWEEN.Tween({ radius: baseRadius })
-            .to({ radius: baseRadius * 1.5 }, 1000) // Animate to 1.5x the base radius
-            .easing(TWEEN.Easing.Sinusoidal.InOut) // Smooth easing
-            .yoyo(true) // Reverse the animation
-            .repeat(Infinity) // Repeat indefinitely
-            .onUpdate(({ radius }) => {
-              marker.setRadius(radius); // Update the marker's radius
-            })
-            .start(); // Start the animation
-        }
-
-        // Add animated markers to the fourth map
-        L.geoJSON(geoJsonFeatureCollection4, {
-          pointToLayer: (feature, latlng) => {
-            // Normalize the total_return value to determine the base radius
-            const baseRadius = 8 + (feature.properties.total_return / maxTotalReturn) * 20;
-
-            // Create a circle marker
-            const marker = L.circleMarker(latlng, {
-              radius: baseRadius, // Initial radius
-              fillColor: 'rgba(255, 103, 31, 0.8)', // Orange color for returnees
-              color: '#fff',
-              weight: 1,
-              opacity: 1,
-              fillOpacity: 0.7
-            });
-
-            // Animate the marker
-            animateCircleMarker(marker, baseRadius);
-
-            return marker;
-          },
-          onEachFeature: (feature, layer) => {
-            const popupContent = `
-              <b>State:</b> ${feature.properties.state}<br/>
-              <b>Total Returnees:</b> ${feature.properties.total_return.toLocaleString()}
-            `;
-            layer.bindPopup(popupContent);
-
-            // Add tooltip
-            const tooltipContent = `<b>${feature.properties.state}</b><br/>
-              <b>Total Returnees:</b> ${feature.properties.total_return.toLocaleString()}`;
-            layer.bindTooltip(tooltipContent);
-          }
-        }).addTo(map4);
-      }
-    });
-
-    // Add legend to the fourth map
-    const legend4 = L.control({ position: 'bottomleft' });
-    legend4.onAdd = () => {
-      const div = L.DomUtil.create('div', 'legend');
-      div.innerHTML = `
-        <span style="font-size:14px; font-weight:bold;">Total Returnees by State:</span><br/>
-        <div style="display: flex; align-items: center; margin-top: 10px;">
-          <div style="width: 10px; height: 10px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
-          <span style="font-size:12px;"> < 10,000 Returnees</span>
-        </div>
-        <div style="display: flex; align-items: center; margin-top: 5px;">
-          <div style="width: 20px; height: 20px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
-          <span style="font-size:12px;">10,000 - 50,000 Returnees</span>
-        </div>
-        <div style="display: flex; align-items: center; margin-top: 5px;">
-          <div style="width: 30px; height: 30px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
-          <span style="font-size:12px;"> > 50,000 Returnees</span>
-        </div>
-      `;
-      return div;
-    };
-    legend4.addTo(map4);
-
     // Initialize Timeline Graph
     const ctx = document.getElementById('timelineChart').getContext('2d');
     const gradient = ctx.createLinearGradient(0, 0, 0, 200);
@@ -1262,6 +1152,132 @@
       }
     });
    
+    // Initialize the fourth map
+    const map4 = L.map('map4').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
+
+    // Define multiple base layers for the fourth map
+    const cartoDBLight4 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const openStreetMap4 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const esriWorldImagery4 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
+    });
+
+    const stamenToner4 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
+    });
+
+    // Add default base layer to the fourth map
+    mapboxCustom4.addTo(map4);
+
+    // Add layer control to the fourth map
+    const baseLayers4 = {
+      "Mapbox Custom": mapboxCustom4,
+      "CartoDB Light": cartoDBLight4,
+      "OpenStreetMap": openStreetMap4,
+      "Esri World Imagery": esriWorldImagery4,
+      "Stamen Toner": stamenToner4
+    };
+
+    L.control.layers(baseLayers4).addTo(map4);
+
+    // Parse CSV data and create animated markers for the fourth map
+    Papa.parse('./data/total_return.csv', {
+      download: true,
+      header: true,
+      dynamicTyping: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        const geoJsonFeatureCollection4 = {
+          type: 'FeatureCollection',
+          features: results.data.map(datum => ({
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: [datum.lon, datum.lat] },
+            properties: datum
+          }))
+        };
+
+        // Find the maximum total_return value for normalization
+        const maxTotalReturn = Math.max(...results.data.map(d => d.total_return));
+
+        // Function to animate circle markers
+        function animateCircleMarker(marker, baseRadius) {
+          const tween = new TWEEN.Tween({ radius: baseRadius })
+            .to({ radius: baseRadius * 1.5 }, 1000) // Animate to 1.5x the base radius
+            .easing(TWEEN.Easing.Sinusoidal.InOut) // Smooth easing
+            .yoyo(true) // Reverse the animation
+            .repeat(Infinity) // Repeat indefinitely
+            .onUpdate(({ radius }) => {
+              marker.setRadius(radius); // Update the marker's radius
+            })
+            .start(); // Start the animation
+        }
+
+        // Add animated markers to the fourth map
+        L.geoJSON(geoJsonFeatureCollection4, {
+          pointToLayer: (feature, latlng) => {
+            // Normalize the total_return value to determine the base radius
+            const baseRadius = 8 + (feature.properties.total_return / maxTotalReturn) * 20;
+
+            // Create a circle marker
+            const marker = L.circleMarker(latlng, {
+              radius: baseRadius, // Initial radius
+              fillColor: 'rgba(255, 103, 31, 0.8)', // Orange color for returnees
+              color: '#fff',
+              weight: 1,
+              opacity: 1,
+              fillOpacity: 0.7
+            });
+
+            // Animate the marker
+            animateCircleMarker(marker, baseRadius);
+
+            return marker;
+          },
+          onEachFeature: (feature, layer) => {
+            const popupContent = `
+              <b>State:</b> ${feature.properties.state}<br/>
+              <b>Total Returnees:</b> ${feature.properties.total_return.toLocaleString()}
+            `;
+            layer.bindPopup(popupContent);
+
+            // Add tooltip
+            const tooltipContent = `<b>${feature.properties.state}</b><br/>
+              <b>Total Returnees:</b> ${feature.properties.total_return.toLocaleString()}`;
+            layer.bindTooltip(tooltipContent);
+          }
+        }).addTo(map4);
+      }
+    });
+
+    // Add legend to the fourth map
+    const legend4 = L.control({ position: 'bottomleft' });
+    legend4.onAdd = () => {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = `
+        <span style="font-size:14px; font-weight:bold;">Total Returnees by State:</span><br/>
+        <div style="display: flex; align-items: center; margin-top: 10px;">
+          <div style="width: 10px; height: 10px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
+          <span style="font-size:12px;">Small Circle: < 10,000 Returnees</span>
+        </div>
+        <div style="display: flex; align-items: center; margin-top: 5px;">
+          <div style="width: 20px; height: 20px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
+          <span style="font-size:12px;">Medium Circle: 10,000 - 50,000 Returnees</span>
+        </div>
+        <div style="display: flex; align-items: center; margin-top: 5px;">
+          <div style="width: 30px; height: 30px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
+          <span style="font-size:12px;">Large Circle: > 50,000 Returnees</span>
+        </div>
+      `;
+      return div;
+    };
+    legend4.addTo(map4);
+
     // Initialize the Displacement Chart
     const states = [
       "Aj Jazirah", "Blue Nile", "Central Darfur", "East Darfur", "Gedaref", 
