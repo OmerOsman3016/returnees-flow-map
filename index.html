@@ -1384,7 +1384,7 @@
     });
 
     // Initialize the fifth map (Pie Chart Map)
-    const map5 = L.map('map5').setView([12.5, 29], 5);
+    const map5 = L.map('map5').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; OpenStreetMap'
     }).addTo(map5);
