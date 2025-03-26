@@ -1125,7 +1125,7 @@ const initTimelineChart = () => {
         }
       },
       animation: {
-        duration: 2000,
+        duration: 20000,
         onComplete: (animation) => {
           // After the line animation completes, animate the points one by one
           const chart = animation.chart;
@@ -1141,7 +1141,7 @@ const initTimelineChart = () => {
               // Add slight delay between points
               setTimeout(() => {
                 animatePoints(index + 1);
-              }, 100);
+              }, 1000);
             }
           };
           
