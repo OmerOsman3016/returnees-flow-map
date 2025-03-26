@@ -1060,8 +1060,7 @@ otal Number of Returnees by State Section -->
       return div;
     };
     legend3.addTo(map3);
-
-       // Initialize Timeline Graph
+    // Initialize Timeline Graph
     const ctx = document.getElementById('timelineChart').getContext('2d');
     const gradient = ctx.createLinearGradient(0, 0, 0, 200);
     gradient.addColorStop(0, '#FFFFFF');
@@ -1166,15 +1165,7 @@ otal Number of Returnees by State Section -->
       }
     });
 
-
-  // Create the chart
-  const timelineChart = new Chart(ctx, config);
-
-  return timelineChart;
-};
-
-document.addEventListener('DOMContentLoaded', initTimelineChart);
-   
+     
     // Initialize the fourth map
     const map4 = L.map('map4').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
 
