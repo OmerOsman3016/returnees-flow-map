@@ -269,7 +269,21 @@
       height: 80vh;
       border-radius: 8px;
     }
+    #map-container-6 {
+      flex: 1;
+      background-color: #ffffff;
+      border: 1px solid #d9e0f1;
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
 
+    #map6 {
+      width: 100%;
+      height: 80vh;
+      border-radius: 8px;
+    }
    /* Timeline container styling */
 #timeline-map-container {
   flex: 1;
@@ -498,7 +512,13 @@
     <h2 id="map-title-2">IDPs Pathways Across Sudan</h2>
     <div id="map2"></div>
   </div>
-
+<!-- Add this new section for Cross-Border Mobility -->
+  <div class="maps-container">
+    <div id="map-container-6">
+      <h2>Cross-Border Mobility Pathways</h2>
+      <div id="map6"></div>
+    </div>
+  </div>
   <!-- Total Number of Returnees by State Section -->
   <div class="idps-frame-container">
     <!-- Map Container for Total Number of Returnees by State -->
@@ -1280,7 +1300,156 @@
     };
     legend4.addTo(map4);
 
- 
+    // Initialize the sixth map (Cross-Border Mobility)
+    const map6 = L.map('map6').setView([12, 30], 4);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map6);
+
+    // Parse CBM.csv data and create flow map
+    Papa.parse('./data/CBM.csv', {
+      download: true,
+      header: true,
+      dynamicTyping: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        // Rename columns to match existing variable names
+        const renamedData = results.data.map(item => ({
+          s_state_id: item.origin_country,
+          s_lon: item.origin_lon,
+          s_lat: item.origin_lat,
+          e_locality_id: item.dest_country,
+          e_lon: item.dest_lon,
+          e_lat: item.dest_lat,
+          e_Volume: item.total_flow,
+          s_State: item.origin_country_name || item.origin_country,
+          e_locality: item.dest_country_name || item.dest_country,
+          primary_reason: item.primary_reason,
+          duration: item.duration
+        }));
+
+        const geoJsonFeatureCollection6 = {
+          type: 'FeatureCollection',
+          features: renamedData.map(datum => ({
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: [datum.s_lon, datum.s_lat] },
+            properties: datum
+          }))
+        };
+
+        const flowmapLayer6 = L.canvasFlowmapLayer(geoJsonFeatureCollection6, {
+          originAndDestinationFieldIds: {
+            originUniqueIdField: 's_state_id',
+            originGeometry: { x: 's_lon', y: 's_lat' },
+            destinationUniqueIdField: 'e_locality_id',
+            destinationGeometry: { x: 'e_lon', y: 'e_lat' }
+          },
+          style: (feature) => ({
+            radius: 8,
+            weight: 1,
+            color: '#fff',
+            fillColor: '#2E8B57',  // Sea green color for international flows
+            fillOpacity: 0.8
+          }),
+          canvasBezierStyle: {
+            type: 'classBreaks',
+            field: 'e_Volume',
+            classBreakInfos: [
+              { classMinValue: 1, classMaxValue: 5000, symbol: { 
+                strokeStyle: '#3CB371',
+                lineWidth: 1,
+                lineCap: 'round',
+                shadowColor: '#98FB98',
+                shadowBlur: 2
+              }},
+              { classMinValue: 5001, classMaxValue: 20000, symbol: { 
+                strokeStyle: '#2E8B57',
+                lineWidth: 2,
+                lineCap: 'round',
+                shadowColor: '#90EE90',
+                shadowBlur: 3
+              }},
+              { classMinValue: 20001, classMaxValue: 100000, symbol: { 
+                strokeStyle: '#228B22',
+                lineWidth: 3,
+                lineCap: 'round',
+                shadowColor: '#7CFC00',
+                shadowBlur: 4
+              }}
+            ],
+            defaultSymbol: { 
+              strokeStyle: '#F0FFF0',
+              lineWidth: 0.5,
+              lineCap: 'round',
+              shadowColor: '#F0FFF0',
+              shadowBlur: 1
+            }
+          },
+          pathDisplayMode: 'all',
+          animationStarted: true,
+          animationEasingFamily: 'Cubic',
+          animationEasingType: 'InOut',
+          animationDuration: 4000,
+          onEachFeature: (feature, layer) => {
+            const tooltipContent = `
+              <strong>From:</strong> ${feature.properties.s_State}<br>
+              <strong>To:</strong> ${feature.properties.e_locality}<br>
+              <strong>Total:</strong> ${feature.properties.e_Volume.toLocaleString()}
+            `;
+            layer.bindTooltip(tooltipContent);
+            
+            const popupContent = `
+              <div style="min-width: 200px">
+                <h4>Cross-Border Movement</h4>
+                <p><strong>From:</strong> ${feature.properties.s_State}</p>
+                <p><strong>To:</strong> ${feature.properties.e_locality}</p>
+                <p><strong>Total Movements:</strong> ${feature.properties.e_Volume.toLocaleString()}</p>
+                <p><strong>Primary Reason:</strong> ${feature.properties.primary_reason}</p>
+                <p><strong>Duration:</strong> ${feature.properties.duration}</p>
+              </div>
+            `;
+            layer.bindPopup(popupContent);
+          }
+        }).addTo(map6);
+
+        // Add legend for Cross-Border Mobility map
+        const legend6 = L.control({ position: 'bottomright' });
+        legend6.onAdd = () => {
+          const div = L.DomUtil.create('div', 'legend');
+          div.innerHTML = `
+            <h4>Flow Volume</h4>
+            <div style="display: flex; align-items: center; margin: 5px 0;">
+              <div style="width:30px;height:3px;background:#3CB371"></div>
+              <span style="margin-left:10px">< 5,000</span>
+            </div>
+            <div style="display: flex; align-items: center; margin: 5px 0;">
+              <div style="width:30px;height:4px;background:#2E8B57"></div>
+              <span style="margin-left:10px">5,001-20,000</span>
+            </div>
+            <div style="display: flex; align-items: center; margin: 5px 0;">
+              <div style="width:30px;height:5px;background:#228B22"></div>
+              <span style="margin-left:10px">> 20,000</span>
+            </div>
+            <p>Color intensity represents<br>movement volume</p>
+          `;
+          return div;
+        };
+        legend6.addTo(map6);
+
+        // Animation handler
+        flowmapLayer6.on('mouseover', (e) => {
+          if (e.sharedOriginFeatures.length) {
+            flowmapLayer6.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
+          }
+        });
+
+        // Initial selection - show all flows from Sudan (SDN)
+        flowmapLayer6.selectFeaturesForPathDisplayById('s_state_id', "SDN", true, 'SELECTION_NEW');
+      },
+      error: (error) => {
+        console.error("Error loading CBM.csv:", error);
+      }
+    });
 
        // Previous script content remains the same until the pie chart map section
 
