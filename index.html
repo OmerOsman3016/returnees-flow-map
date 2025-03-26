@@ -269,21 +269,7 @@
       height: 80vh;
       border-radius: 8px;
     }
-    #map-container-6 {
-      flex: 1;
-      background-color: #ffffff;
-      border: 1px solid #d9e0f1;
-      border-radius: 8px;
-      padding: 10px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-    }
 
-    #map6 {
-      width: 100%;
-      height: 80vh;
-      border-radius: 8px;
-    }
    /* Timeline container styling */
 #timeline-map-container {
   flex: 1;
@@ -512,13 +498,7 @@
     <h2 id="map-title-2">IDPs Pathways Across Sudan</h2>
     <div id="map2"></div>
   </div>
-<!-- Add this new section for Cross-Border Mobility -->
-  <div class="maps-container">
-    <div id="map-container-6">
-      <h2>Cross-Border Mobility Pathways</h2>
-      <div id="map6"></div>
-    </div>
-  </div>
+
   <!-- Total Number of Returnees by State Section -->
   <div class="idps-frame-container">
     <!-- Map Container for Total Number of Returnees by State -->
@@ -1300,157 +1280,7 @@
     };
     legend4.addTo(map4);
 
-    // Initialize the sixth map (Cross-Border Mobility)
-    const map6 = L.map('map6').setView([12, 30], 4);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap'
-    }).addTo(map6);
-
  
-    // Define multiple base layers for the third map
-    const cartoDBLight6 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
-
-    const openStreetMap6 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
-
-    const esriWorldImagery6 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
-    });
-
-    const stamenToner6 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
-      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
-    });
-
-    // Add default base layer to the third map
-    cartoDBLight6.addTo(map6);
-
-    // Add layer control to the third map
-    const baseLayers6 = {
-      "Mapbox Custom": mapboxCustom6,
-      "CartoDB Light": cartoDBLight6,
-      "OpenStreetMap": openStreetMap6,
-      "Esri World Imagery": esriWorldImagery6,
-      "Stamen Toner": stamenToner6
-    };
-
-    L.control.layers(baseLayers6).addTo(map6);
-
-    // Parse CSV data and create animated markers for the third map
-    Papa.parse('./data/CBM.csv', {
-      download: true,
-      header: true,
-      dynamicTyping: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        const geoJsonFeatureCollection3 = {
-          type: 'FeatureCollection',
-          features: results.data.map(datum => ({
-            type: 'Feature',
-            geometry: { type: 'Point', coordinates: [datum.lon, datum.lat] },
-            properties: datum
-          }))
-        };
-
-        // Find the maximum total_idps value for normalization
-        const maxTotalIdps = Math.max(...results.data.map(d => d.total_idps));
-
-        // Function to animate circle markers
-        function animateCircleMarker(marker, baseRadius) {
-          const tween = new TWEEN.Tween({ radius: baseRadius })
-            .to({ radius: baseRadius * 1.5 }, 1000) // Animate to 1.5x the base radius
-            .easing(TWEEN.Easing.Sinusoidal.InOut) // Smooth easing
-            .yoyo(true) // Reverse the animation
-            .repeat(Infinity) // Repeat indefinitely
-            .onUpdate(({ radius }) => {
-              marker.setRadius(radius); // Update the marker's radius
-            })
-            .start(); // Start the animation
-        }
-
-        // Add animated markers to the third map
-        L.geoJSON(geoJsonFeatureCollection3, {
-          pointToLayer: (feature, latlng) => {
-            // Normalize the total_idps value to determine the base radius
-            const baseRadius = 8 + (feature.properties.total_idps / maxTotalIdps) * 20;
-
-            // Create a circle marker
-            const marker = L.circleMarker(latlng, {
-              radius: baseRadius, // Initial radius
-              fillColor: '#418FDE', // Blue color for IDPs
-              color: '#fff',
-              weight: 1,
-              opacity: 1,
-              fillOpacity: 0.7
-            });
-
-            // Animate the marker
-            animateCircleMarker(marker, baseRadius);
-
-            return marker;
-          },
-          onEachFeature: (feature, layer) => {
-            const popupContent = `
-              <b>State:</b> ${feature.properties.state}<br/>
-              <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}
-            `;
-            layer.bindPopup(popupContent);
-
-            // Add tooltip
-            const tooltipContent = `<b>${feature.properties.state}</b><br/>
-              <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}`;
-            layer.bindTooltip(tooltipContent);
-          }
-        }).addTo(map6);
-      }
-    });
-
-    // Update Tween.js animations on each frame
-    function animate() {
-      requestAnimationFrame(animate);
-      TWEEN.update();
-    }
-    animate(); // Start the animation loop
-
-    // Add legend to the third map
-    const legend6 = L.control({ position: 'bottomright' });
-    legend3.onAdd = () => {
-      const div = L.DomUtil.create('div', 'legend');
-      div.innerHTML = `
-        <span style="font-size:14px; font-weight:bold;">Total IDPs by State:</span><br/>
-        <div style="display: flex; align-items: center; margin-top: 10px;">
-          <div style="width: 10px; height: 10px; background: #418FDE; border-radius: 50%; margin-right: 10px;"></div>
-          <span style="font-size:12px;">  < 500,000 IDPs</span>
-        </div>
-        <div style="display: flex; align-items: center; margin-top: 5px;">
-          <div style="width: 20px; height: 20px; background: #418FDE; border-radius: 50%; margin-right: 10px;"></div>
-          <span style="font-size:12px;"> 500,001 - 1,000,000 IDPs</span>
-        </div>
-        <div style="display: flex; align-items: center; margin-top: 5px;">
-          <div style="width: 30px; height: 30px; background: #418FDE; border-radius: 50%; margin-right: 10px;"></div>
-          <span style="font-size:12px;"> > 1,000,001 IDPs</span>
-        </div>
-      `;
-      return div;
-    };
-    legend6.addTo(map6);
-    
-        // Animation handler
-        flowmapLayer6.on('mouseover', (e) => {
-          if (e.sharedOriginFeatures.length) {
-            flowmapLayer6.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
-          }
-        });
-
-        // Initial selection - show all flows from Sudan (SDN)
-        flowmapLayer6.selectFeaturesForPathDisplayById('s_state_id', "SD01", true, 'SELECTION_NEW');
-      },
-      error: (error) => {
-        console.error("Error loading CBM.csv:", error);
-      }
-    });
 
        // Previous script content remains the same until the pie chart map section
 
