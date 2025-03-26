@@ -9,6 +9,7 @@
   <!-- External CSS libraries -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.css" />
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
   <style>
     /* General body styling */
@@ -291,6 +292,22 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   height: 250px; /* Reduced from 350px */
 }
+
+/* Sankey diagram container */
+#sankey-container {
+  background-color: #ffffff;
+  border: 1px solid #d9e0f1;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  height: 700px;
+}
+
+#sankey-diagram {
+  width: 100%;
+  height: 100%;
+}
      
 
 
@@ -348,7 +365,7 @@
       font-weight: 600;
     }
 
-    /* Pie Chart Map Styles */
+    /* Pie Chart Map Showing Displacement Proportions */
     #map5 {
       height: 600px;
       border-radius: 8px;
@@ -385,6 +402,10 @@
 
       #map3 {
         height: 60vh;
+      }
+      
+      #sankey-container {
+        height: 500px;
       }
     }
 
@@ -493,6 +514,11 @@
     </div>
   </div>
   
+  <!-- Sankey Diagram Container -->
+  <div id="sankey-container">
+    <h2>Displacement Accommodation Types by State</h2>
+    <div id="sankey-diagram"></div>
+  </div>
  
   <!-- Pie Chart Map Showing Displacement Proportions -->
   <div class="maps-container">
@@ -508,14 +534,15 @@
     <div id="map2"></div>
   </div>
 
-  <!-- T <!-- Country Circle Propagation Map -->
+  <!-- Country Circle Propagation Map -->
   <div class="maps-container">
     <div id="map-container">
       <h2>Displacement to Neighboring Countries</h2>
       <div id="country-circle-map"></div>
     </div>
   </div>
-otal Number of Returnees by State Section -->
+
+  <!-- Total Number of Returnees by State Section -->
   <div class="idps-frame-container">
     <!-- Map Container for Total Number of Returnees by State -->
     <div id="map-container-4">
@@ -1412,19 +1439,13 @@ otal Number of Returnees by State Section -->
       const div = L.DomUtil.create('div', 'legend');
       div.innerHTML = `
         <h4>Displacement to Neighboring Countries</h4>
-        <div style="display: flex; align-items: center; margin-top: 10px;">
-          <div style="width: 10px; height: 10px; background: #5CB8B2; border-radius: 50%; margin-right: 10px;"></div>
-          <span style="font-size:12px;">Small Circle: Lower Volume</span>
+        <div style="display: flex; align-items: center; margin: 5px 0;">
+          <svg width="20" height="20">
+            <circle cx="10" cy="10" r="10" fill="#5CB8B2"/>
+          </svg>
+          Displaced Population
         </div>
-        <div style="display: flex; align-items: center; margin-top: 5px;">
-          <div style="width: 20px; height: 20px; background: #5CB8B2; border-radius: 50%; margin-right: 10px;"></div>
-          <span style="font-size:12px;">Medium Circle: Medium Volume</span>
-        </div>
-        <div style="display: flex; align-items: center; margin-top: 5px;">
-          <div style="width: 30px; height: 30px; background: #5CB8B2; border-radius: 50%; margin-right: 10px;"></div>
-          <span style="font-size:12px;">Large Circle: Higher Volume</span>
-        </div>
-        <p>Circles pulse to show relative volume of displacement</p>
+        <p>Circle size represents relative volume</p>
       `;
       return div;
     };
@@ -1525,6 +1546,209 @@ otal Number of Returnees by State Section -->
       return div;
     };
     legend5.addTo(map5);
+    
+    // Create Sankey diagram for displacement accommodation types
+    const sankeyData = {
+      // Define nodes (states and accommodation types)
+      nodes: [
+        // States
+        { node: 0, name: "Aj Jazirah", color: "#1f77b4" },
+        { node: 1, name: "Blue Nile", color: "#ff7f0e" },
+        { node: 2, name: "Central Darfur", color: "#2ca02c" },
+        { node: 3, name: "East Darfur", color: "#d62728" },
+        { node: 4, name: "Gedaref", color: "#9467bd" },
+        { node: 5, name: "Kassala", color: "#8c564b" },
+        { node: 6, name: "Khartoum", color: "#e377c2" },
+        { node: 7, name: "North Darfur", color: "#7f7f7f" },
+        { node: 8, name: "North Kordofan", color: "#bcbd22" },
+        { node: 9, name: "Northern", color: "#17becf" },
+        { node: 10, name: "Red Sea", color: "#aec7e8" },
+        { node: 11, name: "River Nile", color: "#ffbb78" },
+        { node: 12, name: "Sennar", color: "#98df8a" },
+        { node: 13, name: "South Darfur", color: "#ff9896" },
+        { node: 14, name: "South Kordofan", color: "#c5b0d5" },
+        { node: 15, name: "West Darfur", color: "#c49c94" },
+        { node: 16, name: "West Kordofan", color: "#f7b6d2" },
+        { node: 17, name: "White Nile", color: "#c7c7c7" },
+        
+        // Accommodation types
+        { node: 18, name: "Camp (formal)", color: "#1f77b4" },
+        { node: 19, name: "In Host Family/Community", color: "#ff7f0e" },
+        { node: 20, name: "In Rented accommodation", color: "#2ca02c" },
+        { node: 21, name: "Improvised/critical shelters", color: "#d62728" },
+        { node: 22, name: "In schools or other public buildings", color: "#9467bd" },
+        { node: 23, name: "Gathering sites (informal settlements)", color: "#8c564b" }
+      ],
+      
+      // Define links (flows between states and accommodation types)
+      links: [
+        // Aj Jazirah
+        { source: 0, target: 18, value: 32814 },
+        { source: 0, target: 19, value: 84 },
+        { source: 0, target: 20, value: 40 },
+        { source: 0, target: 21, value: 31427 },
+        { source: 0, target: 22, value: 1971 },
+        
+        // Blue Nile
+        { source: 1, target: 18, value: 64938 },
+        { source: 1, target: 19, value: 5711 },
+        { source: 1, target: 20, value: 1829 },
+        { source: 1, target: 21, value: 4929 },
+        { source: 1, target: 22, value: 13809 },
+        
+        // Central Darfur
+        { source: 2, target: 18, value: 33425 },
+        { source: 2, target: 19, value: 100 },
+        { source: 2, target: 20, value: 3300 },
+        { source: 2, target: 21, value: 18353 },
+        { source: 2, target: 22, value: 75715 },
+        
+        // East Darfur
+        { source: 3, target: 18, value: 106249 },
+        { source: 3, target: 19, value: 2436 },
+        { source: 3, target: 20, value: 3100 },
+        { source: 3, target: 21, value: 20128 },
+        { source: 3, target: 22, value: 8424 },
+        
+        // Gedaref
+        { source: 4, target: 18, value: 134735 },
+        { source: 4, target: 19, value: 21466 },
+        { source: 4, target: 20, value: 1128 },
+        { source: 4, target: 21, value: 12626 },
+        { source: 4, target: 22, value: 1564 },
+        
+        // Kassala
+        { source: 5, target: 18, value: 42519 },
+        { source: 5, target: 19, value: 8299 },
+        { source: 5, target: 21, value: 13056 },
+        { source: 5, target: 22, value: 766 },
+        
+        // Khartoum
+        { source: 6, target: 18, value: 17406 },
+        { source: 6, target: 19, value: 1722 },
+        { source: 6, target: 20, value: 559 },
+        { source: 6, target: 21, value: 1243 },
+        { source: 6, target: 22, value: 283 },
+        
+        // North Darfur
+        { source: 7, target: 18, value: 103599 },
+        { source: 7, target: 19, value: 2541 },
+        { source: 7, target: 20, value: 5909 },
+        { source: 7, target: 21, value: 20560 },
+        { source: 7, target: 22, value: 92791 },
+        
+        // North Kordofan
+        { source: 8, target: 18, value: 31273 },
+        { source: 8, target: 19, value: 1183 },
+        { source: 8, target: 20, value: 262 },
+        { source: 8, target: 21, value: 1606 },
+        { source: 8, target: 22, value: 3972 },
+        
+        // Northern
+        { source: 9, target: 18, value: 91951 },
+        { source: 9, target: 19, value: 16084 },
+        { source: 9, target: 20, value: 3144 },
+        { source: 9, target: 21, value: 3405 },
+        { source: 9, target: 22, value: 2179 },
+        
+        // Red Sea
+        { source: 10, target: 18, value: 17088 },
+        { source: 10, target: 19, value: 20061 },
+        { source: 10, target: 20, value: 2783 },
+        { source: 10, target: 21, value: 8351 },
+        { source: 10, target: 22, value: 2476 },
+        
+        // River Nile
+        { source: 11, target: 18, value: 119057 },
+        { source: 11, target: 19, value: 42179 },
+        { source: 11, target: 20, value: 2065 },
+        { source: 11, target: 21, value: 8107 },
+        { source: 11, target: 22, value: 14744 },
+        
+        // Sennar
+        { source: 12, target: 18, value: 23015 },
+        { source: 12, target: 19, value: 404 },
+        { source: 12, target: 21, value: 1027 },
+        { source: 12, target: 22, value: 1796 },
+        
+        // South Darfur
+        { source: 13, target: 18, value: 89699 },
+        { source: 13, target: 19, value: 1513 },
+        { source: 13, target: 20, value: 6014 },
+        { source: 13, target: 21, value: 26293 },
+        { source: 13, target: 22, value: 73581 },
+        
+        // South Kordofan
+        { source: 14, target: 18, value: 44687 },
+        { source: 14, target: 19, value: 1500 },
+        { source: 14, target: 20, value: 247 },
+        { source: 14, target: 21, value: 7803 },
+        { source: 14, target: 22, value: 30135 },
+        
+        // West Darfur
+        { source: 15, target: 18, value: 13293 },
+        { source: 15, target: 19, value: 826 },
+        { source: 15, target: 20, value: 25097 },
+        { source: 15, target: 21, value: 1353 },
+        { source: 15, target: 22, value: 9580 },
+        
+        // West Kordofan
+        { source: 16, target: 18, value: 42604 },
+        { source: 16, target: 19, value: 280 },
+        { source: 16, target: 20, value: 280 },
+        { source: 16, target: 21, value: 5548 },
+        { source: 16, target: 22, value: 26432 },
+        
+        // White Nile
+        { source: 17, target: 18, value: 68912 },
+        { source: 17, target: 19, value: 10703 },
+        { source: 17, target: 20, value: 482 },
+        { source: 17, target: 21, value: 20989 },
+        { source: 17, target: 22, value: 25114 }
+      ]
+    };
+
+    // Create the Sankey diagram
+    const sankeyLayout = {
+      title: "Displacement Accommodation Types by State",
+      font: {
+        size: 12,
+        color: "#333"
+      },
+      margin: {
+        t: 50,
+        l: 50,
+        r: 50,
+        b: 50
+      },
+      height: 650,
+      width: 1000
+    };
+
+    Plotly.newPlot('sankey-diagram', [{
+      type: "sankey",
+      orientation: "h",
+      node: {
+        pad: 15,
+        thickness: 30,
+        line: {
+          color: "black",
+          width: 0.5
+        },
+        label: sankeyData.nodes.map(node => node.name),
+        color: sankeyData.nodes.map(node => node.color)
+      },
+      link: {
+        source: sankeyData.links.map(link => link.source),
+        target: sankeyData.links.map(link => link.target),
+        value: sankeyData.links.map(link => link.value),
+        color: sankeyData.links.map(link => {
+          // Use the source node color for the link
+          const sourceNode = sankeyData.nodes.find(node => node.node === link.source);
+          return sourceNode ? sourceNode.color + "80" : "#aaa"; // Add transparency
+        })
+      }
+    }], sankeyLayout);
   </script>
 </body>
 </html>
