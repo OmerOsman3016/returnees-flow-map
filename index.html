@@ -1293,10 +1293,49 @@
     legend4.addTo(map4);
 
     // Initialize the country circle map
+      // Previous script content remains the same until the country circle map section
+    // ...
+
+    // Initialize the country circle map with layer controls
     const countryCircleMap = L.map('country-circle-map').setView([16, 30], 5);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap'
-    }).addTo(countryCircleMap);
+    
+    // Define multiple base layers for the country circle map
+    const cartoDBLightCountry = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const openStreetMapCountry = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const esriWorldImageryCountry = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
+    });
+
+    const stamenTonerCountry = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
+    });
+
+    const mapboxCustomCountry = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
+      attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      tileSize: 512,
+      zoomOffset: -1,
+      maxZoom: 18
+    });
+
+    // Add default base layer to the country circle map
+    cartoDBLightCountry.addTo(countryCircleMap);
+
+    // Add layer control to the country circle map
+    const baseLayersCountry = {
+      "CartoDB Light": cartoDBLightCountry,
+      "OpenStreetMap": openStreetMapCountry,
+      "Esri World Imagery": esriWorldImageryCountry,
+      "Stamen Toner": stamenTonerCountry,
+      "Mapbox Custom": mapboxCustomCountry
+    };
+
+    L.control.layers(baseLayersCountry).addTo(countryCircleMap);
 
     // Country data with coordinates and volume
     const countryData = [
@@ -1312,6 +1351,9 @@
     // Find the maximum volume for scaling
     const maxVolume = Math.max(...countryData.map(d => d.Volume));
 
+    // Create a layer group for the country circles
+    const countryCirclesLayer = L.layerGroup().addTo(countryCircleMap);
+
     // Function to animate circle markers
     function animateCircleMarker(marker, baseRadius) {
       const tween = new TWEEN.Tween({ radius: baseRadius })
@@ -1325,7 +1367,7 @@
         .start(); // Start the animation
     }
 
-    // Add animated circle markers for each country
+    // Add animated circle markers for each country to the layer group
     countryData.forEach(country => {
       // Calculate base radius based on volume (scaled to a reasonable size)
       const baseRadius = 5 + (country.Volume / maxVolume) * 30;
@@ -1338,7 +1380,7 @@
         weight: 1,
         opacity: 1,
         fillOpacity: 0.7
-      }).addTo(countryCircleMap);
+      }).addTo(countryCirclesLayer);
 
       // Add animation
       animateCircleMarker(circle, baseRadius);
@@ -1355,6 +1397,14 @@
         Volume: ${country.Volume.toLocaleString()}
       `);
     });
+
+    // Add overlay control for the country circles
+    const overlaysCountry = {
+      "Displacement Circles": countryCirclesLayer
+    };
+
+    // Add layer control with both base layers and overlays
+    L.control.layers(baseLayersCountry, overlaysCountry).addTo(countryCircleMap);
 
     // Add legend for the country circle map
     const countryLegend = L.control({ position: 'bottomright' });
