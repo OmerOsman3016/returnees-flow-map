@@ -361,11 +361,18 @@
       box-shadow: 0 1px 5px rgba(0,0,0,0.4);
     }
 
+    /* Country Circle Map Styles */
+    #country-circle-map {
+      height: 600px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
     /* Responsive design for smaller screens */
     @media (max-width: 768px) {
       #title-container { flex-direction: column; align-items: flex-start; }
       .content-container { flex-direction: column; }
-      #map, #map2, #map3, #map4, #map5 { height: 90vh; }
+      #map, #map2, #map3, #map4, #map5, #country-circle-map { height: 90vh; }
 
       .idps-frame-container {
         flex-direction: column;
@@ -485,7 +492,16 @@
       <div id="map3"></div>
     </div>
   </div>
-   <!-- Pie Chart Map Showing Displacement Proportions -->
+  
+  <!-- Country Circle Propagation Map -->
+  <div class="maps-container">
+    <div id="map-container">
+      <h2>Displacement to Neighboring Countries</h2>
+      <div id="country-circle-map"></div>
+    </div>
+  </div>
+
+  <!-- Pie Chart Map Showing Displacement Proportions -->
   <div class="maps-container">
     <div id="map-container">
       <h2>Displacement Proportions by State</h2>
@@ -533,8 +549,6 @@
     </div>
   </div>
 
- 
-
   <!-- Timeline and Map Container -->
   <div id="timeline-map-container">
     <!-- Timeline Graph Container -->
@@ -544,8 +558,6 @@
     </div>
   </div>
 
- 
-  
   <!-- Add image above the footer -->
   <img src="./data/doner.png" alt="Donor Logo" style="width: 100%; height: auto; display: block; margin: 0 auto;">
 
@@ -1280,11 +1292,95 @@
     };
     legend4.addTo(map4);
 
- 
+    // Initialize the country circle map
+    const countryCircleMap = L.map('country-circle-map').setView([16, 30], 5);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(countryCircleMap);
 
-       // Previous script content remains the same until the pie chart map section
+    // Country data with coordinates and volume
+    const countryData = [
+      {country: "Egypt", e_lat: 26.8206, e_lon: 30.8025, Volume: 14135},
+      {country: "libya", e_lat: 26.3351, e_lon: 17.2283, Volume: 14136},
+      {country: "Chad", e_lat: 15.4542, e_lon: 18.7322, Volume: 14137},
+      {country: "Central African Republic", e_lat: 6.6111, e_lon: 20.9394, Volume: 14138},
+      {country: "South Sudan", e_lat: 6.877, e_lon: 31.307, Volume: 14139},
+      {country: "Ethiopia", e_lat: 9.145, e_lon: 40.4897, Volume: 14140},
+      {country: "Eritrea", e_lat: 15.1794, e_lon: 39.7823, Volume: 14141}
+    ];
 
-    // Initialize the fifth map (Pie Chart Map)
+    // Find the maximum volume for scaling
+    const maxVolume = Math.max(...countryData.map(d => d.Volume));
+
+    // Function to animate circle markers
+    function animateCircleMarker(marker, baseRadius) {
+      const tween = new TWEEN.Tween({ radius: baseRadius })
+        .to({ radius: baseRadius * 1.5 }, 1500) // Animate to 1.5x the base radius
+        .easing(TWEEN.Easing.Sinusoidal.InOut) // Smooth easing
+        .yoyo(true) // Reverse the animation
+        .repeat(Infinity) // Repeat indefinitely
+        .onUpdate(({ radius }) => {
+          marker.setRadius(radius); // Update the marker's radius
+        })
+        .start(); // Start the animation
+    }
+
+    // Add animated circle markers for each country
+    countryData.forEach(country => {
+      // Calculate base radius based on volume (scaled to a reasonable size)
+      const baseRadius = 5 + (country.Volume / maxVolume) * 30;
+      
+      // Create circle marker
+      const circle = L.circleMarker([country.e_lat, country.e_lon], {
+        radius: baseRadius,
+        fillColor: '#FF671F',
+        color: '#fff',
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.7
+      }).addTo(countryCircleMap);
+
+      // Add animation
+      animateCircleMarker(circle, baseRadius);
+
+      // Add popup with country info
+      circle.bindPopup(`
+        <b>${country.country}</b><br>
+        Volume: ${country.Volume.toLocaleString()}
+      `);
+
+      // Add tooltip
+      circle.bindTooltip(`
+        <b>${country.country}</b><br>
+        Volume: ${country.Volume.toLocaleString()}
+      `);
+    });
+
+    // Add legend for the country circle map
+    const countryLegend = L.control({ position: 'bottomright' });
+    countryLegend.onAdd = () => {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = `
+        <h4>Displacement to Neighboring Countries</h4>
+        <div style="display: flex; align-items: center; margin-top: 10px;">
+          <div style="width: 10px; height: 10px; background: #FF671F; border-radius: 50%; margin-right: 10px;"></div>
+          <span style="font-size:12px;">Small Circle: Lower Volume</span>
+        </div>
+        <div style="display: flex; align-items: center; margin-top: 5px;">
+          <div style="width: 20px; height: 20px; background: #FF671F; border-radius: 50%; margin-right: 10px;"></div>
+          <span style="font-size:12px;">Medium Circle: Medium Volume</span>
+        </div>
+        <div style="display: flex; align-items: center; margin-top: 5px;">
+          <div style="width: 30px; height: 30px; background: #FF671F; border-radius: 50%; margin-right: 10px;"></div>
+          <span style="font-size:12px;">Large Circle: Higher Volume</span>
+        </div>
+        <p>Circles pulse to show relative volume of displacement</p>
+      `;
+      return div;
+    };
+    countryLegend.addTo(countryCircleMap);
+
+    // Pie Chart Map Showing Displacement Proportions
     const map5 = L.map('map5').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; OpenStreetMap'
