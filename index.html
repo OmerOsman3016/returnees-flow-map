@@ -1062,109 +1062,129 @@ otal Number of Returnees by State Section -->
     legend3.addTo(map3);
 
     // Initialize Timeline Graph
-    const ctx = document.getElementById('timelineChart').getContext('2d');
+const initTimelineChart = () => {
+  const ctx = document.getElementById('timelineChart').getContext('2d');
+  
+  // Create gradients
+  const createGradient = (ctx, color) => {
     const gradient = ctx.createLinearGradient(0, 0, 0, 200);
-    gradient.addColorStop(0, '#FFFFFF');
-    gradient.addColorStop(1, '#418FDE');
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
+    gradient.addColorStop(1, color);
+    return gradient;
+  };
 
-    const gradient2 = ctx.createLinearGradient(0, 0, 0, 200);
-    gradient2.addColorStop(0, '#FFFFFF');
-    gradient2.addColorStop(1, '#FF6384'); // Different color for the second dataset
-
-    const timelineChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Aug-2023', 'Sep-2023', 'Oct-2023', 'Nov-2023', 'Dec-2023', 'Jan-2024', 'Feb-2024', 'Mar-2024', 'Apr-2024', 'May-2024', 'Jun-2024', 'Jul-2024', 'Aug-2024', 'Sep-2024', 'Oct-2024', 'Nov-2024', 'Dec-2024', 'Jan-2025', 'Feb-2025', 'Mar-2025'],
-        datasets: [
-          {
-            label: 'IDPs Over Time ',
-            data: [3801754, 4425083, 4856294, 5340863, 5942580, 6144363, 6397698, 6622565, 6786816, 10095054, 10540215, 10710015, 10834382, 10890722, 11018231, 11359005, 11532774,11568970,11585384,11301340],
-            borderColor: '#82C4FF',
-            backgroundColor: gradient,
-            borderWidth: 3,
-            fill: false,
-            pointBackgroundColor: '#ffffff',
-            pointBorderColor: '#82C4FF',
-            pointRadius: 5,
-            pointHoverRadius: 7,
-            tension: 0.4
-          },
-          {
-            label: 'Returnees Over Time ',
-            data: [0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0,396738], // Example data for the second dataset
-            borderColor: '#FF671F', // Different color for the second dataset
-            backgroundColor: gradient2,
-            borderWidth: 3,
-            fill: false,
-            pointBackgroundColor: '#ffffff',
-            pointBorderColor: '#FF671F',
-            pointRadius: 5,
-            pointHoverRadius: 7,
-            tension: 0.4
+  // Chart configuration
+  const config = {
+    type: 'line',
+    data: {
+      labels: ['Aug-23', 'Sep-23', 'Oct-23', 'Nov-23', 'Dec-23', 'Jan-24', 'Feb-24', 'Mar-24', 'Apr-24', 'May-24', 'Jun-24', 'Jul-24', 'Aug-24', 'Sep-24', 'Oct-24', 'Nov-24', 'Dec-24', 'Jan-25', 'Feb-25', 'Mar-25'],
+      datasets: [
+        {
+          label: 'IDPs Over Time',
+          data: [3801754, 4425083, 4856294, 5340863, 5942580, 6144363, 6397698, 6622565, 6786816, 10095054, 10540215, 10710015, 10834382, 10890722, 11018231, 11359005, 11532774, 11568970, 11585384, 11301340],
+          borderColor: '#418FDE',
+          backgroundColor: createGradient(ctx, 'rgba(65, 143, 222, 0.2)'),
+          borderWidth: 3,
+          fill: true,
+          pointBackgroundColor: '#ffffff',
+          pointBorderColor: '#418FDE',
+          pointRadius: 0, // Start with points hidden
+          pointHoverRadius: 6,
+          pointBorderWidth: 2,
+          tension: 0.3,
+          segment: {
+            borderColor: (ctx) => ctx.p0.parsed.y > ctx.p1.parsed.y ? '#FF0000' : '#418FDE',
           }
-        ]
+        },
+        {
+          label: 'Returnees Over Time',
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 396738],
+          borderColor: '#FF671F',
+          backgroundColor: createGradient(ctx, 'rgba(255, 103, 31, 0.2)'),
+          borderWidth: 3,
+          fill: true,
+          pointBackgroundColor: '#ffffff',
+          pointBorderColor: '#FF671F',
+          pointRadius: 0, // Start with points hidden
+          pointHoverRadius: 6,
+          pointBorderWidth: 2,
+          tension: 0.3
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        tooltip: {
+          mode: 'index',
+          intersect: false
+        }
       },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          tooltip: {
-            backgroundColor: '#0033A0',
-            titleColor: '#82C4FF',
-            bodyColor: '#82C4FF',
-            borderColor: '#82C4FF',
-            borderWidth: 1,
-            displayColors: false
-          },
-          legend: {
-            display: true // Show legend to differentiate between datasets
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Total',
-              color: '#82C4FF',
-              font: {
-                size: 14,
-                weight: 'bold'
-              }
-            },
-            grid: {
-              color: '#e0e0e0'
+      animation: {
+        duration: 2000,
+        onComplete: (animation) => {
+          // After the line animation completes, animate the points one by one
+          const chart = animation.chart;
+          const points = chart.getDatasetMeta(0).data.concat(chart.getDatasetMeta(1).data);
+          
+          // Function to animate points sequentially
+          const animatePoints = (index) => {
+            if (index < points.length) {
+              const point = points[index];
+              point.options.radius = 4; // Show point
+              chart.update('none'); // Update without animation
+              
+              // Add slight delay between points
+              setTimeout(() => {
+                animatePoints(index + 1);
+              }, 100);
             }
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'Month',
-              color: '#82C4FF',
-              font: {
-                size: 14,
-                weight: 'bold'
-              }
+          };
+          
+          animatePoints(0);
+        }
+      },
+      // Initial animation configuration for the line
+      transitions: {
+        show: {
+          animations: {
+            x: {
+              from: 0,
+              duration: 2000
             },
-            grid: {
-              color: '#e0e0e0'
+            y: {
+              from: 0,
+              duration: 2000
             }
           }
         },
-        animation: {
-          duration: 1500,
-          easing:  'easeOutExpo' ,
-          delay: 300,              // 300ms delay before starting
-          loop: false,             // Prevent repeating
-          onProgress: (ctx) => {   // Callback during animation
-            console.log(`${ctx.currentStep}/${ctx.numSteps}`);
-          },
-          onComplete: (ctx) => {   // Callback when done
-            console.log('Animation finished!');
+        hide: {
+          animations: {
+            x: {
+              to: 0,
+              duration: 2000
+            },
+            y: {
+              to: 0,
+              duration: 2000
+            }
           }
         }
       }
-    });
+    }
+  };
+
+  // Create the chart
+  const timelineChart = new Chart(ctx, config);
+
+  return timelineChart;
+};
+
+document.addEventListener('DOMContentLoaded', initTimelineChart);
    
     // Initialize the fourth map
     const map4 = L.map('map4').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
