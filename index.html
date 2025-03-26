@@ -1718,7 +1718,6 @@
 
     // Create the Sankey diagram
     const sankeyLayout = {
-      
       font: {
         size: 12,
         color: "#333"
@@ -1733,6 +1732,7 @@
       width: 1000
     };
 
+    // Create the Sankey diagram without animation
     Plotly.newPlot('sankey-diagram', [{
       type: "sankey",
       orientation: "h",
@@ -1756,7 +1756,7 @@
           return sourceNode ? sourceNode.color + "80" : "#aaa"; // Add transparency
         })
       }
-    }], sankeyLayout);
+    }], sankeyLayout, {staticPlot: true});
   </script>
 </body>
 </html>
