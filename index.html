@@ -53,69 +53,61 @@
     body::-webkit-scrollbar-thumb { background: #888; border-radius: 5px; }
     body::-webkit-scrollbar-thumb:hover { background: #555; }
 
-
-    /* Navigation Container - Under Title */
+    /* Navigation Buttons */
     .nav-container {
+      position: fixed;
+      top: 80%;
+      right: 20px;
+      transform: translateY(-50%);
+      z-index: 1000;
       display: flex;
-      justify-content: center;
-      margin: 0 auto 20px auto;
-      width: 100%;
-      max-width: 1200px;
-    }
-    
-    .nav-buttons {
-      display: flex;
+      flex-direction: column;
       gap: 10px;
-      padding: 10px;
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     
     .nav-button {
-      min-width: 120px;
-      height: 40px;
-      border-radius: 20px;
-      background-color: #82C4FF;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: #418FDE;
       color: white;
       border: none;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
       transition: all 0.3s ease;
-      font-size: 14px;
+      font-size: 12px;
       text-align: center;
-      padding: 0 15px;
+      padding: 5px;
       font-weight: bold;
-      white-space: nowrap;
     }
     
     .nav-button:hover {
-      background-color: #5CB8B2;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background-color: #2a6fbb;
+      transform: scale(1.1);
     }
     
     .nav-button.active {
       background-color: #FF671F;
-      box-shadow: 0 4px 8px rgba(255, 103, 31, 0.3);
+      transform: scale(1.1);
     }
     
     /* Mobile responsive adjustments */
     @media (max-width: 768px) {
-      .nav-buttons {
-        flex-wrap: wrap;
-        justify-content: center;
-        padding: 8px;
-        gap: 8px;
+      .nav-container {
+        bottom: 20px;
+        top: auto;
+        right: 20px;
+        transform: none;
+        flex-direction: row;
       }
       
       .nav-button {
-        min-width: 100px;
-        height: 36px;
-        font-size: 12px;
-        padding: 0 12px;
+        width: 40px;
+        height: 40px;
+        font-size: 10px;
       }
     }
     
@@ -493,7 +485,15 @@
 </head>
 
 <body>
-  
+  <!-- Navigation Buttons -->
+  <div class="nav-container">
+    <button class="nav-button" onclick="scrollToSection('dashboard-section')">Dashboard</button>
+    <button class="nav-button" onclick="scrollToSection('idps-section')">IDPs</button>
+    <button class="nav-button" onclick="scrollToSection('displacement-section')">Displacement</button>
+    <button class="nav-button" onclick="scrollToSection('pathways-section')">Pathways</button>
+    <button class="nav-button" onclick="scrollToSection('returnees-section')">Returnees</button>
+    <button class="nav-button" onclick="scrollToSection('timeline-section')">Timeline</button>
+  </div>
 
   <!-- Dashboard Section -->
   <div id="dashboard-section">
@@ -506,7 +506,6 @@
       <!-- Add this image element to the right side of the title -->
       <img src="./data/IOM_DTM_WHITE.png" alt="IOM Logo" class="title-image">
     </div>
-
 
     <!-- Dashboard Cards Container -->
     <div class="dashboard-cards">
@@ -566,17 +565,7 @@
       </div>
     </div>
   </div>
-<!-- Horizontal Navigation Bar -->
-  <div class="nav-container">
-    <div class="nav-buttons">
-      <button class="nav-button" onclick="scrollToSection('dashboard-section')">Dashboard</button>
-      <button class="nav-button" onclick="scrollToSection('idps-section')">IDPs</button>
-      <button class="nav-button" onclick="scrollToSection('displacement-section')">Displacement</button>
-      <button class="nav-button" onclick="scrollToSection('pathways-section')">Pathways</button>
-      <button class="nav-button" onclick="scrollToSection('returnees-section')">Returnees</button>
-      <button class="nav-button" onclick="scrollToSection('timeline-section')">Timeline</button>
-    </div>
-  </div>
+
   <!-- IDPs Section -->
   <div id="idps-section" class="idps-frame-container">
     <!-- Text Container for Total Number of IDPs by State -->
