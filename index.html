@@ -52,7 +52,23 @@
     body::-webkit-scrollbar-track { background: #f1f1f1; }
     body::-webkit-scrollbar-thumb { background: #888; border-radius: 5px; }
     body::-webkit-scrollbar-thumb:hover { background: #555; }
-
+  .image-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    padding: 20px 0;
+  }
+  
+  .image-gallery img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    transition: transform 0.3s;
+  }
+  
+  .image-gallery img:hover {
+    transform: scale(1.03);
+  }
     /* Navigation Buttons */
     .nav-container {
       position: fixed;
@@ -494,7 +510,16 @@
     <button class="nav-button" onclick="scrollToSection('returnees-section')">Returnees</button>
     <button class="nav-button" onclick="scrollToSection('timeline-section')">Timeline</button>
   </div>
-
+<div class="gallery-container">
+  <h1>Your Title Here</h1>
+  
+  <div class="image-gallery">
+    <img src="image1.jpg" alt="Description 1">
+    <img src="image2.jpg" alt="Description 2">
+    <img src="image3.jpg" alt="Description 3">
+   
+  </div>
+</div>
   <!-- Dashboard Section -->
   <div id="dashboard-section">
     <!-- Title Container with Logo, Title, and Info Card -->
