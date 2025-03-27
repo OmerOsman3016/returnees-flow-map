@@ -53,6 +53,89 @@
     body::-webkit-scrollbar-thumb { background: #888; border-radius: 5px; }
     body::-webkit-scrollbar-thumb:hover { background: #555; }
 
+    /* Navigation Buttons */
+    .nav-container {
+      position: fixed;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .nav-button {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #418FDE;
+      color: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      font-size: 12px;
+      text-align: center;
+      padding: 5px;
+      font-weight: bold;
+    }
+    
+    .nav-button:hover {
+      background-color: #2a6fbb;
+      transform: scale(1.1);
+    }
+    
+    .nav-button.active {
+      background-color: #FF671F;
+      transform: scale(1.1);
+    }
+    
+    /* Mobile responsive adjustments */
+    @media (max-width: 768px) {
+      .nav-container {
+        bottom: 20px;
+        top: auto;
+        right: 20px;
+        transform: none;
+        flex-direction: row;
+      }
+      
+      .nav-button {
+        width: 40px;
+        height: 40px;
+        font-size: 10px;
+      }
+    }
+    
+    /* Add section IDs for navigation */
+    #dashboard-section {
+      scroll-margin-top: 20px;
+    }
+    
+    #idps-section {
+      scroll-margin-top: 20px;
+    }
+    
+    #displacement-section {
+      scroll-margin-top: 20px;
+    }
+    
+    #pathways-section {
+      scroll-margin-top: 20px;
+    }
+    
+    #returnees-section {
+      scroll-margin-top: 20px;
+    }
+    
+    #timeline-section {
+      scroll-margin-top: 20px;
+    }
+
     /* Title container styling */
     #title-container {
       display: flex;
@@ -396,81 +479,95 @@
       body { font-size: 12pt; color: #000; }
       .dashboard-cards, .maps-container { page-break-inside: avoid; }
       footer { display: none; }
+      .nav-container { display: none; }
     }
   </style>
 </head>
 
 <body>
-  <!-- Title Container with Logo, Title, and Info Card -->
-  <div id="title-container">
-    <div id="title">
-      <h1>SUDAN | DISPLACEMENT TRACKING MATRIX - SUDAN MOBILITY</h1>
-      <h2><strong>Two Years of Displacement</strong></h2>
-    </div>
-    <!-- Add this image element to the right side of the title -->
-    <img src="./data/IOM_DTM_WHITE.png" alt="IOM Logo" class="title-image">
+  <!-- Navigation Buttons -->
+  <div class="nav-container">
+    <button class="nav-button" onclick="scrollToSection('dashboard-section')">Dashboard</button>
+    <button class="nav-button" onclick="scrollToSection('idps-section')">IDPs</button>
+    <button class="nav-button" onclick="scrollToSection('displacement-section')">Displacement</button>
+    <button class="nav-button" onclick="scrollToSection('pathways-section')">Pathways</button>
+    <button class="nav-button" onclick="scrollToSection('returnees-section')">Returnees</button>
+    <button class="nav-button" onclick="scrollToSection('timeline-section')">Timeline</button>
   </div>
 
-  <!-- Dashboard Cards Container -->
-  <div class="dashboard-cards">
-    <!-- Card 1: Internally Displaced Persons -->
-    <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
-      <div class="card-content">
-        <h2>11,585,384</h2>
-        <p>Internally Displaced </p>
+  <!-- Dashboard Section -->
+  <div id="dashboard-section">
+    <!-- Title Container with Logo, Title, and Info Card -->
+    <div id="title-container">
+      <div id="title">
+        <h1>SUDAN | DISPLACEMENT TRACKING MATRIX - SUDAN MOBILITY</h1>
+        <h2><strong>Two Years of Displacement</strong></h2>
       </div>
-      <div class="card-image">
-        <img src="./data/Internally displaced.png" alt="IDP Icon" class="card-icon">
-      </div>
+      <!-- Add this image element to the right side of the title -->
+      <img src="./data/IOM_DTM_WHITE.png" alt="IOM Logo" class="title-image">
     </div>
 
-    <!-- Card 2: Returnees -->
-    <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
-      <div class="card-content">
-        <h2>396,738</h2>
-        <p>Returnees</p>
+    <!-- Dashboard Cards Container -->
+    <div class="dashboard-cards">
+      <!-- Card 1: Internally Displaced Persons -->
+      <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
+        <div class="card-content">
+          <h2>11,585,384</h2>
+          <p>Internally Displaced </p>
+        </div>
+        <div class="card-image">
+          <img src="./data/Internally displaced.png" alt="IDP Icon" class="card-icon">
+        </div>
       </div>
-      <div class="card-image">
-        <img src="./data/Returnees.png" alt="Returnee Icon" class="card-icon">
-      </div>
-    </div>
 
-    <!-- Card 3: Crossing Border -->
-    <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
-      <div class="card-content">
-        <h2>3,934,086</h2>
-        <p> Crossing Border</p>
+      <!-- Card 2: Returnees -->
+      <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
+        <div class="card-content">
+          <h2>396,738</h2>
+          <p>Returnees</p>
+        </div>
+        <div class="card-image">
+          <img src="./data/Returnees.png" alt="Returnee Icon" class="card-icon">
+        </div>
       </div>
-      <div class="card-image">
-        <img src="./data/Crossing Border.png" alt="Border Crossing Icon" class="card-icon">
-      </div>
-    </div>
 
-    <!-- Card 4: Migrants Affected -->
-    <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
-      <div class="card-content">
-        <h2>400,000</h2>
-        <p>Migrants Affected</p>
+      <!-- Card 3: Crossing Border -->
+      <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
+        <div class="card-content">
+          <h2>3,934,086</h2>
+          <p> Crossing Border</p>
+        </div>
+        <div class="card-image">
+          <img src="./data/Crossing Border.png" alt="Border Crossing Icon" class="card-icon">
+        </div>
       </div>
-      <div class="card-image">
-        <img src="./data/Migrants Affected.png" alt="Migrant Icon" class="card-icon">
-      </div>
-    </div>
 
-    <!-- Card 5: Locations Covered -->
-    <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
-      <div class="card-content">
-        <h2>10,285</h2>
-        <p>Locations Covered</p>
+      <!-- Card 4: Migrants Affected -->
+      <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
+        <div class="card-content">
+          <h2>400,000</h2>
+          <p>Migrants Affected</p>
+        </div>
+        <div class="card-image">
+          <img src="./data/Migrants Affected.png" alt="Migrant Icon" class="card-icon">
+        </div>
       </div>
-      <div class="card-image">
-        <img src="./data/Location.png" alt="Location Icon" class="card-icon">
+
+      <!-- Card 5: Locations Covered -->
+      <div class="dashboard-card" style="background-color: #82C4FF; color: #fff;">
+        <div class="card-content">
+          <h2>10,285</h2>
+          <p>Locations Covered</p>
+        </div>
+        <div class="card-image">
+          <img src="./data/Location.png" alt="Location Icon" class="card-icon">
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- IDPs Frame Container -->
-  <div class="idps-frame-container">
+  <!-- IDPs Section -->
+  <div id="idps-section" class="idps-frame-container">
     <!-- Text Container for Total Number of IDPs by State -->
     <div id="idps-text-container">
       <h2>CONTEXT</h2>
@@ -497,17 +594,16 @@
     </div>
   </div>
   
-
-  <!-- Pie Chart Map Showing Displacement Proportions -->
-  <div class="maps-container">
+  <!-- Displacement Section -->
+  <div id="displacement-section" class="maps-container">
     <div id="map-container">
       <h2>Displacement Proportions by State</h2>
       <div id="map5"></div>
     </div>
   </div>
 
-  <!-- IDPs Pathways Across Sudan Section -->
-  <div id="map-container">
+  <!-- Pathways Section -->
+  <div id="pathways-section" id="map-container">
     <h2 id="map-title-2">IDPs Pathways Across Sudan</h2>
     <div id="map2"></div>
   </div>
@@ -520,8 +616,8 @@
     </div>
   </div>
 
-  <!-- Total Number of Returnees by State Section -->
-  <div class="idps-frame-container">
+  <!-- Returnees Section -->
+  <div id="returnees-section" class="idps-frame-container">
     <!-- Map Container for Total Number of Returnees by State -->
     <div id="map-container-4">
       <h2 id="map-title-4">Total Number of Returnees by State</h2>
@@ -559,13 +655,10 @@
                 <td>River Nile (38%), Red Sea (34%), White Nile (18%)</td>
             </tr>
         </table>
-    </section>
     
-    <section>
         <h2>Conclusion</h2>
         <p>These movements highlight the ongoing challenges faced by displaced populations in Sudan, as well as the efforts to track and support their return to stability. The data underscores the scale of the crisis and the need for continued humanitarian assistance.</p>
         <p>With 13.6 million people displaced (11.6 million internally and 2 million externally), Sudan is currently experiencing the world's largest displacement crisis, particularly concentrated in the Darfur region which has suffered decades of conflict.</p>
-    </section>
     </div>
   </div>
 
@@ -577,8 +670,8 @@
     </div>
   </div>
 
-  <!-- Timeline and Map Container -->
-  <div id="timeline-map-container">
+  <!-- Timeline Section -->
+  <div id="timeline-section" id="timeline-map-container">
     <!-- Timeline Graph Container -->
     <div id="timeline-container">
       <h2>Moblity Over Time (2023 - 2025)</h2>
@@ -611,6 +704,45 @@
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
 
   <script>
+    // Navigation functions
+    function scrollToSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+        
+        // Update active button
+        document.querySelectorAll('.nav-button').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
+      }
+    }
+    
+    // Highlight active section in navigation as user scrolls
+    window.addEventListener('scroll', function() {
+      const sections = ['dashboard-section', 'idps-section', 'displacement-section', 
+                       'pathways-section', 'returnees-section', 'timeline-section'];
+      const navButtons = document.querySelectorAll('.nav-button');
+      
+      let currentSection = '';
+      sections.forEach(section => {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top <= 100 && rect.bottom >= 100) {
+            currentSection = section;
+          }
+        }
+      });
+      
+      navButtons.forEach(button => {
+        button.classList.remove('active');
+        if (button.textContent.toLowerCase().includes(currentSection.replace('-section', ''))) {
+          button.classList.add('active');
+        }
+      });
+    });
+
     // Define Mapbox custom layers
     const mapboxCustom1 = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
         attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
