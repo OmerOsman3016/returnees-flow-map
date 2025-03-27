@@ -53,22 +53,34 @@
     body::-webkit-scrollbar-thumb { background: #888; border-radius: 5px; }
     body::-webkit-scrollbar-thumb:hover { background: #555; }
 
-    /* Navigation Buttons */
+
+    /* Horizontal Navigation Bar */
     .nav-container {
       position: fixed;
-      top: 80%;
-      right: 20px;
-      transform: translateY(-50%);
+      top: 0;
+      left: 0;
+      right: 0;
       z-index: 1000;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 10px 0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .nav-buttons {
+      display: flex;
       gap: 10px;
+      max-width: 1200px;
+      width: 100%;
+      padding: 0 20px;
+      overflow-x: auto;
     }
     
     .nav-button {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
+      min-width: 120px;
+      height: 50px;
+      border-radius: 30px;
       background-color: #418FDE;
       color: white;
       border: none;
@@ -76,39 +88,48 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
       transition: all 0.3s ease;
-      font-size: 12px;
+      font-size: 14px;
       text-align: center;
-      padding: 5px;
+      padding: 0 20px;
       font-weight: bold;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     
     .nav-button:hover {
       background-color: #2a6fbb;
-      transform: scale(1.1);
+      transform: translateY(-2px);
     }
     
     .nav-button.active {
       background-color: #FF671F;
-      transform: scale(1.1);
+      box-shadow: 0 4px 8px rgba(255, 103, 31, 0.3);
+    }
+    
+    /* Adjust title container margin to account for fixed nav */
+    #title-container {
+      margin-top: 80px;
     }
     
     /* Mobile responsive adjustments */
     @media (max-width: 768px) {
-      .nav-container {
-        bottom: 20px;
-        top: auto;
-        right: 20px;
-        transform: none;
-        flex-direction: row;
+      .nav-buttons {
+        padding: 0 10px;
+        gap: 8px;
       }
       
       .nav-button {
-        width: 40px;
+        min-width: 100px;
         height: 40px;
-        font-size: 10px;
+        font-size: 12px;
+        padding: 0 15px;
       }
+      
+      #title-container {
+        margin-top: 70px;
+      }
+    }
     }
     
     /* Add section IDs for navigation */
