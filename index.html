@@ -12,6 +12,132 @@
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
   <style>
+    /* Loading spinner styles */
+    #loading-spinner {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.9);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease-out;
+    }
+    
+    .spinner {
+      width: 80px;
+      height: 80px;
+      position: relative;
+      margin-bottom: 20px;
+    }
+    
+    .spinner-dot {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: #418FDE;
+      border-radius: 50%;
+      animation: spinner-animation 2s infinite ease-in-out;
+    }
+    
+    .spinner-dot:nth-child(1) {
+      top: 0;
+      left: 32px;
+      animation-delay: 0s;
+    }
+    
+    .spinner-dot:nth-child(2) {
+      top: 8px;
+      left: 8px;
+      animation-delay: -0.4s;
+    }
+    
+    .spinner-dot:nth-child(3) {
+      top: 32px;
+      left: 0;
+      animation-delay: -0.8s;
+    }
+    
+    .spinner-dot:nth-child(4) {
+      top: 56px;
+      left: 8px;
+      animation-delay: -1.2s;
+    }
+    
+    .spinner-dot:nth-child(5) {
+      top: 64px;
+      left: 32px;
+      animation-delay: -1.6s;
+    }
+    
+    .spinner-dot:nth-child(6) {
+      top: 56px;
+      left: 56px;
+      animation-delay: -2s;
+    }
+    
+    .spinner-dot:nth-child(7) {
+      top: 32px;
+      left: 64px;
+      animation-delay: -2.4s;
+    }
+    
+    .spinner-dot:nth-child(8) {
+      top: 8px;
+      left: 56px;
+      animation-delay: -2.8s;
+    }
+    
+    @keyframes spinner-animation {
+      0%, 100% {
+        transform: scale(0.1);
+        opacity: 0.5;
+      }
+      50% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    .loading-text {
+      font-size: 18px;
+      color: #418FDE;
+      font-weight: bold;
+      margin-top: 20px;
+      text-align: center;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 0.6;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+    
+    .loading-progress {
+      width: 200px;
+      height: 4px;
+      background: #e0e0e0;
+      border-radius: 2px;
+      margin-top: 15px;
+      overflow: hidden;
+    }
+    
+    .loading-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #418FDE, #82C4FF);
+      transition: width 0.3s ease;
+      border-radius: 2px;
+    }
+
     /* General body styling */
     body {
       margin: 20px;
@@ -552,6 +678,21 @@
         padding: 10px;
         font-size: 16px;
       }
+      
+      /* Adjust loading spinner for mobile */
+      .spinner {
+        width: 60px;
+        height: 60px;
+      }
+      
+      .spinner-dot {
+        width: 12px;
+        height: 12px;
+      }
+      
+      .loading-text {
+        font-size: 16px;
+      }
     }
 
     @media print {
@@ -564,6 +705,24 @@
 </head>
 
 <body>
+  <!-- Loading Spinner -->
+  <div id="loading-spinner">
+    <div class="spinner">
+      <div class="spinner-dot"></div>
+      <div class="spinner-dot"></div>
+      <div class="spinner-dot"></div>
+      <div class="spinner-dot"></div>
+      <div class="spinner-dot"></div>
+      <div class="spinner-dot"></div>
+      <div class="spinner-dot"></div>
+      <div class="spinner-dot"></div>
+    </div>
+    <div class="loading-text">Loading Displacement Data...</div>
+    <div class="loading-progress">
+      <div class="loading-progress-bar" id="progress-bar"></div>
+    </div>
+  </div>
+
   <!-- Navigation Buttons -->
   <div class="nav-container">
     <button class="nav-button" onclick="scrollToSection('dashboard-section')">Overview</button>
@@ -888,6 +1047,37 @@ movements into neighbouring countries.
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
 
   <script>
+    // Loading spinner functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Simulate loading progress
+      let progress = 0;
+      const progressBar = document.getElementById('progress-bar');
+      const loadingSpinner = document.getElementById('loading-spinner');
+      const loadingText = document.querySelector('.loading-text');
+      
+      // Update progress bar
+      const progressInterval = setInterval(function() {
+        progress += Math.random() * 10;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(progressInterval);
+          
+          // Change text when loading is complete
+          loadingText.textContent = 'Almost there...';
+          
+          // Add a small delay before hiding to ensure everything is loaded
+          setTimeout(function() {
+            loadingSpinner.style.opacity = '0';
+            setTimeout(function() {
+              loadingSpinner.style.display = 'none';
+              document.body.style.animation = 'fadeIn 1.5s ease-in-out forwards';
+            }, 500);
+          }, 500);
+        }
+        progressBar.style.width = progress + '%';
+      }, 200);
+    });
+
     // Slideshow functionality
     let slideIndex = 1;
     showSlides(slideIndex);
