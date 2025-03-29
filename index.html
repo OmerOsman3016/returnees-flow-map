@@ -163,7 +163,7 @@
       text-align: center;
       padding: 5px;
       font-weight: bold;
-       opacity: 1;
+      opacity: 1;
     }
     
     .nav-button:hover {
@@ -174,7 +174,6 @@
     .nav-button.active {
       background-color: #FF671F;
       transform: scale(1.1);
-     
     }
     
     /* Mobile responsive adjustments */
@@ -195,26 +194,11 @@
     }
     
     /* Add section IDs for navigation */
-    #dashboard-section {
-      scroll-margin-top: 20px;
-    }
-    
-    #idps-section {
-      scroll-margin-top: 20px;
-    }
-    
-    #displacement-section {
-      scroll-margin-top: 20px;
-    }
-    
-    #pathways-section {
-      scroll-margin-top: 20px;
-    }
-    
-    #returnees-section {
-      scroll-margin-top: 20px;
-    }
-    
+    #dashboard-section,
+    #idps-section,
+    #displacement-section,
+    #pathways-section,
+    #returnees-section,
     #timeline-section {
       scroll-margin-top: 20px;
     }
@@ -437,7 +421,7 @@
       border-radius: 8px;
     }
 
-   /* Timeline container styling */
+    /* Timeline container styling */
     #timeline-map-container {
       flex: 1;
       display: flex;
@@ -456,30 +440,12 @@
       border-radius: 8px;
       padding: 10px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      height: 300px; /* Further reduced height */
+      height: 300px;
     }
 
     #timelineChart {
       width: 100% !important;
-      height: 250px !important; /* Adjusted chart height */
-    }
-
- 
-
-    /* Footer styling */
-    footer {
-      background-color: #418FDE;
-      color: #FFFFFF;
-      text-align: center;
-      padding: 10px;
-      margin-top: 20px;
-      font-size: 12px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      opacity: 0;
-      transform: translateY(20px);
-      animation: slideUp 0.8s ease-in-out forwards;
-      animation-delay: 1.4s;
+      height: 250px !important;
     }
 
     /* Mobility in Sudan Text Container */
@@ -524,6 +490,7 @@
       border-radius: 8px;
       margin: 20px 0;
     }
+    
     .legend {
       background: white;
       padding: 10px;
@@ -536,11 +503,10 @@
       height: 600px;
       border-radius: 8px;
       margin: 20px 0;
-      margin-top: 20px; /* Adjust this value as needed */
-       display: flex;
-  flex-direction: column;
-  gap: 30px; /* Space between all child elements */
-      
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
     }
 
     /* Responsive design for smaller screens */
@@ -619,7 +585,6 @@
         <img src="./data/image10.jpg" alt="Displacement Image 6"> 
       </div>
       
-  
       <!-- Next and previous buttons -->
       <a class="prev" onclick="plusSlides(-1)">❮</a>
       <a class="next" onclick="plusSlides(1)">❯</a>
@@ -719,49 +684,49 @@
     </div>
   </div>
   
-<!-- Displacement Section -->
-<div id="displacement-section" class="maps-container">
-  <div id="map-container">
-    <h2>Displacement Proportions by State</h2>
-    <div id="mobility-text-container">
-      
-      <p>
-        This map visualizes the proportion of each state's population that has been displaced by the ongoing conflict. The pie chart markers show at a glance which states have been most severely affected, with the orange segments representing displaced populations and blue segments showing remaining residents.
-      </p>
-      <p>
-        <strong>Key insights from the map visualization:</strong>
-        <ul>
-          <li><strong>North Darfur stands out</strong> with the highest displacement proportion (66%) - nearly two-thirds of its population has been forced to flee</li>
-          <li><strong>South Darfur shows</strong> the largest absolute numbers (over 2 million displaced) despite being a smaller proportion (53%) of its larger population</li>
-          <li><strong>Khartoum's displacement</strong> (3.5 million people) represents 38% of the state's population, visible through the relative sizes of the pie segments</li>
-          <li><strong>Northern states</strong> like Northern and Red Sea show much smaller displacement proportions (1-2%), visible through their predominantly blue pie charts</li>
-        </ul>
-      </p>
-      <p>
-        <strong>How to interpret the map symbols:</strong>
-        <ul>
-          <li>Each pie chart is scaled to the state's total population size</li>
-          <li>Orange segments show displaced populations</li>
-          <li>Blue segments show non-displaced populations</li>
-          <li>The percentage label in each pie shows the exact displacement proportion</li>
-          <li>Larger pies indicate states with bigger total populations</li>
-        </ul>
-      </p>
-      <p>
-        The spatial distribution reveals clear patterns - states in Darfur and Khartoum show the most severe displacement, while northern and eastern states have been less affected. This visualization helps humanitarian actors quickly identify where needs are greatest and how displacement is impacting different regions proportionally.
-      </p>
-      <p>
-        <strong>Map interaction tips:</strong>
-        <ul>
-          <li>Click on any pie chart to see detailed state statistics</li>
-          <li>Compare states by both segment size (proportion) and overall pie size (total population)</li>
-          <li>Note the concentration of large orange segments in western Sudan</li>
-        </ul>
-      </p>
+  <!-- Displacement Section -->
+  <div id="displacement-section" class="maps-container">
+    <div id="map-container">
+      <h2>Displacement Proportions by State</h2>
+      <div id="mobility-text-container">
+        <p>
+          This map visualizes the proportion of each state's population that has been displaced by the ongoing conflict. The pie chart markers show at a glance which states have been most severely affected, with the orange segments representing displaced populations and blue segments showing remaining residents.
+        </p>
+        <p>
+          <strong>Key insights from the map visualization:</strong>
+          <ul>
+            <li><strong>North Darfur stands out</strong> with the highest displacement proportion (66%) - nearly two-thirds of its population has been forced to flee</li>
+            <li><strong>South Darfur shows</strong> the largest absolute numbers (over 2 million displaced) despite being a smaller proportion (53%) of its larger population</li>
+            <li><strong>Khartoum's displacement</strong> (3.5 million people) represents 38% of the state's population, visible through the relative sizes of the pie segments</li>
+            <li><strong>Northern states</strong> like Northern and Red Sea show much smaller displacement proportions (1-2%), visible through their predominantly blue pie charts</li>
+          </ul>
+        </p>
+        <p>
+          <strong>How to interpret the map symbols:</strong>
+          <ul>
+            <li>Each pie chart is scaled to the state's total population size</li>
+            <li>Orange segments show displaced populations</li>
+            <li>Blue segments show non-displaced populations</li>
+            <li>The percentage label in each pie shows the exact displacement proportion</li>
+            <li>Larger pies indicate states with bigger total populations</li>
+          </ul>
+        </p>
+        <p>
+          The spatial distribution reveals clear patterns - states in Darfur and Khartoum show the most severe displacement, while northern and eastern states have been less affected. This visualization helps humanitarian actors quickly identify where needs are greatest and how displacement is impacting different regions proportionally.
+        </p>
+        <p>
+          <strong>Map interaction tips:</strong>
+          <ul>
+            <li>Click on any pie chart to see detailed state statistics</li>
+            <li>Compare states by both segment size (proportion) and overall pie size (total population)</li>
+            <li>Note the concentration of large orange segments in western Sudan</li>
+          </ul>
+        </p>
+      </div>
+      <div id="map5"></div>
     </div>
-    <div id="map5"></div>
   </div>
-</div>
+  
   <!-- Pathways Section -->
   <div id="pathways-section" id="map-container">
     <h2 id="map-title-2">IDPs Pathways Across Sudan</h2>
@@ -797,7 +762,6 @@
   <!-- Country Circle Propagation Map -->
   <div class="maps-container">
     <div id="map-container">
-      
       <div id="mobility-text-container">
         <h2>Displacement to Neighboring Countries</h2>
         <p>
@@ -830,39 +794,39 @@
 
     <!-- Text Container for Mobility in Sudan -->
     <div id="mobility-text-container">
-       <h2>Returns and Cross-Border Movements</h2>
-        <p>Since December, DTM teams monitored 396,738 individuals returning to their places of origin in Sudan:</p>
-        
-        <h3>Primary Return Destinations</h3>
-        <ul>
-            <li><strong>Aj Jazirah</strong>: 66% of returnees</li>
-            <li><strong>Sennar</strong>: 29% of returnees</li>
-            <li><strong>Khartoum</strong>: 5% of returnees</li>
-        </ul>
-        
-        <h3>Flow Monitoring of Returnees</h3>
-        <table>
-            <tr>
-                <th>Return Destination</th>
-                <th>Primary Origins</th>
-            </tr>
-            <tr>
-                <td>Aj Jazirah</td>
-                <td>Gedaref (44%), Sennar (21%), Kassala (11%)</td>
-            </tr>
-            <tr>
-                <td>Sennar</td>
-                <td>Gedaref (38%), Red Sea (19%), Blue Nile (18%)</td>
-            </tr>
-            <tr>
-                <td>Khartoum</td>
-                <td>River Nile (38%), Red Sea (34%), White Nile (18%)</td>
-            </tr>
-        </table>
-    
-        <h2>Conclusion</h2>
-        <p>These movements highlight the ongoing challenges faced by displaced populations in Sudan, as well as the efforts to track and support their return to stability. The data underscores the scale of the crisis and the need for continued humanitarian assistance.</p>
-        <p>With 13.6 million people displaced (11.6 million internally and 2 million externally), Sudan is currently experiencing the world's largest displacement crisis, particularly concentrated in the Darfur region which has suffered decades of conflict.</p>
+      <h2>Returns and Cross-Border Movements</h2>
+      <p>Since December, DTM teams monitored 396,738 individuals returning to their places of origin in Sudan:</p>
+      
+      <h3>Primary Return Destinations</h3>
+      <ul>
+        <li><strong>Aj Jazirah</strong>: 66% of returnees</li>
+        <li><strong>Sennar</strong>: 29% of returnees</li>
+        <li><strong>Khartoum</strong>: 5% of returnees</li>
+      </ul>
+      
+      <h3>Flow Monitoring of Returnees</h3>
+      <table>
+        <tr>
+          <th>Return Destination</th>
+          <th>Primary Origins</th>
+        </tr>
+        <tr>
+          <td>Aj Jazirah</td>
+          <td>Gedaref (44%), Sennar (21%), Kassala (11%)</td>
+        </tr>
+        <tr>
+          <td>Sennar</td>
+          <td>Gedaref (38%), Red Sea (19%), Blue Nile (18%)</td>
+        </tr>
+        <tr>
+          <td>Khartoum</td>
+          <td>River Nile (38%), Red Sea (34%), White Nile (18%)</td>
+        </tr>
+      </table>
+  
+      <h2>Conclusion</h2>
+      <p>These movements highlight the ongoing challenges faced by displaced populations in Sudan, as well as the efforts to track and support their return to stability. The data underscores the scale of the crisis and the need for continued humanitarian assistance.</p>
+      <p>With 13.6 million people displaced (11.6 million internally and 2 million externally), Sudan is currently experiencing the world's largest displacement crisis, particularly concentrated in the Darfur region which has suffered decades of conflict.</p>
     </div>
   </div>
 
@@ -1463,6 +1427,7 @@
       return div;
     };
     legend3.addTo(map3);
+    
     // Initialize Timeline Graph
     const ctx = document.getElementById('timelineChart').getContext('2d');
     const gradient = ctx.createLinearGradient(0, 0, 0, 200);
@@ -1567,7 +1532,6 @@
         }
       }
     });
-
      
     // Initialize the fourth map
     const map4 = L.map('map4').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
@@ -1695,10 +1659,6 @@
     };
     legend4.addTo(map4);
 
-    // Initialize the country circle map
-      // Previous script content remains the same until the country circle map section
-    // ...
-
     // Initialize the country circle map with layer controls
     const countryCircleMap = L.map('country-circle-map').setView([16, 30], 5);
     
@@ -1737,7 +1697,6 @@
       "Stamen Toner": stamenTonerCountry,
       "Mapbox Custom": mapboxCustomCountry
     };
-
 
     // Country data with coordinates and volume
     const countryData = [
