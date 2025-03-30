@@ -634,6 +634,26 @@
       flex-direction: column;
       gap: 30px;
     }
+
+    /* Drill-down back button */
+    .drilldown-back {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 1000;
+      background: #418FDE;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: none;
+    }
+
+    .drilldown-back:hover {
+      background: #2a6fbb;
+    }
+    
     /* Footer styling */
     footer {
       background-color: #418FDE;
@@ -861,6 +881,7 @@ movements into neighbouring countries.
     <!-- Map Container for Total Number of IDPs by State -->
     <div id="map-container-3">
       <h2 id="map-title-3">Total Number of IDPs by State</h2>
+      <button id="drilldown-back" class="drilldown-back">← Back to States</button>
       <div id="map3"></div>
     </div>
   </div>
@@ -1535,6 +1556,113 @@ movements into neighbouring countries.
 
     L.control.layers(baseLayers3).addTo(map3);
 
+    // Variables for drill-down functionality
+    let stateMarkersLayer = L.layerGroup();
+    let districtMarkersLayer = L.layerGroup();
+    let currentState = null;
+    const drilldownBackBtn = document.getElementById('drilldown-back');
+
+    // Function to load district data for a state
+    function loadDistrictData(stateName) {
+      // Show loading indicator
+      document.getElementById('map-title-3').textContent = `Loading districts for ${stateName}...`;
+      
+      // In a real application, you would load district data from your server or CSV file
+      // For this example, we'll use a mock data structure
+      Papa.parse('./data/districts_data.csv', {
+        download: true,
+        header: true,
+        dynamicTyping: true,
+        skipEmptyLines: true,
+        complete: (results) => {
+          // Filter districts for the selected state
+          const stateDistricts = results.data.filter(d => d.state === stateName);
+          
+          // Clear previous district markers
+          districtMarkersLayer.clearLayers();
+          
+          // Find the maximum total_idps value for normalization
+          const maxTotalIdps = Math.max(...stateDistricts.map(d => d.total_idps));
+          
+          // Add markers for each district
+          stateDistricts.forEach(district => {
+            const baseRadius = 8 + (district.total_idps / maxTotalIdps) * 20;
+            
+            const marker = L.circleMarker([district.lat, district.lon], {
+              radius: baseRadius,
+              fillColor: '#FF671F', // Different color for districts
+              color: '#fff',
+              weight: 1,
+              opacity: 1,
+              fillOpacity: 0.7
+            });
+            
+            // Add animation
+            animateCircleMarker(marker, baseRadius);
+            
+            // Add popup
+            marker.bindPopup(`
+              <b>District:</b> ${district.district}<br/>
+              <b>Total IDPs:</b> ${district.total_idps.toLocaleString()}
+            `);
+            
+            // Add tooltip
+            marker.bindTooltip(`
+              <b>${district.district}</b><br/>
+              <b>Total IDPs:</b> ${district.total_idps.toLocaleString()}
+            `);
+            
+            // Add to district layer
+            districtMarkersLayer.addLayer(marker);
+          });
+          
+          // Add district layer to map
+          map3.addLayer(districtMarkersLayer);
+          
+          // Update title
+          document.getElementById('map-title-3').textContent = `IDPs by District in ${stateName}`;
+          
+          // Show back button
+          drilldownBackBtn.style.display = 'block';
+          
+          // Store current state
+          currentState = stateName;
+          
+          // Fit bounds to show all districts
+          if (stateDistricts.length > 0) {
+            const bounds = L.latLngBounds(stateDistricts.map(d => [d.lat, d.lon]));
+            map3.fitBounds(bounds, { padding: [50, 50] });
+          }
+        },
+        error: (error) => {
+          console.error('Error loading district data:', error);
+          alert('Failed to load district data. Please try again.');
+          document.getElementById('map-title-3').textContent = 'Total Number of IDPs by State';
+        }
+      });
+    }
+
+    // Back button functionality
+    drilldownBackBtn.addEventListener('click', function() {
+      // Remove district layer
+      map3.removeLayer(districtMarkersLayer);
+      
+      // Add state layer back
+      map3.addLayer(stateMarkersLayer);
+      
+      // Reset view
+      map3.setView([16, 30], L.Browser.mobile ? 3 : 5.5);
+      
+      // Update title
+      document.getElementById('map-title-3').textContent = 'Total Number of IDPs by State';
+      
+      // Hide back button
+      drilldownBackBtn.style.display = 'none';
+      
+      // Clear current state
+      currentState = null;
+    });
+
     // Parse CSV data and create animated markers for the third map
     Papa.parse('./data/total_idps.csv', {
       download: true,
@@ -1586,12 +1714,22 @@ movements into neighbouring countries.
             // Animate the marker
             animateCircleMarker(marker, baseRadius);
 
+            // Add click handler for drill-down
+            marker.on('click', function(e) {
+              // Remove state layer
+              map3.removeLayer(stateMarkersLayer);
+              
+              // Load district data for this state
+              loadDistrictData(feature.properties.state);
+            });
+
             return marker;
           },
           onEachFeature: (feature, layer) => {
             const popupContent = `
               <b>State:</b> ${feature.properties.state}<br/>
-              <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}
+              <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}<br/>
+              <small>Click to view districts</small>
             `;
             layer.bindPopup(popupContent);
 
@@ -1600,7 +1738,10 @@ movements into neighbouring countries.
               <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}`;
             layer.bindTooltip(tooltipContent);
           }
-        }).addTo(map3);
+        }).addTo(stateMarkersLayer);
+
+        // Add state markers layer to map
+        map3.addLayer(stateMarkersLayer);
       }
     });
 
@@ -1628,6 +1769,9 @@ movements into neighbouring countries.
         <div style="display: flex; align-items: center; margin-top: 5px;">
           <div style="width: 30px; height: 30px; background: #418FDE; border-radius: 50%; margin-right: 10px;"></div>
           <span style="font-size:12px;"> > 1,000,001 IDPs</span>
+        </div>
+        <div style="margin-top: 10px; font-size:12px; color: #666;">
+          Click on a state to view district-level data
         </div>
       `;
       return div;
