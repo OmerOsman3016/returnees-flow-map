@@ -634,6 +634,26 @@
       flex-direction: column;
       gap: 30px;
     }
+    
+    /* Arrow path styles */
+    .arrow-path {
+      stroke: #FF671F;
+      stroke-width: 2;
+      fill: none;
+      stroke-dasharray: 5, 5;
+      animation: dash 10s linear infinite;
+    }
+    
+    @keyframes dash {
+      to {
+        stroke-dashoffset: -100;
+      }
+    }
+    
+    .arrow-head {
+      fill: #FF671F;
+    }
+
     /* Footer styling */
     footer {
       background-color: #418FDE;
@@ -2063,6 +2083,80 @@ movements into neighbouring countries.
       `);
     });
 
+    // Add arrows showing displacement patterns
+    const arrowLayer = L.layerGroup().addTo(map5);
+    
+    // Define major displacement routes with coordinates
+    const displacementRoutes = [
+      // From Khartoum to major destinations
+      { from: [15.501, 32.560], to: [14.900, 33.434], label: "3.5M to Aj Jazirah" },
+      { from: [15.501, 32.560], to: [13.550, 33.600], label: "1.2M to Sennar" },
+      { from: [15.501, 32.560], to: [13.450, 32.500], label: "0.8M to White Nile" },
+      
+      // From Darfur regions to Chad
+      { from: [12.900, 23.470], to: [15.4542, 18.7322], label: "500K to Chad" },
+      { from: [11.783, 24.883], to: [15.4542, 18.7322], label: "400K to Chad" },
+      { from: [12.900, 22.466], to: [15.4542, 18.7322], label: "300K to Chad" },
+      
+      // From South Darfur to South Sudan
+      { from: [11.783, 24.883], to: [6.877, 31.307], label: "200K to South Sudan" },
+      
+      // From Khartoum to Egypt
+      { from: [15.501, 32.560], to: [26.8206, 30.8025], label: "1.5M to Egypt" }
+    ];
+
+    // Function to create curved arrow between two points
+    function createCurvedArrow(from, to, label) {
+      // Calculate midpoint for curve
+      const midLat = (from[0] + to[0]) / 2;
+      const midLng = (from[1] + to[1]) / 2;
+      
+      // Adjust midpoint to create a curve
+      const curveFactor = 0.3; // Adjust this to change the curve amount
+      const curveLat = midLat + curveFactor * (to[1] - from[1]);
+      const curveLng = midLng - curveFactor * (to[0] - from[0]);
+      
+      // Create SVG path for curved arrow
+      const path = `M ${from[1]} ${from[0]} Q ${curveLng} ${curveLat}, ${to[1]} ${to[0]}`;
+      
+      // Create arrowhead at destination
+      const arrowhead = L.marker([to[0], to[1]], {
+        icon: L.divIcon({
+          html: `
+            <svg width="20" height="20" viewBox="0 0 20 20">
+              <path d="M0,10 L20,0 L20,20 Z" fill="#FF671F" />
+            </svg>
+          `,
+          iconSize: [20, 20],
+          className: 'arrow-head-marker'
+        })
+      }).addTo(arrowLayer);
+      
+      // Create curved path
+      const arrowPath = L.polyline([from, [curveLat, curveLng], to], {
+        color: '#FF671F',
+        weight: 2,
+        dashArray: '5, 5',
+        className: 'arrow-path'
+      }).addTo(arrowLayer);
+      
+      // Add label at midpoint
+      const labelMarker = L.marker([curveLat, curveLng], {
+        icon: L.divIcon({
+          html: `<div style="background: white; padding: 2px 5px; border-radius: 3px; border: 1px solid #FF671F; font-size: 12px;">${label}</div>`,
+          iconSize: [100, 20],
+          className: 'arrow-label'
+        })
+      }).addTo(arrowLayer);
+      
+      return { path: arrowPath, arrowhead, label: labelMarker };
+    }
+
+    // Add all displacement routes as arrows
+    const arrows = displacementRoutes.map(route => 
+      createCurvedArrow(route.from, route.to, route.label)
+    );
+
     // Add legend
     const legend5 = L.control({position: 'bottomright'});
     legend5.onAdd = () => {
@@ -2080,6 +2174,13 @@ movements into neighbouring countries.
             <circle cx="10" cy="10" r="10" fill="#418FDE"/>
           </svg>
           Non-Displaced Population
+        </div>
+        <div style="display: flex; align-items: center; margin: 5px 0;">
+          <svg width="20" height="20">
+            <path d="M0,10 L20,10" stroke="#FF671F" stroke-width="2" stroke-dasharray="5,5"/>
+            <path d="M15,5 L20,10 L15,15 Z" fill="#FF671F"/>
+          </svg>
+          Displacement Pathways
         </div>
         <p>All pie charts are the same size<br>showing proportion displaced</p>
       `;
