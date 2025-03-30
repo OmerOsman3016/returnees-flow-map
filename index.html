@@ -634,14 +634,6 @@
       flex-direction: column;
       gap: 30px;
     }
-    
-    /* Arrow styles for country circle map */
-    .arrow-head {
-      fill: #5CB8B2;
-      stroke: #5CB8B2;
-      stroke-width: 1;
-    }
-    
     /* Footer styling */
     footer {
       background-color: #418FDE;
@@ -954,12 +946,12 @@ movements into neighbouring countries.
       <div id="mobility-text-container">
         <h2>Displacement to Neighboring Countries</h2>
         <p>
-          The map below illustrates the significant displacement of Sudanese populations to neighboring countries since the conflict began. The arrows show the direction of movement, with circle size representing the relative number of displaced persons in each country.
+          The map below illustrates the significant displacement of Sudanese populations to neighboring countries since the conflict began. The size of each circle represents the relative number of displaced persons in each country, with the largest flows going to Egypt, Chad, and South Sudan. This external displacement has created regional humanitarian challenges, with over 3.9 million Sudanese refugees now living in neighboring countries.
         </p>
         <p>
           <strong>Key observations:</strong>
           <ul>
-            <li><strong>Egypt</strong> has received the largest number of displaced persons (1.5 million)</li>
+            <li><strong>Egypt</strong> has received the largest number of displaced persons (1.5 million), representing 38% of all cross-border displacement</li>
             <li><strong>Chad</strong> hosts 767,365 Sudanese refugees, primarily from Darfur region</li>
             <li><strong>South Sudan</strong> has received 341,909 returnees and refugees despite its own humanitarian challenges</li>
             <li>Smaller but significant flows have gone to Ethiopia (88,001), Libya (105,721), and Central African Republic (35,376)</li>
@@ -1053,8 +1045,6 @@ movements into neighbouring countries.
   <script src="https://unpkg.com/papaparse@5.3.0/papaparse.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
-  <!-- Add arrowheads functionality -->
-  <script src="https://unpkg.com/leaflet-arrowheads@1.3.0/src/leaflet-arrowheads.js"></script>
 
   <script>
     // Loading spinner functionality
@@ -1878,17 +1868,42 @@ movements into neighbouring countries.
     // Initialize the country circle map with layer controls
     const countryCircleMap = L.map('country-circle-map').setView([16, 30], 5);
     
-    // Base layers (same as before)
+    // Define multiple base layers for the country circle map
+    const cartoDBLightCountry = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const openStreetMapCountry = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const esriWorldImageryCountry = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
+    });
+
+    const stamenTonerCountry = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
+    });
+
     const mapboxCustomCountry = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
       attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       tileSize: 512,
       zoomOffset: -1,
       maxZoom: 18
-    }).addTo(countryCircleMap);
+    });
 
-    // Sudan center coordinates (Khartoum)
-    const sudanCenter = [15.5007, 32.5599];
-    
+    // Add default base layer to the country circle map
+    mapboxCustomCountry.addTo(countryCircleMap);
+
+    // Add layer control to the country circle map
+    const baseLayersCountry = {
+      "CartoDB Light": cartoDBLightCountry,
+      "OpenStreetMap": openStreetMapCountry,
+      "Esri World Imagery": esriWorldImageryCountry,
+      "Stamen Toner": stamenTonerCountry,
+      "Mapbox Custom": mapboxCustomCountry
+    };
+
     // Country data with coordinates and volume
     const countryData = [
       {country: "Egypt", e_lat: 26.8206, e_lon: 30.8025, Volume: 1500000},
@@ -1905,55 +1920,23 @@ movements into neighbouring countries.
 
     // Create a layer group for the country circles
     const countryCirclesLayer = L.layerGroup().addTo(countryCircleMap);
-    const arrowLayer = L.layerGroup().addTo(countryCircleMap);
-
-    // Function to create arrow polylines with direction
-    function createArrow(from, to, color = '#5CB8B2', weight = 2) {
-      // Calculate offset to prevent arrow from overlapping the circle
-      const dx = to[1] - from[1];
-      const dy = to[0] - from[0];
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      const offsetX = (dx / dist) * 0.2; // Adjust offset as needed
-      const offsetY = (dy / dist) * 0.2;
-      
-      // Create the polyline with arrowhead
-      const arrow = L.polyline([from, [to[0] - offsetY, to[1] - offsetX]], {
-        color: color,
-        weight: weight,
-        opacity: 0.8,
-        lineJoin: 'round',
-        dashArray: null,
-        lineCap: null
-      });
-      
-      // Add arrowhead decoration
-      arrow.arrowheads({
-        yawn: 60,
-        size: '15px',
-        fill: true,
-        frequency: 'endonly',
-        proportionalToTotal: false
-      });
-      
-      return arrow;
-    }
 
     // Function to animate circle markers
     function animateCircleMarker(marker, baseRadius) {
       const tween = new TWEEN.Tween({ radius: baseRadius })
-        .to({ radius: baseRadius * 1.5 }, 1500)
-        .easing(TWEEN.Easing.Sinusoidal.InOut)
-        .yoyo(true)
-        .repeat(Infinity)
+        .to({ radius: baseRadius * 1.5 }, 1500) // Animate to 1.5x the base radius
+        .easing(TWEEN.Easing.Sinusoidal.InOut) // Smooth easing
+        .yoyo(true) // Reverse the animation
+        .repeat(Infinity) // Repeat indefinitely
         .onUpdate(({ radius }) => {
-          marker.setRadius(radius);
+          marker.setRadius(radius); // Update the marker's radius
         })
-        .start();
+        .start(); // Start the animation
     }
 
-    // Add animated circle markers and arrows for each country
+    // Add animated circle markers for each country to the layer group
     countryData.forEach(country => {
-      // Calculate base radius based on volume
+      // Calculate base radius based on volume (scaled to a reasonable size)
       const baseRadius = 5 + (country.Volume / maxVolume) * 30;
       
       // Create circle marker
@@ -1966,45 +1949,28 @@ movements into neighbouring countries.
         fillOpacity: 0.7
       }).addTo(countryCirclesLayer);
 
-      // Create arrow from Sudan to country
-      const arrow = createArrow(
-        sudanCenter,
-        [country.e_lat, country.e_lon],
-        '#5CB8B2',
-        2 + (country.Volume / maxVolume) * 4 // Thicker arrow for larger volumes
-      ).addTo(arrowLayer);
-
-      // Animate the marker
+      // Add animation
       animateCircleMarker(circle, baseRadius);
 
       // Add popup with country info
-      const popupContent = `
+      circle.bindPopup(`
         <b>${country.country}</b><br>
-        Displaced Persons: ${country.Volume.toLocaleString()}
-      `;
-      circle.bindPopup(popupContent);
-      arrow.bindPopup(popupContent);
+        Volume: ${country.Volume.toLocaleString()}
+      `);
 
       // Add tooltip
-      const tooltipContent = `
+      circle.bindTooltip(`
         <b>${country.country}</b><br>
-        ${country.Volume.toLocaleString()} displaced persons
-      `;
-      circle.bindTooltip(tooltipContent);
-      arrow.bindTooltip(tooltipContent);
+        Volume: ${country.Volume.toLocaleString()}
+      `);
     });
 
-    // Add layer control
-    const baseLayersCountry = {
-      "Mapbox Custom": mapboxCustomCountry
-      // Add other base layers if needed
-    };
-
+    // Add overlay control for the country circles
     const overlaysCountry = {
-      "Displacement Flows": arrowLayer,
-      "Displacement Locations": countryCirclesLayer
+      "Displacement Circles": countryCirclesLayer
     };
 
+    // Add layer control with both base layers and overlays
     L.control.layers(baseLayersCountry, overlaysCountry).addTo(countryCircleMap);
 
     // Add legend for the country circle map
@@ -2018,12 +1984,6 @@ movements into neighbouring countries.
             <circle cx="10" cy="10" r="10" fill="#5CB8B2"/>
           </svg>
           Displaced Population
-        </div>
-        <div style="display: flex; align-items: center; margin: 5px 0;">
-          <svg width="20" height="20">
-            <path d="M0,10 L20,10" stroke="#5CB8B2" stroke-width="2" marker-end="url(#arrowhead)"/>
-          </svg>
-          Direction of displacement
         </div>
         <p>Circle size represents relative volume</p>
       `;
