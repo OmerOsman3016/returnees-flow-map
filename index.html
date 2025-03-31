@@ -463,7 +463,7 @@
       animation-delay: 0.8s;
     }
 
-    #map-container, #map-container-2, #map-container-4 {
+    #map-container, #map-container-2, #map-container-4, #map-container-5 {
       flex: 1;
       background-color: #ffffff;
       border: 1px solid #d9e0f1;
@@ -472,7 +472,7 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
-    #map, #map2, #map4 {
+    #map, #map2, #map4, #dtm-conflict-map {
       width: 100%;
       height: 80vh;
       border-radius: 8px;
@@ -605,7 +605,7 @@
     @media (max-width: 768px) {
       #title-container { flex-direction: column; align-items: flex-start; }
       .content-container { flex-direction: column; }
-      #map, #map2, #map3, #map4, #map5, #country-circle-map { height: 90vh; }
+      #map, #map2, #map3, #map4, #map5, #country-circle-map, #dtm-conflict-map { height: 90vh; }
 
       .idps-frame-container {
         flex-direction: column;
@@ -903,6 +903,30 @@ movements into neighbouring countries.
         </p>
       </div>
       <div id="country-circle-map"></div>
+    </div>
+  </div>
+
+  <!-- DTM Presence and Conflict Areas Section -->
+  <div id="dtm-conflict-section" class="maps-container">
+    <div id="map-container-5">
+      <h2>DTM Presence and Conflict Areas in Sudan</h2>
+      <div id="mobility-text-container">
+        <p>
+          This map shows the areas where DTM has active data collection operations (blue markers) 
+          alongside current conflict zones (red areas). The DTM logo appears in each state to 
+          indicate our organizational presence across Sudan.
+        </p>
+        <p>
+          <strong>Key features:</strong>
+          <ul>
+            <li><strong>Blue markers</strong> indicate locations where DTM has active data collection</li>
+            <li><strong>Red shaded areas</strong> show regions with active conflict</li>
+            <li><strong>DTM logos</strong> appear in each state capital to represent our organizational presence</li>
+            <li><strong>Marker size</strong> reflects the scale of DTM operations in each location</li>
+          </ul>
+        </p>
+      </div>
+      <div id="dtm-conflict-map"></div>
     </div>
   </div>
 
@@ -2111,6 +2135,136 @@ movements into neighbouring countries.
       return div;
     };
     legend5.addTo(map5);
+
+    // Initialize DTM and Conflict Map
+    const dtmConflictMap = L.map('dtm-conflict-map').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
+
+    // Add base layer
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(dtmConflictMap);
+
+    // DTM data collection points (sample data - replace with actual coordinates)
+    const dtmPoints = [
+      {name: "Khartoum Office", lat: 15.500, lng: 32.560, size: "large"},
+      {name: "Nyala Data Hub", lat: 12.050, lng: 24.883, size: "medium"},
+      {name: "El Fasher Center", lat: 13.633, lng: 25.350, size: "medium"},
+      {name: "Geneina Station", lat: 13.450, lng: 22.450, size: "small"},
+      {name: "Port Sudan Office", lat: 19.615, lng: 37.216, size: "small"},
+      {name: "Kassala Center", lat: 15.450, lng: 36.400, size: "small"},
+      {name: "El Obeid Hub", lat: 13.183, lng: 30.216, size: "medium"},
+      {name: "Wad Madani Office", lat: 14.400, lng: 33.500, size: "medium"},
+      {name: "El Gedaref Station", lat: 14.040, lng: 35.380, size: "small"},
+      {name: "Kosti Center", lat: 13.166, lng: 32.666, size: "small"}
+    ];
+
+    // Conflict areas (sample polygons - replace with actual conflict data)
+    const conflictAreas = [
+      {
+        name: "Khartoum Conflict Zone",
+        coords: [[15.6, 32.5], [15.6, 32.6], [15.4, 32.6], [15.4, 32.5]]
+      },
+      {
+        name: "Darfur Conflict Region",
+        coords: [[13.5, 24.0], [13.5, 25.5], [12.0, 25.5], [12.0, 24.0]]
+      },
+      {
+        name: "Kordofan Conflict Area",
+        coords: [[12.5, 28.0], [12.5, 30.0], [11.0, 30.0], [11.0, 28.0]]
+      }
+    ];
+
+    // Add conflict areas as red polygons
+    conflictAreas.forEach(area => {
+      L.polygon(area.coords, {
+        color: '#d22630',
+        fillColor: '#ff671f',
+        fillOpacity: 0.5,
+        weight: 1
+      }).addTo(dtmConflictMap).bindPopup(`<b>${area.name}</b><br>Active conflict zone`);
+    });
+
+    // Custom DTM icon with logo
+    const dtmIcon = L.icon({
+      iconUrl: './data/IOM_DTM_WHITE.png', // Path to your DTM logo
+      iconSize: [30, 30], // Size of the icon
+      iconAnchor: [15, 15], // Point of the icon which will correspond to marker's location
+      popupAnchor: [0, -15] // Point from which the popup should open relative to the iconAnchor
+    });
+
+    // Add DTM presence markers to each state capital
+    const stateCapitals = [
+      {name: "Khartoum", lat: 15.500, lng: 32.560},
+      {name: "Nyala", lat: 12.050, lng: 24.883},
+      {name: "El Fasher", lat: 13.633, lng: 25.350},
+      {name: "Geneina", lat: 13.450, lng: 22.450},
+      {name: "Port Sudan", lat: 19.615, lng: 37.216},
+      {name: "Kassala", lat: 15.450, lng: 36.400},
+      {name: "El Obeid", lat: 13.183, lng: 30.216},
+      {name: "Wad Madani", lat: 14.400, lng: 33.500},
+      {name: "El Gedaref", lat: 14.040, lng: 35.380},
+      {name: "Kosti", lat: 13.166, lng: 32.666},
+      {name: "Dongola", lat: 19.166, lng: 30.483},
+      {name: "Kadugli", lat: 11.016, lng: 29.716},
+      {name: "Ed Damazin", lat: 11.766, lng: 34.350},
+      {name: "Singa", lat: 13.150, lng: 33.933},
+      {name: "Rabak", lat: 13.150, lng: 32.733},
+      {name: "El Daein", lat: 11.450, lng: 26.133},
+      {name: "Zalingei", lat: 12.900, lng: 23.470}
+    ];
+
+    stateCapitals.forEach(capital => {
+      L.marker([capital.lat, capital.lng], {
+        icon: dtmIcon
+      }).addTo(dtmConflictMap).bindPopup(`<b>${capital.name}</b><br>DTM presence in this state`);
+    });
+
+    // Add DTM data collection points with different sizes
+    dtmPoints.forEach(point => {
+      let radius;
+      switch(point.size) {
+        case 'large': radius = 12; break;
+        case 'medium': radius = 8; break;
+        case 'small': radius = 5; break;
+        default: radius = 6;
+      }
+      
+      L.circleMarker([point.lat, point.lng], {
+        radius: radius,
+        fillColor: '#418FDE',
+        color: '#fff',
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+      }).addTo(dtmConflictMap).bindPopup(`<b>${point.name}</b><br>DTM data collection point`);
+    });
+
+    // Add legend
+    const dtmLegend = L.control({position: 'bottomright'});
+    dtmLegend.onAdd = () => {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = `
+        <h4>DTM Presence & Conflict Areas</h4>
+        <div style="display: flex; align-items: center; margin: 5px 0;">
+          <img src="./data/IOM_DTM_WHITE.png" width="20" height="20">
+          <span style="margin-left: 5px;">DTM State Presence</span>
+        </div>
+        <div style="display: flex; align-items: center; margin: 5px 0;">
+          <svg width="20" height="20">
+            <circle cx="10" cy="10" r="6" fill="#418FDE" stroke="#fff" stroke-width="1"/>
+          </svg>
+          <span style="margin-left: 5px;">DTM Data Collection</span>
+        </div>
+        <div style="display: flex; align-items: center; margin: 5px 0;">
+          <svg width="20" height="20">
+            <rect width="20" height="20" fill="rgba(255, 103, 31, 0.5)" stroke="#d22630" stroke-width="1"/>
+          </svg>
+          <span style="margin-left: 5px;">Conflict Area</span>
+        </div>
+      `;
+      return div;
+    };
+    dtmLegend.addTo(dtmConflictMap);
   </script>
 </body>
 </html>
