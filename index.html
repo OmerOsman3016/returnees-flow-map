@@ -260,79 +260,7 @@
       to {opacity: 1}
     }
 
-    /* Navigation Buttons */
-    .nav-container {
-      position: fixed;
-      top: 25%;
-      right: 20px;
-      transform: translateY(-50%);
-      z-index: 1000;
-      display: flex;
-      flex-direction: row;
-      gap: 10px;
-    }
-    
-    .nav-button {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background-color: #418FDE;
-      color: white;
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-      transition: all 0.3s ease;
-      font-size: 12px;
-      text-align: center;
-      padding: 5px;
-      font-weight: bold;
-      opacity: 1;
-    }
-    
-    .nav-button:hover {
-      background-color: #2a6fbb;
-      transform: scale(1.1);
-       opacity: 1;
-    }
-    
-    .nav-button.active {
-      background-color: #FF671F;
-      transform: scale(1.1);
-    }
-    
-    /* Mobile responsive adjustments */
-    @media (max-width: 768px) {
-      .nav-container {
-        bottom: 20px;
-        top: auto;
-        right: 20px;
-        transform: none;
-        flex-direction: column;
-      }
-      
-      .nav-button {
-        width: 40px;
-        height: 40px;
-        font-size: 10px;
-        opacity: 0.8;
-  transition: opacity 0.3s;
-      }
-    }
-    
-    /* Add section IDs for navigation */
-    #dashboard-section,
-    #idps-section,
-    #displacement-section,
-    #pathways-section,
-    #returnees-section,
-    #timeline-section {
-      scroll-margin-top: 20px;
-    }
-
-    /* Title container styling */
+    /* Title Container with Logo, Title, and Info Card */
     #title-container {
       display: flex;
       align-items: center;
@@ -722,7 +650,6 @@
       body { font-size: 12pt; color: #000; }
       .dashboard-cards, .maps-container { page-break-inside: avoid; }
       footer { display: none; }
-      .nav-container { display: none; }
     }
   </style>
 </head>
@@ -744,16 +671,6 @@
     <div class="loading-progress">
       <div class="loading-progress-bar" id="progress-bar"></div>
     </div>
-  </div>
-
-  <!-- Navigation Buttons -->
-  <div class="nav-container">
-    <button class="nav-button" onclick="scrollToSection('dashboard-section')">Overview</button>
-    <button class="nav-button" onclick="scrollToSection('idps-section')">IDPs</button>
-    <button class="nav-button" onclick="scrollToSection('displacement-section')">Displacement</button>
-    <button class="nav-button" onclick="scrollToSection('pathways-section')">Pathways</button>
-    <button class="nav-button" onclick="scrollToSection('returnees-section')">Returnees</button>
-    <button class="nav-button" onclick="scrollToSection('timeline-section')">Timeline</button>
   </div>
 
   <!-- Dashboard Section -->
@@ -1140,45 +1057,6 @@ movements into neighbouring countries.
     setInterval(() => {
       plusSlides(1);
     }, 5000);
-
-    // Navigation functions
-    function scrollToSection(sectionId) {
-      const section = document.getElementById(sectionId);
-      if (section) {
-        section.scrollIntoView({ behavior: 'smooth' });
-        
-        // Update active button
-        document.querySelectorAll('.nav-button').forEach(btn => {
-          btn.classList.remove('active');
-        });
-        event.target.classList.add('active');
-      }
-    }
-    
-    // Highlight active section in navigation as user scrolls
-    window.addEventListener('scroll', function() {
-      const sections = ['dashboard-section', 'idps-section', 'displacement-section', 
-                       'pathways-section', 'returnees-section', 'timeline-section'];
-      const navButtons = document.querySelectorAll('.nav-button');
-      
-      let currentSection = '';
-      sections.forEach(section => {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 100 && rect.bottom >= 100) {
-            currentSection = section;
-          }
-        }
-      });
-      
-      navButtons.forEach(button => {
-        button.classList.remove('active');
-        if (button.textContent.toLowerCase().includes(currentSection.replace('-section', ''))) {
-          button.classList.add('active');
-        }
-      });
-    });
 
     // Define Mapbox custom layers
     const mapboxCustom1 = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
