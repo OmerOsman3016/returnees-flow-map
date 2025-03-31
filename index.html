@@ -548,11 +548,111 @@
       margin: 20px 0;
     }
     
-    .legend {
-      background: white;
-      padding: 10px;
-      border-radius: 5px;
-      box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+    /* Improved Legend Styles */
+    .custom-legend {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 12px 15px;
+      border-radius: 8px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      font-family: 'Arial', sans-serif;
+      line-height: 1.5;
+      color: #333;
+      border: 1px solid #ddd;
+      max-width: 220px;
+    }
+
+    .legend-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .legend-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 8px;
+    }
+
+    .legend-title {
+      margin: 0;
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    .legend-close {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #777;
+      padding: 0 5px;
+      line-height: 1;
+    }
+
+    .legend-close:hover {
+      color: #333;
+    }
+
+    .legend-items {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .legend-line-container {
+      position: relative;
+      width: 70px;
+      flex-shrink: 0;
+    }
+
+    .legend-line-color, .legend-line-pattern {
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .legend-label {
+      font-size: 13px;
+      flex-grow: 1;
+    }
+
+    .legend-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #666;
+      font-size: 14px;
+      padding: 0 5px;
+      line-height: 1;
+    }
+
+    .legend-toggle:hover {
+      color: #333;
+    }
+
+    .legend-footer {
+      font-size: 11px;
+      color: #666;
+      text-align: center;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #eee;
+    }
+
+    .leaflet-dragging .custom-legend {
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      opacity: 0.9;
     }
 
     /* Country Circle Map Styles */
@@ -643,6 +743,20 @@
       
       .loading-text {
         font-size: 16px;
+      }
+      
+      /* Adjust legend for mobile */
+      .custom-legend {
+        max-width: 180px;
+        padding: 8px 10px;
+      }
+      
+      .legend-title {
+        font-size: 13px;
+      }
+      
+      .legend-label {
+        font-size: 12px;
       }
     }
 
@@ -1244,22 +1358,107 @@ movements into neighbouring countries.
       }
     });
 
-    // Add legend to the first map
-    const legend = L.control({ position: 'bottomright' });
-    legend.onAdd = () => {
-      const div = L.DomUtil.create('div', 'legend');
-      div.innerHTML = `
-        <span style="font-size:14px">Returnee Flow Volume:</span><br/>
-        <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> < 10000</span><br/>
-        <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold">10,001 - 20,000</span><br/>
-        <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> > 20,000</span><br/>
+    // Add enhanced legend to the first map
+    const legend = L.control({
+      position: 'bottomright',
+      className: 'custom-legend',
+      draggable: true
+    });
+
+    legend.onAdd = function() {
+      const div = L.DomUtil.create('div', 'legend-container');
+      
+      // Add title with close button
+      const header = L.DomUtil.create('div', 'legend-header', div);
+      
+      const title = L.DomUtil.create('h3', 'legend-title', header);
+      title.textContent = 'Returnee Flow Volume';
+      title.setAttribute('aria-label', 'Legend for returnee flow volume');
+      
+      const closeBtn = L.DomUtil.create('button', 'legend-close', header);
+      closeBtn.innerHTML = '&times;';
+      closeBtn.setAttribute('aria-label', 'Close legend');
+      closeBtn.title = 'Close legend';
+      
+      // Legend items data - now with patterns for colorblind users
+      const items = [
+        { color: '#ffb81c', pattern: 'url(#diagonalHatch)', height: '4px', label: '< 10,000' },
+        { color: '#ff671f', pattern: 'url(#crossHatch)', height: '4px', label: '10,001 - 20,000' },
+        { color: '#e34a33', pattern: 'url(#dotPattern)', height: '6px', label: '> 20,000' }
+      ];
+      
+      // Add SVG patterns for colorblind accessibility
+      const svgDefs = `
+        <svg width="0" height="0" style="position:absolute">
+          <defs>
+            <pattern id="diagonalHatch" width="4" height="4" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+              <line x1="0" y1="0" x2="0" y2="4" stroke="#000" stroke-width="1" opacity="0.3"/>
+            </pattern>
+            <pattern id="crossHatch" width="4" height="4" patternUnits="userSpaceOnUse">
+              <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="#000" stroke-width="1" opacity="0.3"/>
+            </pattern>
+            <pattern id="dotPattern" width="3" height="3" patternUnits="userSpaceOnUse">
+              <circle cx="1.5" cy="1.5" r="0.8" fill="#000" opacity="0.3"/>
+            </pattern>
+          </defs>
+        </svg>
       `;
+      div.insertAdjacentHTML('afterbegin', svgDefs);
+      
+      // Create legend items container
+      const itemsContainer = L.DomUtil.create('div', 'legend-items', div);
+      
+      // Create legend items
+      items.forEach(item => {
+        const itemContainer = L.DomUtil.create('div', 'legend-item', itemsContainer);
+        itemContainer.setAttribute('role', 'listitem');
+        
+        // Create line with both color and pattern
+        const lineContainer = L.DomUtil.create('div', 'legend-line-container', itemContainer);
+        
+        const colorLine = L.DomUtil.create('div', 'legend-line-color', lineContainer);
+        colorLine.style.backgroundColor = item.color;
+        colorLine.style.height = item.height;
+        
+        const patternLine = L.DomUtil.create('div', 'legend-line-pattern', lineContainer);
+        patternLine.style.background = item.pattern;
+        patternLine.style.height = item.height;
+        
+        const label = L.DomUtil.create('span', 'legend-label', itemContainer);
+        label.textContent = item.label;
+        
+        // Add toggle buttons for each item
+        const toggleBtn = L.DomUtil.create('button', 'legend-toggle', itemContainer);
+        toggleBtn.innerHTML = '◯';
+        toggleBtn.setAttribute('aria-label', `Toggle ${item.label} visibility`);
+        toggleBtn.title = 'Toggle visibility';
+      });
+      
+      // Add footer with scale information
+      const footer = L.DomUtil.create('div', 'legend-footer', div);
+      footer.textContent = 'Values represent monthly averages';
+      
       return div;
     };
+
+    // Add legend to map
     legend.addTo(map);
+
+    // Add interactivity to legend
+    document.addEventListener('DOMContentLoaded', function() {
+      // Close button functionality
+      document.querySelector('.legend-close')?.addEventListener('click', function() {
+        document.querySelector('.custom-legend').style.display = 'none';
+      });
+      
+      // Toggle buttons functionality (would need to connect to actual layer visibility)
+      document.querySelectorAll('.legend-toggle').forEach(btn => {
+        btn.addEventListener('click', function() {
+          this.innerHTML = this.innerHTML === '◯' ? '●' : '◯';
+          // Here you would add logic to toggle corresponding map layers
+        });
+      });
+    });
 
     // Initialize the second map
     const map2 = L.map('map2').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
@@ -1386,21 +1585,90 @@ movements into neighbouring countries.
       }
     });
 
-    // Add legend to the second map
-    const legend2 = L.control({ position: 'bottomright' });
-    legend2.onAdd = () => {
-      const div = L.DomUtil.create('div', 'legend');
-      div.innerHTML = `
-        <span style="font-size:14px">Returnee Flow Volume:</span><br/>
-        <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> < 10000</span><br/>
-        <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold">10,001 - 20,000</span><br/>
-        <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
-        <span style="float:left;font-weight:bold"> > 20,000</span><br/>
+    // Add enhanced legend to the second map
+    const legend2 = L.control({
+      position: 'bottomright',
+      className: 'custom-legend',
+      draggable: true
+    });
+
+    legend2.onAdd = function() {
+      const div = L.DomUtil.create('div', 'legend-container');
+      
+      // Add title with close button
+      const header = L.DomUtil.create('div', 'legend-header', div);
+      
+      const title = L.DomUtil.create('h3', 'legend-title', header);
+      title.textContent = 'IDP Flow Volume';
+      title.setAttribute('aria-label', 'Legend for IDP flow volume');
+      
+      const closeBtn = L.DomUtil.create('button', 'legend-close', header);
+      closeBtn.innerHTML = '&times;';
+      closeBtn.setAttribute('aria-label', 'Close legend');
+      closeBtn.title = 'Close legend';
+      
+      // Legend items data - now with patterns for colorblind users
+      const items = [
+        { color: '#ffb81c', pattern: 'url(#diagonalHatch)', height: '4px', label: '< 10,000' },
+        { color: '#ff671f', pattern: 'url(#crossHatch)', height: '4px', label: '10,001 - 20,000' },
+        { color: '#e34a33', pattern: 'url(#dotPattern)', height: '6px', label: '> 20,000' }
+      ];
+      
+      // Add SVG patterns for colorblind accessibility
+      const svgDefs = `
+        <svg width="0" height="0" style="position:absolute">
+          <defs>
+            <pattern id="diagonalHatch" width="4" height="4" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+              <line x1="0" y1="0" x2="0" y2="4" stroke="#000" stroke-width="1" opacity="0.3"/>
+            </pattern>
+            <pattern id="crossHatch" width="4" height="4" patternUnits="userSpaceOnUse">
+              <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="#000" stroke-width="1" opacity="0.3"/>
+            </pattern>
+            <pattern id="dotPattern" width="3" height="3" patternUnits="userSpaceOnUse">
+              <circle cx="1.5" cy="1.5" r="0.8" fill="#000" opacity="0.3"/>
+            </pattern>
+          </defs>
+        </svg>
       `;
+      div.insertAdjacentHTML('afterbegin', svgDefs);
+      
+      // Create legend items container
+      const itemsContainer = L.DomUtil.create('div', 'legend-items', div);
+      
+      // Create legend items
+      items.forEach(item => {
+        const itemContainer = L.DomUtil.create('div', 'legend-item', itemsContainer);
+        itemContainer.setAttribute('role', 'listitem');
+        
+        // Create line with both color and pattern
+        const lineContainer = L.DomUtil.create('div', 'legend-line-container', itemContainer);
+        
+        const colorLine = L.DomUtil.create('div', 'legend-line-color', lineContainer);
+        colorLine.style.backgroundColor = item.color;
+        colorLine.style.height = item.height;
+        
+        const patternLine = L.DomUtil.create('div', 'legend-line-pattern', lineContainer);
+        patternLine.style.background = item.pattern;
+        patternLine.style.height = item.height;
+        
+        const label = L.DomUtil.create('span', 'legend-label', itemContainer);
+        label.textContent = item.label;
+        
+        // Add toggle buttons for each item
+        const toggleBtn = L.DomUtil.create('button', 'legend-toggle', itemContainer);
+        toggleBtn.innerHTML = '◯';
+        toggleBtn.setAttribute('aria-label', `Toggle ${item.label} visibility`);
+        toggleBtn.title = 'Toggle visibility';
+      });
+      
+      // Add footer with scale information
+      const footer = L.DomUtil.create('div', 'legend-footer', div);
+      footer.textContent = 'Values represent monthly averages';
+      
       return div;
     };
+
+    // Add legend to map
     legend2.addTo(map2);
 
     // Initialize the third map
@@ -1633,30 +1901,63 @@ movements into neighbouring countries.
     }
     animate(); // Start the animation loop
 
-    // Add legend to the third map
-    const legend3 = L.control({ position: 'bottomright' });
-    legend3.onAdd = () => {
-      const div = L.DomUtil.create('div', 'legend');
-      div.innerHTML = `
-        <span style="font-size:14px; font-weight:bold;">Total IDPs by State:</span><br/>
-        <div style="display: flex; align-items: center; margin-top: 10px;">
-          <div style="width: 10px; height: 10px; background: #418FDE; border-radius: 50%; margin-right: 10px;"></div>
-          <span style="font-size:12px;">  < 500,000 IDPs</span>
-        </div>
-        <div style="display: flex; align-items: center; margin-top: 5px;">
-          <div style="width: 20px; height: 20px; background: #418FDE; border-radius: 50%; margin-right: 10px;"></div>
-          <span style="font-size:12px;"> 500,001 - 1,000,000 IDPs</span>
-        </div>
-        <div style="display: flex; align-items: center; margin-top: 5px;">
-          <div style="width: 30px; height: 30px; background: #418FDE; border-radius: 50%; margin-right: 10px;"></div>
-          <span style="font-size:12px;"> > 1,000,001 IDPs</span>
-        </div>
-        <div style="margin-top: 10px; font-size:12px; color: #666;">
-          Click on a state to view district-level data
-        </div>
-      `;
+    // Add enhanced legend to the third map
+    const legend3 = L.control({
+      position: 'bottomright',
+      className: 'custom-legend',
+      draggable: true
+    });
+
+    legend3.onAdd = function() {
+      const div = L.DomUtil.create('div', 'legend-container');
+      
+      // Add title with close button
+      const header = L.DomUtil.create('div', 'legend-header', div);
+      
+      const title = L.DomUtil.create('h3', 'legend-title', header);
+      title.textContent = 'IDPs by State';
+      title.setAttribute('aria-label', 'Legend for IDPs by state');
+      
+      const closeBtn = L.DomUtil.create('button', 'legend-close', header);
+      closeBtn.innerHTML = '&times;';
+      closeBtn.setAttribute('aria-label', 'Close legend');
+      closeBtn.title = 'Close legend';
+      
+      // Legend items data
+      const items = [
+        { color: '#418FDE', size: '10px', label: '< 500,000 IDPs' },
+        { color: '#418FDE', size: '20px', label: '500,001 - 1,000,000 IDPs' },
+        { color: '#418FDE', size: '30px', label: '> 1,000,001 IDPs' }
+      ];
+      
+      // Create legend items container
+      const itemsContainer = L.DomUtil.create('div', 'legend-items', div);
+      
+      // Create legend items
+      items.forEach(item => {
+        const itemContainer = L.DomUtil.create('div', 'legend-item', itemsContainer);
+        itemContainer.setAttribute('role', 'listitem');
+        
+        // Create circle with size
+        const circle = L.DomUtil.create('div', 'legend-circle', itemContainer);
+        circle.style.width = item.size;
+        circle.style.height = item.size;
+        circle.style.backgroundColor = item.color;
+        circle.style.borderRadius = '50%';
+        circle.style.marginRight = '10px';
+        
+        const label = L.DomUtil.create('span', 'legend-label', itemContainer);
+        label.textContent = item.label;
+      });
+      
+      // Add footer with instructions
+      const footer = L.DomUtil.create('div', 'legend-footer', div);
+      footer.textContent = 'Click on a state to view district-level data';
+      
       return div;
     };
+
+    // Add legend to map
     legend3.addTo(map3);
     
     // Initialize Timeline Graph
@@ -1867,27 +2168,59 @@ movements into neighbouring countries.
       }
     });
 
-    // Add legend to the fourth map
-    const legend4 = L.control({ position: 'bottomleft' });
-    legend4.onAdd = () => {
-      const div = L.DomUtil.create('div', 'legend');
-      div.innerHTML = `
-        <span style="font-size:14px; font-weight:bold;">Total Returnees by State:</span><br/>
-        <div style="display: flex; align-items: center; margin-top: 10px;">
-          <div style="width: 10px; height: 10px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
-          <span style="font-size:12px;">< 10,000 Returnees</span>
-        </div>
-        <div style="display: flex; align-items: center; margin-top: 5px;">
-          <div style="width: 20px; height: 20px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
-          <span style="font-size:12px;">10,000 - 50,000 Returnees</span>
-        </div>
-        <div style="display: flex; align-items: center; margin-top: 5px;">
-          <div style="width: 30px; height: 30px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
-          <span style="font-size:12px;"> > 50,000 Returnees</span>
-        </div>
-      `;
+    // Add enhanced legend to the fourth map
+    const legend4 = L.control({
+      position: 'bottomright',
+      className: 'custom-legend',
+      draggable: true
+    });
+
+    legend4.onAdd = function() {
+      const div = L.DomUtil.create('div', 'legend-container');
+      
+      // Add title with close button
+      const header = L.DomUtil.create('div', 'legend-header', div);
+      
+      const title = L.DomUtil.create('h3', 'legend-title', header);
+      title.textContent = 'Returnees by State';
+      title.setAttribute('aria-label', 'Legend for returnees by state');
+      
+      const closeBtn = L.DomUtil.create('button', 'legend-close', header);
+      closeBtn.innerHTML = '&times;';
+      closeBtn.setAttribute('aria-label', 'Close legend');
+      closeBtn.title = 'Close legend';
+      
+      // Legend items data
+      const items = [
+        { color: 'rgba(255, 103, 31, 0.8)', size: '10px', label: '< 10,000 Returnees' },
+        { color: 'rgba(255, 103, 31, 0.8)', size: '20px', label: '10,000 - 50,000 Returnees' },
+        { color: 'rgba(255, 103, 31, 0.8)', size: '30px', label: '> 50,000 Returnees' }
+      ];
+      
+      // Create legend items container
+      const itemsContainer = L.DomUtil.create('div', 'legend-items', div);
+      
+      // Create legend items
+      items.forEach(item => {
+        const itemContainer = L.DomUtil.create('div', 'legend-item', itemsContainer);
+        itemContainer.setAttribute('role', 'listitem');
+        
+        // Create circle with size
+        const circle = L.DomUtil.create('div', 'legend-circle', itemContainer);
+        circle.style.width = item.size;
+        circle.style.height = item.size;
+        circle.style.backgroundColor = item.color;
+        circle.style.borderRadius = '50%';
+        circle.style.marginRight = '10px';
+        
+        const label = L.DomUtil.create('span', 'legend-label', itemContainer);
+        label.textContent = item.label;
+      });
+      
       return div;
     };
+
+    // Add legend to map
     legend4.addTo(map4);
 
     // Initialize the country circle map with layer controls
@@ -1998,22 +2331,63 @@ movements into neighbouring countries.
     // Add layer control with both base layers and overlays
     L.control.layers(baseLayersCountry, overlaysCountry).addTo(countryCircleMap);
 
-    // Add legend for the country circle map
-    const countryLegend = L.control({ position: 'bottomright' });
-    countryLegend.onAdd = () => {
-      const div = L.DomUtil.create('div', 'legend');
-      div.innerHTML = `
-        <h4>Displacement to Neighboring Countries</h4>
-        <div style="display: flex; align-items: center; margin: 5px 0;">
-          <svg width="20" height="20">
-            <circle cx="10" cy="10" r="10" fill="#5CB8B2"/>
-          </svg>
-          Displaced Population
-        </div>
-        <p>Circle size represents relative volume</p>
-      `;
+    // Add enhanced legend for the country circle map
+    const countryLegend = L.control({
+      position: 'bottomright',
+      className: 'custom-legend',
+      draggable: true
+    });
+
+    countryLegend.onAdd = function() {
+      const div = L.DomUtil.create('div', 'legend-container');
+      
+      // Add title with close button
+      const header = L.DomUtil.create('div', 'legend-header', div);
+      
+      const title = L.DomUtil.create('h3', 'legend-title', header);
+      title.textContent = 'Displacement to Neighboring Countries';
+      title.setAttribute('aria-label', 'Legend for displacement to neighboring countries');
+      
+      const closeBtn = L.DomUtil.create('button', 'legend-close', header);
+      closeBtn.innerHTML = '&times;';
+      closeBtn.setAttribute('aria-label', 'Close legend');
+      closeBtn.title = 'Close legend';
+      
+      // Legend items data
+      const items = [
+        { color: '#5CB8B2', size: '10px', label: '< 100,000' },
+        { color: '#5CB8B2', size: '20px', label: '100,000 - 500,000' },
+        { color: '#5CB8B2', size: '30px', label: '> 500,000' }
+      ];
+      
+      // Create legend items container
+      const itemsContainer = L.DomUtil.create('div', 'legend-items', div);
+      
+      // Create legend items
+      items.forEach(item => {
+        const itemContainer = L.DomUtil.create('div', 'legend-item', itemsContainer);
+        itemContainer.setAttribute('role', 'listitem');
+        
+        // Create circle with size
+        const circle = L.DomUtil.create('div', 'legend-circle', itemContainer);
+        circle.style.width = item.size;
+        circle.style.height = item.size;
+        circle.style.backgroundColor = item.color;
+        circle.style.borderRadius = '50%';
+        circle.style.marginRight = '10px';
+        
+        const label = L.DomUtil.create('span', 'legend-label', itemContainer);
+        label.textContent = item.label;
+      });
+      
+      // Add footer with instructions
+      const footer = L.DomUtil.create('div', 'legend-footer', div);
+      footer.textContent = 'Circle size represents relative volume';
+      
       return div;
     };
+
+    // Add legend to map
     countryLegend.addTo(countryCircleMap);
 
     // Pie Chart Map Showing Displacement Proportions
@@ -2088,28 +2462,61 @@ movements into neighbouring countries.
       `);
     });
 
-    // Add legend
-    const legend5 = L.control({position: 'bottomright'});
-    legend5.onAdd = () => {
-      const div = L.DomUtil.create('div', 'legend');
-      div.innerHTML = `
-        <h4>Displacement Proportions</h4>
-        <div style="display: flex; align-items: center; margin: 5px 0;">
-          <svg width="20" height="20">
-            <circle cx="10" cy="10" r="10" fill="rgba(255, 103, 31, 0.8)"/>
-          </svg>
-          Displaced Population
-        </div>
-        <div style="display: flex; align-items: center; margin: 5px 0;">
-          <svg width="20" height="20">
-            <circle cx="10" cy="10" r="10" fill="#418FDE"/>
-          </svg>
-          Non-Displaced Population
-        </div>
-        <p>All pie charts are the same size<br>showing proportion displaced</p>
-      `;
+    // Add enhanced legend for the pie chart map
+    const legend5 = L.control({
+      position: 'bottomright',
+      className: 'custom-legend',
+      draggable: true
+    });
+
+    legend5.onAdd = function() {
+      const div = L.DomUtil.create('div', 'legend-container');
+      
+      // Add title with close button
+      const header = L.DomUtil.create('div', 'legend-header', div);
+      
+      const title = L.DomUtil.create('h3', 'legend-title', header);
+      title.textContent = 'Displacement Proportions';
+      title.setAttribute('aria-label', 'Legend for displacement proportions');
+      
+      const closeBtn = L.DomUtil.create('button', 'legend-close', header);
+      closeBtn.innerHTML = '&times;';
+      closeBtn.setAttribute('aria-label', 'Close legend');
+      closeBtn.title = 'Close legend';
+      
+      // Legend items data
+      const items = [
+        { color: 'rgba(255, 103, 31, 0.8)', label: 'Displaced Population' },
+        { color: '#418FDE', label: 'Non-Displaced Population' }
+      ];
+      
+      // Create legend items container
+      const itemsContainer = L.DomUtil.create('div', 'legend-items', div);
+      
+      // Create legend items
+      items.forEach(item => {
+        const itemContainer = L.DomUtil.create('div', 'legend-item', itemsContainer);
+        itemContainer.setAttribute('role', 'listitem');
+        
+        // Create color swatch
+        const swatch = L.DomUtil.create('div', 'legend-swatch', itemContainer);
+        swatch.style.width = '20px';
+        swatch.style.height = '20px';
+        swatch.style.backgroundColor = item.color;
+        swatch.style.marginRight = '10px';
+        
+        const label = L.DomUtil.create('span', 'legend-label', itemContainer);
+        label.textContent = item.label;
+      });
+      
+      // Add footer with instructions
+      const footer = L.DomUtil.create('div', 'legend-footer', div);
+      footer.textContent = 'All pie charts are the same size showing proportion displaced';
+      
       return div;
     };
+
+    // Add legend to map
     legend5.addTo(map5);
   </script>
 </body>
