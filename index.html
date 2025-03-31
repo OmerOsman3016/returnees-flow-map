@@ -12,6 +12,40 @@
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
   <style>
+    /* Flow line legend styling */
+.flow-legend {
+  background: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+}
+
+.flow-legend h4 {
+  margin: 0 0 10px;
+  color: #418FDE;
+  font-size: 14px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.legend-item svg {
+  margin-right: 8px;
+}
+
+/* Pulsing animation for origin markers */
+@keyframes pulse {
+  0% { r: 8px; }
+  50% { r: 12px; }
+  100% { r: 8px; }
+}
+
+.origin-marker circle {
+  animation: pulse 2s infinite;
+}
     /* Loading spinner styles */
     #loading-spinner {
       position: fixed;
@@ -1890,131 +1924,138 @@ movements into neighbouring countries.
     };
     legend4.addTo(map4);
 
-    // Initialize the country circle map with layer controls
-    const countryCircleMap = L.map('country-circle-map').setView([16, 30], 5);
-    
-    // Define multiple base layers for the country circle map
-    const cartoDBLightCountry = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
+   // Add this to your existing map initialization code
+const countryCircleMap = L.map('country-circle-map').setView([16, 30], 5);
 
-    const openStreetMapCountry = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
+// 1. Define origin points (conflict zones in Sudan)
+const originPoints = {
+  "Khartoum": { lat: 15.500, lng: 32.559 },
+  "Darfur": { lat: 12.900, lng: 24.900 },
+  "Kordofan": { lat: 12.700, lng: 29.300 }
+};
 
-    const esriWorldImageryCountry = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
-    });
+// 2. Destination countries data
+const destinationCountries = [
+  { name: "Egypt", lat: 26.820, lng: 30.802, volume: 1500000, color: "#FF671F" },
+  { name: "Chad", lat: 15.454, lng: 18.732, volume: 767365, color: "#418FDE" },
+  { name: "South Sudan", lat: 6.877, lng: 31.307, volume: 341909, color: "#5CB8B2" },
+  { name: "Ethiopia", lat: 9.145, lng: 40.490, volume: 88001, color: "#FFB81C" },
+  { name: "Libya", lat: 26.335, lng: 17.228, volume: 105721, color: "#E34A33" }
+];
 
-    const stamenTonerCountry = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
-      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
-    });
-
-    const mapboxCustomCountry = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
-      attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      tileSize: 512,
-      zoomOffset: -1,
-      maxZoom: 18
-    });
-
-    // Add default base layer to the country circle map
-    mapboxCustomCountry.addTo(countryCircleMap);
-
-    // Add layer control to the country circle map
-    const baseLayersCountry = {
-      "CartoDB Light": cartoDBLightCountry,
-      "OpenStreetMap": openStreetMapCountry,
-      "Esri World Imagery": esriWorldImageryCountry,
-      "Stamen Toner": stamenTonerCountry,
-      "Mapbox Custom": mapboxCustomCountry
-    };
-
-    // Country data with coordinates and volume
-    const countryData = [
-      {country: "Egypt", e_lat: 26.8206, e_lon: 30.8025, Volume: 1500000},
-      {country: "libya", e_lat: 26.3351, e_lon: 17.2283, Volume: 105721},
-      {country: "Chad", e_lat: 15.4542, e_lon: 18.7322, Volume: 767365},
-      {country: "Central African Republic", e_lat: 6.6111, e_lon: 20.9394, Volume: 35376},
-      {country: "South Sudan", e_lat: 6.877, e_lon: 31.307, Volume: 341909},
-      {country: "Ethiopia", e_lat: 9.145, e_lon: 40.4897, Volume: 88001},
-      {country: "Eritrea", e_lat: 15.1794, e_lon: 39.7823, Volume: 14141}
-    ];
-
-    // Find the maximum volume for scaling
-    const maxVolume = Math.max(...countryData.map(d => d.Volume));
-
-    // Create a layer group for the country circles
-    const countryCirclesLayer = L.layerGroup().addTo(countryCircleMap);
-
-    // Function to animate circle markers
-    function animateCircleMarker(marker, baseRadius) {
-      const tween = new TWEEN.Tween({ radius: baseRadius })
-        .to({ radius: baseRadius * 1.5 }, 1500) // Animate to 1.5x the base radius
-        .easing(TWEEN.Easing.Sinusoidal.InOut) // Smooth easing
-        .yoyo(true) // Reverse the animation
-        .repeat(Infinity) // Repeat indefinitely
-        .onUpdate(({ radius }) => {
-          marker.setRadius(radius); // Update the marker's radius
-        })
-        .start(); // Start the animation
+// 3. Create flow lines with animations
+destinationCountries.forEach(country => {
+  // Calculate line weight based on volume
+  const lineWeight = 1 + (country.volume / 500000);
+  
+  // Create curved paths using Bézier curves
+  const curvePoints = [
+    [originPoints.Khartoum.lat, originPoints.Khartoum.lng],
+    [
+      (originPoints.Khartoum.lat + country.lat) / 2 + (Math.random() * 2 - 1),
+      (originPoints.Khartoum.lng + country.lng) / 2 + (Math.random() * 3 - 1.5)
+    ],
+    [country.lat, country.lng]
+  ];
+  
+  // Animated flow line
+  const flowLine = L.curve(
+    ['M', curvePoints[0], 'Q', curvePoints[1], curvePoints[2]], 
+    {
+      color: country.color,
+      weight: lineWeight,
+      dashArray: "10, 10",
+      animate: {
+        duration: 30000, // 30 seconds
+        iterations: Infinity
+      }
     }
+  ).addTo(countryCircleMap);
 
-    // Add animated circle markers for each country to the layer group
-    countryData.forEach(country => {
-      // Calculate base radius based on volume (scaled to a reasonable size)
-      const baseRadius = 5 + (country.Volume / maxVolume) * 30;
-      
-      // Create circle marker
-      const circle = L.circleMarker([country.e_lat, country.e_lon], {
-        radius: baseRadius,
-        fillColor: '#5CB8B2',
-        color: '#fff',
-        weight: 1,
-        opacity: 1,
-        fillOpacity: 0.7
-      }).addTo(countryCirclesLayer);
+  // Add direction arrow
+  const arrowHead = L.polylineDecorator(flowLine, {
+    patterns: [
+      {
+        offset: '100%',
+        repeat: 0,
+        symbol: L.Symbol.arrowHead({
+          pixelSize: 15,
+          pathOptions: {
+            color: country.color,
+            fillOpacity: 1,
+            weight: 0
+          }
+        })
+      }
+    ]
+  }).addTo(countryCircleMap);
 
-      // Add animation
-      animateCircleMarker(circle, baseRadius);
+  // Interactive tooltip
+  flowLine.bindTooltip(`
+    <strong>Route:</strong> Sudan → ${country.name}<br>
+    <strong>Displaced:</strong> ${country.volume.toLocaleString()} people
+  `, { permanent: false, direction: 'top' });
 
-      // Add popup with country info
-      circle.bindPopup(`
-        <b>${country.country}</b><br>
-        Volume: ${country.Volume.toLocaleString()}
-      `);
+  // Highlight on hover
+  flowLine.on('mouseover', function() {
+    this.setStyle({ weight: lineWeight * 1.5 });
+    arrowHead.setStyle({ weight: lineWeight * 1.5 });
+  }).on('mouseout', function() {
+    this.setStyle({ weight: lineWeight });
+    arrowHead.setStyle({ weight: lineWeight });
+  });
+});
 
-      // Add tooltip
-      circle.bindTooltip(`
-        <b>${country.country}</b><br>
-        Volume: ${country.Volume.toLocaleString()}
-      `);
-    });
+// 4. Add origin markers with pulsating effect
+Object.entries(originPoints).forEach(([name, coords]) => {
+  const originMarker = L.circleMarker([coords.lat, coords.lng], {
+    radius: 8,
+    fillColor: "#D22630",
+    color: "#fff",
+    weight: 2,
+    opacity: 1,
+    fillOpacity: 0.8
+  }).addTo(countryCircleMap);
 
-    // Add overlay control for the country circles
-    const overlaysCountry = {
-      "Displacement Circles": countryCirclesLayer
-    };
+  // Pulsing animation
+  let currentRadius = 8;
+  setInterval(() => {
+    currentRadius = currentRadius === 8 ? 10 : 8;
+    originMarker.setRadius(currentRadius);
+  }, 1000);
 
-    // Add layer control with both base layers and overlays
-    L.control.layers(baseLayersCountry, overlaysCountry).addTo(countryCircleMap);
+  originMarker.bindTooltip(`<strong>Origin:</strong> ${name}`, { permanent: false });
+});
 
-    // Add legend for the country circle map
-    const countryLegend = L.control({ position: 'bottomright' });
-    countryLegend.onAdd = () => {
-      const div = L.DomUtil.create('div', 'legend');
-      div.innerHTML = `
-        <h4>Displacement to Neighboring Countries</h4>
-        <div style="display: flex; align-items: center; margin: 5px 0;">
-          <svg width="20" height="20">
-            <circle cx="10" cy="10" r="10" fill="#5CB8B2"/>
-          </svg>
-          Displaced Population
-        </div>
-        <p>Circle size represents relative volume</p>
-      `;
-      return div;
-    };
-    countryLegend.addTo(countryCircleMap);
+// 5. Add legend for flow lines
+const flowLegend = L.control({ position: 'bottomleft' });
+flowLegend.onAdd = function() {
+  const div = L.DomUtil.create('div', 'legend flow-legend');
+  div.innerHTML = `
+    <h4>Displacement Routes</h4>
+    <div class="legend-item">
+      <svg width="20" height="20">
+        <line x1="0" y1="10" x2="20" y2="10" stroke="#FF671F" stroke-width="3" stroke-dasharray="5,5"/>
+      </svg>
+      <span>To Egypt</span>
+    </div>
+    <div class="legend-item">
+      <svg width="20" height="20">
+        <line x1="0" y1="10" x2="20" y2="10" stroke="#418FDE" stroke-width="3" stroke-dasharray="5,5"/>
+      </svg>
+      <span>To Chad</span>
+    </div>
+    <div class="legend-item">
+      <svg width="20" height="20">
+        <line x1="0" y1="10" x2="20" y2="10" stroke="#5CB8B2" stroke-width="3" stroke-dasharray="5,5"/>
+      </svg>
+      <span>To South Sudan</span>
+    </div>
+    <p>Line thickness = relative volume</p>
+  `;
+  return div;
+};
+flowLegend.addTo(countryCircleMap);
 
     // Pie Chart Map Showing Displacement Proportions
     const map5 = L.map('map5').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
