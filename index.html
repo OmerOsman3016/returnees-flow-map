@@ -478,8 +478,8 @@
       border-radius: 8px;
     }
 
-    /* Heatmap container styling */
-    #heatmap-container {
+    /* Timeline container styling */
+    #timeline-map-container {
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -491,47 +491,18 @@
       animation-delay: 1s;
     }
 
-    #heatmap-chart-container {
+    #timeline-container {
       background-color: #ffffff;
       border: 1px solid #d9e0f1;
       border-radius: 8px;
       padding: 10px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      height: 500px;
+      height: 300px;
     }
 
-    #heatmap-controls {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
-      margin-top: 10px;
-    }
-
-    #heatmap-slider {
-      flex-grow: 1;
-      max-width: 600px;
-    }
-
-    #heatmap-play-button {
-      background-color: #418FDE;
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    #heatmap-play-button:hover {
-      background-color: #2a6fbb;
-    }
-
-    #heatmap-time-display {
-      min-width: 100px;
-      text-align: center;
-      font-weight: bold;
-      color: #418FDE;
+    #timelineChart {
+      width: 100% !important;
+      height: 250px !important;
     }
 
     /* Mobility in Sudan Text Container */
@@ -672,16 +643,6 @@
       
       .loading-text {
         font-size: 16px;
-      }
-
-      /* Adjust heatmap controls for mobile */
-      #heatmap-controls {
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      #heatmap-slider {
-        width: 100%;
       }
     }
 
@@ -981,17 +942,12 @@ movements into neighbouring countries.
     </div>
   </div>
 
-  <!-- Heatmap Section -->
-  <div id="heatmap-section" id="heatmap-container">
-    <!-- Heatmap Chart Container -->
-    <div id="heatmap-chart-container">
-      <h2>Displacement Heatmap Over Time (2023 - 2025)</h2>
-      <div id="heatmapChart"></div>
-      <div id="heatmap-controls">
-        <button id="heatmap-play-button">▶ Play</button>
-        <input type="range" id="heatmap-slider" min="0" max="19" value="0" step="1">
-        <div id="heatmap-time-display">Aug-2023</div>
-      </div>
+  <!-- Timeline Section -->
+  <div id="timeline-section" id="timeline-map-container">
+    <!-- Timeline Graph Container -->
+    <div id="timeline-container">
+      <h2>Moblity Over Time (2023 - 2025)</h2>
+      <canvas id="timelineChart"></canvas>
     </div>
   </div>
   
@@ -1030,7 +986,6 @@ movements into neighbouring countries.
   <script src="https://unpkg.com/papaparse@5.3.0/papaparse.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
   <script>
     // Loading spinner functionality
@@ -1704,6 +1659,111 @@ movements into neighbouring countries.
     };
     legend3.addTo(map3);
     
+    // Initialize Timeline Graph
+    const ctx = document.getElementById('timelineChart').getContext('2d');
+    const gradient = ctx.createLinearGradient(0, 0, 0, 200);
+    gradient.addColorStop(0, '#FFFFFF');
+    gradient.addColorStop(1, '#418FDE');
+
+    const gradient2 = ctx.createLinearGradient(0, 0, 0, 200);
+    gradient2.addColorStop(0, '#FFFFFF');
+    gradient2.addColorStop(1, '#FF6384'); // Different color for the second dataset
+
+    const timelineChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Aug-2023', 'Sep-2023', 'Oct-2023', 'Nov-2023', 'Dec-2023', 'Jan-2024', 'Feb-2024', 'Mar-2024', 'Apr-2024', 'May-2024', 'Jun-2024', 'Jul-2024', 'Aug-2024', 'Sep-2024', 'Oct-2024', 'Nov-2024', 'Dec-2024', 'Jan-2025', 'Feb-2025', 'Mar-2025'],
+        datasets: [
+          {
+            label: 'IDPs Over Time ',
+            data: [3801754, 4425083, 4856294, 5340863, 5942580, 6144363, 6397698, 6622565, 6786816, 10095054, 10540215, 10710015, 10834382, 10890722, 11018231, 11359005, 11532774,11568970,11585384,11301340],
+            borderColor: '#82C4FF',
+            backgroundColor: gradient,
+            borderWidth: 3,
+            fill: false,
+            pointBackgroundColor: '#ffffff',
+            pointBorderColor: '#82C4FF',
+            pointRadius: 5,
+            pointHoverRadius: 7,
+            tension: 0.4
+          },
+          {
+            label: 'Returnees Over Time ',
+            data: [0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0,396738], // Example data for the second dataset
+            borderColor: '#FF671F', // Different color for the second dataset
+            backgroundColor: gradient2,
+            borderWidth: 3,
+            fill: false,
+            pointBackgroundColor: '#ffffff',
+            pointBorderColor: '#FF671F',
+            pointRadius: 5,
+            pointHoverRadius: 7,
+            tension: 0.4
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          tooltip: {
+            backgroundColor: '#0033A0',
+            titleColor: '#82C4FF',
+            bodyColor: '#82C4FF',
+            borderColor: '#82C4FF',
+            borderWidth: 1,
+            displayColors: false
+          },
+          legend: {
+            display: true // Show legend to differentiate between datasets
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Total',
+              color: '#82C4FF',
+              font: {
+                size: 14,
+                weight: 'bold'
+              }
+            },
+            grid: {
+              color: '#e0e0e0'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Month',
+              color: '#82C4FF',
+              font: {
+                size: 14,
+                weight: 'bold'
+              }
+            },
+            grid: {
+              color: '#e0e0e0'
+            }
+          }
+        },
+        animation: {
+          duration: 5000,
+          easing:  'linear' ,
+          delay: 300,              // 300ms delay before starting
+          loop: false,             // Prevent repeating
+          onProgress: (ctx) => {   // Callback during animation
+            console.log(`${ctx.currentStep}/${ctx.numSteps}`);
+          },
+          onComplete: (ctx) => {   // Callback when done
+            console.log('Animation finished!');
+          }
+        }
+      }
+    });
+     
     // Initialize the fourth map
     const map4 = L.map('map4').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
 
@@ -1835,11 +1895,11 @@ movements into neighbouring countries.
     
     // Define multiple base layers for the country circle map
     const cartoDBLightCountry = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap'
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
 
     const openStreetMapCountry = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap'
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
 
     const esriWorldImageryCountry = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
@@ -1957,7 +2017,7 @@ movements into neighbouring countries.
     countryLegend.addTo(countryCircleMap);
 
     // Pie Chart Map Showing Displacement Proportions
-    const map5 = L.map('map5').setView([16, 30], 5.5);
+    const map5 = L.map('map5').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; OpenStreetMap'
     }).addTo(map5);
@@ -2051,171 +2111,6 @@ movements into neighbouring countries.
       return div;
     };
     legend5.addTo(map5);
-
-    // Initialize Heatmap with Time Control
-    const months = ['Aug-2023', 'Sep-2023', 'Oct-2023', 'Nov-2023', 'Dec-2023', 
-                    'Jan-2024', 'Feb-2024', 'Mar-2024', 'Apr-2024', 'May-2024', 
-                    'Jun-2024', 'Jul-2024', 'Aug-2024', 'Sep-2024', 'Oct-2024', 
-                    'Nov-2024', 'Dec-2024', 'Jan-2025', 'Feb-2025', 'Mar-2025'];
-    
-    const idpsData = [3801754, 4425083, 4856294, 5340863, 5942580, 6144363, 
-                      6397698, 6622565, 6786816, 10095054, 10540215, 10710015, 
-                      10834382, 10890722, 11018231, 11359005, 11532774, 11568970, 
-                      11585384, 11301340];
-    
-    const returneesData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 396738];
-    
-    // Prepare data for heatmap
-    const heatmapData = months.map((month, i) => {
-      return {
-        month: month,
-        idps: idpsData[i],
-        returnees: returneesData[i]
-      };
-    });
-    
-    // Create heatmap chart
-    const heatmapElement = document.getElementById('heatmapChart');
-    const heatmapSlider = document.getElementById('heatmap-slider');
-    const heatmapPlayButton = document.getElementById('heatmap-play-button');
-    const heatmapTimeDisplay = document.getElementById('heatmap-time-display');
-    
-    let heatmapChart;
-    let isPlaying = false;
-    let playInterval;
-    
-    function updateHeatmap(timeIndex) {
-      // Ensure timeIndex is within bounds
-      timeIndex = Math.max(0, Math.min(timeIndex, months.length - 1));
-      
-      // Update slider position
-      heatmapSlider.value = timeIndex;
-      
-      // Update time display
-      heatmapTimeDisplay.textContent = months[timeIndex];
-      
-      // Create data for the current time period
-      const currentData = heatmapData.slice(0, timeIndex + 1);
-      
-      // Create traces for the heatmap
-      const traces = [
-        {
-          x: currentData.map(d => d.month),
-          y: currentData.map(d => d.idps),
-          name: 'IDPs',
-          type: 'scatter',
-          mode: 'lines+markers',
-          line: {color: '#418FDE', width: 3},
-          marker: {size: 8, color: '#418FDE'},
-          hoverinfo: 'y+name',
-          hoverlabel: {bgcolor: '#418FDE'}
-        },
-        {
-          x: currentData.map(d => d.month),
-          y: currentData.map(d => d.returnees),
-          name: 'Returnees',
-          type: 'scatter',
-          mode: 'lines+markers',
-          line: {color: '#FF671F', width: 3},
-          marker: {size: 8, color: '#FF671F'},
-          hoverinfo: 'y+name',
-          hoverlabel: {bgcolor: '#FF671F'}
-        }
-      ];
-      
-      // Update or create the chart
-      if (heatmapChart) {
-        Plotly.react(heatmapElement, traces, heatmapLayout);
-      } else {
-        const heatmapLayout = {
-          title: 'Displacement Over Time',
-          xaxis: {
-            title: 'Month',
-            tickangle: -45,
-            showgrid: true,
-            gridcolor: '#f0f0f0'
-          },
-          yaxis: {
-            title: 'Number of People',
-            showgrid: true,
-            gridcolor: '#f0f0f0',
-            rangemode: 'tozero'
-          },
-          margin: {t: 50, l: 60, r: 30, b: 80},
-          hovermode: 'closest',
-          plot_bgcolor: 'rgba(0,0,0,0)',
-          paper_bgcolor: 'rgba(0,0,0,0)',
-          legend: {
-            orientation: 'h',
-            yanchor: 'bottom',
-            y: 1.02,
-            xanchor: 'right',
-            x: 1
-          },
-          transition: {
-            duration: 500,
-            easing: 'cubic-in-out'
-          }
-        };
-        
-        heatmapChart = Plotly.newPlot(heatmapElement, traces, heatmapLayout);
-      }
-    }
-    
-    // Initialize heatmap with first time period
-    updateHeatmap(0);
-    
-    // Add slider event listener
-    heatmapSlider.addEventListener('input', function() {
-      if (isPlaying) {
-        togglePlayback();
-      }
-      updateHeatmap(parseInt(this.value));
-    });
-    
-    // Add play button event listener
-    heatmapPlayButton.addEventListener('click', togglePlayback);
-    
-    function togglePlayback() {
-      isPlaying = !isPlaying;
-      
-      if (isPlaying) {
-        heatmapPlayButton.textContent = '❚❚ Pause';
-        
-        let currentIndex = parseInt(heatmapSlider.value);
-        playInterval = setInterval(function() {
-          currentIndex++;
-          if (currentIndex >= months.length) {
-            currentIndex = 0;
-          }
-          updateHeatmap(currentIndex);
-        }, 1000);
-      } else {
-        heatmapPlayButton.textContent = '▶ Play';
-        clearInterval(playInterval);
-      }
-    }
-    
-    // Add keyboard controls
-    document.addEventListener('keydown', function(e) {
-      if (e.target.tagName.toLowerCase() !== 'input') { // Don't interfere with form inputs
-        const currentIndex = parseInt(heatmapSlider.value);
-        
-        if (e.key === 'ArrowLeft') {
-          // Left arrow - go back one time period
-          updateHeatmap(Math.max(0, currentIndex - 1));
-          if (isPlaying) togglePlayback();
-        } else if (e.key === 'ArrowRight') {
-          // Right arrow - go forward one time period
-          updateHeatmap(Math.min(months.length - 1, currentIndex + 1));
-          if (isPlaying) togglePlayback();
-        } else if (e.key === ' ') {
-          // Spacebar - toggle play/pause
-          togglePlayback();
-          e.preventDefault(); // Prevent page scrolling
-        }
-      }
-    });
   </script>
 </body>
 </html>
