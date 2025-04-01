@@ -584,6 +584,39 @@
     .drilldown-back:hover {
       background: #2a6fbb;
     }
+
+    /* Heatmap controls styling */
+    .heatmap-control-button {
+      background-color: #418FDE;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+
+    .heatmap-control-button:hover {
+      background-color: #2a6fbb;
+    }
+
+    #heatmap-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    #heatmap-slider {
+      flex-grow: 1;
+      margin: 0 15px;
+    }
+
+    #heatmap-time-display {
+      min-width: 80px;
+      text-align: center;
+    }
     
     /* Footer styling */
     footer {
@@ -643,6 +676,21 @@
       
       .loading-text {
         font-size: 16px;
+      }
+
+      /* Adjust heatmap controls for mobile */
+      #heatmap-controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      #heatmap-slider {
+        width: 100%;
+        margin: 10px 0;
+      }
+
+      #heatmap-time-display {
+        margin: 5px 0;
       }
     }
 
@@ -903,6 +951,33 @@ movements into neighbouring countries.
         </p>
       </div>
       <div id="country-circle-map"></div>
+    </div>
+  </div>
+
+  <!-- Heatmap Section -->
+  <div id="heatmap-section" class="maps-container">
+    <div id="heatmap-container">
+      <h2>Displacement Heatmap Over Time (2023 - 2025)</h2>
+      <div id="mobility-text-container">
+        <p>
+          This interactive heatmap visualization shows the progression of displacement over time. The heat intensity represents the number of displaced persons, with darker colors indicating higher numbers. Use the time slider or play button to see how the situation evolved month by month.
+        </p>
+        <p>
+          <strong>Key patterns to observe:</strong>
+          <ul>
+            <li>The rapid increase in IDPs (blue line) in the first months of the conflict</li>
+            <li>The sudden spike in May 2024 when displacement surpassed 10 million</li>
+            <li>The appearance of returnees (orange line) only in the most recent data</li>
+          </ul>
+        </p>
+      </div>
+      <div id="heatmapChart" style="height: 400px;"></div>
+      <div id="heatmap-controls" style="margin-top: 20px;">
+        <button id="heatmap-play-button" class="heatmap-control-button">▶ Play</button>
+        <input type="range" id="heatmap-slider" min="0" max="19" value="0" step="1" style="width: 70%; margin: 0 15px;">
+        <span id="heatmap-time-display" style="font-weight: bold; color: #418FDE;">Aug-2023</span>
+        <button id="heatmap-export-button" class="heatmap-control-button">Export as Image</button>
+      </div>
     </div>
   </div>
 
@@ -2111,6 +2186,208 @@ movements into neighbouring countries.
       return div;
     };
     legend5.addTo(map5);
+
+    // Heatmap Data (from your timeline chart)
+    const months = ['Aug-2023', 'Sep-2023', 'Oct-2023', 'Nov-2023', 'Dec-2023', 
+                   'Jan-2024', 'Feb-2024', 'Mar-2024', 'Apr-2024', 'May-2024', 
+                   'Jun-2024', 'Jul-2024', 'Aug-2024', 'Sep-2024', 'Oct-2024', 
+                   'Nov-2024', 'Dec-2024', 'Jan-2025', 'Feb-2025', 'Mar-2025'];
+    
+    const idpsData = [3801754, 4425083, 4856294, 5340863, 5942580, 6144363, 
+                     6397698, 6622565, 6786816, 10095054, 10540215, 10710015, 
+                     10834382, 10890722, 11018231, 11359005, 11532774, 11568970, 
+                     11585384, 11301340];
+    
+    const returneesData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 396738];
+
+    // Prepare heatmap data
+    const heatmapData = [];
+    for (let i = 0; i < months.length; i++) {
+      heatmapData.push({
+        month: months[i],
+        idps: idpsData[i],
+        returnees: returneesData[i]
+      });
+    }
+
+    // Create heatmap
+    const heatmapElement = document.getElementById('heatmapChart');
+    const heatmapSlider = document.getElementById('heatmap-slider');
+    const heatmapPlayButton = document.getElementById('heatmap-play-button');
+    const heatmapTimeDisplay = document.getElementById('heatmap-time-display');
+    const heatmapExportButton = document.getElementById('heatmap-export-button');
+    
+    let heatmapChart;
+    let isPlaying = false;
+    let playInterval;
+    const animationSpeed = 1000; // milliseconds between frames
+
+    // Initialize heatmap
+    function initHeatmap() {
+      const initialData = getDataUpToIndex(0);
+      
+      const layout = {
+        title: 'Displacement Over Time',
+        xaxis: {
+          title: 'Month',
+          tickangle: -45,
+          showgrid: true,
+          gridcolor: '#f0f0f0'
+        },
+        yaxis: {
+          title: 'Number of People',
+          showgrid: true,
+          gridcolor: '#f0f0f0',
+          rangemode: 'tozero'
+        },
+        margin: {t: 50, l: 60, r: 30, b: 80},
+        hovermode: 'closest',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        legend: {
+          orientation: 'h',
+          yanchor: 'bottom',
+          y: 1.02,
+          xanchor: 'right',
+          x: 1
+        },
+        transition: {
+          duration: 500,
+          easing: 'cubic-in-out'
+        }
+      };
+      
+      const config = {
+        responsive: true,
+        displayModeBar: true
+      };
+      
+      heatmapChart = Plotly.newPlot(
+        heatmapElement, 
+        [
+          createTrace('IDPs', '#418FDE', initialData),
+          createTrace('Returnees', '#FF671F', initialData)
+        ], 
+        layout, 
+        config
+      );
+    }
+
+    // Create a trace for the chart
+    function createTrace(name, color, data) {
+      return {
+        x: data.map(d => d.month),
+        y: data.map(d => d[name.toLowerCase()]),
+        name: name,
+        type: 'scatter',
+        mode: 'lines+markers',
+        line: {color: color, width: 3},
+        marker: {size: 8, color: color},
+        hoverinfo: 'y+name',
+        hoverlabel: {bgcolor: color},
+        fill: 'tozeroy',
+        fillcolor: hexToRgba(color, 0.2)
+      };
+    }
+
+    // Helper function to convert hex to rgba
+    function hexToRgba(hex, alpha) {
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    // Get data up to a specific index
+    function getDataUpToIndex(index) {
+      return heatmapData.slice(0, index + 1);
+    }
+
+    // Update heatmap to show data up to a specific time index
+    function updateHeatmap(timeIndex) {
+      timeIndex = Math.max(0, Math.min(timeIndex, months.length - 1));
+      
+      // Update UI elements
+      heatmapSlider.value = timeIndex;
+      heatmapTimeDisplay.textContent = months[timeIndex];
+      
+      // Get data for this time period
+      const currentData = getDataUpToIndex(timeIndex);
+      
+      // Update chart
+      Plotly.react(
+        heatmapElement,
+        [
+          createTrace('IDPs', '#418FDE', currentData),
+          createTrace('Returnees', '#FF671F', currentData)
+        ],
+        heatmapChart.layout
+      );
+    }
+
+    // Toggle play/pause of animation
+    function togglePlayback() {
+      isPlaying = !isPlaying;
+      
+      if (isPlaying) {
+        heatmapPlayButton.textContent = '❚❚ Pause';
+        
+        let currentIndex = parseInt(heatmapSlider.value);
+        playInterval = setInterval(() => {
+          currentIndex++;
+          if (currentIndex >= months.length) {
+            currentIndex = 0;
+            if (isPlaying) togglePlayback(); // Stop at end
+          }
+          updateHeatmap(currentIndex);
+        }, animationSpeed);
+      } else {
+        heatmapPlayButton.textContent = '▶ Play';
+        clearInterval(playInterval);
+      }
+    }
+
+    // Export heatmap as image
+    function exportHeatmap() {
+      Plotly.downloadImage(heatmapElement, {
+        format: 'png',
+        width: 1200,
+        height: 600,
+        filename: 'sudan-displacement-heatmap'
+      });
+    }
+
+    // Initialize heatmap when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      initHeatmap();
+      
+      // Event listeners
+      heatmapSlider.addEventListener('input', () => {
+        if (isPlaying) togglePlayback();
+        updateHeatmap(parseInt(heatmapSlider.value));
+      });
+      
+      heatmapPlayButton.addEventListener('click', togglePlayback);
+      heatmapExportButton.addEventListener('click', exportHeatmap);
+      
+      // Keyboard controls
+      document.addEventListener('keydown', (e) => {
+        if (e.target.tagName.toLowerCase() !== 'input') {
+          const currentIndex = parseInt(heatmapSlider.value);
+          
+          if (e.key === 'ArrowLeft') {
+            updateHeatmap(currentIndex - 1);
+            if (isPlaying) togglePlayback();
+          } else if (e.key === 'ArrowRight') {
+            updateHeatmap(currentIndex + 1);
+            if (isPlaying) togglePlayback();
+          } else if (e.key === ' ') {
+            togglePlayback();
+            e.preventDefault();
+          }
+        }
+      });
+    });
   </script>
 </body>
 </html>
