@@ -2325,28 +2325,28 @@ movements into neighbouring countries.
       );
     }
 
-    // Toggle play/pause of animation
-    function togglePlayback() {
-      isPlaying = !isPlaying;
-      
-      if (isPlaying) {
-        heatmapPlayButton.textContent = '❚❚ Pause';
-        
-        let currentIndex = parseInt(heatmapSlider.value);
-        playInterval = setInterval(() => {
-          currentIndex++;
-          if (currentIndex >= months.length) {
-            currentIndex = 0;
-            if (isPlaying) togglePlayback(); // Stop at end
-          }
-          updateHeatmap(currentIndex);
-        }, animationSpeed);
-      } else {
-        heatmapPlayButton.textContent = '▶ Play';
-        clearInterval(playInterval);
+// Toggle play/pause of animation
+function togglePlayback() {
+  isPlaying = !isPlaying;
+  
+  if (isPlaying) {
+    heatmapPlayButton.textContent = '❚❚ Pause';
+    
+    let currentIndex = parseInt(heatmapSlider.value);
+    playInterval = setInterval(() => {
+      currentIndex++;
+      if (currentIndex >= months.length) {
+        currentIndex = months.length - 1; // Stop at the last month
+        togglePlayback(); // Stop playback
+        return;
       }
-    }
-
+      updateHeatmap(currentIndex);
+    }, animationSpeed);
+  } else {
+    heatmapPlayButton.textContent = '▶ Play';
+    clearInterval(playInterval);
+  }
+}
     // Export heatmap as image
     function exportHeatmap() {
       Plotly.downloadImage(heatmapElement, {
@@ -2382,7 +2382,7 @@ movements into neighbouring countries.
             updateHeatmap(currentIndex + 1);
             if (isPlaying) togglePlayback();
           } else if (e.key === ' ') {
-            togglePlayback(currentIndex = months.length - 1);
+            togglePlayback();
             e.preventDefault();
           }
         }
