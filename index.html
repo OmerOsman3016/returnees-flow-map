@@ -2382,7 +2382,7 @@ movements into neighbouring countries.
             updateHeatmap(currentIndex + 1);
             if (isPlaying) togglePlayback();
           } else if (e.key === ' ') {
-            togglePlayback();
+            togglePlayback(currentIndex = months.length - 1);
             e.preventDefault();
           }
         }
