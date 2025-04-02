@@ -336,7 +336,7 @@
       font-weight: 600;
       text-align: left;
       margin: 25px 0 15px;
-     
+       
     }
 
     /* Description container styling */
@@ -1091,18 +1091,22 @@
         <span class="dot" onclick="currentSlide(3)"></span> 
       </div>
 
-      !-- Dashboard Cards Container -->
-<div class="dashboard-cards">
-  <!-- Card 1: Internally Displaced Persons -->
-  <div class="dashboard-card" style="--card-color: #2A81CB;">
-    <div class="card-icon">
-      <img src="./data/Internally_displaced.png" alt="Internally Displaced" class="card-icon-img">
-    </div>
-    <h3>Internally Displaced</h3>
-    <div class="value">11,301,340</div>
-    <div class="change positive">
-      <i class="fas fa-arrow-up"></i> 3.2% since last month
-    </div>
+      <!-- Dashboard Cards Container -->
+      <div class="dashboard-cards">
+        <!-- Card 1: Internally Displaced Persons -->
+        <div class="dashboard-card" style="--card-color: #2A81CB;">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path fill="currentColor" d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" />
+            </svg>
+          </div>
+          <h3>Internally Displaced</h3>
+          <div class="value">11,301,340</div>
+          <div class="change positive">
+            <i class="fas fa-arrow-up"></i> 3.2% since last month
+          </div>
+          <div class="card-footer">Nationwide</div>
+        </div>
 
         <!-- Card 2: Returnees -->
         <div class="dashboard-card" style="--card-color: #5CB85C;">
@@ -1116,7 +1120,7 @@
           <div class="change negative">
             <i class="fas fa-arrow-down"></i> 1.5% since last month
           </div>
-         
+          <div class="card-footer">Northern regions</div>
         </div>
 
         <!-- Card 3: Crossing Border -->
@@ -1131,7 +1135,7 @@
           <div class="change positive">
             <i class="fas fa-arrow-up"></i> 0.8% since last month
           </div>
-          
+          <div class="card-footer">Neighboring countries</div>
         </div>
 
         <!-- Card 4: Migrants Affected -->
@@ -1145,7 +1149,8 @@
           <div class="value">400,000</div>
           <div class="change negative">
             <i class="fas fa-arrow-down"></i> 2.1% since last month
-          </div> 
+          </div>
+          <div class="card-footer">Urban centers</div>
         </div>
 
         <!-- Card 5: Locations Covered -->
@@ -1160,7 +1165,7 @@
           <div class="change positive">
             <i class="fas fa-arrow-up"></i> 1.2% since last month
           </div>
-           
+          <div class="card-footer">Across Sudan</div>
         </div>
       </div>
     </div>
