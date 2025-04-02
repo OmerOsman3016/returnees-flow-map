@@ -436,7 +436,7 @@
       font-weight: 600;
     }
 
-    /* Map Container for Total Number of IDPs by STATE */
+    /* Map Container for Total Number of IDPs by State */
     #map-container-3 {
       flex: 2;
       background-color: #ffffff;
@@ -591,6 +591,74 @@
       text-align: center;
     }
     
+    /* Enhanced Legend Styles */
+    .legend {
+      background: white;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+      font-family: Arial, sans-serif;
+      max-width: 200px;
+    }
+    
+    .legend h4 {
+      margin: 0 0 10px;
+      color: #555;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    
+    .legend-checkbox {
+      margin: 5px 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    .legend-checkbox input {
+      margin-right: 8px;
+    }
+    
+    .legend-checkbox label {
+      font-size: 13px;
+      color: #555;
+    }
+    
+    .marker-size-controls {
+      margin-top: 15px;
+    }
+    
+    .marker-size-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+    }
+    
+    .marker-size-buttons button {
+      padding: 3px 8px;
+      font-size: 12px;
+      background-color: #f0f0f0;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .marker-size-buttons button:hover {
+      background-color: #e0e0e0;
+    }
+    
+    .marker-size-buttons button.active {
+      background-color: #418FDE;
+      color: white;
+      border-color: #2a6fbb;
+    }
+    
+    .marker-size-label {
+      font-size: 12px;
+      color: #777;
+      margin-bottom: 5px;
+    }
+    
     /* Footer styling */
     footer {
       background-color: #418FDE;
@@ -664,6 +732,20 @@
 
       #heatmap-time-display {
         margin: 5px 0;
+      }
+      
+      /* Adjust legend for mobile */
+      .legend {
+        max-width: 160px;
+        padding: 10px;
+      }
+      
+      .marker-size-buttons {
+        flex-direction: column;
+      }
+      
+      .marker-size-buttons button {
+        margin-bottom: 5px;
       }
     }
 
@@ -1979,23 +2061,24 @@ movements into neighbouring countries.
     ];
 
     // Create pie chart icon function with standardized size
-    function createPieChartIcon(displaced, total) {
+    function createPieChartIcon(displaced, total, sizeFactor = 1) {
       const displacedPercent = displaced / total;
       const endAngle = displacedPercent * 360;
       
       // Use a fixed radius for all pie charts (e.g., 16 pixels)
-      const radius = 30;
+      const baseRadius = 30;
+      const radius = baseRadius * sizeFactor;
       
       const svg = `
-        <svg width="${radius * 2}" height="${radius * 2}" viewBox="0 0 32 32">
-          <circle cx="16" cy="16" r="16" fill="#418FDE"/>
-          <path d="M16,16 L16,0 A16,16 0 ${endAngle > 180 ? 1 : 0},1 
-            ${16 + Math.sin((endAngle * Math.PI)/180) * 16},
-            ${16 - Math.cos((endAngle * Math.PI)/180) * 16} z" 
+        <svg width="${radius * 2}" height="${radius * 2}" viewBox="0 0 ${radius * 2} ${radius * 2}">
+          <circle cx="${radius}" cy="${radius}" r="${radius}" fill="#418FDE"/>
+          <path d="M${radius},${radius} L${radius},0 A${radius},${radius} 0 ${endAngle > 180 ? 1 : 0},1 
+            ${radius + Math.sin((endAngle * Math.PI)/180) * radius},
+            ${radius - Math.cos((endAngle * Math.PI)/180) * radius} z" 
             fill="rgba(255, 103, 31, 0.8)"/>
-          <circle cx="16" cy="16" r="12" fill="white" opacity="0.7"/>
-          <text x="16" y="16" text-anchor="middle" dominant-baseline="middle" 
-                font-size="8" font-weight="bold" fill="#82C4FF">
+          <circle cx="${radius}" cy="${radius}" r="${radius * 0.6}" fill="white" opacity="0.7"/>
+          <text x="${radius}" y="${radius}" text-anchor="middle" dominant-baseline="middle" 
+                font-size="${8 * sizeFactor}" font-weight="bold" fill="#82C4FF">
             ${Math.round(displacedPercent * 100)}%
           </text>
         </svg>
@@ -2008,45 +2091,123 @@ movements into neighbouring countries.
       });
     }
 
+    // Create a layer group for the pie chart markers
+    const pieMarkersLayer = L.layerGroup().addTo(map5);
+    
+    // Store references to all pie chart markers
+    const pieMarkers = [];
+
     // Add markers with standardized pie charts
     stateData.forEach(state => {
       const [name, lat, lng, displaced, total] = state;
       
-      L.marker([lat, lng], {
-        icon: createPieChartIcon(displaced, total)
-      }).addTo(map5).bindPopup(`
+      const marker = L.marker([lat, lng], {
+        icon: createPieChartIcon(displaced, total, 1.0) // Default medium size
+      }).addTo(pieMarkersLayer).bindPopup(`
         <b>${name}</b><br>
         Total Population: ${total.toLocaleString()}<br>
         Displaced: ${displaced.toLocaleString()} (${((displaced/total)*100).toFixed(1)}%)<br>
         Non-Displaced: ${(total - displaced).toLocaleString()}
       `);
+      
+      // Store reference to marker
+      pieMarkers.push({
+        name: name,
+        lat: lat,
+        lng: lng,
+        displaced: displaced,
+        total: total,
+        marker: marker
+      });
     });
 
-   // Replace the existing legend5 code with this:
-const legend5 = L.control({position: 'bottomright'});
-legend5.onAdd = () => {
-  const div = L.DomUtil.create('div', 'legend');
-  div.innerHTML = `
-    <h4 style="margin-bottom: 10px;">Displacement Proportion</h4>
-    <div style="margin-bottom: 10px;">
-      <input type="checkbox" id="displaced-checkbox" checked>
-      <label for="displaced-checkbox">Displaced Population</label><br>
-      <input type="checkbox" id="remaining-checkbox" checked>
-      <label for="remaining-checkbox">Remaining Population</label>
-    </div>
-    <div style="margin-top: 15px;">
-      <h4 style="margin-bottom: 5px;">Marker Size</h4>
-      <div style="font-size: 12px; margin-bottom: 5px;">Represents total state population</div>
-      <div style="display: flex; justify-content: space-between; width: 120px;">
-        <button style="padding: 3px 8px; font-size: 12px;">Small</button>
-        <button style="padding: 3px 8px; font-size: 12px;">Medium</button>
-        <button style="padding: 3px 8px; font-size: 12px;">Large</button>
-      </div>
-    </div>
-  `;
-  return div;
-};
-legend5.addTo(map5);
+    // Function to update pie chart sizes
+    function updatePieChartSizes(size) {
+      const sizeFactors = {
+        small: 0.7,
+        medium: 1.0,
+        large: 1.3
+      };
+      
+      const factor = sizeFactors[size];
+      
+      // Update all pie chart markers
+      pieMarkers.forEach(pieMarker => {
+        pieMarker.marker.setIcon(createPieChartIcon(pieMarker.displaced, pieMarker.total, factor));
+      });
+    }
+
+    // Enhanced legend control for pie chart map
+    const legend5 = L.control({position: 'bottomright'});
+    legend5.onAdd = () => {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = `
+        <h4>Displacement Proportion</h4>
+        <div class="legend-checkbox">
+          <input type="checkbox" id="displaced-checkbox" checked>
+          <label for="displaced-checkbox">Displaced Population</label>
+        </div>
+        <div class="legend-checkbox">
+          <input type="checkbox" id="remaining-checkbox" checked>
+          <label for="remaining-checkbox">Remaining Population</label>
+        </div>
+        <div class="marker-size-controls">
+          <div class="marker-size-label">Marker Size</div>
+          <div class="marker-size-buttons">
+            <button id="size-small">Small</button>
+            <button id="size-medium" class="active">Medium</button>
+            <button id="size-large">Large</button>
+          </div>
+          <div class="marker-size-label">Represents total state population</div>
+        </div>
+      `;
+      
+      // Add functionality to checkboxes
+      const displacedCheckbox = div.querySelector('#displaced-checkbox');
+      const remainingCheckbox = div.querySelector('#remaining-checkbox');
+      
+      displacedCheckbox.addEventListener('change', function() {
+        // Toggle visibility of displaced segments (orange)
+        const opacity = this.checked ? 1 : 0;
+        pieMarkers.forEach(pieMarker => {
+          const icon = pieMarker.marker.getIcon();
+          const newHtml = icon.options.html.replace(/fill="rgba\(255, 103, 31, [\d.]+\)"/g, 
+                                          `fill="rgba(255, 103, 31, ${opacity})"`);
+          icon.options.html = newHtml;
+          pieMarker.marker.setIcon(icon);
+        });
+      });
+      
+      remainingCheckbox.addEventListener('change', function() {
+        // Toggle visibility of remaining segments (blue)
+        const opacity = this.checked ? 1 : 0;
+        pieMarkers.forEach(pieMarker => {
+          const icon = pieMarker.marker.getIcon();
+          const newHtml = icon.options.html.replace(/fill="#418FDE"/g, 
+                                          `fill="rgba(65, 143, 222, ${opacity})"`);
+          icon.options.html = newHtml;
+          pieMarker.marker.setIcon(icon);
+        });
+      });
+      
+      // Add functionality to size buttons
+      const sizeButtons = div.querySelectorAll('.marker-size-buttons button');
+      sizeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // Remove active class from all buttons
+          sizeButtons.forEach(btn => btn.classList.remove('active'));
+          // Add active class to clicked button
+          this.classList.add('active');
+          
+          // Change marker size
+          const size = this.id.split('-')[1]; // small, medium, or large
+          updatePieChartSizes(size);
+        });
+      });
+      
+      return div;
+    };
+    legend5.addTo(map5);
 
     // Heatmap Data (from your timeline chart)
     const months = ['Aug-2023', 'Sep-2023', 'Oct-2023', 'Nov-2023', 'Dec-2023', 
@@ -2186,28 +2347,29 @@ legend5.addTo(map5);
       );
     }
 
-// Toggle play/pause of animation
-function togglePlayback() {
-  isPlaying = !isPlaying;
-  
-  if (isPlaying) {
-    heatmapPlayButton.textContent = '❚❚ Pause';
-    
-    let currentIndex = parseInt(heatmapSlider.value);
-    playInterval = setInterval(() => {
-      currentIndex++;
-      if (currentIndex >= months.length) {
-        currentIndex = months.length - 1; // Stop at the last month
-        togglePlayback(); // Stop playback
-        return;
+    // Toggle play/pause of animation
+    function togglePlayback() {
+      isPlaying = !isPlaying;
+      
+      if (isPlaying) {
+        heatmapPlayButton.textContent = '❚❚ Pause';
+        
+        let currentIndex = parseInt(heatmapSlider.value);
+        playInterval = setInterval(() => {
+          currentIndex++;
+          if (currentIndex >= months.length) {
+            currentIndex = months.length - 1; // Stop at the last month
+            togglePlayback(); // Stop playback
+            return;
+          }
+          updateHeatmap(currentIndex);
+        }, animationSpeed);
+      } else {
+        heatmapPlayButton.textContent = '▶ Play';
+        clearInterval(playInterval);
       }
-      updateHeatmap(currentIndex);
-    }, animationSpeed);
-  } else {
-    heatmapPlayButton.textContent = '▶ Play';
-    clearInterval(playInterval);
-  }
-}
+    }
+
     // Export heatmap as image
     function exportHeatmap() {
       Plotly.downloadImage(heatmapElement, {
