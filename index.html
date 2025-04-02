@@ -185,13 +185,16 @@
       max-width: 1400px;
       margin: 0 auto;
       width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 30px; /* Standardized gap between sections */
     }
   
     /* Slideshow container */
     .slideshow-container {
       max-width: 100%;
       position: relative;
-      margin: 20px 0;
+      margin: 0 auto;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 8px 20px rgba(0,0,0,0.1);
@@ -247,7 +250,7 @@
     /* The dots/bullets/indicators */
     .dots {
       text-align: center;
-      margin-top: 15px;
+      margin: 15px 0;
     }
 
     .dot {
@@ -283,7 +286,6 @@
       background: linear-gradient(135deg, #418FDE 0%, #2A6FBB 100%);
       padding: 15px 30px;
       color: white;
-      margin-bottom: 20px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       flex-wrap: wrap;
@@ -335,8 +337,9 @@
       font-size: 22px;
       font-weight: 600;
       text-align: left;
-      margin: 25px 0 15px;
-       
+      margin: 0 0 15px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e0e8f5;
     }
 
     /* Description container styling */
@@ -345,7 +348,6 @@
       background-color: #ffffff;
       border-radius: 12px;
       padding: 20px 25px;
-      margin-bottom: 20px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       opacity: 0;
@@ -369,7 +371,6 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 20px;
-      margin-bottom: 30px;
       opacity: 0;
       transform: translateY(20px);
       animation: slideUp 0.8s ease-in-out forwards;
@@ -494,7 +495,6 @@
     .idps-frame-container {
       display: flex;
       gap: 20px;
-      margin-bottom: 30px;
       opacity: 0;
       transform: translateY(20px);
       animation: slideUp 0.8s ease-in-out forwards;
@@ -572,7 +572,6 @@
     .maps-container {
       display: flex;
       gap: 20px;
-      margin-bottom: 30px;
       opacity: 0;
       transform: translateY(20px);
       animation: slideUp 0.8s ease-in-out forwards;
@@ -603,17 +602,6 @@
       font-size: 15px;
       line-height: 1.7;
       color: #555;
-      gap: 20px;
-    }
-
-    #mobility-text-container h2 {
-      color: #2A6FBB;
-      font-size: 22px;
-      font-weight: 600;
-      text-align: left;
-      margin: 0 0 15px;
-      padding-bottom: 8px;
-      border-bottom: 2px solid #e0e8f5;
     }
 
     #mobility-text-container p {
@@ -655,7 +643,6 @@
     #map5 {
       height: 600px;
       border-radius: 8px;
-      margin: 20px 0;
     }
     
     .legend {
@@ -669,11 +656,6 @@
     #country-circle-map {
       height: 600px;
       border-radius: 8px;
-      margin: 20px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
-       margin-top: 30px
     }
 
     /* Drill-down back button */
@@ -832,7 +814,6 @@
       color: #FFFFFF;
       text-align: center;
       padding: 20px;
-      margin-top: 30px;
       font-size: 14px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -886,7 +867,6 @@
       background-color: #f8f9fa;
       border-left: 4px solid #FF671F;
       padding: 20px;
-      margin: 30px 0;
       font-size: 14px;
       line-height: 1.6;
       border-radius: 0 8px 8px 0;
@@ -906,7 +886,6 @@
       width: 100%;
       height: auto;
       display: block;
-      margin: 20px auto;
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
@@ -1250,36 +1229,37 @@
     </div>
     
     <!-- Pathways Section -->
-    
-      <div id="mobility-text-container">
-        <div id="pathways-section" id="map-container">
-      <h2 id="map-title-2">IDPs Pathways Across Sudan</h2>
-        <p>
-          This map visualizes the complex movement patterns of Internally Displaced Persons (IDPs) across Sudan. The animated flow lines represent the pathways taken by displaced populations, with their thickness indicating the relative volume of movement between locations. The map reveals several critical displacement corridors that have emerged during the crisis.
-        </p>
-        <p>
-          <strong>Key displacement patterns shown:</strong>
-          <ul>
-            <li><strong>Mass exodus from Khartoum:</strong> Thick flow lines show the movement of over 3.5 million people from the capital to neighboring states, particularly to Aj Jazirah, Sennar, and White Nile states.</li>
-            <li><strong>Darfur cross-border movements:</strong> Significant flows from Darfur states into neighboring Chad and South Sudan, with particularly heavy movement from West Darfur to Chad.</li>
-            <li><strong>Secondary displacement:</strong> Many IDPs who initially fled to relatively safer areas like Aj Jazirah have been forced to move again as conflict spread.</li>
-            <li><strong>Urban to rural movement:</strong> The majority of flows show displacement from urban centers to rural areas, straining already limited resources in receiving communities.</li>
-          </ul>
-        </p>
-        <p>
-          <strong>How to use this map:</strong>
-          <ul>
-            <li>Click on any flow line to see details about that displacement pathway</li>
-            <li>Hover over origin or destination points to see total numbers</li>
-            <li>Note that line thickness represents relative volume - thicker lines indicate larger numbers of displaced persons</li>
-            <li>The animation direction shows the direction of displacement</li>
-          </ul>
-        </p>
-        <p>
-          These displacement pathways have significant implications for humanitarian response, as they show where needs are concentrated and help predict where populations may move next based on conflict patterns and existing migration routes.
-        </p>
+    <div id="pathways-section" class="maps-container">
+      <div id="map-container-2">
+        <h2 id="map-title-2">IDPs Pathways Across Sudan</h2>
+        <div id="mobility-text-container">
+          <p>
+            This map visualizes the complex movement patterns of Internally Displaced Persons (IDPs) across Sudan. The animated flow lines represent the pathways taken by displaced populations, with their thickness indicating the relative volume of movement between locations. The map reveals several critical displacement corridors that have emerged during the crisis.
+          </p>
+          <p>
+            <strong>Key displacement patterns shown:</strong>
+            <ul>
+              <li><strong>Mass exodus from Khartoum:</strong> Thick flow lines show the movement of over 3.5 million people from the capital to neighboring states, particularly to Aj Jazirah, Sennar, and White Nile states.</li>
+              <li><strong>Darfur cross-border movements:</strong> Significant flows from Darfur states into neighboring Chad and South Sudan, with particularly heavy movement from West Darfur to Chad.</li>
+              <li><strong>Secondary displacement:</strong> Many IDPs who initially fled to relatively safer areas like Aj Jazirah have been forced to move again as conflict spread.</li>
+              <li><strong>Urban to rural movement:</strong> The majority of flows show displacement from urban centers to rural areas, straining already limited resources in receiving communities.</li>
+            </ul>
+          </p>
+          <p>
+            <strong>How to use this map:</strong>
+            <ul>
+              <li>Click on any flow line to see details about that displacement pathway</li>
+              <li>Hover over origin or destination points to see total numbers</li>
+              <li>Note that line thickness represents relative volume - thicker lines indicate larger numbers of displaced persons</li>
+              <li>The animation direction shows the direction of displacement</li>
+            </ul>
+          </p>
+          <p>
+            These displacement pathways have significant implications for humanitarian response, as they show where needs are concentrated and help predict where populations may move next based on conflict patterns and existing migration routes.
+          </p>
+        </div>
+        <div id="map2"></div>
       </div>
-      <div id="map2"></div>
     </div>
     
     <!-- Country Circle Propagation Map -->
@@ -1307,12 +1287,11 @@
       </div>
     </div>  
     
-   
-        <div id="mobility-text-container">
-           <!-- Heatmap Section -->
+    <!-- Heatmap Section -->
     <div id="heatmap-section" class="maps-container">
       <div id="heatmap-container">
         <h2>Mobility Over Time (2023 - 2025)</h2>
+        <div id="mobility-text-container">
           <p>
             This interactive heatmap visualization shows the progression of displacement over time. The heat intensity represents the number of displaced persons, with darker colors indicating higher numbers. Use the time slider or play button to see how the situation evolved month by month.
           </p>
@@ -1324,9 +1303,9 @@
               <li>The appearance of returnees (orange line) only in the most recent data</li>
             </ul>
           </p>
-          <div id="heatmapChart" style="height: 400px;"></div>
         </div>
-        <div id="heatmap-controls" style="margin-top: 20px;">
+        <div id="heatmapChart" style="height: 400px;"></div>
+        <div id="heatmap-controls">
           <button id="heatmap-play-button" class="heatmap-control-button">▶ Play</button>
           <input type="range" id="heatmap-slider" min="0" max="19" value="0" step="1" style="width: 70%; margin: 0 15px;">
           <span id="heatmap-time-display" style="font-weight: bold; color: #418FDE;">Aug-2023</span>
