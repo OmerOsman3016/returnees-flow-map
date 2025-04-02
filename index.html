@@ -2022,29 +2022,31 @@ movements into neighbouring countries.
       `);
     });
 
-    // Add legend
-    const legend5 = L.control({position: 'bottomright'});
-    legend5.onAdd = () => {
-      const div = L.DomUtil.create('div', 'legend');
-      div.innerHTML = `
-        <h4>Displacement Proportions</h4>
-        <div style="display: flex; align-items: center; margin: 5px 0;">
-          <svg width="20" height="20">
-            <circle cx="10" cy="10" r="10" fill="rgba(255, 103, 31, 0.8)"/>
-          </svg>
-          Displaced Population
-        </div>
-        <div style="display: flex; align-items: center; margin: 5px 0;">
-          <svg width="20" height="20">
-            <circle cx="10" cy="10" r="10" fill="#418FDE"/>
-          </svg>
-          Non-Displaced Population
-        </div>
-        <p>All pie charts are the same size<br>showing proportion displaced</p>
-      `;
-      return div;
-    };
-    legend5.addTo(map5);
+   // Replace the existing legend5 code with this:
+const legend5 = L.control({position: 'bottomright'});
+legend5.onAdd = () => {
+  const div = L.DomUtil.create('div', 'legend');
+  div.innerHTML = `
+    <h4 style="margin-bottom: 10px;">Displacement Proportion</h4>
+    <div style="margin-bottom: 10px;">
+      <input type="checkbox" id="displaced-checkbox" checked>
+      <label for="displaced-checkbox">Displaced Population</label><br>
+      <input type="checkbox" id="remaining-checkbox" checked>
+      <label for="remaining-checkbox">Remaining Population</label>
+    </div>
+    <div style="margin-top: 15px;">
+      <h4 style="margin-bottom: 5px;">Marker Size</h4>
+      <div style="font-size: 12px; margin-bottom: 5px;">Represents total state population</div>
+      <div style="display: flex; justify-content: space-between; width: 120px;">
+        <button style="padding: 3px 8px; font-size: 12px;">Small</button>
+        <button style="padding: 3px 8px; font-size: 12px;">Medium</button>
+        <button style="padding: 3px 8px; font-size: 12px;">Large</button>
+      </div>
+    </div>
+  `;
+  return div;
+};
+legend5.addTo(map5);
 
     // Heatmap Data (from your timeline chart)
     const months = ['Aug-2023', 'Sep-2023', 'Oct-2023', 'Nov-2023', 'Dec-2023', 
