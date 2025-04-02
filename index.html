@@ -927,6 +927,71 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
+    /* IDP Accommodation Data Analysis Section */
+    .accommodation-container {
+      max-width: 900px;
+      margin: 30px auto;
+      background-color: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 0.8s ease-in-out forwards;
+      animation-delay: 1s;
+    }
+
+    .accommodation-container h1 {
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .accommodation-container .subtitle {
+      text-align: center;
+      color: #7f8c8d;
+      margin-bottom: 30px;
+      font-weight: normal;
+    }
+
+    .accommodation-container .chart-container {
+      position: relative;
+      height: 500px;
+      margin: 30px 0;
+    }
+
+    .accommodation-container .analysis {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 6px;
+      margin-top: 30px;
+      border-left: 4px solid #3498db;
+    }
+
+    .accommodation-container .analysis h2 {
+      color: #2c3e50;
+      margin-top: 0;
+    }
+
+    .accommodation-container .key-point {
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .accommodation-container .data-source {
+      font-size: 12px;
+      color: #7f8c8d;
+      text-align: right;
+      margin-top: 20px;
+    }
+
+    .accommodation-container .highlight {
+      background-color: #fffde7;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-weight: bold;
+    }
+
     /* Responsive design for smaller screens */
     @media (max-width: 992px) {
       .idps-frame-container {
@@ -1021,6 +1086,15 @@
       
       .marker-size-buttons button {
         margin-bottom: 5px;
+      }
+
+      /* Adjust accommodation section for mobile */
+      .accommodation-container {
+        padding: 20px;
+      }
+
+      .accommodation-container .chart-container {
+        height: 400px;
       }
     }
 
@@ -1314,6 +1388,31 @@
       </div>
     </div>  
     
+    <!-- IDP Accommodation Data Analysis Section -->
+    <div class="accommodation-container">
+      <h1>Where IDPs Live - Accommodation Analysis</h1>
+      <p class="subtitle">Distribution of Internally Displaced Persons by Housing Type</p>
+      
+      <div class="chart-container">
+        <canvas id="accommodationChart"></canvas>
+      </div>
+      
+      <div class="analysis">
+        <h2>Data Insights</h2>
+        <p><span class="key-point">Dominant Accommodation Type:</span> The data reveals that <span class="highlight">Host Family/Community accommodation</span> houses the largest number of IDPs at <span class="highlight">1,077,264</span> individuals, accounting for approximately 45% of the total displaced population represented in this dataset.</p>
+        
+        <p><span class="key-point">Formal vs Informal Housing:</span> While <span class="highlight">formal camps</span> accommodate 415,783 IDPs, informal solutions like <span class="highlight">improvised shelters</span> (56,239) and <span class="highlight">informal settlements</span> (385,332) collectively house a significant portion of the population, indicating potential gaps in formal housing solutions.</p>
+        
+        <p><span class="key-point">Rental Market Pressure:</span> The <span class="highlight">137,092 IDPs in rented accommodations</span> represent a population that may be competing with local residents for housing, potentially driving up rental prices in host communities.</p>
+        
+        <p><span class="key-point">Public Infrastructure Use:</span> Schools and other public buildings serve as temporary housing for <span class="highlight">206,804 IDPs</span>, which may impact the normal functioning of these institutions and access to services for both displaced and host communities.</p>
+        
+        <p><span class="key-point">Vulnerability Indicators:</span> The populations in <span class="highlight">improvised shelters</span> (56,239) and <span class="highlight">informal settlements</span> (385,332) are likely the most vulnerable, facing greater protection risks and less access to basic services.</p>
+      </div>
+      
+      <div class="data-source">Data represents counts of internally displaced persons by accommodation type | Visualization created for humanitarian analysis</div>
+    </div>
+
     <!-- Heatmap Section -->
     <div id="heatmap-section" class="maps-container">
       <div id="heatmap-container">
@@ -1410,6 +1509,7 @@
   <script src="https://unpkg.com/papaparse@5.3.0/papaparse.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
     // Loading spinner functionality
@@ -2214,11 +2314,11 @@
     
     // Define multiple base layers for the country circle map
     const cartoDBLightCountry = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      attribution: '&copy; OpenStreetMap'
     });
 
     const openStreetMapCountry = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      attribution: '&copy; OpenStreetMap'
     });
 
     const esriWorldImageryCountry = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
@@ -2713,6 +2813,105 @@
           }
         }
       });
+    });
+
+    // IDP Accommodation Chart
+    document.addEventListener('DOMContentLoaded', function() {
+      // Accommodation data
+      const data = {
+        labels: [
+          'Camp (formal)',
+          'Host Family/Community',
+          'Rented accommodation',
+          'Improvised shelters',
+          'Schools/public buildings',
+          'Informal settlements'
+        ],
+        datasets: [{
+          data: [415783, 1077264, 137092, 56239, 206804, 385332],
+          backgroundColor: [
+            'rgba(52, 152, 219, 0.7)',
+            'rgba(46, 204, 113, 0.7)',
+            'rgba(231, 76, 60, 0.7)',
+            'rgba(243, 156, 18, 0.7)',
+            'rgba(155, 89, 182, 0.7)',
+            'rgba(26, 188, 156, 0.7)'
+          ],
+          borderColor: [
+            'rgba(52, 152, 219, 1)',
+            'rgba(46, 204, 113, 1)',
+            'rgba(231, 76, 60, 1)',
+            'rgba(243, 156, 18, 1)',
+            'rgba(155, 89, 182, 1)',
+            'rgba(26, 188, 156, 1)'
+          ],
+          borderWidth: 1
+        }]
+      };
+
+      // Chart configuration
+      const config = {
+        type: 'bar',
+        data: data,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.raw.toLocaleString();
+                },
+                afterLabel: function(context) {
+                  const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
+                  const percentage = ((context.raw / total) * 100).toFixed(1);
+                  return `Represents ${percentage}% of total`;
+                }
+              }
+            },
+            title: {
+              display: true,
+              text: 'Number of IDPs by Accommodation Type',
+              font: {
+                size: 18
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              },
+              title: {
+                display: true,
+                text: 'Number of IDPs',
+                font: {
+                  weight: 'bold'
+                }
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Accommodation Type',
+                font: {
+                  weight: 'bold'
+                }
+              }
+            }
+          }
+        }
+      };
+
+      // Create the chart
+      const ctx = document.getElementById('accommodationChart').getContext('2d');
+      new Chart(ctx, config);
     });
   </script>
 </body>
