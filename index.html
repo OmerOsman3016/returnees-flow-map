@@ -14,41 +14,42 @@
 
   <style>
     /* Card Icon Styling */
-.card-icon {
-  width: 50px;
-  height: 50px;
-  margin: 0 auto 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(var(--card-color-rgb), 0.1);
-  border-radius: 50%;
-  padding: 10px; /* Added padding */
-}
+    .card-icon {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(var(--card-color-rgb), 0.1);
+      border-radius: 50%;
+      padding: 10px;
+    }
 
-.card-icon-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: brightness(0) saturate(100%) invert(32%) sepia(74%) saturate(1038%) hue-rotate(183deg) brightness(91%) contrast(91%);
-}
+    .card-icon-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: brightness(0) saturate(100%) invert(32%) sepia(74%) saturate(1038%) hue-rotate(183deg) brightness(91%) contrast(91%);
+    }
 
-/* Specific color adjustments for each card */
-.dashboard-card:nth-child(1) .card-icon-img {
-  filter: brightness(0) saturate(100%) invert(32%) sepia(74%) saturate(1038%) hue-rotate(183deg) brightness(91%) contrast(91%);
-}
-.dashboard-card:nth-child(2) .card-icon-img {
-  filter: brightness(0) saturate(100%) invert(63%) sepia(64%) saturate(439%) hue-rotate(62deg) brightness(93%) contrast(84%);
-}
-.dashboard-card:nth-child(3) .card-icon-img {
-  filter: brightness(0) saturate(100%) invert(76%) sepia(40%) saturate(955%) hue-rotate(333deg) brightness(94%) contrast(91%);
-}
-.dashboard-card:nth-child(4) .card-icon-img {
-  filter: brightness(0) saturate(100%) invert(37%) sepia(93%) saturate(949%) hue-rotate(327deg) brightness(89%) contrast(89%);
-}
-.dashboard-card:nth-child(5) .card-icon-img {
-  filter: brightness(0) saturate(100%) invert(73%) sepia(49%) saturate(481%) hue-rotate(152deg) brightness(94%) contrast(89%);
-}
+    /* Specific color adjustments for each card */
+    .dashboard-card:nth-child(1) .card-icon-img {
+      filter: brightness(0) saturate(100%) invert(32%) sepia(74%) saturate(1038%) hue-rotate(183deg) brightness(91%) contrast(91%);
+    }
+    .dashboard-card:nth-child(2) .card-icon-img {
+      filter: brightness(0) saturate(100%) invert(63%) sepia(64%) saturate(439%) hue-rotate(62deg) brightness(93%) contrast(84%);
+    }
+    .dashboard-card:nth-child(3) .card-icon-img {
+      filter: brightness(0) saturate(100%) invert(76%) sepia(40%) saturate(955%) hue-rotate(333deg) brightness(94%) contrast(91%);
+    }
+    .dashboard-card:nth-child(4) .card-icon-img {
+      filter: brightness(0) saturate(100%) invert(37%) sepia(93%) saturate(949%) hue-rotate(327deg) brightness(89%) contrast(89%);
+    }
+    .dashboard-card:nth-child(5) .card-icon-img {
+      filter: brightness(0) saturate(100%) invert(73%) sepia(49%) saturate(481%) hue-rotate(152deg) brightness(94%) contrast(89%);
+    }
+
     /* Loading spinner styles */
     #loading-spinner {
       position: fixed;
@@ -223,7 +224,7 @@
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 30px; /* Standardized gap between sections */
+      gap: 30px;
     }
   
     /* Slideshow container */
@@ -315,7 +316,7 @@
       to {opacity: 1}
     }
 
-        /* Title Container with Logo, Title, and Info Card */
+    /* Title Container with Logo, Title, and Info Card */
     #title-container {
       display: flex;
       align-items: center;
@@ -331,7 +332,6 @@
       animation: slideUp 0.8s ease-in-out forwards;
       animation-delay: 0.2s;
     }
-
 
     @keyframes slideUp {
       from { opacity: 0; transform: translateY(20px); }
@@ -376,7 +376,6 @@
       font-weight: 600;
       text-align: left;
       margin: 0 0 15px;
-      
     }
 
     /* Description container styling */
@@ -927,137 +926,137 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
-/* IDP Accommodation Analysis Styles */
-.accommodation-analysis {
-    background-color: #ffffff;
-    border-radius: 12px;
-    padding: 30px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    opacity: 0;
-    transform: translateY(20px);
-    animation: slideUp 0.8s ease-in-out forwards;
-    animation-delay: 1s;
-}
-
-.accommodation-analysis h2 {
-    color: #2c3e50;
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-.accommodation-analysis .subtitle {
-    text-align: center;
-    color: #7f8c8d;
-    margin-bottom: 30px;
-    font-weight: normal;
-}
-
-.accommodation-analysis .chart-container {
-    position: relative;
-    height: 500px;
-    margin: 30px 0;
-}
-
-.accommodation-analysis .analysis {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 6px;
-    margin-top: 30px;
-    border-left: 4px solid #3498db;
-}
-
-.accommodation-analysis .analysis h3 {
-    color: #2c3e50;
-    margin-top: 0;
-}
-
-.accommodation-analysis .key-point {
-    font-weight: bold;
-    color: #2c3e50;
-}
-
-.accommodation-analysis .data-source {
-    font-size: 12px;
-    color: #7f8c8d;
-    text-align: right;
-    margin-top: 20px;
-}
-
-.accommodation-analysis .highlight {
-    background-color: #fffde7;
-    padding: 2px 4px;
-    border-radius: 3px;
-    font-weight: bold;
-}
-
-/* Population Pyramid Styles */
-.population-pyramid-container {
-    background-color: #ffffff;
-    border-radius: 12px;
-    padding: 30px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    margin-top: 30px;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: slideUp 0.8s ease-in-out forwards;
-    animation-delay: 1.2s;
-}
-
-.population-pyramid-container h2 {
-    color: #2c3e50;
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-.population-pyramid-container .subtitle {
-    text-align: center;
-    color: #7f8c8d;
-    margin-bottom: 30px;
-    font-weight: normal;
-}
-
-.population-pyramid-container .chart-container {
-    position: relative;
-    height: 500px;
-    margin: 30px 0;
-}
-
-.population-pyramid-container .analysis {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 6px;
-    margin-top: 30px;
-    border-left: 4px solid #3498db;
-}
-
-.population-pyramid-container .analysis h3 {
-    color: #2c3e50;
-    margin-top: 0;
-}
-
-.population-pyramid-container .key-point {
-    font-weight: bold;
-    color: #2c3e50;
-}
-
-.population-pyramid-container .data-source {
-    font-size: 12px;
-    color: #7f8c8d;
-    text-align: right;
-    margin-top: 20px;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .accommodation-analysis, .population-pyramid-container {
-        padding: 20px;
+    /* IDP Accommodation Analysis Styles */
+    .accommodation-analysis {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 0.8s ease-in-out forwards;
+      animation-delay: 1s;
     }
-    
-    .accommodation-analysis .chart-container,
+
+    .accommodation-analysis h2 {
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .accommodation-analysis .subtitle {
+      text-align: center;
+      color: #7f8c8d;
+      margin-bottom: 30px;
+      font-weight: normal;
+    }
+
+    .accommodation-analysis .chart-container {
+      position: relative;
+      height: 500px;
+      margin: 30px 0;
+    }
+
+    .accommodation-analysis .analysis {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 6px;
+      margin-top: 30px;
+      border-left: 4px solid #3498db;
+    }
+
+    .accommodation-analysis .analysis h3 {
+      color: #2c3e50;
+      margin-top: 0;
+    }
+
+    .accommodation-analysis .key-point {
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .accommodation-analysis .data-source {
+      font-size: 12px;
+      color: #7f8c8d;
+      text-align: right;
+      margin-top: 20px;
+    }
+
+    .accommodation-analysis .highlight {
+      background-color: #fffde7;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-weight: bold;
+    }
+
+    /* Population Pyramid Styles */
+    .population-pyramid-container {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      margin-top: 30px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 0.8s ease-in-out forwards;
+      animation-delay: 1.2s;
+    }
+
+    .population-pyramid-container h2 {
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .population-pyramid-container .subtitle {
+      text-align: center;
+      color: #7f8c8d;
+      margin-bottom: 30px;
+      font-weight: normal;
+    }
+
     .population-pyramid-container .chart-container {
-        height: 400px;
+      position: relative;
+      height: 500px;
+      margin: 30px 0;
     }
-}
+
+    .population-pyramid-container .analysis {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 6px;
+      margin-top: 30px;
+      border-left: 4px solid #3498db;
+    }
+
+    .population-pyramid-container .analysis h3 {
+      color: #2c3e50;
+      margin-top: 0;
+    }
+
+    .population-pyramid-container .key-point {
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .population-pyramid-container .data-source {
+      font-size: 12px;
+      color: #7f8c8d;
+      text-align: right;
+      margin-top: 20px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .accommodation-analysis, .population-pyramid-container {
+        padding: 20px;
+      }
+      
+      .accommodation-analysis .chart-container,
+      .population-pyramid-container .chart-container {
+        height: 400px;
+      }
+    }
 
     /* Responsive design for smaller screens */
     @media (max-width: 992px) {
@@ -1207,9 +1206,8 @@
         <div class="spinner-dot"></div>
       </div>
       <div class="loading-text">Loading Displacement Data...</div>
-        <div class="loading-text">Sudan’s war has created the world’s worst displacement crisis, with millions at risk ...</div>
+      <div class="loading-text">Sudan's war has created the world's worst displacement crisis, with millions at risk ...</div>
       <div class="loading-progress">
-      
         <div class="loading-progress-bar" id="progress-bar"></div>
       </div>
     </div>
@@ -1220,7 +1218,7 @@
       <div id="title-container">
         <div id="title">
           <h1>SUDAN | DISPLACEMENT TRACKING MATRIX - SUDAN MOBILITY</h1>
-           <h2><strong>Two Years of Displacement</strong></h2>
+          <h2><strong>Two Years of Displacement</strong></h2>
         </div>
        
         <!-- Add this image element to the right side of the title -->
@@ -1258,7 +1256,7 @@
         <!-- Card 1: Internally Displaced Persons -->
         <div class="dashboard-card" style="--card-color: #2A81CB;">
           <div class="card-icon">
-             <img src="./data/Internally displaced.png" alt="IDP Icon" class="card-icon-img">
+            <img src="./data/Internally displaced.png" alt="IDP Icon" class="card-icon-img">
           </div>
           <h3>Internally Displaced</h3>
           <div class="value">11,301,340</div>
@@ -1271,7 +1269,7 @@
         <!-- Card 2: Returnees -->
         <div class="dashboard-card" style="--card-color: #5CB85C;">
           <div class="card-icon">
-               <img src="./data/Returnees.png" alt="IDP Icon" class="card-icon-img">
+            <img src="./data/Returnees.png" alt="IDP Icon" class="card-icon-img">
           </div>
           <h3>Returnees</h3>
           <div class="value">396,738</div>
@@ -1284,7 +1282,7 @@
         <!-- Card 3: Crossing Border -->
         <div class="dashboard-card" style="--card-color: #F0AD4E;">
           <div class="card-icon">
-             <img src="./data/Crossing Border.png" alt="IDP Icon" class="card-icon-img">
+            <img src="./data/Crossing Border.png" alt="IDP Icon" class="card-icon-img">
           </div>
           <h3>Crossing Border</h3>
           <div class="value">3,934,086</div>
@@ -1297,7 +1295,7 @@
         <!-- Card 4: Migrants Affected -->
         <div class="dashboard-card" style="--card-color: #D9534F;">
           <div class="card-icon">
-             <img src="./data/Crossing Border.png" alt="IDP Icon" class="card-icon-img">  
+            <img src="./data/Crossing Border.png" alt="IDP Icon" class="card-icon-img">  
           </div>
           <h3>Migrants Affected</h3>
           <div class="value">400,000</div>
@@ -1310,7 +1308,7 @@
         <!-- Card 5: Locations Covered -->
         <div class="dashboard-card" style="--card-color: #5BC0DE;">
           <div class="card-icon">
-               <img src="./data/Location.png" alt="IDP Icon" class="card-icon-img">  
+            <img src="./data/Location.png" alt="IDP Icon" class="card-icon-img">  
           </div>
           <h3>Locations Covered</h3>
           <div class="value">10,285</div>
@@ -1328,14 +1326,14 @@
       <div id="idps-text-container">
         <h2>CONTEXT</h2>
         <p>
-         Sudan hosts an estimated 11,301,340 internally displaced
-        persons (IDPs) as of 30 March 2025, including those
-        displaced both before and after the outbreak of the conflict
-        between the Sudanese Armed Forces (SAF) and Rapid
-        Support Forces (RSF) on 15 April 2023.This report analyses displacement pathways and key
-        demographic information for the total population of
-        IDPs across Sudan, as well as data on mixed cross-border
-        movements into neighbouring countries.
+          Sudan hosts an estimated 11,301,340 internally displaced
+          persons (IDPs) as of 30 March 2025, including those
+          displaced both before and after the outbreak of the conflict
+          between the Sudanese Armed Forces (SAF) and Rapid
+          Support Forces (RSF) on 15 April 2023.This report analyses displacement pathways and key
+          demographic information for the total population of
+          IDPs across Sudan, as well as data on mixed cross-border
+          movements into neighbouring countries.
         </p>
         <h3>KEY FACTS AND FIGURES:</h3>
         <ul>
@@ -1358,25 +1356,25 @@
     
     <!-- Population Pyramid Section -->
     <div class="population-pyramid-container">
-        <h2>IDP Population Pyramid</h2>
-        <p class="subtitle">Age and Gender Distribution of Internally Displaced Persons</p>
+      <h2>IDP Population Pyramid</h2>
+      <p class="subtitle">Age and Gender Distribution of Internally Displaced Persons</p>
+      
+      <div class="chart-container">
+        <canvas id="populationPyramidChart"></canvas>
+      </div>
+      <div id="idps-text-container">
+        <h3>Demographic Insights</h3>
+        <p><span class="key-point">Youthful Population:</span> The pyramid shows a broad base with <span class="highlight">41% of IDPs under 18 years old</span>, indicating a very young population structure typical of displacement crises.</p>
         
-        <div class="chart-container">
-            <canvas id="populationPyramidChart"></canvas>
-        </div>
-         <div id="idps-text-container">
-            <h3>Demographic Insights</h3>
-            <p><span class="key-point">Youthful Population:</span> The pyramid shows a broad base with <span class="highlight">41% of IDPs under 18 years old</span>, indicating a very young population structure typical of displacement crises.</p>
-            
-            <p><span class="key-point">Gender Imbalance:</span> There are <span class="highlight">more female IDPs (54%) than male (46%)</span> across most age groups, with the largest disparities in the 18-59 working age bracket.</p>
-            
-            <p><span class="key-point">Child Displacement:</span> Children aged 0-5 years represent <span class="highlight">16.9% of all IDPs</span>, with 866,389 males and 1,045,329 females in this age group.</p>
-            
-            <p><span class="key-point">Working Age Adults:</span> The 18-59 age group comprises <span class="highlight">39.7% of IDPs</span>, with 2,054,763 males and 2,436,550 females, reflecting potential impacts on labor markets and household structures.</p>
-            
-            <p><span class="key-point">Elderly Population:</span> Those aged 60+ represent only <span class="highlight">7.6% of IDPs</span>, with 425,893 males and 434,360 females, suggesting lower survival rates or mobility challenges for older populations in displacement.</p>
-        </div>
- 
+        <p><span class="key-point">Gender Imbalance:</span> There are <span class="highlight">more female IDPs (54%) than male (46%)</span> across most age groups, with the largest disparities in the 18-59 working age bracket.</p>
+        
+        <p><span class="key-point">Child Displacement:</span> Children aged 0-5 years represent <span class="highlight">16.9% of all IDPs</span>, with 866,389 males and 1,045,329 females in this age group.</p>
+        
+        <p><span class="key-point">Working Age Adults:</span> The 18-59 age group comprises <span class="highlight">39.7% of IDPs</span>, with 2,054,763 males and 2,436,550 females, reflecting potential impacts on labor markets and household structures.</p>
+        
+        <p><span class="key-point">Elderly Population:</span> Those aged 60+ represent only <span class="highlight">7.6% of IDPs</span>, with 425,893 males and 434,360 females, suggesting lower survival rates or mobility challenges for older populations in displacement.</p>
+      </div>
+    </div>
     
     <!-- Displacement Section -->
     <div id="displacement-section" class="maps-container">
@@ -1480,33 +1478,32 @@
       </div>
     </div>  
     
-   <!-- IDP Accommodation Data Analysis Section -->
-        <div class="maps-container">
-            <div id="map-container">
-                <div class="accommodation-analysis">
-                    <h2>Where IDPs Live - Accommodation Analysis</h2>
-                    <p class="subtitle">Distribution of Internally Displaced Persons by Housing Type</p>
-                    
-                    <div class="chart-container">
-                        <canvas id="accommodationChart"></canvas>
-                    </div>
-                    
-                    <div id="mobility-text-container">
-                        <h3>Data Insights</h3>
-                        <p><span class="key-point">Dominant Accommodation Type:</span> The data reveals that <span class="highlight">Host Family/Community accommodation</span> houses the largest number of IDPs at <span class="highlight">1,077,264</span> individuals, accounting for approximately 45% of the total displaced population represented in this dataset.</p>
-                        
-                        <p><span class="key-point">Formal vs Informal Housing:</span> While <span class="highlight">formal camps</span> accommodate 415,783 IDPs, informal solutions like <span class="highlight">improvised shelters</span> (56,239) and <span class="highlight">informal settlements</span> (385,332) collectively house a significant portion of the population, indicating potential gaps in formal housing solutions.</p>
-                        
-                        <p><span class="key-point">Rental Market Pressure:</span> The <span class="highlight">137,092 IDPs in rented accommodations</span> represent a population that may be competing with local residents for housing, potentially driving up rental prices in host communities.</p>
-                        
-                        <p><span class="key-point">Public Infrastructure Use:</span> Schools and other public buildings serve as temporary housing for <span class="highlight">206,804 IDPs</span>, which may impact the normal functioning of these institutions and access to services for both displaced and host communities.</p>
-                        
-                        <p><span class="key-point">Vulnerability Indicators:</span> The populations in <span class="highlight">improvised shelters</span> (56,239) and <span class="highlight">informal settlements</span> (385,332) are likely the most vulnerable, facing greater protection risks and less access to basic services.</p>
-                         </div>
-                    
-                </div>
-            </div>
+    <!-- IDP Accommodation Data Analysis Section -->
+    <div class="maps-container">
+      <div id="map-container">
+        <div class="accommodation-analysis">
+          <h2>Where IDPs Live - Accommodation Analysis</h2>
+          <p class="subtitle">Distribution of Internally Displaced Persons by Housing Type</p>
+          
+          <div class="chart-container">
+            <canvas id="accommodationChart"></canvas>
+          </div>
+          
+          <div id="mobility-text-container">
+            <h3>Data Insights</h3>
+            <p><span class="key-point">Dominant Accommodation Type:</span> The data reveals that <span class="highlight">Host Family/Community accommodation</span> houses the largest number of IDPs at <span class="highlight">1,077,264</span> individuals, accounting for approximately 45% of the total displaced population represented in this dataset.</p>
+            
+            <p><span class="key-point">Formal vs Informal Housing:</span> While <span class="highlight">formal camps</span> accommodate 415,783 IDPs, informal solutions like <span class="highlight">improvised shelters</span> (56,239) and <span class="highlight">informal settlements</span> (385,332) collectively house a significant portion of the population, indicating potential gaps in formal housing solutions.</p>
+            
+            <p><span class="key-point">Rental Market Pressure:</span> The <span class="highlight">137,092 IDPs in rented accommodations</span> represent a population that may be competing with local residents for housing, potentially driving up rental prices in host communities.</p>
+            
+            <p><span class="key-point">Public Infrastructure Use:</span> Schools and other public buildings serve as temporary housing for <span class="highlight">206,804 IDPs</span>, which may impact the normal functioning of these institutions and access to services for both displaced and host communities.</p>
+            
+            <p><span class="key-point">Vulnerability Indicators:</span> The populations in <span class="highlight">improvised shelters</span> (56,239) and <span class="highlight">informal settlements</span> (385,332) are likely the most vulnerable, facing greater protection risks and less access to basic services.</p>
+          </div>
         </div>
+      </div>
+    </div>
 
     <!-- Heatmap Section -->
     <div id="heatmap-section" class="maps-container">
@@ -2279,15 +2276,15 @@
     legend3.addTo(map3);
     
     // Initialize the fourth map
-    const map4 = L.map('map4').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
+    const map4 = L.map('map4').setView([16, 30], 5);
 
     // Define multiple base layers for the fourth map
     const cartoDBLight4 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      attribution: '&copy; OpenStreetMap'
     });
 
     const openStreetMap4 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      attribution: '&copy; OpenStreetMap'
     });
 
     const esriWorldImagery4 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
