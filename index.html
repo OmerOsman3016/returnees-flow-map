@@ -927,71 +927,79 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
-    /* IDP Accommodation Data Analysis Section */
-    .accommodation-container {
-      width: 100%;
-      margin: 30px auto;
-      background-color: white;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-      opacity: 0;
-      transform: translateY(20px);
-      animation: slideUp 0.8s ease-in-out forwards;
-      animation-delay: 1s;
-    }
+/* IDP Accommodation Analysis Styles */
+.accommodation-analysis {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUp 0.8s ease-in-out forwards;
+    animation-delay: 1s;
+}
 
-    .accommodation-container h1 {
-      color: #2c3e50;
-      text-align: center;
-      margin-bottom: 10px;
-    }
+.accommodation-analysis h2 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 10px;
+}
 
-    .accommodation-container .subtitle {
-  color: #2A6FBB;
-      font-size: 22px;
-      font-weight: 600;
-      text-align: left;
-      margin: 0 0 15px;
-    }
+.accommodation-analysis .subtitle {
+    text-align: center;
+    color: #7f8c8d;
+    margin-bottom: 30px;
+    font-weight: normal;
+}
 
-    .accommodation-container .chart-container {
-      position: relative;
-      height: 500px;
-      margin: 30px 0;
-    }
+.accommodation-analysis .chart-container {
+    position: relative;
+    height: 500px;
+    margin: 30px 0;
+}
 
-    .accommodation-container .analysis {
-      background-color: #f8f9fa;
-      padding: 20px;
-      border-radius: 6px;
-      margin-top: 30px;
-      border-left: 4px solid #3498db;
-    }
+.accommodation-analysis .analysis {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 6px;
+    margin-top: 30px;
+    border-left: 4px solid #3498db;
+}
 
-    .accommodation-container .analysis h2 {
-      color: #2c3e50;
-      margin-top: 0;
-    }
+.accommodation-analysis .analysis h3 {
+    color: #2c3e50;
+    margin-top: 0;
+}
 
-    .accommodation-container .key-point {
-      font-weight: bold;
-      color: #2c3e50;
-    }
+.accommodation-analysis .key-point {
+    font-weight: bold;
+    color: #2c3e50;
+}
 
-    .accommodation-container .data-source {
-      font-size: 12px;
-      color: #7f8c8d;
-      text-align: right;
-      margin-top: 20px;
-    }
+.accommodation-analysis .data-source {
+    font-size: 12px;
+    color: #7f8c8d;
+    text-align: right;
+    margin-top: 20px;
+}
 
-    .accommodation-container .highlight {
-      background-color: #fffde7;
-      padding: 2px 4px;
-      border-radius: 3px;
-      font-weight: bold;
+.accommodation-analysis .highlight {
+    background-color: #fffde7;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .accommodation-analysis {
+        padding: 20px;
     }
+    
+    .accommodation-analysis .chart-container {
+        height: 400px;
+    }
+}
 
     /* Responsive design for smaller screens */
     @media (max-width: 992px) {
@@ -1389,30 +1397,34 @@
       </div>
     </div>  
     
-    <!-- IDP Accommodation Data Analysis Section -->
-    <div class="accommodation-container">
-   
-      <p class="subtitle">Distribution of Internally Displaced Persons by Housing Type</p>
-      
-      <div class="chart-container">
-        <canvas id="accommodationChart"></canvas>
-      </div>
-      
-      <div class="analysis">
-        <h2>Data Insights</h2>
-        <p><span class="key-point">Dominant Accommodation Type:</span> The data reveals that <span class="highlight">Host Family/Community accommodation</span> houses the largest number of IDPs at <span class="highlight">1,077,264</span> individuals, accounting for approximately 45% of the total displaced population represented in this dataset.</p>
-        
-        <p><span class="key-point">Formal vs Informal Housing:</span> While <span class="highlight">formal camps</span> accommodate 415,783 IDPs, informal solutions like <span class="highlight">improvised shelters</span> (56,239) and <span class="highlight">informal settlements</span> (385,332) collectively house a significant portion of the population, indicating potential gaps in formal housing solutions.</p>
-        
-        <p><span class="key-point">Rental Market Pressure:</span> The <span class="highlight">137,092 IDPs in rented accommodations</span> represent a population that may be competing with local residents for housing, potentially driving up rental prices in host communities.</p>
-        
-        <p><span class="key-point">Public Infrastructure Use:</span> Schools and other public buildings serve as temporary housing for <span class="highlight">206,804 IDPs</span>, which may impact the normal functioning of these institutions and access to services for both displaced and host communities.</p>
-        
-        <p><span class="key-point">Vulnerability Indicators:</span> The populations in <span class="highlight">improvised shelters</span> (56,239) and <span class="highlight">informal settlements</span> (385,332) are likely the most vulnerable, facing greater protection risks and less access to basic services.</p>
-      </div>
-      
-      <div class="data-source">Data represents counts of internally displaced persons by accommodation type | Visualization created for humanitarian analysis</div>
-    </div>
+   <!-- IDP Accommodation Data Analysis Section -->
+        <div class="maps-container">
+            <div id="map-container">
+                <div class="accommodation-analysis">
+                    <h2>Where IDPs Live - Accommodation Analysis</h2>
+                    <p class="subtitle">Distribution of Internally Displaced Persons by Housing Type</p>
+                    
+                    <div class="chart-container">
+                        <canvas id="accommodationChart"></canvas>
+                    </div>
+                    
+                    <div class="analysis">
+                        <h3>Data Insights</h3>
+                        <p><span class="key-point">Dominant Accommodation Type:</span> The data reveals that <span class="highlight">Host Family/Community accommodation</span> houses the largest number of IDPs at <span class="highlight">1,077,264</span> individuals, accounting for approximately 45% of the total displaced population represented in this dataset.</p>
+                        
+                        <p><span class="key-point">Formal vs Informal Housing:</span> While <span class="highlight">formal camps</span> accommodate 415,783 IDPs, informal solutions like <span class="highlight">improvised shelters</span> (56,239) and <span class="highlight">informal settlements</span> (385,332) collectively house a significant portion of the population, indicating potential gaps in formal housing solutions.</p>
+                        
+                        <p><span class="key-point">Rental Market Pressure:</span> The <span class="highlight">137,092 IDPs in rented accommodations</span> represent a population that may be competing with local residents for housing, potentially driving up rental prices in host communities.</p>
+                        
+                        <p><span class="key-point">Public Infrastructure Use:</span> Schools and other public buildings serve as temporary housing for <span class="highlight">206,804 IDPs</span>, which may impact the normal functioning of these institutions and access to services for both displaced and host communities.</p>
+                        
+                        <p><span class="key-point">Vulnerability Indicators:</span> The populations in <span class="highlight">improvised shelters</span> (56,239) and <span class="highlight">informal settlements</span> (385,332) are likely the most vulnerable, facing greater protection risks and less access to basic services.</p>
+                    </div>
+                    
+                    <div class="data-source">Data represents counts of internally displaced persons by accommodation type | Visualization created for humanitarian analysis</div>
+                </div>
+            </div>
+        </div>
 
     <!-- Heatmap Section -->
     <div id="heatmap-section" class="maps-container">
@@ -2817,103 +2829,103 @@
     });
 
     // IDP Accommodation Chart
-    document.addEventListener('DOMContentLoaded', function() {
-      // Accommodation data
-      const data = {
-        labels: [
-          'Camp (formal)',
-          'Host Family/Community',
-          'Rented accommodation',
-          'Improvised shelters',
-          'Schools/public buildings',
-          'Informal settlements'
-        ],
-        datasets: [{
-          data: [415783, 1077264, 137092, 56239, 206804, 385332],
-          backgroundColor: [
-            'rgba(52, 152, 219, 0.7)',
-            'rgba(46, 204, 113, 0.7)',
-            'rgba(231, 76, 60, 0.7)',
-            'rgba(243, 156, 18, 0.7)',
-            'rgba(155, 89, 182, 0.7)',
-            'rgba(26, 188, 156, 0.7)'
-          ],
-          borderColor: [
-            'rgba(52, 152, 219, 1)',
-            'rgba(46, 204, 113, 1)',
-            'rgba(231, 76, 60, 1)',
-            'rgba(243, 156, 18, 1)',
-            'rgba(155, 89, 182, 1)',
-            'rgba(26, 188, 156, 1)'
-          ],
-          borderWidth: 1
-        }]
-      };
+        document.addEventListener('DOMContentLoaded', function() {
+            // Accommodation data
+            const data = {
+                labels: [
+                    'Camp (formal)',
+                    'Host Family/Community',
+                    'Rented accommodation',
+                    'Improvised shelters',
+                    'Schools/public buildings',
+                    'Informal settlements'
+                ],
+                datasets: [{
+                    data: [415783, 1077264, 137092, 56239, 206804, 385332],
+                    backgroundColor: [
+                        'rgba(52, 152, 219, 0.7)',
+                        'rgba(46, 204, 113, 0.7)',
+                        'rgba(231, 76, 60, 0.7)',
+                        'rgba(243, 156, 18, 0.7)',
+                        'rgba(155, 89, 182, 0.7)',
+                        'rgba(26, 188, 156, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(52, 152, 219, 1)',
+                        'rgba(46, 204, 113, 1)',
+                        'rgba(231, 76, 60, 1)',
+                        'rgba(243, 156, 18, 1)',
+                        'rgba(155, 89, 182, 1)',
+                        'rgba(26, 188, 156, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
 
-      // Chart configuration
-      const config = {
-        type: 'bar',
-        data: data,
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false
-            },
-            tooltip: {
-              callbacks: {
-                label: function(context) {
-                  return context.raw.toLocaleString();
-                },
-                afterLabel: function(context) {
-                  const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
-                  const percentage = ((context.raw / total) * 100).toFixed(1);
-                  return `Represents ${percentage}% of total`;
+            // Chart configuration
+            const config = {
+                type: 'bar',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw.toLocaleString();
+                                },
+                                afterLabel: function(context) {
+                                    const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((context.raw / total) * 100).toFixed(1);
+                                    return `Represents ${percentage}% of total`;
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Number of IDPs by Accommodation Type',
+                            font: {
+                                size: 18
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString();
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Number of IDPs',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Accommodation Type',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    }
                 }
-              }
-            },
-            title: {
-              display: true,
-              text: 'Number of IDPs by Accommodation Type',
-              font: {
-                size: 18
-              }
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: {
-                callback: function(value) {
-                  return value.toLocaleString();
-                }
-              },
-              title: {
-                display: true,
-                text: 'Number of IDPs',
-                font: {
-                  weight: 'bold'
-                }
-              }
-            },
-            x: {
-              title: {
-                display: true,
-                text: 'Accommodation Type',
-                font: {
-                  weight: 'bold'
-                }
-              }
-            }
-          }
-        }
-      };
+            };
 
-      // Create the chart
-      const ctx = document.getElementById('accommodationChart').getContext('2d');
-      new Chart(ctx, config);
-    });
+            // Create the chart
+            const ctx = document.getElementById('accommodationChart').getContext('2d');
+            new Chart(ctx, config);
+        });
   </script>
 </body>
 </html>
