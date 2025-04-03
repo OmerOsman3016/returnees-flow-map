@@ -990,13 +990,71 @@
     font-weight: bold;
 }
 
+/* Population Pyramid Styles */
+.population-pyramid-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-top: 30px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUp 0.8s ease-in-out forwards;
+    animation-delay: 1.2s;
+}
+
+.population-pyramid-container h2 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.population-pyramid-container .subtitle {
+    text-align: center;
+    color: #7f8c8d;
+    margin-bottom: 30px;
+    font-weight: normal;
+}
+
+.population-pyramid-container .chart-container {
+    position: relative;
+    height: 500px;
+    margin: 30px 0;
+}
+
+.population-pyramid-container .analysis {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 6px;
+    margin-top: 30px;
+    border-left: 4px solid #3498db;
+}
+
+.population-pyramid-container .analysis h3 {
+    color: #2c3e50;
+    margin-top: 0;
+}
+
+.population-pyramid-container .key-point {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.population-pyramid-container .data-source {
+    font-size: 12px;
+    color: #7f8c8d;
+    text-align: right;
+    margin-top: 20px;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .accommodation-analysis {
+    .accommodation-analysis, .population-pyramid-container {
         padding: 20px;
     }
     
-    .accommodation-analysis .chart-container {
+    .accommodation-analysis .chart-container,
+    .population-pyramid-container .chart-container {
         height: 400px;
     }
 }
@@ -1295,6 +1353,31 @@
         <button id="drilldown-back" class="drilldown-back">← Back to States</button>
         <div id="map3"></div>
       </div>
+    </div>
+    
+    <!-- Population Pyramid Section -->
+    <div class="population-pyramid-container">
+        <h2>IDP Population Pyramid</h2>
+        <p class="subtitle">Age and Gender Distribution of Internally Displaced Persons</p>
+        
+        <div class="chart-container">
+            <canvas id="populationPyramidChart"></canvas>
+        </div>
+        
+        <div class="analysis">
+            <h3>Demographic Insights</h3>
+            <p><span class="key-point">Youthful Population:</span> The pyramid shows a broad base with <span class="highlight">41% of IDPs under 18 years old</span>, indicating a very young population structure typical of displacement crises.</p>
+            
+            <p><span class="key-point">Gender Imbalance:</span> There are <span class="highlight">more female IDPs (54%) than male (46%)</span> across most age groups, with the largest disparities in the 18-59 working age bracket.</p>
+            
+            <p><span class="key-point">Child Displacement:</span> Children aged 0-5 years represent <span class="highlight">16.9% of all IDPs</span>, with 866,389 males and 1,045,329 females in this age group.</p>
+            
+            <p><span class="key-point">Working Age Adults:</span> The 18-59 age group comprises <span class="highlight">39.7% of IDPs</span>, with 2,054,763 males and 2,436,550 females, reflecting potential impacts on labor markets and household structures.</p>
+            
+            <p><span class="key-point">Elderly Population:</span> Those aged 60+ represent only <span class="highlight">7.6% of IDPs</span>, with 425,893 males and 434,360 females, suggesting lower survival rates or mobility challenges for older populations in displacement.</p>
+        </div>
+        
+        <div class="data-source">Data represents age and gender distribution of internally displaced persons | Visualization created for humanitarian analysis</div>
     </div>
     
     <!-- Displacement Section -->
@@ -2831,103 +2914,204 @@
     });
 
     // IDP Accommodation Chart
-        document.addEventListener('DOMContentLoaded', function() {
-            // Accommodation data
-            const data = {
-                labels: [
-                    'Camp (formal)',
-                    'Host Family/Community',
-                    'Rented accommodation',
-                    'Improvised shelters',
-                    'Schools/public buildings',
-                    'Informal settlements'
+    document.addEventListener('DOMContentLoaded', function() {
+        // Accommodation data
+        const data = {
+            labels: [
+                'Camp (formal)',
+                'Host Family/Community',
+                'Rented accommodation',
+                'Improvised shelters',
+                'Schools/public buildings',
+                'Informal settlements'
+            ],
+            datasets: [{
+                data: [415783, 1077264, 137092, 56239, 206804, 385332],
+                backgroundColor: [
+                    'rgba(52, 152, 219, 0.7)',
+                    'rgba(46, 204, 113, 0.7)',
+                    'rgba(231, 76, 60, 0.7)',
+                    'rgba(243, 156, 18, 0.7)',
+                    'rgba(155, 89, 182, 0.7)',
+                    'rgba(26, 188, 156, 0.7)'
                 ],
-                datasets: [{
-                    data: [415783, 1077264, 137092, 56239, 206804, 385332],
-                    backgroundColor: [
-                        'rgba(52, 152, 219, 0.7)',
-                        'rgba(46, 204, 113, 0.7)',
-                        'rgba(231, 76, 60, 0.7)',
-                        'rgba(243, 156, 18, 0.7)',
-                        'rgba(155, 89, 182, 0.7)',
-                        'rgba(26, 188, 156, 0.7)'
-                    ],
-                    borderColor: [
-                        'rgba(52, 152, 219, 1)',
-                        'rgba(46, 204, 113, 1)',
-                        'rgba(231, 76, 60, 1)',
-                        'rgba(243, 156, 18, 1)',
-                        'rgba(155, 89, 182, 1)',
-                        'rgba(26, 188, 156, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            };
+                borderColor: [
+                    'rgba(52, 152, 219, 1)',
+                    'rgba(46, 204, 113, 1)',
+                    'rgba(231, 76, 60, 1)',
+                    'rgba(243, 156, 18, 1)',
+                    'rgba(155, 89, 182, 1)',
+                    'rgba(26, 188, 156, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
 
-            // Chart configuration
-            const config = {
-                type: 'bar',
-                data: data,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return context.raw.toLocaleString();
-                                },
-                                afterLabel: function(context) {
-                                    const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                    const percentage = ((context.raw / total) * 100).toFixed(1);
-                                    return `Represents ${percentage}% of total`;
-                                }
+        // Chart configuration
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.raw.toLocaleString();
+                            },
+                            afterLabel: function(context) {
+                                const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = ((context.raw / total) * 100).toFixed(1);
+                                return `Represents ${percentage}% of total`;
+                            }
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Number of IDPs by Accommodation Type',
+                        font: {
+                            size: 18
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString();
                             }
                         },
                         title: {
                             display: true,
-                            text: 'Number of IDPs by Accommodation Type',
+                            text: 'Number of IDPs',
                             font: {
-                                size: 18
+                                weight: 'bold'
                             }
                         }
                     },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return value.toLocaleString();
-                                }
-                            },
-                            title: {
-                                display: true,
-                                text: 'Number of IDPs',
-                                font: {
-                                    weight: 'bold'
-                                }
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Accommodation Type',
-                                font: {
-                                    weight: 'bold'
-                                }
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Accommodation Type',
+                            font: {
+                                weight: 'bold'
                             }
                         }
                     }
                 }
-            };
+            }
+        };
 
-            // Create the chart
-            const ctx = document.getElementById('accommodationChart').getContext('2d');
-            new Chart(ctx, config);
+        // Create the chart
+        const ctx = document.getElementById('accommodationChart').getContext('2d');
+        new Chart(ctx, config);
+    });
+
+    // Population Pyramid Chart
+    document.addEventListener('DOMContentLoaded', function() {
+        // Population pyramid data
+        const ageGroups = ['0 - 01 Year', '01 - 05 Years', '06 - 17 Years', '18 - 59 Years', '60+ Years'];
+        const maleData = [523121, 866389, 1365369, 2054763, 425893];
+        const femaleData = [563794, 1045329, 1585772, 2436550, 434360];
+        
+        // Calculate percentages for better visualization
+        const totalPopulation = maleData.reduce((a, b) => a + b, 0) + femaleData.reduce((a, b) => a + b, 0);
+        const malePercentages = maleData.map(value => -(value / totalPopulation * 100).toFixed(2));
+        const femalePercentages = femaleData.map(value => (value / totalPopulation * 100).toFixed(2));
+        
+        const ctx = document.getElementById('populationPyramidChart').getContext('2d');
+        
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ageGroups,
+                datasets: [
+                    {
+                        label: 'Male',
+                        data: malePercentages,
+                        backgroundColor: 'rgba(65, 143, 222, 0.7)',
+                        borderColor: 'rgba(65, 143, 222, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Female',
+                        data: femalePercentages,
+                        backgroundColor: 'rgba(255, 103, 31, 0.7)',
+                        borderColor: 'rgba(255, 103, 31, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        stacked: true,
+                        ticks: {
+                            callback: function(value) {
+                                return Math.abs(value) + '%';
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Percentage of Total Population',
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    y: {
+                        stacked: true,
+                        title: {
+                            display: true,
+                            text: 'Age Group',
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const datasetLabel = context.dataset.label || '';
+                                const value = context.raw;
+                                const absValue = Math.abs(value);
+                                const count = context.datasetIndex === 0 ? 
+                                    maleData[context.dataIndex] : 
+                                    femaleData[context.dataIndex];
+                                
+                                return `${datasetLabel}: ${absValue}% (${count.toLocaleString()})`;
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            boxWidth: 12,
+                            padding: 20
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'IDP Population by Age and Gender',
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        }
+                    }
+                }
+            }
         });
+    });
   </script>
 </body>
 </html>
