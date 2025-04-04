@@ -405,14 +405,6 @@
                 
                 const content = modal.querySelector('.modal-content');
                 
-                // Calculate statistics
-                const totalIDPs = Object.values(idpData).reduce((sum, state) => sum + (state.idps || 0), 0);
-                const percentage = totalIDPs > 0 ? ((idpCount / totalIDPs) * 100).toFixed(1) : 0;
-                const sortedStates = Object.entries(idpData)
-                    .sort((a, b) => (b[1]?.idps || 0) - (a[1]?.idps || 0))
-                    .map(entry => entry[0]);
-                const rank = sortedStates.indexOf(stateName) + 1;
-                
                 // Create modal content with all data fields
                 content.innerHTML = `
                     <h2>${stateName} ${stateData.stateCode ? `(${stateData.stateCode})` : ''}</h2>
@@ -420,14 +412,6 @@
                         <div class="stat-item">
                             <div class="stat-value">${idpCount.toLocaleString()}</div>
                             <div class="stat-label">Internally Displaced Persons</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value">${percentage}%</div>
-                            <div class="stat-label">Of National Total</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value">#${rank}</div>
-                            <div class="stat-label">National Rank</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-value">${stateData.localities?.toLocaleString() || 'N/A'}</div>
