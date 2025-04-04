@@ -9,178 +9,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333;
-        }
-        
-        .header {
-            background-color: #2A81CB;
-            color: white;
-            padding: 1rem;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        
-        .header h1 {
-            margin: 0;
-            font-size: 1.8rem;
-        }
-        
-        .header p {
-            margin: 0.5rem 0 0;
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-        
-        .map-container {
-            height: 80vh;
-            width: 100%;
-        }
-        
-        .info-panel {
-            padding: 0.8rem;
-            background: white;
-            border-radius: 5px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-        
-        .info-panel h4 {
-            margin: 0 0 0.5rem;
-            color: #333;
-        }
-        
-        .info-panel b {
-            color: #2A81CB;
-        }
-        
-        /* Loading indicator */
-        .loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255,255,255,0.9);
-            padding: 1rem 2rem;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
-            z-index: 1000;
-        }
-        
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
-        }
-        
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            width: 70%;
-            max-width: 800px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        
-        .modal-close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        
-        .modal-close:hover {
-            color: #333;
-        }
-        
-        .state-stats {
-            display: flex;
-            justify-content: space-between;
-            margin: 1.5rem 0;
-            flex-wrap: wrap;
-        }
-        
-        .stat-item {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-            flex: 1;
-            min-width: 120px;
-            margin: 0.5rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .stat-value {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #2A81CB;
-            margin-bottom: 0.5rem;
-        }
-        
-        .stat-label {
-            font-size: 0.9rem;
-            color: #666;
-        }
-        
-        .state-chart-container {
-            margin: 2rem 0;
-            height: 300px;
-        }
-        
-        .state-details h3 {
-            color: #2A81CB;
-            margin-top: 1.5rem;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 0.5rem;
-        }
-        
-        .state-details ul {
-            padding-left: 1.2rem;
-        }
-        
-        .state-details li {
-            margin-bottom: 0.5rem;
-        }
-        
-        .footer {
-            text-align: center;
-            padding: 1rem;
-            background-color: #f8f9fa;
-            font-size: 0.9rem;
-            color: #666;
-        }
-        
-        @media (max-width: 768px) {
-            .modal-content {
-                width: 90%;
-                margin: 10% auto;
-                padding: 1rem;
-            }
-            
-            .state-stats {
-                flex-direction: column;
-            }
-            
-            .stat-item {
-                margin: 0.5rem 0;
-            }
-        }
+        /* Your existing CSS styles here */
+        /* ... */
     </style>
 </head>
 <body>
@@ -197,12 +27,6 @@
     </div>
     
     <script>
-        /** 
-         * Enhanced Map Visualization for Sudan Returnees Flow Map
-         *
-         * This script provides improved map visualizations with real data loading
-         */
-        
         // Global variables to store our data
         let sudanAdmin1Data = null;
         let idpData = null;
@@ -225,7 +49,24 @@
                 document.getElementById('loading').style.display = 'none';
             }).catch(error => {
                 console.error('Error loading data:', error);
-                document.getElementById('loading').textContent = 'Error loading data. Please try again.';
+                const loadingDiv = document.getElementById('loading');
+                loadingDiv.textContent = 'Error loading data. Please check:';
+                
+                // Create a more detailed error message
+                const errorDetails = document.createElement('div');
+                errorDetails.style.marginTop = '10px';
+                errorDetails.style.textAlign = 'left';
+                errorDetails.style.fontSize = '0.8em';
+                errorDetails.innerHTML = `
+                    <p>1. Ensure you have both data files in the correct location:</p>
+                    <ul>
+                        <li><code>./data/Admin1.json</code> (Sudan administrative boundaries)</li>
+                        <li><code>./data/total_idps.csv</code> (IDP data with columns: state, total_idps, lat, lon)</li>
+                    </ul>
+                    <p>2. Check your browser's developer console (F12) for specific errors</p>
+                    <p>3. If running locally, you may need to use a local web server due to CORS restrictions</p>
+                `;
+                loadingDiv.appendChild(errorDetails);
             });
         });
 
@@ -234,10 +75,18 @@
          */
         function loadGeoJSONData() {
             return fetch('./data/Admin1.json')
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Failed to load Admin1.json: ${response.status} ${response.statusText}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
+                    if (!data || !data.features || data.features.length === 0) {
+                        throw new Error('Admin1.json is empty or invalid GeoJSON');
+                    }
                     sudanAdmin1Data = data;
-                    console.log('Loaded Admin1 GeoJSON data', sudanAdmin1Data);
+                    console.log('Loaded Admin1 GeoJSON data with', data.features.length, 'features');
                 });
         }
 
@@ -249,18 +98,37 @@
                 Papa.parse('./data/total_idps.csv', {
                     download: true,
                     header: true,
+                    skipEmptyLines: true,
                     complete: function(results) {
-                        idpData = results.data.map(row => ({
-                            state: row.state,
-                            total_idps: parseInt(row.total_idps) || 0,
-                            lat: parseFloat(row.lat) || null,
-                            lon: parseFloat(row.lon) || null
-                        }));
-                        console.log('Loaded IDP CSV data', idpData);
+                        if (results.errors && results.errors.length > 0) {
+                            console.warn('CSV parsing warnings:', results.errors);
+                        }
+                        
+                        if (!results.data || results.data.length === 0) {
+                            reject(new Error('CSV file is empty or could not be parsed'));
+                            return;
+                        }
+                        
+                        // Process the CSV data
+                        idpData = results.data.map((row, index) => {
+                            // Validate required fields
+                            if (!row.state) {
+                                console.warn(`Row ${index + 1} is missing state name`);
+                            }
+                            
+                            return {
+                                state: row.state || `Unknown State ${index + 1}`,
+                                total_idps: parseInt(row.total_idps) || 0,
+                                lat: parseFloat(row.lat) || null,
+                                lon: parseFloat(row.lon) || null
+                            };
+                        });
+                        
+                        console.log('Loaded', idpData.length, 'IDP records from CSV');
                         resolve();
                     },
                     error: function(error) {
-                        reject(error);
+                        reject(new Error(`Failed to load total_idps.csv: ${error.message}`));
                     }
                 });
             });
@@ -270,86 +138,65 @@
          * Get IDP data for a specific state
          */
         function getIdpDataForState(stateName) {
-            if (!idpData) return null;
+            if (!idpData || !stateName) return null;
+            
+            // Clean the state name for comparison
+            const cleanName = stateName.toString().toLowerCase().trim();
             
             // Find matching state (case insensitive, partial match)
-            const stateLower = stateName.toLowerCase();
-            const match = idpData.find(row => 
-                row.state && row.state.toLowerCase().includes(stateLower));
-            
-            return match || null;
+            return idpData.find(row => {
+                if (!row.state) return false;
+                return row.state.toLowerCase().includes(cleanName);
+            }) || null;
         }
 
         /**
          * Initialize the main IDP map showing total IDPs by state
          */
         function initializeIDPMap() {
-            // Create the map instance with improved initial view
+            // Create the map instance
             idpMap = L.map('map-container', {
                 center: [15.5, 30.5], // Centered on Sudan
                 zoom: 5.5,
                 minZoom: 5,
                 maxZoom: 10,
-                zoomControl: false, // We'll add custom zoom controls
+                zoomControl: false,
                 attributionControl: true
             });
 
-            // Add custom zoom controls in a better position
-            L.control.zoom({
-                position: 'topright'
-            }).addTo(idpMap);
+            // Add controls
+            L.control.zoom({ position: 'topright' }).addTo(idpMap);
+            L.control.scale({ position: 'bottomright', imperial: false }).addTo(idpMap);
 
-            // Add scale control
-            L.control.scale({
-                position: 'bottomright',
-                imperial: false
-            }).addTo(idpMap);
-
-            // Add improved basemap with better contrast for data visualization
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            // Add base layers
+            const lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
                 subdomains: 'abcd',
                 maxZoom: 20
             }).addTo(idpMap);
 
-            // Add a secondary satellite basemap option
             const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                attribution: 'Tiles &copy; Esri'
             });
 
-            // Create a layer control for basemap switching
-            const baseMaps = {
-                "Light": L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-                    subdomains: 'abcd',
-                    maxZoom: 20
-                }),
+            L.control.layers({
+                "Light": lightLayer,
                 "Satellite": satelliteLayer
-            };
+            }, null, { position: 'topright', collapsed: true }).addTo(idpMap);
 
-            // Add the layer control to the map
-            L.control.layers(baseMaps, null, {
-                position: 'topright',
-                collapsed: true
-            }).addTo(idpMap);
-
-            // Improved color scale for IDP visualization
+            // Color scale for IDP visualization
             function getColor(d) {
                 return d > 1000000 ? '#2A81CB' :
                        d > 500000  ? '#73B9ED' :
                                      '#BFE1F6';
             }
 
-            // Improved styling for state boundaries
+            // Style function for GeoJSON features
             function style(feature) {
-                // Get state name from feature properties
                 const stateName = feature.properties.admin1Name || feature.properties.ADM1_EN || feature.properties.name;
-                
-                // Find matching IDP data
                 const stateData = getIdpDataForState(stateName);
                 const idpCount = stateData ? stateData.total_idps : 0;
                 
-                // Store the IDP count in the feature properties for later use
                 feature.properties.idp_count = idpCount;
                 feature.properties.stateData = stateData;
                 
@@ -363,36 +210,28 @@
                 };
             }
 
-            // Enhanced hover effect
+            // Feature interaction functions
             function highlightFeature(e) {
                 const layer = e.target;
-                
                 layer.setStyle({
                     weight: 3,
                     color: '#666',
                     dashArray: '',
                     fillOpacity: 0.8
-                });
-                
-                layer.bringToFront();
+                }).bringToFront();
                 updateInfoPanel(layer.feature.properties);
             }
 
-            // Reset highlight
             function resetHighlight(e) {
-                if (geojsonLayer) {
-                    geojsonLayer.resetStyle(e.target);
-                }
+                geojsonLayer.resetStyle(e.target);
                 infoPanel.update();
             }
 
-            // Click handler for zooming to state
             function zoomToFeature(e) {
                 idpMap.fitBounds(e.target.getBounds());
                 showStateDetails(e.target.feature.properties);
             }
 
-            // Set interaction listeners
             function onEachFeature(feature, layer) {
                 layer.on({
                     mouseover: highlightFeature,
@@ -401,15 +240,13 @@
                 });
             }
 
-            // Create a custom info panel
+            // Create info panel
             infoPanel = L.control({position: 'topleft'});
-
             infoPanel.onAdd = function(map) {
                 this._div = L.DomUtil.create('div', 'info-panel');
                 this.update();
                 return this._div;
             };
-
             infoPanel.update = function(props) {
                 this._div.innerHTML = '<h4>Sudan IDP Distribution</h4>' +
                     (props ?
@@ -417,179 +254,96 @@
                         (props.idp_count ? props.idp_count.toLocaleString() : 'No data') + ' IDPs'
                         : 'Hover over a state');
             };
-
             infoPanel.addTo(idpMap);
 
-            // Function to update info panel on hover
             function updateInfoPanel(props) {
                 infoPanel.update(props);
             }
 
-            // Function to show detailed state information
-            function showStateDetails(props) {
-                // Create or update a modal with detailed information
-                let modal = document.getElementById('state-details-modal');
-                
-                if (!modal) {
-                    modal = document.createElement('div');
-                    modal.id = 'state-details-modal';
-                    modal.className = 'modal';
-                    document.body.appendChild(modal);
-                    
-                    // Add close button
-                    const closeBtn = document.createElement('span');
-                    closeBtn.className = 'modal-close';
-                    closeBtn.innerHTML = '&times;';
-                    closeBtn.onclick = function() {
-                        modal.style.display = 'none';
-                    };
-                    modal.appendChild(closeBtn);
-                    
-                    // Add content container
-                    const content = document.createElement('div');
-                    content.className = 'modal-content';
-                    modal.appendChild(content);
-                }
-                
-                // Get the content container
-                const content = modal.querySelector('.modal-content');
-                
-                // Get state name and data
-                const stateName = props.admin1Name || props.ADM1_EN || props.name || 'Unknown State';
-                const stateData = props.stateData || {};
-                const idpCount = props.idp_count ? props.idp_count.toLocaleString() : 'Data not available';
-                
-                // Create a more detailed visualization of the state data
-                content.innerHTML = `
-                    <h2>${stateName}</h2>
-                    <div class="state-stats">
-                        <div class="stat-item">
-                            <div class="stat-value">${idpCount}</div>
-                            <div class="stat-label">Internally Displaced Persons</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value">${stateData.lat ? stateData.lat.toFixed(2) : 'N/A'}</div>
-                            <div class="stat-label">Latitude</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value">${stateData.lon ? stateData.lon.toFixed(2) : 'N/A'}</div>
-                            <div class="stat-label">Longitude</div>
-                        </div>
-                    </div>
-                    <div class="state-chart-container">
-                        <canvas id="state-chart"></canvas>
-                    </div>
-                    <div class="state-details">
-                        <h3>Displacement Overview</h3>
-                        <p>The displacement situation in ${stateName} shows ${idpCount} internally displaced persons according to recent reports.</p>
-                        <h3>Key Challenges</h3>
-                        <ul>
-                            <li>Access to clean water and sanitation</li>
-                            <li>Food security concerns</li>
-                            <li>Limited healthcare facilities</li>
-                            <li>Protection issues for vulnerable populations</li>
-                        </ul>
-                    </div>
-                `;
-                
-                // Show the modal
-                modal.style.display = 'block';
-                
-                // Create a chart for the state data
-                const ctx = document.getElementById('state-chart')?.getContext('2d');
-                if (ctx) {
-                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                    
-                    // Generate some reasonable data based on the total IDPs
-                    const baseValue = props.idp_count ? props.idp_count / 12 : 50000;
-                    const idpData = months.map((_, i) => 
-                        Math.floor(baseValue * (0.7 + Math.random() * 0.6))
-                    );
-                    
-                    new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: months,
-                            datasets: [
-                                {
-                                    label: 'Estimated IDPs',
-                                    data: idpData,
-                                    borderColor: '#2A81CB',
-                                    backgroundColor: 'rgba(42, 129, 203, 0.1)',
-                                    borderWidth: 2,
-                                    tension: 0.3,
-                                    fill: true
-                                }
-                            ]
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                title: {
-                                    display: true,
-                                    text: 'Estimated Monthly Displacement Trends',
-                                    font: {
-                                        size: 16
-                                    }
-                                },
-                                legend: {
-                                    position: 'top'
-                                },
-                                tooltip: {
-                                    mode: 'index',
-                                    intersect: false
-                                }
-                            },
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    title: {
-                                        display: true,
-                                        text: 'Number of IDPs'
-                                    }
-                                },
-                                x: {
-                                    title: {
-                                        display: true,
-                                        text: 'Month'
-                                    }
-                                }
-                            }
-                        }
-                    });
-                }
-            }
-
-            // Add the GeoJSON layer to the map if we have the data
+            // Add GeoJSON layer if data is available
             if (sudanAdmin1Data) {
                 geojsonLayer = L.geoJSON(sudanAdmin1Data, {
                     style: style,
                     onEachFeature: onEachFeature
                 }).addTo(idpMap);
-
-                // Fit the map to the bounds of our data
                 idpMap.fitBounds(geojsonLayer.getBounds());
-            } else {
-                console.error('No GeoJSON data available');
             }
 
-            // Add markers for each state with IDP data if coordinates are available
+            // Add markers if CSV data is available
             if (idpData) {
                 idpData.forEach(state => {
                     if (state.lat && state.lon) {
-                        const marker = L.circleMarker([state.lat, state.lon], {
-                            radius: Math.min(10, Math.max(3, Math.log(state.total_idps) * 1.5)),
+                        L.circleMarker([state.lat, state.lon], {
+                            radius: Math.min(15, Math.max(5, Math.log(state.total_idps + 1) * 2)),
                             fillColor: getColor(state.total_idps),
                             color: '#fff',
                             weight: 1,
                             opacity: 1,
                             fillOpacity: 0.8
-                        }).addTo(idpMap);
-                        
-                        marker.bindTooltip(`${state.state}: ${state.total_idps.toLocaleString()} IDPs`);
+                        })
+                        .bindTooltip(`${state.state}: ${state.total_idps.toLocaleString()} IDPs`)
+                        .addTo(idpMap);
                     }
                 });
             }
+        }
+
+        // Function to show detailed state information
+        function showStateDetails(props) {
+            // Create or update modal
+            let modal = document.getElementById('state-details-modal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'state-details-modal';
+                modal.className = 'modal';
+                document.body.appendChild(modal);
+                
+                const closeBtn = document.createElement('span');
+                closeBtn.className = 'modal-close';
+                closeBtn.innerHTML = '&times;';
+                closeBtn.onclick = () => modal.style.display = 'none';
+                modal.appendChild(closeBtn);
+                
+                const content = document.createElement('div');
+                content.className = 'modal-content';
+                modal.appendChild(content);
+            }
+            
+            const content = modal.querySelector('.modal-content');
+            const stateName = props.admin1Name || props.ADM1_EN || props.name || 'Unknown State';
+            const stateData = props.stateData || {};
+            const idpCount = props.idp_count ? props.idp_count.toLocaleString() : 'No data';
+            
+            content.innerHTML = `
+                <h2>${stateName}</h2>
+                <div class="state-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">${idpCount}</div>
+                        <div class="stat-label">IDPs</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">${stateData.lat ? stateData.lat.toFixed(4) : 'N/A'}</div>
+                        <div class="stat-label">Latitude</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">${stateData.lon ? stateData.lon.toFixed(4) : 'N/A'}</div>
+                        <div class="stat-label">Longitude</div>
+                    </div>
+                </div>
+                <div class="state-details">
+                    <h3>Displacement Overview</h3>
+                    <p>${stateName} has ${idpCount} reported internally displaced persons.</p>
+                    <h3>Key Challenges</h3>
+                    <ul>
+                        <li>Access to basic services</li>
+                        <li>Food insecurity</li>
+                        <li>Healthcare access</li>
+                        <li>Protection concerns</li>
+                    </ul>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
         }
     </script>
 </body>
