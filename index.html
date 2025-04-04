@@ -234,13 +234,13 @@
                         const data = {};
                         results.data.forEach(row => {
                             try {
-                                const stateName = row['State of Displacement'].trim();
-                                data[stateName] = {
+                                const stateCode = row['State Code'].trim();
+                                data[stateCode] = {
+                                    stateName: row['State of Displacement'].trim(),
                                     idps: parseInt(row['Total IDPs'].replace(/,/g, '')) || 0,
                                     population: parseInt(row['Population'].replace(/,/g, '')) || 0,
                                     localities: parseInt(row['Number of Localities'].replace(/,/g, '')) || 0,
-                                    locations: parseInt(row['Number of Locations'].replace(/,/g, '')) || 0,
-                                    stateCode: row['State Code'] || ''
+                                    locations: parseInt(row['Number of Locations'].replace(/,/g, '')) || 0
                                 };
                             } catch (e) {
                                 console.error("Error processing row:", row, e);
@@ -303,8 +303,8 @@
 
             // Style for state boundaries
             function style(feature) {
-                const stateName = feature.properties.admin1Name;
-                const idpCount = idpData[stateName]?.idps || 0;
+                const stateCode = feature.properties.admin1Code;
+                const idpCount = idpData[stateCode]?.idps || 0;
                 
                 return {
                     weight: 1.5,
@@ -326,7 +326,7 @@
                     fillOpacity: 0.9
                 });
                 layer.bringToFront();
-                updateInfoPanel(layer.feature.properties);
+                updateInfoPanel(layer.feature);
             }
 
             // Reset highlight
@@ -338,7 +338,7 @@
             // Zoom to feature on click
             function zoomToFeature(e) {
                 idpMap.fitBounds(e.target.getBounds());
-                showStateDetails(e.target.feature.properties);
+                showStateDetails(e.target.feature);
             }
 
             // Add interactions to each feature
@@ -357,28 +357,30 @@
                 this.update();
                 return this._div;
             };
-            infoPanel.update = function(props) {
-                const stateName = props ? props.admin1Name : '';
-                const idpCount = props ? (idpData[stateName]?.idps || null) : null;
+            infoPanel.update = function(feature) {
+                const stateCode = feature ? feature.properties.admin1Code : null;
+                const stateData = stateCode ? idpData[stateCode] : null;
+                const stateName = feature ? feature.properties.admin1Name : '';
                 
                 this._div.innerHTML = '<h4>Sudan IDP Distribution</h4>' +
-                    (props ?
+                    (feature ?
                         `<b>${stateName}</b><br />` +
-                        (idpCount ? idpCount.toLocaleString() + ' IDPs' : 'Data not available') +
-                        `<div class="color-key" style="background: ${getColor(idpCount)};"></div>`
+                        (stateData?.idps ? stateData.idps.toLocaleString() + ' IDPs' : 'Data not available') +
+                        `<div class="color-key" style="background: ${getColor(stateData?.idps || 0)};"></div>`
                         : 'Hover over a state');
             };
             infoPanel.addTo(idpMap);
 
             // Update info panel
-            function updateInfoPanel(props) {
-                infoPanel.update(props);
+            function updateInfoPanel(feature) {
+                infoPanel.update(feature);
             }
 
             // Show detailed state information
-            function showStateDetails(props) {
-                const stateName = props.admin1Name;
-                const stateData = idpData[stateName] || {};
+            function showStateDetails(feature) {
+                const stateCode = feature.properties.admin1Code;
+                const stateData = idpData[stateCode] || {};
+                const stateName = feature.properties.admin1Name;
                 const idpCount = stateData.idps || 0;
                 
                 // Create or update modal
@@ -407,7 +409,7 @@
                 
                 // Create modal content with all data fields
                 content.innerHTML = `
-                    <h2>${stateName} ${stateData.stateCode ? `(${stateData.stateCode})` : ''}</h2>
+                    <h2>${stateName} (${stateCode})</h2>
                     <div class="state-stats">
                         <div class="stat-item">
                             <div class="stat-value">${idpCount.toLocaleString()}</div>
