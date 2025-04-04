@@ -44,14 +44,6 @@
             height: calc(100vh - 60px);
         }
         
-        .sidebar {
-            width: 350px;
-            background-color: #f5f5f5;
-            padding: 20px;
-            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
-            overflow-y: auto;
-        }
-        
         .info-panel {
             padding: 10px;
             background: white;
@@ -190,11 +182,6 @@
                 flex-direction: column;
             }
             
-            .sidebar {
-                width: auto;
-                order: 1;
-            }
-            
             #map-container {
                 order: 2;
                 height: 60vh;
@@ -215,27 +202,6 @@
     
     <div class="container">
         <div id="map-container"></div>
-        <div class="sidebar">
-            <h2>About This Dashboard</h2>
-            <p>This interactive map displays the distribution of Internally Displaced Persons (IDPs) across Sudan's states based on 2024 data.</p>
-            
-            <h3>How to Use</h3>
-            <ul>
-                <li>Hover over states to see IDP numbers</li>
-                <li>Click on a state for detailed information</li>
-                <li>Use the layer control to switch between map views</li>
-                <li>Zoom in/out using mouse wheel or +/- buttons</li>
-            </ul>
-            
-            <h3>Key Insights</h3>
-            <p>The data shows significant displacement in Darfur states, with North Darfur and South Darfur having the highest numbers of IDPs.</p>
-            
-            <div class="data-source">
-                <h3>Data Sources</h3>
-                <p>IDP numbers: Sudan Humanitarian Aid Commission (2024)</p>
-                <p>Administrative boundaries: Humanitarian Data Exchange</p>
-            </div>
-        </div>
     </div>
 
     <!-- Leaflet JS -->
@@ -664,4 +630,4 @@ function initializeIDPMap() {
 }
     </script>
 </body>
-</html> 
+</html>
