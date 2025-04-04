@@ -208,10 +208,10 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
-        // The initializeIDPMap function from the previous code goes here
         document.addEventListener('DOMContentLoaded', function() {
             initializeIDPMap();
         });
+
 /**
  * Initialize the main IDP map showing total IDPs by state
  */
@@ -264,28 +264,6 @@ function initializeIDPMap() {
     position: 'topright',
     collapsed: true
   }).addTo(idpMap);
-
-  // IDP data by state
-  const idpData = {
-    "Aj Jazirah": 331531,
-    "Blue Nile": 456465,
-    "Central Darfur": 929977,
-    "East Darfur": 793948,
-    "Gedaref": 852626,
-    "Kassala": 318415,
-    "Khartoum": 105380,
-    "North Darfur": 1786909,
-    "North Kordofan": 199248,
-    "Northern": 567174,
-    "Red Sea": 244306,
-    "River Nile": 935723,
-    "Sennar": 130614,
-    "South Darfur": 1837706,
-    "South Kordofan": 447459,
-    "West Darfur": 309227,
-    "West Kordofan": 406093,
-    "White Nile": 648539
-  };
 
   // Improved color scale for IDP visualization
   function getColor(d) {
