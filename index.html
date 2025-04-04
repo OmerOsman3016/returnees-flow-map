@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -185,6 +185,40 @@
             margin-bottom: 8px;
         }
         
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        
+        .data-table th, .data-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .data-table th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+        }
+        
+        .data-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .displacement-intensity {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+        
+        .displacement-intensity h4 {
+            margin-top: 0;
+            color: #08306B;
+        }
+        
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
@@ -203,6 +237,15 @@
             .modal-content {
                 width: 90%;
                 margin: 10% auto;
+            }
+            
+            .state-stats {
+                flex-direction: column;
+            }
+            
+            .stat-item {
+                min-width: 100%;
+                margin: 5px 0;
             }
         }
     </style>
@@ -246,6 +289,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             initializeIDPMap();
         });
+
 /**
  * Initialize the main IDP map showing total IDPs by state
  */
@@ -299,26 +343,134 @@ function initializeIDPMap() {
     collapsed: true
   }).addTo(idpMap);
 
-  // IDP data by state
+  // Enhanced IDP data by state with all provided fields
   const idpData = {
-    "Aj Jazirah": 331531,
-    "Blue Nile": 456465,
-    "Central Darfur": 929977,
-    "East Darfur": 793948,
-    "Gedaref": 852626,
-    "Kassala": 318415,
-    "Khartoum": 105380,
-    "North Darfur": 1786909,
-    "North Kordofan": 199248,
-    "Northern": 567174,
-    "Red Sea": 244306,
-    "River Nile": 935723,
-    "Sennar": 130614,
-    "South Darfur": 1837706,
-    "South Kordofan": 447459,
-    "West Darfur": 309227,
-    "West Kordofan": 406093,
-    "White Nile": 648539
+    "Aj Jazirah": {
+      idps: 331531,
+      stateCode: "SD15",
+      localities: 8,
+      locations: 1870,
+      population: 5687557
+    },
+    "Blue Nile": {
+      idps: 456465,
+      stateCode: "SD08",
+      localities: 7,
+      locations: 240,
+      population: 1344267
+    },
+    "Central Darfur": {
+      idps: 929977,
+      stateCode: "SD06",
+      localities: 9,
+      locations: 131,
+      population: 1786503
+    },
+    "East Darfur": {
+      idps: 793948,
+      stateCode: "SD05",
+      localities: 9,
+      locations: 52,
+      population: 1213951
+    },
+    "Gedaref": {
+      idps: 852626,
+      stateCode: "SD12",
+      localities: 12,
+      locations: 656,
+      population: 2545604
+    },
+    "Kassala": {
+      idps: 318415,
+      stateCode: "SD11",
+      localities: 11,
+      locations: 325,
+      population: 2811446
+    },
+    "Khartoum": {
+      idps: 105380,
+      stateCode: "SD01",
+      localities: 7,
+      locations: 416,
+      population: 9146191
+    },
+    "North Darfur": {
+      idps: 1786909,
+      stateCode: "SD02",
+      localities: 17,
+      locations: 510,
+      population: 2775652
+    },
+    "North Kordofan": {
+      idps: 199248,
+      stateCode: "SD13",
+      localities: 8,
+      locations: 639,
+      population: 2160476
+    },
+    "Northern": {
+      idps: 567174,
+      stateCode: "SD17",
+      localities: 7,
+      locations: 629,
+      population: 1023194
+    },
+    "Red Sea": {
+      idps: 244306,
+      stateCode: "SD10",
+      localities: 10,
+      locations: 306,
+      population: 1549857
+    },
+    "River Nile": {
+      idps: 935723,
+      stateCode: "SD16",
+      localities: 7,
+      locations: 1283,
+      population: 1651873
+    },
+    "Sennar": {
+      idps: 130614,
+      stateCode: "SD14",
+      localities: 7,
+      locations: 420,
+      population: 2170863
+    },
+    "South Darfur": {
+      idps: 1837706,
+      stateCode: "SD03",
+      localities: 21,
+      locations: 156,
+      population: 3912372
+    },
+    "South Kordofan": {
+      idps: 447459,
+      stateCode: "SD07",
+      localities: 14,
+      locations: 497,
+      population: 2017962
+    },
+    "West Darfur": {
+      idps: 309227,
+      stateCode: "SD04",
+      localities: 8,
+      locations: 145,
+      population: 1940860
+    },
+    "West Kordofan": {
+      idps: 406093,
+      stateCode: "SD18",
+      localities: 14,
+      locations: 701,
+      population: 1713462
+    },
+    "White Nile": {
+      idps: 648539,
+      stateCode: "SD09",
+      localities: 9,
+      locations: 1309,
+      population: 3046811
+    }
   };
 
   // Improved color scale for IDP visualization
@@ -333,7 +485,7 @@ function initializeIDPMap() {
   // Improved styling for state boundaries
   function style(feature) {
     const stateName = feature.properties.admin1Name;
-    const idpCount = idpData[stateName] || 0;
+    const idpCount = idpData[stateName] ? idpData[stateName].idps : 0;
     
     return {
       weight: 1.5,
@@ -392,7 +544,8 @@ function initializeIDPMap() {
 
   infoPanel.update = function(props) {
     const stateName = props ? props.admin1Name : '';
-    const idpCount = props ? idpData[stateName] : null;
+    const stateData = props ? idpData[stateName] : null;
+    const idpCount = stateData ? stateData.idps : null;
     
     this._div.innerHTML = '<h4>Sudan IDP Distribution</h4>' +
       (props ?
@@ -412,7 +565,20 @@ function initializeIDPMap() {
   // Function to show detailed state information
   function showStateDetails(props) {
     const stateName = props.admin1Name;
-    const idpCount = idpData[stateName] || 0;
+    const stateData = idpData[stateName] || {
+      idps: 0,
+      stateCode: "N/A",
+      localities: 0,
+      locations: 0,
+      population: 0
+    };
+    
+    // Calculate additional metrics
+    const totalIDPs = Object.values(idpData).reduce((sum, state) => sum + state.idps, 0);
+    const percentage = ((stateData.idps / totalIDPs) * 100).toFixed(1);
+    const rank = Object.entries(idpData).sort((a, b) => b[1].idps - a[1].idps).findIndex(x => x[0] === stateName) + 1;
+    const idpDensity = stateData.population > 0 ? (stateData.idps / stateData.population * 100).toFixed(1) : 0;
+    const locationsPerLocality = stateData.localities > 0 ? (stateData.locations / stateData.localities).toFixed(1) : 0;
     
     // Create or update a modal with detailed information
     let modal = document.getElementById('state-details-modal');
@@ -441,16 +607,13 @@ function initializeIDPMap() {
     // Get the content container
     const content = modal.querySelector('.modal-content');
     
-    // Calculate percentage of total IDPs
-    const totalIDPs = Object.values(idpData).reduce((a, b) => a + b, 0);
-    const percentage = ((idpCount / totalIDPs) * 100).toFixed(1);
-    
-    // Create a more detailed visualization of the state data
+    // Create the detailed content
     content.innerHTML = `
-      <h2>${stateName}</h2>
+      <h2>${stateName} (${stateData.stateCode})</h2>
+      
       <div class="state-stats">
         <div class="stat-item">
-          <div class="stat-value">${idpCount.toLocaleString()}</div>
+          <div class="stat-value">${stateData.idps.toLocaleString()}</div>
           <div class="stat-label">Internally Displaced Persons</div>
         </div>
         <div class="stat-item">
@@ -458,13 +621,52 @@ function initializeIDPMap() {
           <div class="stat-label">Of National Total</div>
         </div>
         <div class="stat-item">
-          <div class="stat-value">#${Object.entries(idpData).sort((a, b) => b[1] - a[1]).findIndex(x => x[0] === stateName) + 1}</div>
+          <div class="stat-value">#${rank}</div>
           <div class="stat-label">National Rank</div>
         </div>
+        <div class="stat-item">
+          <div class="stat-value">${idpDensity}%</div>
+          <div class="stat-label">Of State Population</div>
+        </div>
       </div>
+      
+      <div class="displacement-intensity">
+        <h4>Displacement Intensity</h4>
+        <p>${getIntensityDescription(stateData.idps, stateData.population)}</p>
+      </div>
+      
       <div class="state-chart-container">
         <canvas id="state-chart"></canvas>
       </div>
+      
+      <h3>Administrative Data</h3>
+      <table class="data-table">
+        <tr>
+          <th>Metric</th>
+          <th>Value</th>
+        </tr>
+        <tr>
+          <td>State Code</td>
+          <td>${stateData.stateCode}</td>
+        </tr>
+        <tr>
+          <td>Number of Localities</td>
+          <td>${stateData.localities.toLocaleString()}</td>
+        </tr>
+        <tr>
+          <td>Number of Locations</td>
+          <td>${stateData.locations.toLocaleString()}</td>
+        </tr>
+        <tr>
+          <td>Locations per Locality</td>
+          <td>${locationsPerLocality}</td>
+        </tr>
+        <tr>
+          <td>Total Population</td>
+          <td>${stateData.population.toLocaleString()}</td>
+        </tr>
+      </table>
+      
       <div class="state-details">
         <h3>Displacement Context</h3>
         <p>${getStateDescription(stateName)}</p>
@@ -483,8 +685,8 @@ function initializeIDPMap() {
     
     // Generate some random data for demonstration
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const idpDataPoints = generateMonthlyData(idpCount);
-    const returneeData = generateReturneeData(idpCount);
+    const idpDataPoints = generateMonthlyData(stateData.idps);
+    const returneeData = generateReturneeData(stateData.idps);
     
     new Chart(ctx, {
       type: 'line',
@@ -558,6 +760,21 @@ function initializeIDPMap() {
     });
   }
 
+  // Helper function to generate displacement intensity description
+  function getIntensityDescription(idps, population) {
+    const density = population > 0 ? (idps / population) * 100 : 0;
+    
+    if (density > 30) {
+      return "This state has extremely high displacement intensity, with more than 30% of its population displaced. The humanitarian situation is critical.";
+    } else if (density > 15) {
+      return "This state has very high displacement intensity, with 15-30% of its population displaced. The humanitarian needs are severe.";
+    } else if (density > 5) {
+      return "This state has moderate displacement intensity, with 5-15% of its population displaced. Significant humanitarian assistance is required.";
+    } else {
+      return "This state has relatively low displacement intensity, with less than 5% of its population displaced. However, localized needs may still be significant.";
+    }
+  }
+
   // Helper function to generate realistic monthly data
   function generateMonthlyData(baseValue) {
     const variation = baseValue * 0.3; // Allow 30% variation
@@ -583,38 +800,139 @@ function initializeIDPMap() {
   // Helper function to get state descriptions
   function getStateDescription(stateName) {
     const descriptions = {
-      "North Darfur": "North Darfur has experienced significant displacement due to ongoing conflict and intercommunal violence. The state hosts the largest IDP population in Sudan.",
-      "South Darfur": "South Darfur continues to see displacement from both conflict and environmental factors, with many IDPs concentrated around Nyala.",
-      "Central Darfur": "Central Darfur's displacement situation is characterized by periodic flare-ups of violence and limited access to humanitarian assistance.",
-      // Add descriptions for other states...
-      "Khartoum": "Despite being the capital, Khartoum has seen displacement due to urban conflict and economic factors, though numbers are lower than in conflict zones.",
-      "White Nile": "White Nile hosts both IDPs and refugees from neighboring countries, with displacement driven by multiple factors."
+      "North Darfur": "North Darfur has experienced significant displacement due to ongoing conflict and intercommunal violence. The state hosts the largest IDP population in Sudan with 1,786,909 displaced persons across 510 locations in 17 localities.",
+      "South Darfur": "South Darfur continues to see displacement from both conflict and environmental factors, with 1,837,706 IDPs concentrated in 156 locations across 21 localities. Nyala remains a major hub for displaced populations.",
+      "Central Darfur": "Central Darfur's displacement situation is characterized by periodic flare-ups of violence and limited access to humanitarian assistance. The state has 929,977 IDPs in 131 locations across 9 localities.",
+      "Khartoum": "Despite being the capital, Khartoum has seen displacement due to urban conflict and economic factors, though numbers are lower than in conflict zones. The state reports 105,380 IDPs across 416 locations in 7 localities.",
+      "White Nile": "White Nile hosts both IDPs and refugees from neighboring countries, with displacement driven by multiple factors. The state has 648,539 IDPs in 1,309 locations across 9 localities.",
+      "Aj Jazirah": "Aj Jazirah has seen significant displacement with 331,531 IDPs across 1,870 locations in 8 localities. The state's central location makes it both a source and destination for displacement.",
+      "Blue Nile": "Blue Nile state has experienced ongoing displacement with 456,465 IDPs in 240 locations across 7 localities. The region continues to face security challenges.",
+      "East Darfur": "East Darfur hosts 793,948 IDPs in 52 locations across 9 localities. The displacement situation remains volatile with periodic new displacements.",
+      "Gedaref": "Gedaref reports 852,626 IDPs in 656 locations across 12 localities. The state borders Ethiopia and hosts both IDPs and refugees.",
+      "Kassala": "Kassala has 318,415 IDPs in 325 locations across 11 localities. The state's displacement is influenced by both internal and cross-border factors.",
+      "North Kordofan": "North Kordofan has 199,248 IDPs in 639 locations across 8 localities. Displacement patterns show both conflict-induced and economic migration.",
+      "Northern": "Northern state reports 567,174 IDPs in 629 locations across 7 localities. The Nile River plays a significant role in displacement patterns.",
+      "Red Sea": "Red Sea state has 244,306 IDPs in 306 locations across 10 localities. The coastal region faces unique displacement challenges.",
+      "River Nile": "River Nile state hosts 935,723 IDPs in 1,283 locations across 7 localities, representing one of the highest concentrations of displacement.",
+      "Sennar": "Sennar has 130,614 IDPs in 420 locations across 7 localities. The state's displacement is relatively lower but still significant.",
+      "South Kordofan": "South Kordofan reports 447,459 IDPs in 497 locations across 14 localities. The state continues to experience conflict-related displacement.",
+      "West Darfur": "West Darfur has 309,227 IDPs in 145 locations across 8 localities. The state borders Chad and sees cross-border displacement patterns.",
+      "West Kordofan": "West Kordofan hosts 406,093 IDPs in 701 locations across 14 localities. The state's displacement reflects both historical and recent conflicts."
     };
     
-    return descriptions[stateName] || `The displacement situation in ${stateName} has been affected by various factors including conflict, environmental conditions, and economic challenges.`;
+    return descriptions[stateName] || `The displacement situation in ${stateName} has been affected by various factors including conflict, environmental conditions, and economic challenges. The state reports ${idpData[stateName]?.idps.toLocaleString() || 'unknown number of'} IDPs across ${idpData[stateName]?.locations.toLocaleString() || 'multiple'} locations in ${idpData[stateName]?.localities || 'several'} localities.`;
   }
 
   // Helper function to get state-specific challenges
   function getStateChallenges(stateName) {
     const challenges = {
       "North Darfur": [
-        "Ongoing conflict and insecurity",
-        "Limited humanitarian access",
-        "Environmental degradation",
-        "Overcrowded camps"
+        "Ongoing conflict and insecurity limiting humanitarian access",
+        "Overcrowded camps with inadequate shelter and sanitation",
+        "Food insecurity affecting 78% of displaced households",
+        "Limited healthcare facilities for trauma and chronic conditions"
       ],
       "South Darfur": [
-        "Protection concerns",
-        "Food insecurity",
-        "Limited healthcare",
-        "Water scarcity"
+        "Protection concerns including gender-based violence",
+        "Acute food insecurity in 65% of displacement sites",
+        "Only 40% of health facilities fully functional",
+        "Water scarcity affecting 85% of IDP communities"
       ],
-      // Add challenges for other states...
+      "Central Darfur": [
+        "Intercommunal violence disrupting aid delivery",
+        "High rates of malnutrition among children under 5",
+        "Limited education opportunities for displaced children",
+        "Shelter materials shortage as rainy season approaches"
+      ],
       "Khartoum": [
-        "Urban displacement challenges",
-        "High cost of living",
-        "Limited shelter options",
-        "Livelihood opportunities"
+        "Urban displacement creating unique protection risks",
+        "High cost of living limiting IDP self-reliance",
+        "Limited formal camp structures leading to informal settlements",
+        "Restricted access to livelihoods and documentation"
+      ],
+      "White Nile": [
+        "Mixed population of IDPs and refugees straining services",
+        "Flooding risks during rainy season",
+        "Limited agricultural land for livelihood opportunities",
+        "Pressure on host community resources"
+      ],
+      "Aj Jazirah": [
+        "Rapid urbanization of displacement sites",
+        "Limited WASH infrastructure for growing populations",
+        "Integration challenges for long-term displaced",
+        "Need for durable solutions beyond humanitarian aid"
+      ],
+      "Blue Nile": [
+        "Ongoing security incidents disrupting services",
+        "Remote locations hard to reach with assistance",
+        "Ethnic tensions complicating protection responses",
+        "High prevalence of unexploded ordnance risks"
+      ],
+      "East Darfur": [
+        "Cross-border displacement dynamics",
+        "Limited local governance capacity",
+        "Environmental degradation reducing livelihood options",
+        "Seasonal mobility patterns affecting service delivery"
+      ],
+      "Gedaref": [
+        "Mixed migration flows complicating response",
+        "Border security concerns limiting access",
+        "Climate variability affecting food production",
+        "Limited health infrastructure for infectious diseases"
+      ],
+      "Kassala": [
+        "Economic pressures driving secondary displacement",
+        "Cultural barriers to women's access to services",
+        "Limited formal registration of IDPs",
+        "Water management challenges in arid environment"
+      ],
+      "North Kordofan": [
+        "Desertification reducing traditional livelihoods",
+        "Limited humanitarian presence in remote areas",
+        "Intergenerational displacement creating dependency",
+        "Need for development-oriented solutions"
+      ],
+      "Northern": [
+        "Nile-dependent livelihoods disrupted",
+        "Limited arable land for agricultural programs",
+        "Urban concentration of services leaving rural gaps",
+        "Cultural heritage preservation concerns"
+      ],
+      "Red Sea": [
+        "Harsh climate conditions exacerbating vulnerabilities",
+        "Port city dynamics creating unique protection risks",
+        "Limited fresh water sources",
+        "Marine-based livelihoods disrupted"
+      ],
+      "River Nile": [
+        "Flood risks to displacement sites",
+        "High concentration of IDPs in limited areas",
+        "Agricultural land disputes",
+        "Limited livelihood diversification options"
+      ],
+      "Sennar": [
+        "Border dynamics with Ethiopia",
+        "Underfunded response relative to needs",
+        "Limited media attention to crisis",
+        "Dependence on seasonal labor migration"
+      ],
+      "South Kordofan": [
+        "Active conflict zones limiting access",
+        "Landmine contamination risks",
+        "Ethnic divisions complicating reconciliation",
+        "Limited infrastructure for service delivery"
+      ],
+      "West Darfur": [
+        "Cross-border movements with Chad",
+        "Intercommunal violence cycles",
+        "Limited civil documentation",
+        "Pressure on urban centers from rural displacement"
+      ],
+      "West Kordofan": [
+        "Oil industry impacts on displacement",
+        "Competition over scarce resources",
+        "Historical grievances fueling tensions",
+        "Limited humanitarian presence"
       ]
     };
     
@@ -622,7 +940,9 @@ function initializeIDPMap() {
       "Access to clean water and sanitation",
       "Food security concerns",
       "Limited healthcare facilities",
-      "Protection issues for vulnerable populations"
+      "Protection issues for vulnerable populations",
+      "Shelter and non-food item needs",
+      "Education access for displaced children"
     ];
   }
 
@@ -660,6 +980,14 @@ function initializeIDPMap() {
     })
     .catch(error => {
       console.error('Error loading GeoJSON data:', error);
+      // Add error message to map container
+      document.getElementById('map-container').innerHTML = `
+        <div style="padding: 20px; background: #ffebee; color: #c62828; border: 1px solid #ef9a9a;">
+          <h3>Error Loading Map Data</h3>
+          <p>Failed to load geographic data required for this visualization. Please try refreshing the page.</p>
+          <p>Technical details: ${error.message}</p>
+        </div>
+      `;
     });
 }
     </script>
