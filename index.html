@@ -11,7 +11,6 @@
     <!-- PapaParse for CSV parsing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <style>
-        /* Your existing CSS styles remain the same */
         body {
             margin: 0;
             padding: 0;
@@ -215,14 +214,14 @@
             // First load the CSV data, then initialize the map
             loadIDPData().then(idpData => {
                 initializeIDPMap(idpData);
+            }).catch(error => {
+                console.error("Error initializing map:", error);
+                alert("Failed to load data. Please check console for details.");
             });
         });
 
-        // Global variable to store the IDP data
-        let idpData = {};
-
         /**
-         * Load IDP data from CSV file
+         * Load IDP data from CSV file with proper error handling
          */
         async function loadIDPData() {
             return new Promise((resolve, reject) => {
@@ -234,15 +233,20 @@
                         // Transform the CSV data into the format we need
                         const data = {};
                         results.data.forEach(row => {
-                            // Clean up state names to match GeoJSON properties
-                            const stateName = row['State of Displacement'].trim();
-                            data[stateName] = {
-                                idps: parseInt(row['Total IDPs']),
-                                population: parseInt(row['Population']),
-                                localities: parseInt(row['Number of Localities']),
-                                locations: parseInt(row['Number of Locations'])
-                            };
+                            try {
+                                const stateName = row['State of Displacement'].trim();
+                                data[stateName] = {
+                                    idps: parseInt(row['Total IDPs'].replace(/,/g, '')) || 0,
+                                    population: parseInt(row['Population'].replace(/,/g, '')) || 0,
+                                    localities: parseInt(row['Number of Localities'].replace(/,/g, '')) || 0,
+                                    locations: parseInt(row['Number of Locations'].replace(/,/g, '')) || 0,
+                                    stateCode: row['State Code'] || ''
+                                };
+                            } catch (e) {
+                                console.error("Error processing row:", row, e);
+                            }
                         });
+                        console.log("Processed IDP data:", data);
                         resolve(data);
                     },
                     error: function(error) {
@@ -257,68 +261,47 @@
          * Initialize the main IDP map showing total IDPs by state
          */
         function initializeIDPMap(idpData) {
-            // Store the data globally
-            window.idpData = idpData;
-
-            // Create the map instance with improved initial view
+            // Create the map instance
             const idpMap = L.map('map-container', {
                 center: [15.5, 30.5], // Centered on Sudan
                 zoom: 5.5,
                 minZoom: 5,
                 maxZoom: 10,
-                zoomControl: false, // We'll add custom zoom controls
+                zoomControl: false,
                 attributionControl: true
             });
 
-            // Add custom zoom controls in a better position
-            L.control.zoom({
-                position: 'topright'
-            }).addTo(idpMap);
+            // Add controls
+            L.control.zoom({ position: 'topright' }).addTo(idpMap);
+            L.control.scale({ position: 'bottomright', imperial: false }).addTo(idpMap);
 
-            // Add scale control
-            L.control.scale({
-                position: 'bottomright',
-                imperial: false
-            }).addTo(idpMap);
-
-            // Add improved basemap with better contrast for data visualization
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            // Add base maps
+            const lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
                 subdomains: 'abcd',
                 maxZoom: 20
             }).addTo(idpMap);
 
-            // Add a secondary satellite basemap option
             const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
                 attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
             });
 
-            // Create a layer control for basemap switching
-            const baseMaps = {
-                "Light": L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-                    subdomains: 'abcd',
-                    maxZoom: 20
-                }),
+            // Layer control
+            L.control.layers({
+                "Light": lightLayer,
                 "Satellite": satelliteLayer
-            };
+            }, null, { position: 'topright', collapsed: true }).addTo(idpMap);
 
-            // Add the layer control to the map
-            L.control.layers(baseMaps, null, {
-                position: 'topright',
-                collapsed: true
-            }).addTo(idpMap);
-
-            // Improved color scale for IDP visualization
+            // Color scale for IDP visualization
             function getColor(d) {
                 return d > 1500000 ? '#08306B' :
-                    d > 1000000 ? '#2171B5' :
-                    d > 500000  ? '#6BAED6' :
-                    d > 250000  ? '#BDD7E7' :
-                                '#EFF3FF';
+                       d > 1000000 ? '#2171B5' :
+                       d > 500000  ? '#6BAED6' :
+                       d > 250000  ? '#BDD7E7' :
+                                     '#EFF3FF';
             }
 
-            // Improved styling for state boundaries
+            // Style for state boundaries
             function style(feature) {
                 const stateName = feature.properties.admin1Name;
                 const idpCount = idpData[stateName]?.idps || 0;
@@ -333,17 +316,15 @@
                 };
             }
 
-            // Enhanced hover effect
+            // Highlight feature on hover
             function highlightFeature(e) {
                 const layer = e.target;
-                
                 layer.setStyle({
                     weight: 3,
                     color: '#666',
                     dashArray: '',
                     fillOpacity: 0.9
                 });
-                
                 layer.bringToFront();
                 updateInfoPanel(layer.feature.properties);
             }
@@ -354,13 +335,13 @@
                 infoPanel.update();
             }
 
-            // Click handler for zooming to state
+            // Zoom to feature on click
             function zoomToFeature(e) {
                 idpMap.fitBounds(e.target.getBounds());
                 showStateDetails(e.target.feature.properties);
             }
 
-            // Set interaction listeners
+            // Add interactions to each feature
             function onEachFeature(feature, layer) {
                 layer.on({
                     mouseover: highlightFeature,
@@ -369,15 +350,13 @@
                 });
             }
 
-            // Create a custom info panel
+            // Create info panel
             const infoPanel = L.control({position: 'topleft'});
-
             infoPanel.onAdd = function(map) {
                 this._div = L.DomUtil.create('div', 'info-panel');
                 this.update();
                 return this._div;
             };
-
             infoPanel.update = function(props) {
                 const stateName = props ? props.admin1Name : '';
                 const idpCount = props ? (idpData[stateName]?.idps || null) : null;
@@ -389,21 +368,20 @@
                         `<div class="color-key" style="background: ${getColor(idpCount)};"></div>`
                         : 'Hover over a state');
             };
-
             infoPanel.addTo(idpMap);
 
-            // Function to update info panel on hover
+            // Update info panel
             function updateInfoPanel(props) {
                 infoPanel.update(props);
             }
 
-            // Function to show detailed state information
+            // Show detailed state information
             function showStateDetails(props) {
                 const stateName = props.admin1Name;
                 const stateData = idpData[stateName] || {};
                 const idpCount = stateData.idps || 0;
                 
-                // Create or update a modal with detailed information
+                // Create or update modal
                 let modal = document.getElementById('state-details-modal');
                 
                 if (!modal) {
@@ -412,7 +390,6 @@
                     modal.className = 'modal';
                     document.body.appendChild(modal);
                     
-                    // Add close button
                     const closeBtn = document.createElement('span');
                     closeBtn.className = 'modal-close';
                     closeBtn.innerHTML = '&times;';
@@ -421,28 +398,24 @@
                     };
                     modal.appendChild(closeBtn);
                     
-                    // Add content container
                     const content = document.createElement('div');
                     content.className = 'modal-content';
                     modal.appendChild(content);
                 }
                 
-                // Get the content container
                 const content = modal.querySelector('.modal-content');
                 
-                // Calculate percentage of total IDPs
+                // Calculate statistics
                 const totalIDPs = Object.values(idpData).reduce((sum, state) => sum + (state.idps || 0), 0);
                 const percentage = totalIDPs > 0 ? ((idpCount / totalIDPs) * 100).toFixed(1) : 0;
-                
-                // Create rank
                 const sortedStates = Object.entries(idpData)
                     .sort((a, b) => (b[1]?.idps || 0) - (a[1]?.idps || 0))
                     .map(entry => entry[0]);
                 const rank = sortedStates.indexOf(stateName) + 1;
                 
-                // Create a more detailed visualization of the state data
+                // Create modal content with all data fields
                 content.innerHTML = `
-                    <h2>${stateName}</h2>
+                    <h2>${stateName} ${stateData.stateCode ? `(${stateData.stateCode})` : ''}</h2>
                     <div class="state-stats">
                         <div class="stat-item">
                             <div class="stat-value">${idpCount.toLocaleString()}</div>
@@ -485,11 +458,16 @@
                 // Show the modal
                 modal.style.display = 'block';
                 
-                // Create a chart for the state data
+                // Create chart
+                createStateChart(stateName, idpCount);
+            }
+
+            // Create chart for state data
+            function createStateChart(stateName, idpCount) {
                 const ctx = document.getElementById('state-chart').getContext('2d');
-                
-                // Generate some random data for demonstration
                 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                
+                // Generate sample data (replace with real data if available)
                 const idpDataPoints = generateMonthlyData(idpCount);
                 const returneeData = generateReturneeData(idpCount);
                 
@@ -518,149 +496,108 @@
                             }
                         ]
                     },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: 'Monthly Displacement Trends (2024)',
-                                font: {
-                                    size: 16
-                                }
-                            },
-                            legend: {
-                                position: 'top'
-                            },
-                            tooltip: {
-                                mode: 'index',
-                                intersect: false,
-                                callbacks: {
-                                    label: function(context) {
-                                        return `${context.dataset.label}: ${context.raw.toLocaleString()}`;
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Number of People'
-                                },
-                                ticks: {
-                                    callback: function(value) {
-                                        return value.toLocaleString();
-                                    }
-                                }
-                            },
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Month'
-                                }
-                            }
-                        }
-                    }
+                    options: getChartOptions()
                 });
             }
 
-            // Helper function to generate realistic monthly data
+            // Chart configuration
+            function getChartOptions() {
+                return {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Monthly Displacement Trends (2024)',
+                            font: { size: 16 }
+                        },
+                        legend: { position: 'top' },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw.toLocaleString()}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Number of People' },
+                            ticks: { callback: function(value) { return value.toLocaleString(); } }
+                        },
+                        x: { title: { display: true, text: 'Month' } }
+                    }
+                };
+            }
+
+            // Helper functions
             function generateMonthlyData(baseValue) {
-                const variation = baseValue * 0.3; // Allow 30% variation
+                const variation = baseValue * 0.3;
                 return Array.from({length: 12}, (_, i) => {
-                    // Simulate seasonal patterns - more displacement in certain months
                     const seasonFactor = 1 + (0.2 * Math.sin(i * 0.5));
                     const randomFactor = 1 + (Math.random() - 0.5) * 0.2;
                     return Math.floor(baseValue * seasonFactor * randomFactor);
                 });
             }
 
-            // Helper function to generate returnee data
             function generateReturneeData(idpCount) {
-                const baseReturns = idpCount * 0.05; // Assume 5% return rate
+                const baseReturns = idpCount * 0.05;
                 return Array.from({length: 12}, (_, i) => {
-                    // More returns in later months
                     const progressFactor = 1 + (i / 12);
                     const randomFactor = 0.8 + Math.random() * 0.4;
                     return Math.floor(baseReturns * progressFactor * randomFactor);
                 });
             }
 
-            // Helper function to get state descriptions
             function getStateDescription(stateName) {
                 const descriptions = {
-                    "North Darfur": "North Darfur has experienced significant displacement due to ongoing conflict and intercommunal violence. The state hosts the largest IDP population in Sudan.",
-                    "South Darfur": "South Darfur continues to see displacement from both conflict and environmental factors, with many IDPs concentrated around Nyala.",
-                    "Central Darfur": "Central Darfur's displacement situation is characterized by periodic flare-ups of violence and limited access to humanitarian assistance.",
-                    "Khartoum": "Despite being the capital, Khartoum has seen displacement due to urban conflict and economic factors, though numbers are lower than in conflict zones.",
-                    "White Nile": "White Nile hosts both IDPs and refugees from neighboring countries, with displacement driven by multiple factors."
+                    "North Darfur": "North Darfur has experienced significant displacement due to ongoing conflict and intercommunal violence.",
+                    "South Darfur": "South Darfur continues to see displacement from both conflict and environmental factors.",
+                    "Central Darfur": "Central Darfur's displacement situation is characterized by periodic flare-ups of violence.",
+                    "Khartoum": "Despite being the capital, Khartoum has seen displacement due to urban conflict and economic factors.",
+                    "White Nile": "White Nile hosts both IDPs and refugees from neighboring countries."
                 };
-                
-                return descriptions[stateName] || `The displacement situation in ${stateName} has been affected by various factors including conflict, environmental conditions, and economic challenges.`;
+                return descriptions[stateName] || `The displacement situation in ${stateName} has been affected by various factors.`;
             }
 
-            // Helper function to get state-specific challenges
             function getStateChallenges(stateName) {
                 const challenges = {
-                    "North Darfur": [
-                        "Ongoing conflict and insecurity",
-                        "Limited humanitarian access",
-                        "Environmental degradation",
-                        "Overcrowded camps"
-                    ],
-                    "South Darfur": [
-                        "Protection concerns",
-                        "Food insecurity",
-                        "Limited healthcare",
-                        "Water scarcity"
-                    ],
-                    "Khartoum": [
-                        "Urban displacement challenges",
-                        "High cost of living",
-                        "Limited shelter options",
-                        "Livelihood opportunities"
-                    ]
+                    "North Darfur": ["Ongoing conflict", "Limited humanitarian access", "Environmental degradation"],
+                    "South Darfur": ["Protection concerns", "Food insecurity", "Water scarcity"],
+                    "Khartoum": ["Urban displacement challenges", "High cost of living"]
                 };
-                
                 return challenges[stateName] || [
-                    "Access to clean water and sanitation",
+                    "Access to clean water",
                     "Food security concerns",
-                    "Limited healthcare facilities",
-                    "Protection issues for vulnerable populations"
+                    "Limited healthcare facilities"
                 ];
             }
 
-            // Load the GeoJSON data and create the map layer
+            // Load GeoJSON and create map layer
             fetch('./data/Admin1.json')
                 .then(response => response.json())
                 .then(data => {
-                    // Create the GeoJSON layer with our styling and interaction
                     geojsonLayer = L.geoJson(data, {
                         style: style,
                         onEachFeature: onEachFeature
                     }).addTo(idpMap);
 
-                    // Add a legend
+                    // Add legend
                     const legend = L.control({position: 'bottomleft'});
-
                     legend.onAdd = function(map) {
                         const div = L.DomUtil.create('div', 'info legend');
                         const grades = [0, 250000, 500000, 1000000, 1500000];
-                        const labels = [];
                         
                         div.innerHTML = '<h4>IDP Count</h4>';
-                        
-                        // Loop through our intervals and generate a label with a colored square for each interval
                         for (let i = 0; i < grades.length; i++) {
                             div.innerHTML +=
                                 '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
                                 grades[i].toLocaleString() + (grades[i + 1] ? '–' + grades[i + 1].toLocaleString() + '<br>' : '+');
                         }
-                        
                         return div;
                     };
-
                     legend.addTo(idpMap);
                 })
                 .catch(error => {
