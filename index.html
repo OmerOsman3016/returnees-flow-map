@@ -1984,8 +1984,8 @@
         // Add tooltip and popup to features
         function addTooltip(feature, layer) {
           const tooltipContent = feature.properties.isOrigin
-            ? `State of Displacement: ${feature.properties.s_State}`
-            : `State of Return: ${feature.properties.e_locality}`;
+            ? `Displacement From: ${feature.properties.s_State}`
+            : `Displacement To: ${feature.properties.e_locality}`;
 
           layer.bindTooltip(tooltipContent);
           layer.on('mouseover', () => layer.openTooltip());
