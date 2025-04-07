@@ -177,112 +177,133 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
-        // Embedded IDP data
+        // Embedded IDP data with updated numbers
         const idpData = {
             "SD01": {
                 stateName: "North Darfur",
-                idps: 1750000,
-                population: 3200000,
-                localities: 18,
-                locations: 350
+                idps: 1786909,
+                population: 2775652,
+                localities: 17,
+                locations: 510
             },
             "SD02": {
                 stateName: "South Darfur",
-                idps: 1200000,
-                population: 5800000,
-                localities: 22,
-                locations: 420
+                idps: 1837706,
+                population: 3912372,
+                localities: 21,
+                locations: 156
             },
             "SD03": {
                 stateName: "Central Darfur",
-                idps: 850000,
-                population: 2100000,
-                localities: 15,
-                locations: 280
+                idps: 929977,
+                population: 1786503,
+                localities: 9,
+                locations: 131
             },
             "SD04": {
                 stateName: "Khartoum",
-                idps: 2300000,
-                population: 8500000,
+                idps: 105380,
+                population: 9146191,
                 localities: 7,
-                locations: 150
+                locations: 416
             },
             "SD05": {
                 stateName: "White Nile",
-                idps: 650000,
-                population: 3000000,
-                localities: 12,
-                locations: 180
+                idps: 648539,
+                population: 3046811,
+                localities: 9,
+                locations: 1309
             },
             "SD06": {
                 stateName: "North Kordofan",
-                idps: 420000,
-                population: 3200000,
-                localities: 10,
-                locations: 160
+                idps: 199248,
+                population: 2160476,
+                localities: 8,
+                locations: 639
             },
             "SD07": {
                 stateName: "South Kordofan",
-                idps: 380000,
-                population: 2800000,
-                localities: 8,
-                locations: 140
+                idps: 447459,
+                population: 2017962,
+                localities: 14,
+                locations: 497
             },
             "SD08": {
                 stateName: "West Darfur",
-                idps: 720000,
-                population: 2500000,
-                localities: 14,
-                locations: 210
+                idps: 309227,
+                population: 1940860,
+                localities: 8,
+                locations: 145
             },
             "SD09": {
                 stateName: "East Darfur",
-                idps: 290000,
-                population: 1800000,
+                idps: 793948,
+                population: 1213951,
                 localities: 9,
-                locations: 120
+                locations: 52
             },
             "SD10": {
                 stateName: "Blue Nile",
-                idps: 180000,
-                population: 1200000,
-                localities: 6,
-                locations: 90
+                idps: 456465,
+                population: 1344267,
+                localities: 7,
+                locations: 240
             },
             "SD11": {
                 stateName: "Gedaref",
-                idps: 95000,
-                population: 2300000,
-                localities: 5,
-                locations: 70
+                idps: 852626,
+                population: 2545604,
+                localities: 12,
+                locations: 656
             },
             "SD12": {
                 stateName: "Kassala",
-                idps: 120000,
-                population: 2100000,
-                localities: 6,
-                locations: 80
+                idps: 318415,
+                population: 2811446,
+                localities: 11,
+                locations: 325
             },
             "SD13": {
                 stateName: "Red Sea",
-                idps: 85000,
-                population: 1800000,
-                localities: 4,
-                locations: 60
+                idps: 244306,
+                population: 1549857,
+                localities: 10,
+                locations: 306
             },
             "SD14": {
                 stateName: "River Nile",
-                idps: 65000,
-                population: 1500000,
-                localities: 3,
-                locations: 50
+                idps: 935723,
+                population: 1651873,
+                localities: 7,
+                locations: 1283
             },
             "SD15": {
                 stateName: "Sennar",
-                idps: 110000,
-                population: 2200000,
-                localities: 5,
-                locations: 75
+                idps: 130614,
+                population: 2170863,
+                localities: 7,
+                locations: 420
+            },
+            "SD16": {
+                stateName: "Aj Jazirah",
+                idps: 331531,
+                population: 5687557,
+                localities: 8,
+                locations: 1870
+            },
+            "SD17": {
+                stateName: "Northern",
+                idps: 567174,
+                population: 1023194,
+                localities: 7,
+                locations: 629
+            },
+            "SD18": {
+                stateName: "West Kordofan",
+                idps: 406093,
+                population: 1713462,
+                localities: 14,
+                locations: 701
             }
         };
 
@@ -715,6 +736,39 @@
                         "geometry": {
                             "type": "Polygon",
                             "coordinates": [[[33,12], [33,13], [34,13], [34,12], [33,12]]]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "admin1Code": "SD16",
+                            "admin1Name": "Aj Jazirah"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [[[33,14], [33,15], [34,15], [34,14], [33,14]]]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "admin1Code": "SD17",
+                            "admin1Name": "Northern"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [[[30,19], [30,20], [31,20], [31,19], [30,19]]]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "admin1Code": "SD18",
+                            "admin1Name": "West Kordofan"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [[[27,11], [27,12], [28,12], [28,11], [27,11]]]
                         }
                     }
                 ]
