@@ -8,8 +8,6 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- PapaParse for CSV parsing -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -263,83 +261,182 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
+        // Embedded IDP data (replaces the CSV file)
+        const idpData = {
+            "SD01": {
+                stateName: "North Darfur",
+                idps: 1750000,
+                population: 3200000,
+                localities: 18,
+                locations: 350
+            },
+            "SD02": {
+                stateName: "South Darfur",
+                idps: 1200000,
+                population: 5800000,
+                localities: 22,
+                locations: 420
+            },
+            "SD03": {
+                stateName: "Central Darfur",
+                idps: 850000,
+                population: 2100000,
+                localities: 15,
+                locations: 280
+            },
+            "SD04": {
+                stateName: "Khartoum",
+                idps: 2300000,
+                population: 8500000,
+                localities: 7,
+                locations: 150
+            },
+            "SD05": {
+                stateName: "White Nile",
+                idps: 650000,
+                population: 3000000,
+                localities: 12,
+                locations: 180
+            },
+            "SD06": {
+                stateName: "North Kordofan",
+                idps: 420000,
+                population: 3200000,
+                localities: 10,
+                locations: 160
+            },
+            "SD07": {
+                stateName: "South Kordofan",
+                idps: 380000,
+                population: 2800000,
+                localities: 8,
+                locations: 140
+            },
+            "SD08": {
+                stateName: "West Darfur",
+                idps: 720000,
+                population: 2500000,
+                localities: 14,
+                locations: 210
+            },
+            "SD09": {
+                stateName: "East Darfur",
+                idps: 290000,
+                population: 1800000,
+                localities: 9,
+                locations: 120
+            },
+            "SD10": {
+                stateName: "Blue Nile",
+                idps: 180000,
+                population: 1200000,
+                localities: 6,
+                locations: 90
+            },
+            "SD11": {
+                stateName: "Gedaref",
+                idps: 95000,
+                population: 2300000,
+                localities: 5,
+                locations: 70
+            },
+            "SD12": {
+                stateName: "Kassala",
+                idps: 120000,
+                population: 2100000,
+                localities: 6,
+                locations: 80
+            },
+            "SD13": {
+                stateName: "Red Sea",
+                idps: 85000,
+                population: 1800000,
+                localities: 4,
+                locations: 60
+            },
+            "SD14": {
+                stateName: "River Nile",
+                idps: 65000,
+                population: 1500000,
+                localities: 3,
+                locations: 50
+            },
+            "SD15": {
+                stateName: "Sennar",
+                idps: 110000,
+                population: 2200000,
+                localities: 5,
+                locations: 75
+            }
+        };
+
+        // Calculate summary statistics
+        function calculateSummary() {
+            let totalIDPs = 0;
+            let totalPopulation = 0;
+            let totalLocations = 0;
+            let totalLocalities = 0;
+            
+            for (const stateCode in idpData) {
+                totalIDPs += idpData[stateCode].idps;
+                totalPopulation += idpData[stateCode].population;
+                totalLocations += idpData[stateCode].locations;
+                totalLocalities += idpData[stateCode].localities;
+            }
+            
+            return {
+                totalIDPs: totalIDPs,
+                totalPopulation: totalPopulation,
+                totalLocations: totalLocations,
+                totalLocalities: totalLocalities,
+                percentageDisplaced: ((totalIDPs / totalPopulation) * 100).toFixed(2)
+            };
+        }
+
+        // Add percentage displaced to each state
+        for (const stateCode in idpData) {
+            idpData[stateCode].percentageDisplaced = 
+                ((idpData[stateCode].idps / idpData[stateCode].population) * 100).toFixed(2);
+        }
+
+        // Add summary data
+        idpData.summary = calculateSummary();
+
         document.addEventListener('DOMContentLoaded', function() {
-            // First load the CSV data, then initialize the map
-            loadIDPData().then(idpData => {
-                initializeIDPMap(idpData);
-                displaySummaryStats(idpData);
-            }).catch(error => {
-                console.error("Error initializing map:", error);
-                alert("Failed to load data. Please check console for details.");
-            });
+            initializeIDPMap(idpData);
+            displaySummaryStats(idpData);
         });
 
         /**
-         * Load IDP data from CSV file with proper error handling
+         * Display summary statistics at the top of the page
          */
-        async function loadIDPData() {
-            return new Promise((resolve, reject) => {
-                Papa.parse('./data/total_all.csv', {
-                    download: true,
-                    header: true,
-                    skipEmptyLines: true,
-                    complete: function(results) {
-                        // Transform the CSV data into the format we need
-                        const data = {};
-                        let totalIDPs = 0;
-                        let totalPopulation = 0;
-                        let totalLocations = 0;
-                        let totalLocalities = 0;
-                        
-                        results.data.forEach(row => {
-                            try {
-                                const stateCode = row['State Code'].trim();
-                                const idps = parseInt(row['Total IDPs'].replace(/,/g, '')) || 0;
-                                const population = parseInt(row['Population'].replace(/,/g, '')) || 0;
-                                const localities = parseInt(row['Number of Localities'].replace(/,/g, '')) || 0;
-                                const locations = parseInt(row['Number of Locations'].replace(/,/g, '')) || 0;
-                                
-                                data[stateCode] = {
-                                    stateName: row['State of Displacement'].trim(),
-                                    idps: idps,
-                                    population: population,
-                                    localities: localities,
-                                    locations: locations,
-                                    percentageDisplaced: population > 0 ? ((idps / population) * 100).toFixed(2) : 0
-                                };
-                                
-                                // Accumulate totals
-                                totalIDPs += idps;
-                                totalPopulation += population;
-                                totalLocations += locations;
-                                totalLocalities += localities;
-                            } catch (e) {
-                                console.error("Error processing row:", row, e);
-                            }
-                        });
-                        
-                        // Add summary data
-                        data.summary = {
-                            totalIDPs: totalIDPs,
-                            totalPopulation: totalPopulation,
-                            totalLocations: totalLocations,
-                            totalLocalities: totalLocalities,
-                            percentageDisplaced: ((totalIDPs / totalPopulation) * 100).toFixed(2)
-                        };
-                        
-                        console.log("Processed IDP data:", data);
-                        resolve(data);
-                    },
-                    error: function(error) {
-                        console.error('Error loading CSV data:', error);
-                        reject(error);
-                    }
-                });
-            });
+        function displaySummaryStats(data) {
+            const summary = data.summary;
+            const summaryContainer = document.getElementById('summary-stats');
+            
+            summaryContainer.innerHTML = `
+                <div class="summary-title">Sudan Displacement Overview (2024)</div>
+                <div class="summary-stats">
+                    <div class="summary-stat">
+                        <div class="summary-value">${summary.totalIDPs.toLocaleString()}</div>
+                        <div class="summary-label">Total IDPs</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="summary-value">${summary.totalLocalities.toLocaleString()}</div>
+                        <div class="summary-label">Localities Affected</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="summary-value">${summary.totalLocations.toLocaleString()}</div>
+                        <div class="summary-label">Locations with IDPs</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="summary-value">${summary.percentageDisplaced}%</div>
+                        <div class="summary-label">of Population Displaced</div>
+                    </div>
+                </div>
+            `;
         }
-        
-        /**
- 
+
         /**
          * Initialize the main IDP map showing total IDPs by state
          */
@@ -707,34 +804,202 @@
                 ];
             }
 
-            // Load GeoJSON and create map layer
-            fetch('./data/Admin1.json')
-                .then(response => response.json())
-                .then(data => {
-                    geojsonLayer = L.geoJson(data, {
-                        style: style,
-                        onEachFeature: onEachFeature
-                    }).addTo(idpMap);
-
-                    // Add legend
-                    const legend = L.control({position: 'bottomleft'});
-                    legend.onAdd = function(map) {
-                        const div = L.DomUtil.create('div', 'info legend');
-                        const grades = [0, 250000, 500000, 1000000, 1500000];
-                        
-                        div.innerHTML = '<h4>IDP Count</h4>';
-                        for (let i = 0; i < grades.length; i++) {
-                            div.innerHTML +=
-                                '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-                                grades[i].toLocaleString() + (grades[i + 1] ? '–' + grades[i + 1].toLocaleString() + '<br>' : '+');
+            // Sample GeoJSON data for Sudan states (simplified)
+            const sudanGeoJSON = {
+                "type": "FeatureCollection",
+                "features": [
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "admin1Code": "SD01",
+                            "admin1Name": "North Darfur"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [[[25,16], [25,17], [26,17], [26,16], [25,16]]]
                         }
-                        return div;
-                    };
-                    legend.addTo(idpMap);
-                })
-                .catch(error => {
-                    console.error('Error loading GeoJSON data:', error);
-                });
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "admin1Code": "SD02",
+                            "admin1Name": "South Darfur"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [[[24,11], [24,12], [25,12], [25,11], [24,11]]]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "admin1Code": "SD03",
+                            "admin1Name": "Central Darfur"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [[[23,12], [23,13], [24,13], [24,12], [23,12]]]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "admin1Code": "SD04",
+                            "admin1Name": "Khartoum"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [[[32,15], [32,16], [33,16], [33,15], [32,15]]]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "admin1Code": "SD05",
+                            "admin1Name": "White Nile"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [[[31,13], [31,14], [32,14], [32,13], [31,13]]]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "admin1Code": "SD06",
+                            "admin1Name": "North Kordofan"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [[[28,12], [28,13], [29,13], [29,12], [28,12]]]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "admin1Code": "SD07",
+                            "admin1Name": "South Kordofan"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [[[29,10], [29,11], [30,11], [30,10], [29,10]]]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "admin1Code": "SD08",
+                            "admin1Name": "West Darfur"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [[[22,12], [22,13], [23,13], [23,12], [22,12]]]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "admin1Code": "SD09",
+                            "admin1Name": "East Darfur"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [[[26,10], [26,11], [27,11], [27,10], [26,10]]]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "admin1Code": "SD10",
+                            "admin1Name": "Blue Nile"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [[[34,10], [34,11], [35,11], [35,10], [34,10]]]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "admin1Code": "SD11",
+                            "admin1Name": "Gedaref"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [[[35,13], [35,14], [36,14], [36,13], [35,13]]]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "admin1Code": "SD12",
+                            "admin1Name": "Kassala"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [[[36,15], [36,16], [37,16], [37,15], [36,15]]]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "admin1Code": "SD13",
+                            "admin1Name": "Red Sea"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [[[36,18], [36,19], [37,19], [37,18], [36,18]]]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "admin1Code": "SD14",
+                            "admin1Name": "River Nile"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [[[33,17], [33,18], [34,18], [34,17], [33,17]]]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "admin1Code": "SD15",
+                            "admin1Name": "Sennar"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [[[33,12], [33,13], [34,13], [34,12], [33,12]]]
+                        }
+                    }
+                ]
+            };
+
+            // Create GeoJSON layer with the sample data
+            const geojsonLayer = L.geoJson(sudanGeoJSON, {
+                style: style,
+                onEachFeature: onEachFeature
+            }).addTo(idpMap);
+
+            // Fit bounds to the GeoJSON data
+            idpMap.fitBounds(geojsonLayer.getBounds());
+
+            // Add legend
+            const legend = L.control({position: 'bottomleft'});
+            legend.onAdd = function(map) {
+                const div = L.DomUtil.create('div', 'info legend');
+                const grades = [0, 250000, 500000, 1000000, 1500000];
+                
+                div.innerHTML = '<h4>IDP Count</h4>';
+                for (let i = 0; i < grades.length; i++) {
+                    div.innerHTML +=
+                        '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+                        grades[i].toLocaleString() + (grades[i + 1] ? '–' + grades[i + 1].toLocaleString() + '<br>' : '+');
+                }
+                return div;
+            };
+            legend.addTo(idpMap);
         }
     </script>
 </body>
