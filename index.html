@@ -339,39 +339,7 @@
         }
         
         /**
-         * Display summary statistics at the top of the page
-         */
-        function displaySummaryStats(idpData) {
-            const summary = idpData.summary;
-            const summaryContainer = document.getElementById('summary-stats');
-            
-            summaryContainer.innerHTML = `
-                <div class="summary-title">Sudan Displacement Overview</div>
-                <div class="summary-stats">
-                    <div class="summary-stat">
-                        <div class="summary-value">${summary.totalIDPs.toLocaleString()}</div>
-                        <div class="summary-label">Total IDPs</div>
-                    </div>
-                    <div class="summary-stat">
-                        <div class="summary-value">${summary.totalPopulation.toLocaleString()}</div>
-                        <div class="summary-label">Total Population</div>
-                    </div>
-                    <div class="summary-stat">
-                        <div class="summary-value">${summary.percentageDisplaced}%</div>
-                        <div class="summary-label">Population Displaced</div>
-                    </div>
-                    <div class="summary-stat">
-                        <div class="summary-value">${summary.totalLocalities.toLocaleString()}</div>
-                        <div class="summary-label">Localities</div>
-                    </div>
-                    <div class="summary-stat">
-                        <div class="summary-value">${summary.totalLocations.toLocaleString()}</div>
-                        <div class="summary-label">Locations</div>
-                    </div>
-                </div>
-            `;
-        }
-
+ 
         /**
          * Initialize the main IDP map showing total IDPs by state
          */
