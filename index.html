@@ -535,8 +535,8 @@
       --card-color-rgb: 91, 192, 222;
     }
 
-    /* Parent Container for Text and Map */
-    .idps-frame-container {
+    /* Frame Container for all map sections */
+    .frame-container {
       display: flex;
       gap: 20px;
       opacity: 0;
@@ -545,8 +545,8 @@
       animation-delay: 0.8s;
     }
 
-    /* Text Container for Total Number of IDPs by STATE */
-    #idps-text-container {
+    /* Text Container for all sections */
+    .text-container {
       flex: 1;
       background-color: #ffffff;
       border-radius: 12px;
@@ -554,28 +554,28 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
-    #idps-text-container p {
+    .text-container p {
       font-size: 15px;
       line-height: 1.7;
       color: #555;
       margin-bottom: 15px;
     }
 
-    #idps-text-container ul {
+    .text-container ul {
       list-style-type: none;
       margin-left: 0;
       padding-left: 0;
       color: #555;
     }
 
-    #idps-text-container ul li {
+    .text-container ul li {
       margin-bottom: 10px;
       padding-left: 20px;
       position: relative;
       line-height: 1.6;
     }
 
-    #idps-text-container ul li:before {
+    .text-container ul li:before {
       content: "•";
       color: #418FDE;
       font-size: 20px;
@@ -584,12 +584,12 @@
       top: -2px;
     }
 
-    #idps-text-container strong {
+    .text-container strong {
       color: #333;
       font-weight: 600;
     }
 
-    #idps-text-container h3 {
+    .text-container h3 {
       color: #2A6FBB;
       font-size: 18px;
       margin: 20px 0 10px;
@@ -597,8 +597,8 @@
       padding-bottom: 5px;
     }
 
-    /* Map Container for Total Number of IDPs by State */
-    #map-container-3 {
+    /* Map Container for all sections */
+    .map-container {
       flex: 2;
       background-color: #ffffff;
       border-radius: 12px;
@@ -606,86 +606,14 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
-    #map3 {
+    .map {
       width: 100%;
       height: 80vh;
       border-radius: 8px;
-    }
-
-    /* Maps container styling */
-    .maps-container {
-      display: flex;
-      gap: 20px;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: slideUp 0.8s ease-in-out forwards;
-      animation-delay: 0.8s;
-    }
-
-    #map-container, #map-container-2, #map-container-4 {
-      flex: 1;
-      background-color: #ffffff;
-      border-radius: 12px;
-      padding: 15px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-
-    #map, #map2, #map4 {
-      width: 100%;
-      height: 80vh;
-      border-radius: 8px;
-    }
-
-    /* Mobility in Sudan Text Container */
-    #mobility-text-container {
-      flex: 1;
-      background-color: #ffffff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      font-size: 15px;
-      line-height: 1.7;
-      color: #555;
-      weight:40%
-    }
-
-    #mobility-text-container p {
-      margin-bottom: 15px;
-    }
-
-    #mobility-text-container strong {
-      color: #333;
-      font-weight: 600;
-    }
-
-    #mobility-text-container .data-point {
-      color: #418FDE;
-      font-weight: 600;
-    }
-
-    #mobility-text-container ul {
-      list-style-type: none;
-      margin-left: 0;
-      padding-left: 0;
-    }
-
-    #mobility-text-container ul li {
-      margin-bottom: 10px;
-      padding-left: 20px;
-      position: relative;
-    }
-
-    #mobility-text-container ul li:before {
-      content: "•";
-      color: #418FDE;
-      font-size: 20px;
-      position: absolute;
-      left: 0;
-      top: -2px;
     }
 
     /* Pie Chart Map Showing Displacement Proportions */
-    #map5 {
+    .pie-map {
       height: 600px;
       border-radius: 8px;
     }
@@ -698,7 +626,7 @@
     }
 
     /* Country Circle Map Styles */
-    #country-circle-map {
+    .country-circle-map {
       height: 600px;
       border-radius: 8px;
     }
@@ -1069,15 +997,15 @@
 
     /* Responsive design for smaller screens */
     @media (max-width: 992px) {
-      .idps-frame-container {
+      .frame-container {
         flex-direction: column;
       }
 
-      #map-container-3, #idps-text-container {
+      .map-container, .text-container {
         flex: 1;
       }
 
-      #map3 {
+      .map {
         height: 60vh;
       }
     }
@@ -1101,7 +1029,7 @@
         flex-direction: column; 
       }
       
-      #map, #map2, #map3, #map4, #map5, #country-circle-map { 
+      .map { 
         height: 70vh; 
       }
 
@@ -1181,7 +1109,7 @@
         padding: 10px;
       }
       
-      .dashboard-cards, .maps-container { 
+      .dashboard-cards, .frame-container { 
         page-break-inside: avoid; 
       }
       
@@ -1227,7 +1155,7 @@
       <div id="title-container">
         <div id="title">
           <h1>SUDAN | DISPLACEMENT TRACKING MATRIX - SUDAN MOBILITY</h1>
-          <h2><strong>Two Years of Conflict in Sudan - The World’s Largest Displacement Crisis</strong></h2>
+          <h2><strong>Two Years of Conflict in Sudan - The World's Largest Displacement Crisis</strong></h2>
         </div>
        
         <!-- Add this image element to the right side of the title -->
@@ -1330,9 +1258,9 @@
     </div>
      
     <!-- IDPs Section -->
-    <div id="idps-section" class="idps-frame-container">
+    <div class="frame-container">
       <!-- Text Container for Total Number of IDPs by State -->
-      <div id="idps-text-container">
+      <div class="text-container">
         <h2>CONTEXT</h2>
         <p>
         As the conflict in Sudan enters its third year, nearly one third of the population remains displaced, with over 15 million individuals displaced internally or across borders.  The number of internally displaced persons (IDPs) in Sudan has tripled during the conflict, from 3.8 million prior to April 2023 to over 11.3 million in April 2025— the highest number of IDPs ever reported in a country.    Nearly 4 million individuals were displaced to neighbouring countries since April 2023. </p> 
@@ -1351,10 +1279,10 @@
       </div>
 
       <!-- Map Container for Total Number of IDPs by State -->
-      <div id="map-container-3">
+      <div class="map-container">
         <h2 id="map-title-3">Total Number of IDPs by State</h2>
         <button id="drilldown-back" class="drilldown-back">← Back to States</button>
-        <div id="map3"></div>
+        <div id="map3" class="map"></div>
       </div>
     </div>
     
@@ -1366,7 +1294,7 @@
       <div class="chart-container">
         <canvas id="populationPyramidChart"></canvas>
       </div>
-      <div id="idps-text-container">
+      <div class="text-container">
         <h3>Demographic Insights</h3>
         <p><span class="key-point">Youthful Population:</span> The pyramid shows a broad base with <span class="highlight">41% of IDPs under 18 years old</span>, indicating a very young population structure typical of displacement crises.</p>
         
@@ -1381,151 +1309,149 @@
     </div>
     
     <!-- Displacement Section -->
-    <div id="displacement-section" class="maps-container">
-      <div id="map-container">
+    <div class="frame-container">
+      <div class="text-container">
         <h2>Displacement Proportions by State</h2>
-        <div id="mobility-text-container">
-          <p>
-            This map visualizes the proportion of each state's population that has been displaced by the ongoing conflict. The pie chart markers show at a glance which states have been most severely affected, with the orange segments representing displaced populations and blue segments showing remaining residents.
-          </p>
-          <p>
-            <strong>Key insights from the map visualization:</strong>
-            <ul>
-              <li><strong>North Darfur stands out</strong> with the highest displacement proportion (66%) - nearly two-thirds of its population has been forced to flee</li>
-              <li><strong>South Darfur shows</strong> the largest absolute numbers (over 2 million displaced) despite being a smaller proportion (53%) of its larger population</li>
-              <li><strong>Khartoum's displacement</strong> (3.5 million people) represents 38% of the state's population, visible through the relative sizes of the pie segments</li>
-              <li><strong>Northern states</strong> like Northern and Red Sea show much smaller displacement proportions (1-2%), visible through their predominantly blue pie charts</li>
-            </ul>
-          </p>
-          <p>
-            <strong>How to interpret the map symbols:</strong>
-            <ul>
-              <li>Each pie chart is scaled to the state's total population size</li>
-              <li>Orange segments show displaced populations</li>
-              <li>Blue segments show non-displaced populations</li>
-              <li>The percentage label in each pie shows the exact displacement proportion</li>
-              <li>Larger pies indicate states with bigger total populations</li>
-            </ul>
-          </p>
-          <p>
-            The spatial distribution reveals clear patterns - states in Darfur and Khartoum show the most severe displacement, while northern and eastern states have been less affected. This visualization helps humanitarian actors quickly identify where needs are greatest and how displacement is impacting different regions proportionally.
-          </p>
-          <p>
-            <strong>Map interaction tips:</strong>
-            <ul>
-              <li>Click on any pie chart to see detailed state statistics</li>
-              <li>Compare states by both segment size (proportion) and overall pie size (total population)</li>
-              <li>Note the concentration of large orange segments in western Sudan</li>
-            </ul>
-          </p>
-        </div>
-        <div id="map5"></div>
+        <p>
+          This map visualizes the proportion of each state's population that has been displaced by the ongoing conflict. The pie chart markers show at a glance which states have been most severely affected, with the orange segments representing displaced populations and blue segments showing remaining residents.
+        </p>
+        <p>
+          <strong>Key insights from the map visualization:</strong>
+          <ul>
+            <li><strong>North Darfur stands out</strong> with the highest displacement proportion (66%) - nearly two-thirds of its population has been forced to flee</li>
+            <li><strong>South Darfur shows</strong> the largest absolute numbers (over 2 million displaced) despite being a smaller proportion (53%) of its larger population</li>
+            <li><strong>Khartoum's displacement</strong> (3.5 million people) represents 38% of the state's population, visible through the relative sizes of the pie segments</li>
+            <li><strong>Northern states</strong> like Northern and Red Sea show much smaller displacement proportions (1-2%), visible through their predominantly blue pie charts</li>
+          </ul>
+        </p>
+        <p>
+          <strong>How to interpret the map symbols:</strong>
+          <ul>
+            <li>Each pie chart is scaled to the state's total population size</li>
+            <li>Orange segments show displaced populations</li>
+            <li>Blue segments show non-displaced populations</li>
+            <li>The percentage label in each pie shows the exact displacement proportion</li>
+            <li>Larger pies indicate states with bigger total populations</li>
+          </ul>
+        </p>
+        <p>
+          The spatial distribution reveals clear patterns - states in Darfur and Khartoum show the most severe displacement, while northern and eastern states have been less affected. This visualization helps humanitarian actors quickly identify where needs are greatest and how displacement is impacting different regions proportionally.
+        </p>
+        <p>
+          <strong>Map interaction tips:</strong>
+          <ul>
+            <li>Click on any pie chart to see detailed state statistics</li>
+            <li>Compare states by both segment size (proportion) and overall pie size (total population)</li>
+            <li>Note the concentration of large orange segments in western Sudan</li>
+          </ul>
+        </p>
+      </div>
+      <div class="map-container">
+        <div id="map5" class="pie-map"></div>
       </div>
     </div>
     
     <!-- Pathways Section -->
-    <div id="pathways-section" class="maps-container">
-      <div id="map-container-2">
-        <h2 id="map-title-2">IDPs Pathways Across Sudan</h2>
-        <div id="mobility-text-container">
-          <p>
-            This map visualizes the complex movement patterns of Internally Displaced Persons (IDPs) across Sudan. The animated flow lines represent the pathways taken by displaced populations, with their thickness indicating the relative volume of movement between locations. The map reveals several critical displacement corridors that have emerged during the crisis.
-          </p>
-          <p>
-            <strong>Key displacement patterns shown:</strong>
-            <ul>
-              <li><strong>Mass exodus from Khartoum:</strong> Thick flow lines show the movement of over 3.5 million people from the capital to neighboring states, particularly to Aj Jazirah, Sennar, and White Nile states.</li>
-              <li><strong>Darfur cross-border movements:</strong> Significant flows from Darfur states into neighboring Chad and South Sudan, with particularly heavy movement from West Darfur to Chad.</li>
-              <li><strong>Secondary displacement:</strong> Many IDPs who initially fled to relatively safer areas like Aj Jazirah have been forced to move again as conflict spread.</li>
-              <li><strong>Urban to rural movement:</strong> The majority of flows show displacement from urban centers to rural areas, straining already limited resources in receiving communities.</li>
-            </ul>
-          </p>
-          <p>
-            <strong>How to use this map:</strong>
-            <ul>
-              <li>Click on any flow line to see details about that displacement pathway</li>
-              <li>Hover over origin or destination points to see total numbers</li>
-              <li>Note that line thickness represents relative volume - thicker lines indicate larger numbers of displaced persons</li>
-              <li>The animation direction shows the direction of displacement</li>
-            </ul>
-          </p>
-          <p>
-            These displacement pathways have significant implications for humanitarian response, as they show where needs are concentrated and help predict where populations may move next based on conflict patterns and existing migration routes.
-          </p>
-        </div>
-        <div id="map2"></div>
+    <div class="frame-container">
+      <div class="text-container">
+        <h2>IDPs Pathways Across Sudan</h2>
+        <p>
+          This map visualizes the complex movement patterns of Internally Displaced Persons (IDPs) across Sudan. The animated flow lines represent the pathways taken by displaced populations, with their thickness indicating the relative volume of movement between locations. The map reveals several critical displacement corridors that have emerged during the crisis.
+        </p>
+        <p>
+          <strong>Key displacement patterns shown:</strong>
+          <ul>
+            <li><strong>Mass exodus from Khartoum:</strong> Thick flow lines show the movement of over 3.5 million people from the capital to neighboring states, particularly to Aj Jazirah, Sennar, and White Nile states.</li>
+            <li><strong>Darfur cross-border movements:</strong> Significant flows from Darfur states into neighboring Chad and South Sudan, with particularly heavy movement from West Darfur to Chad.</li>
+            <li><strong>Secondary displacement:</strong> Many IDPs who initially fled to relatively safer areas like Aj Jazirah have been forced to move again as conflict spread.</li>
+            <li><strong>Urban to rural movement:</strong> The majority of flows show displacement from urban centers to rural areas, straining already limited resources in receiving communities.</li>
+          </ul>
+        </p>
+        <p>
+          <strong>How to use this map:</strong>
+          <ul>
+            <li>Click on any flow line to see details about that displacement pathway</li>
+            <li>Hover over origin or destination points to see total numbers</li>
+            <li>Note that line thickness represents relative volume - thicker lines indicate larger numbers of displaced persons</li>
+            <li>The animation direction shows the direction of displacement</li>
+          </ul>
+        </p>
+        <p>
+          These displacement pathways have significant implications for humanitarian response, as they show where needs are concentrated and help predict where populations may move next based on conflict patterns and existing migration routes.
+        </p>
+      </div>
+      <div class="map-container">
+        <div id="map2" class="map"></div>
       </div>
     </div>
     
     <!-- Country Circle Propagation Map -->
-    <div class="maps-container">
-      <div id="map-container">
-        <div id="mobility-text-container">
-          <h2>Displacement to Neighboring Countries</h2>
-          <p>
-            The map below illustrates the significant displacement of Sudanese populations to neighboring countries since the conflict began. The size of each circle represents the relative number of displaced persons in each country, with the largest flows going to Egypt, Chad, and South Sudan. This external displacement has created regional humanitarian challenges, with over 3.9 million Sudanese refugees now living in neighboring countries.
-          </p>
-          <p>
-            <strong>Key observations:</strong>
-            <ul>
-              <li><strong>Egypt</strong> has received the largest number of displaced persons (1.5 million), representing 38% of all cross-border displacement</li>
-              <li><strong>Chad</strong> hosts 767,365 Sudanese refugees, primarily from Darfur region</li>
-              <li><strong>South Sudan</strong> has received 341,909 returnees and refugees despite its own humanitarian challenges</li>
-              <li>Smaller but significant flows have gone to Ethiopia (88,001), Libya (105,721), and Central African Republic (35,376)</li>
-            </ul>
-          </p>
-          <p>
-            These displacement patterns reflect both historical migration routes and the geographical proximity to conflict zones, with Darfur refugees primarily going to Chad, while those from eastern Sudan flee to Ethiopia and Egypt.
-          </p>
-        </div>
-        <div id="country-circle-map"></div>
+    <div class="frame-container">
+      <div class="text-container">
+        <h2>Displacement to Neighboring Countries</h2>
+        <p>
+          The map below illustrates the significant displacement of Sudanese populations to neighboring countries since the conflict began. The size of each circle represents the relative number of displaced persons in each country, with the largest flows going to Egypt, Chad, and South Sudan. This external displacement has created regional humanitarian challenges, with over 3.9 million Sudanese refugees now living in neighboring countries.
+        </p>
+        <p>
+          <strong>Key observations:</strong>
+          <ul>
+            <li><strong>Egypt</strong> has received the largest number of displaced persons (1.5 million), representing 38% of all cross-border displacement</li>
+            <li><strong>Chad</strong> hosts 767,365 Sudanese refugees, primarily from Darfur region</li>
+            <li><strong>South Sudan</strong> has received 341,909 returnees and refugees despite its own humanitarian challenges</li>
+            <li>Smaller but significant flows have gone to Ethiopia (88,001), Libya (105,721), and Central African Republic (35,376)</li>
+          </ul>
+        </p>
+        <p>
+          These displacement patterns reflect both historical migration routes and the geographical proximity to conflict zones, with Darfur refugees primarily going to Chad, while those from eastern Sudan flee to Ethiopia and Egypt.
+        </p>
+      </div>
+      <div class="map-container">
+        <div id="country-circle-map" class="country-circle-map"></div>
       </div>
     </div>  
     
     <!-- IDP Accommodation Data Analysis Section -->
-    <div class="maps-container">
-      <div id="map-container">
-        <div class="accommodation-analysis">
-          <h2>Where IDPs Live - Accommodation Analysis</h2>
-          <p class="subtitle">Distribution of Internally Displaced Persons by Housing Type</p>
+    <div class="frame-container">
+      <div class="text-container">
+        <h2>Where IDPs Live - Accommodation Analysis</h2>
+        <p class="subtitle">Distribution of Internally Displaced Persons by Housing Type</p>
+        
+        <div class="chart-container">
+          <canvas id="accommodationChart"></canvas>
+        </div>
+        
+        <div class="text-container">
+          <h3>Data Insights</h3>
+          <p><span class="key-point">Dominant Accommodation Type:</span> The data reveals that <span class="highlight">Host Family/Community accommodation</span> houses the largest number of IDPs at <span class="highlight">1,077,264</span> individuals, accounting for approximately 45% of the total displaced population represented in this dataset.</p>
           
-          <div class="chart-container">
-            <canvas id="accommodationChart"></canvas>
-          </div>
+          <p><span class="key-point">Formal vs Informal Housing:</span> While <span class="highlight">formal camps</span> accommodate 415,783 IDPs, informal solutions like <span class="highlight">improvised shelters</span> (56,239) and <span class="highlight">informal settlements</span> (385,332) collectively house a significant portion of the population, indicating potential gaps in formal housing solutions.</p>
           
-          <div id="mobility-text-container">
-            <h3>Data Insights</h3>
-            <p><span class="key-point">Dominant Accommodation Type:</span> The data reveals that <span class="highlight">Host Family/Community accommodation</span> houses the largest number of IDPs at <span class="highlight">1,077,264</span> individuals, accounting for approximately 45% of the total displaced population represented in this dataset.</p>
-            
-            <p><span class="key-point">Formal vs Informal Housing:</span> While <span class="highlight">formal camps</span> accommodate 415,783 IDPs, informal solutions like <span class="highlight">improvised shelters</span> (56,239) and <span class="highlight">informal settlements</span> (385,332) collectively house a significant portion of the population, indicating potential gaps in formal housing solutions.</p>
-            
-            <p><span class="key-point">Rental Market Pressure:</span> The <span class="highlight">137,092 IDPs in rented accommodations</span> represent a population that may be competing with local residents for housing, potentially driving up rental prices in host communities.</p>
-            
-            <p><span class="key-point">Public Infrastructure Use:</span> Schools and other public buildings serve as temporary housing for <span class="highlight">206,804 IDPs</span>, which may impact the normal functioning of these institutions and access to services for both displaced and host communities.</p>
-            
-            <p><span class="key-point">Vulnerability Indicators:</span> The populations in <span class="highlight">improvised shelters</span> (56,239) and <span class="highlight">informal settlements</span> (385,332) are likely the most vulnerable, facing greater protection risks and less access to basic services.</p>
-          </div>
+          <p><span class="key-point">Rental Market Pressure:</span> The <span class="highlight">137,092 IDPs in rented accommodations</span> represent a population that may be competing with local residents for housing, potentially driving up rental prices in host communities.</p>
+          
+          <p><span class="key-point">Public Infrastructure Use:</span> Schools and other public buildings serve as temporary housing for <span class="highlight">206,804 IDPs</span>, which may impact the normal functioning of these institutions and access to services for both displaced and host communities.</p>
+          
+          <p><span class="key-point">Vulnerability Indicators:</span> The populations in <span class="highlight">improvised shelters</span> (56,239) and <span class="highlight">informal settlements</span> (385,332) are likely the most vulnerable, facing greater protection risks and less access to basic services.</p>
         </div>
       </div>
     </div>
 
     <!-- Heatmap Section -->
-    <div id="heatmap-section" class="maps-container">
-      <div id="heatmap-container">
+    <div class="frame-container">
+      <div class="text-container">
         <h2>Mobility Over Time (2023 - 2025)</h2>
-        <div id="mobility-text-container">
-          <p>
-            This interactive heatmap visualization shows the progression of displacement over time. The heat intensity represents the number of displaced persons, with darker colors indicating higher numbers. Use the time slider or play button to see how the situation evolved month by month.
-          </p>
-          <p>
-            <strong>Key patterns to observe:</strong>
-            <ul>
-              <li>The rapid increase in IDPs (blue line) in the first months of the conflict</li>
-              <li>The sudden spike in May 2024 when displacement surpassed 10 million</li>
-              <li>The appearance of returnees (orange line) only in the most recent data</li>
-            </ul>
-          </p>
-        </div>
+        <p>
+          This interactive heatmap visualization shows the progression of displacement over time. The heat intensity represents the number of displaced persons, with darker colors indicating higher numbers. Use the time slider or play button to see how the situation evolved month by month.
+        </p>
+        <p>
+          <strong>Key patterns to observe:</strong>
+          <ul>
+            <li>The rapid increase in IDPs (blue line) in the first months of the conflict</li>
+            <li>The sudden spike in May 2024 when displacement surpassed 10 million</li>
+            <li>The appearance of returnees (orange line) only in the most recent data</li>
+          </ul>
+        </p>
+      </div>
+      <div class="map-container">
         <div id="heatmapChart" style="height: 400px;"></div>
         <div id="heatmap-controls">
           <button id="heatmap-play-button" class="heatmap-control-button">▶ Play</button>
@@ -1537,15 +1463,15 @@
     </div>
 
     <!-- Returnees Section -->
-    <div id="returnees-section" class="idps-frame-container">
+    <div class="frame-container">
       <!-- Map Container for Total Number of Returnees by State -->
-      <div id="map-container-4">
+      <div class="map-container">
         <h2 id="map-title-4">Total Number of Returnees by State</h2>
-        <div id="map4"></div>
+        <div id="map4" class="map"></div>
       </div>
 
       <!-- Text Container for Mobility in Sudan -->
-      <div id="mobility-text-container">
+      <div class="text-container">
         <h2>Returns and Cross-Border Movements</h2>
         <p>After two years of continuous conflict and rising displacement, DTM recorded the first decrease in the estimated number of IDPs in March 2023. The number of IDPs decrease by approximately 2 per cent between January and March 2025, due to an increase in return movements to Sennar, Aj Jazirah, and Khartoum states. As of 04 March 2025, DTM field teams recorded nearly 400,000 returnees from internal displacement as well as increased return movements from neighbouring countries. DTM anticipates that millions of displaced households will return to areas of origin as the conflict enters a third year, depending on unfolding dynamics. .</p>
         
@@ -1563,10 +1489,15 @@
     </div>
 
     <!-- Maps Container for Returnee Pathways -->
-    <div class="maps-container">
-      <div id="map-container-2">
-        <h2 id="map-title">Returnee Pathways Across Sudan</h2>
-        <div id="map"></div>
+    <div class="frame-container">
+      <div class="text-container">
+        <h2>Returnee Pathways Across Sudan</h2>
+        <p>
+          This map shows the movement patterns of returnees across Sudan. The flow lines represent the pathways taken by returning populations, with thickness indicating relative volume of movement between locations.
+        </p>
+      </div>
+      <div class="map-container">
+        <div id="map" class="map"></div>
       </div>
     </div>
     
