@@ -13,14 +13,51 @@
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
   <style>
-    /* Loading Spinner Styles */
+    /* Card Icon Styling */
+    .card-icon {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(var(--card-color-rgb), 0.1);
+      border-radius: 50%;
+      padding: 10px;
+    }
+
+    .card-icon-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: brightness(0) saturate(100%) invert(32%) sepia(74%) saturate(1038%) hue-rotate(183deg) brightness(91%) contrast(91%);
+    }
+
+    /* Specific color adjustments for each card */
+    .dashboard-card:nth-child(1) .card-icon-img {
+      filter: brightness(0) saturate(100%) invert(32%) sepia(74%) saturate(1038%) hue-rotate(183deg) brightness(91%) contrast(91%);
+    }
+    .dashboard-card:nth-child(2) .card-icon-img {
+      filter: brightness(0) saturate(100%) invert(63%) sepia(64%) saturate(439%) hue-rotate(62deg) brightness(93%) contrast(84%);
+    }
+    .dashboard-card:nth-child(3) .card-icon-img {
+      filter: brightness(0) saturate(100%) invert(76%) sepia(40%) saturate(955%) hue-rotate(333deg) brightness(94%) contrast(91%);
+    }
+    .dashboard-card:nth-child(4) .card-icon-img {
+      filter: brightness(0) saturate(100%) invert(37%) sepia(93%) saturate(949%) hue-rotate(327deg) brightness(89%) contrast(89%);
+    }
+    .dashboard-card:nth-child(5) .card-icon-img {
+      filter: brightness(0) saturate(100%) invert(73%) sepia(49%) saturate(481%) hue-rotate(152deg) brightness(94%) contrast(89%);
+    }
+
+    /* Loading spinner styles */
     #loading-spinner {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(255, 255, 255, 0.98);
+      background-color: rgba(255, 255, 255, 0.9);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -29,19 +66,11 @@
       transition: opacity 0.5s ease-out;
     }
     
-    .spinner-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      max-width: 500px;
-      text-align: center;
-    }
-    
     .spinner {
       width: 80px;
       height: 80px;
       position: relative;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
     
     .spinner-dot {
@@ -116,7 +145,7 @@
       font-size: 18px;
       color: #418FDE;
       font-weight: bold;
-      margin-bottom: 20px;
+      margin-top: 20px;
       text-align: center;
       animation: pulse 2s infinite;
     }
@@ -130,107 +159,21 @@
       }
     }
     
-    .progress-container {
-      width: 100%;
-      max-width: 300px;
-      margin: 20px 0;
-    }
-    
-    .progress-bar-container {
-      width: 100%;
-      height: 6px;
+    .loading-progress {
+      width: 200px;
+      height: 4px;
       background: #e0e0e0;
-      border-radius: 3px;
+      border-radius: 2px;
+      margin-top: 15px;
       overflow: hidden;
-      margin-bottom: 5px;
     }
     
-    .progress-bar {
+    .loading-progress-bar {
       height: 100%;
       width: 0%;
       background: linear-gradient(90deg, #418FDE, #82C4FF);
       transition: width 0.3s ease;
-      border-radius: 3px;
-    }
-    
-    .progress-info {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-    }
-    
-    .progress-text {
-      font-size: 14px;
-      color: #418FDE;
-      font-weight: 600;
-    }
-    
-    .loading-facts {
-      background-color: rgba(65, 143, 222, 0.1);
-      border-radius: 8px;
-      padding: 20px;
-      margin-top: 30px;
-      max-width: 500px;
-      text-align: center;
-      border-left: 4px solid #418FDE;
-    }
-    
-    .loading-facts h3 {
-      color: #2A6FBB;
-      margin-top: 0;
-      margin-bottom: 10px;
-    }
-    
-    .fact-text {
-      font-size: 15px;
-      color: #555;
-      line-height: 1.6;
-      font-style: italic;
-    }
-    
-    .loading-logo {
-      width: 200px;
-      height: auto;
-      margin-bottom: 30px;
-      opacity: 0.9;
-    }
-
-    /* Rest of your existing styles... */
-    /* Card Icon Styling */
-    .card-icon {
-      width: 50px;
-      height: 50px;
-      margin: 0 auto 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(var(--card-color-rgb), 0.1);
-      border-radius: 50%;
-      padding: 10px;
-    }
-
-    .card-icon-img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      filter: brightness(0) saturate(100%) invert(32%) sepia(74%) saturate(1038%) hue-rotate(183deg) brightness(91%) contrast(91%);
-    }
-
-    /* Specific color adjustments for each card */
-    .dashboard-card:nth-child(1) .card-icon-img {
-      filter: brightness(0) saturate(100%) invert(32%) sepia(74%) saturate(1038%) hue-rotate(183deg) brightness(91%) contrast(91%);
-    }
-    .dashboard-card:nth-child(2) .card-icon-img {
-      filter: brightness(0) saturate(100%) invert(63%) sepia(64%) saturate(439%) hue-rotate(62deg) brightness(93%) contrast(84%);
-    }
-    .dashboard-card:nth-child(3) .card-icon-img {
-      filter: brightness(0) saturate(100%) invert(76%) sepia(40%) saturate(955%) hue-rotate(333deg) brightness(94%) contrast(91%);
-    }
-    .dashboard-card:nth-child(4) .card-icon-img {
-      filter: brightness(0) saturate(100%) invert(37%) sepia(93%) saturate(949%) hue-rotate(327deg) brightness(89%) contrast(89%);
-    }
-    .dashboard-card:nth-child(5) .card-icon-img {
-      filter: brightness(0) saturate(100%) invert(73%) sepia(49%) saturate(481%) hue-rotate(152deg) brightness(94%) contrast(89%);
+      border-radius: 2px;
     }
 
     /* General body styling */
@@ -753,6 +696,12 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
+    /* Country Circle Map Styles */
+    #country-circle-map {
+      height: 600px;
+      border-radius: 8px;
+    }
+
     /* Drill-down back button */
     .drilldown-back {
       position: absolute;
@@ -1151,7 +1100,7 @@
         flex-direction: column; 
       }
       
-      #map, #map2, #map3, #map4, #map5 { 
+      #map, #map2, #map3, #map4, #map5, #country-circle-map { 
         height: 70vh; 
       }
 
@@ -1251,10 +1200,9 @@
 </head>
 
 <body>
-  <!-- Loading Spinner -->
-  <div id="loading-spinner">
-    <div class="spinner-container">
-      <img src="./data/IOM_DTM_WHITE.png" alt="IOM Logo" class="loading-logo">
+  <div class="main-container">
+    <!-- Loading Spinner -->
+    <div id="loading-spinner">
       <div class="spinner">
         <div class="spinner-dot"></div>
         <div class="spinner-dot"></div>
@@ -1266,26 +1214,12 @@
         <div class="spinner-dot"></div>
       </div>
       <div class="loading-text">Loading Displacement Data...</div>
-      
-      <div class="progress-container">
-        <div class="progress-bar-container">
-          <div class="progress-bar" id="progress-bar"></div>
-        </div>
-        <div class="progress-info">
-          <span class="progress-text" id="progress-text">0%</span>
-          <span class="progress-text">Preparing your dashboard...</span>
-        </div>
-      </div>
-      
-      <div class="loading-facts">
-        <h3>Did You Know?</h3>
-        <p class="fact-text" id="fact-text">Sudan's war has created the world's worst displacement crisis, with millions at risk...</p>
+      <div class="loading-text">Sudan's war has created the world's worst displacement crisis, with millions at risk ...</div>
+      <div class="loading-progress">
+        <div class="loading-progress-bar" id="progress-bar"></div>
       </div>
     </div>
-  </div>
 
-  <!-- Rest of your HTML content remains the same -->
-  <div class="main-container">
     <!-- Dashboard Section -->
     <div id="dashboard-section">
       <!-- Title Container with Logo, Title, and Info Card -->
@@ -1527,6 +1461,31 @@
       </div>
     </div>
     
+    <!-- Country Circle Propagation Map -->
+    <div class="maps-container">
+      <div id="map-container">
+        <div id="mobility-text-container">
+          <h2>Displacement to Neighboring Countries</h2>
+          <p>
+            The map below illustrates the significant displacement of Sudanese populations to neighboring countries since the conflict began. The size of each circle represents the relative number of displaced persons in each country, with the largest flows going to Egypt, Chad, and South Sudan. This external displacement has created regional humanitarian challenges, with over 3.9 million Sudanese refugees now living in neighboring countries.
+          </p>
+          <p>
+            <strong>Key observations:</strong>
+            <ul>
+              <li><strong>Egypt</strong> has received the largest number of displaced persons (1.5 million), representing 38% of all cross-border displacement</li>
+              <li><strong>Chad</strong> hosts 767,365 Sudanese refugees, primarily from Darfur region</li>
+              <li><strong>South Sudan</strong> has received 341,909 returnees and refugees despite its own humanitarian challenges</li>
+              <li>Smaller but significant flows have gone to Ethiopia (88,001), Libya (105,721), and Central African Republic (35,376)</li>
+            </ul>
+          </p>
+          <p>
+            These displacement patterns reflect both historical migration routes and the geographical proximity to conflict zones, with Darfur refugees primarily going to Chad, while those from eastern Sudan flee to Ethiopia and Egypt.
+          </p>
+        </div>
+        <div id="country-circle-map"></div>
+      </div>
+    </div>  
+    
     <!-- IDP Accommodation Data Analysis Section -->
     <div class="maps-container">
       <div id="map-container">
@@ -1592,22 +1551,18 @@
       <!-- Text Container for Mobility in Sudan -->
       <div id="mobility-text-container">
         <h2>Returns and Cross-Border Movements</h2>
-        <p>Since December 2024, a notable shift in displacement trends has emerged following nearly two years of conflict between the Rapid Support Forces (RSF) and the Sudanese Armed Forces (SAF). To ensure comprehensive data on return movements, the Displacement Tracking Matrix (DTM) in Sudan has initiated systematic monitoring at key transit points and return locations. This effort tracks returnees arriving from internal displacement sites and neighboring countries while simultaneously analyzing broader displacement patterns,The data collection focuses on (Return routes,Demographic profiles,ocations of origin and return destinations,Drivers of return).</p>
+        <p>Since December 2024, DTM teams have monitored 396,738 individuals returning to their places of origin in Sudan—a significant shift in displacement trends after nearly two years of conflict between the Rapid Support Forces (RSF) and Sudanese Armed Forces (SAF).</p>
         
-        <h2>Key Findings on Return Movements:</h2>
+        <h3>Primary Return Destinations</h3>
         <ul>
-             <li><strong>396,738 </strong>:  Returned to their areas of origin within Sudan </li>
-          <li><strong>Aj Jazirah</strong>: 262,645 individuals (66.2% of total returns) </li>
-          <li><strong>Sennar</strong>: 114,759 individuals (28.9% of total returns)</li>
-          <li><strong>Khartoum</strong>:19,334 individuals (4.9% of total returns).</li>
-            <li><strong>114,457</strong>:  have crossed back into Sudan from Egypt </li>
-          <p>
-        <strong>Note:</strong> These figures reflect spontaneous returns, primarily driven by improved security conditions, livelihood opportunities, We expect continued high volumes of returns to Al Jazirah, Sennar, White Nile, and Khartoum to persist throughout the year.
-      </p>
-            
+          <li><strong>Aj Jazirah</strong>: 66% of returnees he highest proportion of returnees, driven by improved access and relative stability </li>
+          <li><strong>Sennar</strong>: 29% of returnees</li>
+          <li><strong>Khartoum</strong>: 5% of returnees Limited returns to the capital reflect ongoing insecurity, infrastructure damage, and lack of basic services.</li>
         </ul>
         
-         
+        <h2>Key Findings on Returns</h2>
+        <p>For the first time since the outbreak of war in April 2023, the number of internally displaced persons (IDPs) in Sudan has shown a decline, indicating early signs of return movements. However, these returns remain fragile, Many returning households are engaging in short-term visits rather than permanent resettlement, primarily to evaluate security conditions, access essential services, or retrieve belongings. This behavior indicates ongoing insecurity and a lack of confidence in long-term safety.</p>
+        <p>the majority of Sudanese fleeing abroad—particularly to neighboring countries like Egypt, South Sudan, and Ethiopia—have come from Khartoum and Al Jazira states, As a result, any significant return movements from abroad will likely originate from these areas .</p>
       </div>
     </div>
 
@@ -1657,1172 +1612,1279 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
-    // Enhanced Loading Animation Functionality
+    // Loading spinner functionality
     document.addEventListener('DOMContentLoaded', function() {
-      const facts = [
-        "Sudan's war has created the world's worst displacement crisis, with millions at risk",
-        "Over 3.9 million Sudanese have fled to neighboring countries",
-        "66% of North Darfur's population has been displaced",
-        "Children under 18 make up 41% of displaced persons",
-        "The conflict has displaced more people than any other current crisis worldwide",
-        "Over 2 million IDPs are living in camps across Sudan"
-      ];
-      
-      const progressBar = document.getElementById('progress-bar');
-      const progressText = document.getElementById('progress-text');
-      const factText = document.getElementById('fact-text');
-      const loadingSpinner = document.getElementById('loading-spinner');
-      
-      // Rotate facts every 5 seconds
-      let factIndex = 0;
-      const rotateFacts = setInterval(() => {
-        factIndex = (factIndex + 1) % facts.length;
-        factText.textContent = facts[factIndex];
-      }, 5000);
-      
       // Simulate loading progress
       let progress = 0;
-      const progressInterval = setInterval(() => {
+      const progressBar = document.getElementById('progress-bar');
+      const loadingSpinner = document.getElementById('loading-spinner');
+      const loadingText = document.querySelector('.loading-text');
+      
+      // Update progress bar
+      const progressInterval = setInterval(function() {
         progress += Math.random() * 10;
         if (progress >= 100) {
           progress = 100;
           clearInterval(progressInterval);
-          clearInterval(rotateFacts);
           
-          // Add slight delay before hiding to ensure everything is loaded
-          setTimeout(() => {
+          // Change text when loading is complete
+          loadingText.textContent = 'Almost there...';
+          
+          // Add a small delay before hiding to ensure everything is loaded
+          setTimeout(function() {
             loadingSpinner.style.opacity = '0';
-            setTimeout(() => {
+            setTimeout(function() {
               loadingSpinner.style.display = 'none';
               document.body.style.animation = 'fadeIn 1.5s ease-in-out forwards';
             }, 500);
           }, 500);
         }
         progressBar.style.width = progress + '%';
-        progressText.textContent = Math.round(progress) + '%';
       }, 200);
-      
-      // Initialize all other functionality after loading
-      setTimeout(initializeDashboard, 100);
     });
+
+    // Slideshow functionality
+    let slideIndex = 1;
+    showSlides(slideIndex);
     
-    function initializeDashboard() {
-      // Slideshow functionality
-      let slideIndex = 1;
-      showSlides(slideIndex);
+    // Next/previous controls
+    function plusSlides(n) {
+      showSlides(slideIndex += n);
+    }
+    
+    // Thumbnail image controls
+    function currentSlide(n) {
+      showSlides(slideIndex = n);
+    }
+    
+    function showSlides(n) {
+      let i;
+      let slides = document.getElementsByClassName("slide");
+      let dots = document.getElementsByClassName("dot");
       
-      // Next/previous controls
-      function plusSlides(n) {
-        showSlides(slideIndex += n);
+      if (n > slides.length) {slideIndex = 1}
+      if (n < 1) {slideIndex = slides.length}
+      
+      for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
       }
       
-      // Thumbnail image controls
-      function currentSlide(n) {
-        showSlides(slideIndex = n);
+      for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
       }
       
-      function showSlides(n) {
-        let i;
-        let slides = document.getElementsByClassName("slide");
-        let dots = document.getElementsByClassName("dot");
-        
-        if (n > slides.length) {slideIndex = 1}
-        if (n < 1) {slideIndex = slides.length}
-        
-        for (i = 0; i < slides.length; i++) {
-          slides[i].style.display = "none";
+      slides[slideIndex-1].style.display = "block";
+      dots[slideIndex-1].className += " active";
+    }
+    
+    // Auto-advance slides every 5 seconds
+    setInterval(() => {
+      plusSlides(1);
+    }, 5000);
+
+    // Define Mapbox custom layers
+    const mapboxCustom1 = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
+        attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        tileSize: 512,
+        zoomOffset: -1,
+        maxZoom: 18
+    });
+
+    const mapboxCustom2 = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
+        attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        tileSize: 512,
+        zoomOffset: -1,
+        maxZoom: 18
+    });
+
+    const mapboxCustom3 = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
+        attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        tileSize: 512,
+        zoomOffset: -1,
+        maxZoom: 18
+    });
+
+    const mapboxCustom4 = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
+        attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        tileSize: 512,
+        zoomOffset: -1,
+        maxZoom: 18
+    });
+
+    // Initialize the first map
+    const map = L.map('map').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
+
+    // Define multiple base layers for the first map
+    const cartoDBLight1 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const openStreetMap1 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const esriWorldImagery1 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
+    });
+
+    const stamenToner1 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
+    });
+
+    const mapboxLight = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
+        attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        tileSize: 512,
+        zoomOffset: -1,
+        maxZoom: 18
+    });
+
+    const mapboxStreets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
+        attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        tileSize: 512,
+        zoomOffset: -1,
+        maxZoom: 18
+    });
+
+    const mapboxSatellite = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
+        attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        tileSize: 512,
+        zoomOffset: -1,
+        maxZoom: 18
+    });
+
+    const mapboxOutdoors = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
+        attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        tileSize: 512,
+        zoomOffset: -1,
+        maxZoom: 18
+    });
+
+    // Add default base layer to the first map
+    mapboxCustom1.addTo(map);
+
+    // Add layer control to the first map
+    const baseLayers1 = {
+      "Mapbox Custom": mapboxCustom1,
+      "CartoDB Light": cartoDBLight1,
+      "OpenStreetMap": openStreetMap1,
+      "Esri World Imagery": esriWorldImagery1,
+      "Stamen Toner": stamenToner1,
+      "Mapbox Light": mapboxLight,
+      "Mapbox Streets": mapboxStreets,
+      "Mapbox Outdoors": mapboxOutdoors,
+      "Mapbox Satellite": mapboxSatellite
+    };
+
+    L.control.layers(baseLayers1).addTo(map);
+
+    // Parse CSV data and create flow map layer for the first map
+    Papa.parse('./data/data.csv', {
+      download: true,
+      header: true,
+      dynamicTyping: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        const geoJsonFeatureCollection = {
+          type: 'FeatureCollection',
+          features: results.data.map(datum => ({
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: [datum.s_lon, datum.s_lat] },
+            properties: datum
+          }))
+        };
+
+        flowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
+          originAndDestinationFieldIds: {
+            originUniqueIdField: 's_state_id',
+            originGeometry: { x: 's_lon', y: 's_lat' },
+            destinationUniqueIdField: 'e_locality_id',
+            destinationGeometry: { x: 'e_lon', y: 'e_lat' }
+          },
+          style: (feature) => {
+            const baseRadius = 6;
+            const maxRadius = 20;
+            const volume = feature.properties.e_Volume || 0;
+
+            const radius = feature.properties.isOrigin
+              ? baseRadius
+              : Math.min(baseRadius + (volume / 5000), maxRadius);
+
+            return {
+              radius: radius,
+              weight: 1,
+              color: feature.properties.isOrigin ? '#FFFFFF' : '#FFFFFF',
+              fillColor: feature.properties.isOrigin ? '#418FDE' : 'rgb(255, 103, 31)',
+              fillOpacity: feature.properties.isOrigin ? 0.8 : 0.7
+            };
+          },
+          canvasBezierStyle: {
+            type: 'classBreaks',
+            field: 'e_Volume',
+            classBreakInfos: [
+              { classMinValue: 1, classMaxValue: 10000, symbol: { strokeStyle: '#ffb81c', lineWidth: 0.5, lineCap: 'round', shadowColor: '#fee8c8', shadowBlur: 2.0 } },
+              { classMinValue: 10001, classMaxValue: 20000, symbol: { strokeStyle: '#ff671f', lineWidth: 1.5, lineCap: 'round', shadowColor: '#fdbb84', shadowBlur: 2.0 } },
+              { classMinValue: 20001, classMaxValue: 200000, symbol: { strokeStyle: '#d22630', lineWidth: 3, lineCap: 'round', shadowColor: '#e34a33', shadowBlur: 2.0 } }
+            ],
+            defaultSymbol: { strokeStyle: '#e7e1ef', lineWidth: 0.5, lineCap: 'round', shadowColor: '#e7e1ef', shadowBlur: 1.5 }
+          },
+          pathDisplayMode: 'all',
+          animationStarted: true,
+          animationEasingFamily: 'Linear',
+          animationEasingType: 'None',
+          animationDuration: 3000,
+          onEachFeature: addTooltip
+        }).addTo(map);
+
+        // Add tooltip and popup to features
+        function addTooltip(feature, layer) {
+          const tooltipContent = feature.properties.isOrigin
+            ? `State of Displacement: ${feature.properties.s_State}`
+            : `State of Return: ${feature.properties.e_locality}`;
+
+          layer.bindTooltip(tooltipContent);
+          layer.on('mouseover', () => layer.openTooltip());
+          layer.on('mouseout', () => layer.closeTooltip());
+
+          // Add popup
+          const popupContent = feature.properties.isOrigin
+            ? `<b>State of Displacement:</b> ${feature.properties.s_State}`
+            : `<b>State of Return:</b> ${feature.properties.e_locality}`;
+
+          layer.bindPopup(popupContent);
         }
-        
-        for (i = 0; i < dots.length; i++) {
-          dots[i].className = dots[i].className.replace(" active", "");
-        }
-        
-        slides[slideIndex-1].style.display = "block";
-        dots[slideIndex-1].className += " active";
+
+        // Highlight paths on mouseover
+        flowmapLayer.on('mouseover', (e) => {
+          if (e.sharedOriginFeatures.length) {
+            flowmapLayer.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
+          }
+          if (e.sharedDestinationFeatures.length) {
+            flowmapLayer.selectFeaturesForPathDisplay(e.sharedDestinationFeatures, 'SELECTION_NEW');
+          }
+        });
+
+        // Select initial feature for path display
+        flowmapLayer.selectFeaturesForPathDisplayById('s_state_id', "SD15", true, 'SELECTION_NEW');
       }
+    });
+
+    // Add legend to the first map
+    const legend = L.control({ position: 'bottomright' });
+    legend.onAdd = () => {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = `
+        <span style="font-size:14px">Returnee Flow Volume:</span><br/>
+        <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold"> < 10000</span><br/>
+        <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold">10,001 - 20,000</span><br/>
+        <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold"> > 20,000</span><br/>
+      `;
+      return div;
+    };
+    legend.addTo(map);
+
+    // Initialize the second map
+    const map2 = L.map('map2').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
+
+    // Define multiple base layers for the second map
+    const cartoDBLight2 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const openStreetMap2 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const esriWorldImagery2 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
+    });
+
+    const stamenToner2 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
+    });
+
+    // Add default base layer to the second map
+    mapboxCustom2.addTo(map2);
+
+    // Add layer control to the second map
+    const baseLayers2 = {
+      "Mapbox Custom": mapboxCustom2,
+      "CartoDB Light": cartoDBLight2,
+      "OpenStreetMap": openStreetMap2,
+      "Esri World Imagery": esriWorldImagery2,
+      "Stamen Toner": stamenToner2
+    };
+
+    L.control.layers(baseLayers2).addTo(map2);
+
+    // Parse CSV data and create flow map layer for the second map
+    Papa.parse('./data/data_idps.csv', {
+      download: true,
+      header: true,
+      dynamicTyping: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        const geoJsonFeatureCollection2 = {
+          type: 'FeatureCollection',
+          features: results.data.map(datum => ({
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: [datum.s_lon, datum.s_lat] },
+            properties: datum
+          }))
+        };
+
+        const flowmapLayer2 = L.canvasFlowmapLayer(geoJsonFeatureCollection2, {
+          originAndDestinationFieldIds: {
+            originUniqueIdField: 's_state_id',
+            originGeometry: { x: 's_lon', y: 's_lat' },
+            destinationUniqueIdField: 'e_locality_id',
+            destinationGeometry: { x: 'e_lon', y: 'e_lat' }
+          },
+          style: (feature) => {
+            const baseRadius = 12;
+            const maxRadius = 6;
+            const volume = feature.properties.e_Volume || 0;
+
+            const radius = feature.properties.isOrigin
+              ? baseRadius
+              : Math.min(baseRadius + (volume / 5000), maxRadius);
+
+            return {
+              radius: radius,
+              weight: 1,
+              color: feature.properties.isOrigin ? '#FFFFFF' : '#FFFFFF',
+              fillColor: feature.properties.isOrigin ? 'rgb(255, 103, 31)' : '#418FDE',
+              fillOpacity: feature.properties.isOrigin ? 0.8 : 0.7
+            };
+          },
+          canvasBezierStyle: {
+            type: 'classBreaks',
+            field: 'e_Volume',
+            classBreakInfos: [
+              { classMinValue: 1, classMaxValue: 10000, symbol: { strokeStyle: '#ffb81c', lineWidth: 0.5, lineCap: 'round', shadowColor: '#fee8c8', shadowBlur: 2.0 } },
+              { classMinValue: 10001, classMaxValue: 20000, symbol: { strokeStyle: '#ff671f', lineWidth: 1.5, lineCap: 'round', shadowColor: '#fdbb84', shadowBlur: 2.0 } },
+              { classMinValue: 20001, classMaxValue: 200000, symbol: { strokeStyle: '#d22630', lineWidth: 3, lineCap: 'round', shadowColor: '#e34a33', shadowBlur: 2.0 } }
+            ],
+            defaultSymbol: { strokeStyle: '#e7e1ef', lineWidth: 0.5, lineCap: 'round', shadowColor: '#e7e1ef', shadowBlur: 1.5 }
+          },
+          pathDisplayMode: 'all',
+          animationStarted: true,
+          animationEasingFamily: 'Linear',
+          animationEasingType: 'None',
+          animationDuration: 3000,
+          onEachFeature: addTooltip
+        }).addTo(map2);
+
+        // Add tooltip and popup to features
+        function addTooltip(feature, layer) {
+          const tooltipContent = feature.properties.isOrigin
+            ? `State of Displacement: ${feature.properties.s_State}`
+            : `State of Return: ${feature.properties.e_locality}`;
+
+          layer.bindTooltip(tooltipContent);
+          layer.on('mouseover', () => layer.openTooltip());
+          layer.on('mouseout', () => layer.closeTooltip());
+
+          // Add popup
+          const popupContent = feature.properties.isOrigin
+            ? `<b>Displacement From:</b> ${feature.properties.s_State}`
+            : `<b>Displacement To:</b> ${feature.properties.e_locality}`;
+
+          layer.bindPopup(popupContent);
+        }
+
+        // Highlight paths on mouseover
+        flowmapLayer2.on('mouseover', (e) => {
+          if (e.sharedOriginFeatures.length) {
+            flowmapLayer2.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
+          }
+          if (e.sharedDestinationFeatures.length) {
+            flowmapLayer2.selectFeaturesForPathDisplay(e.sharedDestinationFeatures, 'SELECTION_NEW');
+          }
+        });
+
+        // Select initial feature for path display
+        flowmapLayer2.selectFeaturesForPathDisplayById('s_state_id', "SD15", true, 'SELECTION_NEW');
+      }
+    });
+
+    // Add legend to the second map
+    const legend2 = L.control({ position: 'bottomright' });
+    legend2.onAdd = () => {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = `
+        <span style="font-size:14px">Returnee Flow Volume:</span><br/>
+        <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold"> < 10000</span><br/>
+        <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold">10,001 - 20,000</span><br/>
+        <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
+        <span style="float:left;font-weight:bold"> > 20,000</span><br/>
+      `;
+      return div;
+    };
+    legend2.addTo(map2);
+
+    // Initialize the third map
+    const map3 = L.map('map3').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
+
+    // Define multiple base layers for the third map
+    const cartoDBLight3 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const openStreetMap3 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const esriWorldImagery3 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
+    });
+
+    const stamenToner3 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
+    });
+
+    // Add default base layer to the third map
+    mapboxCustom3.addTo(map3);
+
+    // Add layer control to the third map
+    const baseLayers3 = {
+      "Mapbox Custom": mapboxCustom3,
+      "CartoDB Light": cartoDBLight3,
+      "OpenStreetMap": openStreetMap3,
+      "Esri World Imagery": esriWorldImagery3,
+      "Stamen Toner": stamenToner3
+    };
+
+    L.control.layers(baseLayers3).addTo(map3);
+
+    // Variables for drill-down functionality
+    let stateMarkersLayer = L.layerGroup();
+    let districtMarkersLayer = L.layerGroup();
+    let currentState = null;
+    const drilldownBackBtn = document.getElementById('drilldown-back');
+
+    // Function to load district data for a state
+    function loadDistrictData(stateName) {
+      // Show loading indicator
+      document.getElementById('map-title-3').textContent = `Loading districts for ${stateName}...`;
       
-      // Auto-advance slides every 5 seconds
-      setInterval(() => {
-        plusSlides(1);
-      }, 5000);
-
-      // The rest of your existing JavaScript code...
-      // Define Mapbox custom layers
-      const mapboxCustom1 = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
-          attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-          tileSize: 512,
-          zoomOffset: -1,
-          maxZoom: 18
-      });
-
-      const mapboxCustom2 = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
-          attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-          tileSize: 512,
-          zoomOffset: -1,
-          maxZoom: 18
-      });
-
-      const mapboxCustom3 = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
-          attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-          tileSize: 512,
-          zoomOffset: -1,
-          maxZoom: 18
-      });
-
-      const mapboxCustom4 = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
-          attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-          tileSize: 512,
-          zoomOffset: -1,
-          maxZoom: 18
-      });
-
-      // Initialize the first map
-      const map = L.map('map').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
-
-      // Define multiple base layers for the first map
-      const cartoDBLight1 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      });
-
-      const openStreetMap1 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      });
-
-      const esriWorldImagery1 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
-      });
-
-      const stamenToner1 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
-        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
-      });
-
-      const mapboxLight = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
-          attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-          tileSize: 512,
-          zoomOffset: -1,
-          maxZoom: 18
-      });
-
-      const mapboxStreets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
-          attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-          tileSize: 512,
-          zoomOffset: -1,
-          maxZoom: 18
-      });
-
-      const mapboxSatellite = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
-          attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-          tileSize: 512,
-          zoomOffset: -1,
-          maxZoom: 18
-      });
-
-      const mapboxOutdoors = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
-          attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-          tileSize: 512,
-          zoomOffset: -1,
-          maxZoom: 18
-      });
-
-      // Add default base layer to the first map
-      mapboxCustom1.addTo(map);
-
-      // Add layer control to the first map
-      const baseLayers1 = {
-        "Mapbox Custom": mapboxCustom1,
-        "CartoDB Light": cartoDBLight1,
-        "OpenStreetMap": openStreetMap1,
-        "Esri World Imagery": esriWorldImagery1,
-        "Stamen Toner": stamenToner1,
-        "Mapbox Light": mapboxLight,
-        "Mapbox Streets": mapboxStreets,
-        "Mapbox Outdoors": mapboxOutdoors,
-        "Mapbox Satellite": mapboxSatellite
-      };
-
-      L.control.layers(baseLayers1).addTo(map);
-
-      // Parse CSV data and create flow map layer for the first map
-      Papa.parse('./data/data.csv', {
+      // In a real application, you would load district data from your server or CSV file
+      // For this example, we'll use a mock data structure
+      Papa.parse('./data/districts_data.csv', {
         download: true,
         header: true,
         dynamicTyping: true,
         skipEmptyLines: true,
         complete: (results) => {
-          const geoJsonFeatureCollection = {
-            type: 'FeatureCollection',
-            features: results.data.map(datum => ({
-              type: 'Feature',
-              geometry: { type: 'Point', coordinates: [datum.s_lon, datum.s_lat] },
-              properties: datum
-            }))
-          };
-
-          flowmapLayer = L.canvasFlowmapLayer(geoJsonFeatureCollection, {
-            originAndDestinationFieldIds: {
-              originUniqueIdField: 's_state_id',
-              originGeometry: { x: 's_lon', y: 's_lat' },
-              destinationUniqueIdField: 'e_locality_id',
-              destinationGeometry: { x: 'e_lon', y: 'e_lat' }
-            },
-            style: (feature) => {
-              const baseRadius = 6;
-              const maxRadius = 20;
-              const volume = feature.properties.e_Volume || 0;
-
-              const radius = feature.properties.isOrigin
-                ? baseRadius
-                : Math.min(baseRadius + (volume / 5000), maxRadius);
-
-              return {
-                radius: radius,
-                weight: 1,
-                color: feature.properties.isOrigin ? '#FFFFFF' : '#FFFFFF',
-                fillColor: feature.properties.isOrigin ? '#418FDE' : 'rgb(255, 103, 31)',
-                fillOpacity: feature.properties.isOrigin ? 0.8 : 0.7
-              };
-            },
-            canvasBezierStyle: {
-              type: 'classBreaks',
-              field: 'e_Volume',
-              classBreakInfos: [
-                { classMinValue: 1, classMaxValue: 10000, symbol: { strokeStyle: '#ffb81c', lineWidth: 0.5, lineCap: 'round', shadowColor: '#fee8c8', shadowBlur: 2.0 } },
-                { classMinValue: 10001, classMaxValue: 20000, symbol: { strokeStyle: '#ff671f', lineWidth: 1.5, lineCap: 'round', shadowColor: '#fdbb84', shadowBlur: 2.0 } },
-                { classMinValue: 20001, classMaxValue: 200000, symbol: { strokeStyle: '#d22630', lineWidth: 3, lineCap: 'round', shadowColor: '#e34a33', shadowBlur: 2.0 } }
-              ],
-              defaultSymbol: { strokeStyle: '#e7e1ef', lineWidth: 0.5, lineCap: 'round', shadowColor: '#e7e1ef', shadowBlur: 1.5 }
-            },
-            pathDisplayMode: 'all',
-            animationStarted: true,
-            animationEasingFamily: 'Linear',
-            animationEasingType: 'None',
-            animationDuration: 3000,
-            onEachFeature: addTooltip
-          }).addTo(map);
-
-          // Add tooltip and popup to features
-          function addTooltip(feature, layer) {
-            const tooltipContent = feature.properties.isOrigin
-              ? `State of Displacement: ${feature.properties.s_State}`
-              : `State of Return: ${feature.properties.e_locality}`;
-
-            layer.bindTooltip(tooltipContent);
-            layer.on('mouseover', () => layer.openTooltip());
-            layer.on('mouseout', () => layer.closeTooltip());
-
-            // Add popup
-            const popupContent = feature.properties.isOrigin
-              ? `<b>State of Displacement:</b> ${feature.properties.s_State}`
-              : `<b>State of Return:</b> ${feature.properties.e_locality}`;
-
-            layer.bindPopup(popupContent);
-          }
-
-          // Highlight paths on mouseover
-          flowmapLayer.on('mouseover', (e) => {
-            if (e.sharedOriginFeatures.length) {
-              flowmapLayer.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
-            }
-            if (e.sharedDestinationFeatures.length) {
-              flowmapLayer.selectFeaturesForPathDisplay(e.sharedDestinationFeatures, 'SELECTION_NEW');
-            }
-          });
-
-          // Select initial feature for path display
-          flowmapLayer.selectFeaturesForPathDisplayById('s_state_id', "SD15", true, 'SELECTION_NEW');
-        }
-      });
-
-      // Add legend to the first map
-      const legend = L.control({ position: 'bottomright' });
-      legend.onAdd = () => {
-        const div = L.DomUtil.create('div', 'legend');
-        div.innerHTML = `
-          <span style="font-size:14px">Returnee Flow Volume:</span><br/>
-          <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
-          <span style="float:left;font-weight:bold"> < 10000</span><br/>
-          <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
-          <span style="float:left;font-weight:bold">10,001 - 20,000</span><br/>
-          <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
-          <span style="float:left;font-weight:bold"> > 20,000</span><br/>
-        `;
-        return div;
-      };
-      legend.addTo(map);
-
-      // Initialize the second map
-      const map2 = L.map('map2').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
-
-      // Define multiple base layers for the second map
-      const cartoDBLight2 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      });
-
-      const openStreetMap2 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      });
-
-      const esriWorldImagery2 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
-      });
-
-      const stamenToner2 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
-        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
-      });
-
-      // Add default base layer to the second map
-      mapboxCustom2.addTo(map2);
-
-      // Add layer control to the second map
-      const baseLayers2 = {
-        "Mapbox Custom": mapboxCustom2,
-        "CartoDB Light": cartoDBLight2,
-        "OpenStreetMap": openStreetMap2,
-        "Esri World Imagery": esriWorldImagery2,
-        "Stamen Toner": stamenToner2
-      };
-
-      L.control.layers(baseLayers2).addTo(map2);
-
-      // Parse CSV data and create flow map layer for the second map
-      Papa.parse('./data/data_idps.csv', {
-        download: true,
-        header: true,
-        dynamicTyping: true,
-        skipEmptyLines: true,
-        complete: (results) => {
-          const geoJsonFeatureCollection2 = {
-            type: 'FeatureCollection',
-            features: results.data.map(datum => ({
-              type: 'Feature',
-              geometry: { type: 'Point', coordinates: [datum.s_lon, datum.s_lat] },
-              properties: datum
-            }))
-          };
-
-          const flowmapLayer2 = L.canvasFlowmapLayer(geoJsonFeatureCollection2, {
-            originAndDestinationFieldIds: {
-              originUniqueIdField: 's_state_id',
-              originGeometry: { x: 's_lon', y: 's_lat' },
-              destinationUniqueIdField: 'e_locality_id',
-              destinationGeometry: { x: 'e_lon', y: 'e_lat' }
-            },
-            style: (feature) => {
-              const baseRadius = 12;
-              const maxRadius = 6;
-              const volume = feature.properties.e_Volume || 0;
-
-              const radius = feature.properties.isOrigin
-                ? baseRadius
-                : Math.min(baseRadius + (volume / 5000), maxRadius);
-
-              return {
-                radius: radius,
-                weight: 1,
-                color: feature.properties.isOrigin ? '#FFFFFF' : '#FFFFFF',
-                fillColor: feature.properties.isOrigin ? 'rgb(255, 103, 31)' : '#418FDE',
-                fillOpacity: feature.properties.isOrigin ? 0.8 : 0.7
-              };
-            },
-            canvasBezierStyle: {
-              type: 'classBreaks',
-              field: 'e_Volume',
-              classBreakInfos: [
-                { classMinValue: 1, classMaxValue: 10000, symbol: { strokeStyle: '#ffb81c', lineWidth: 0.5, lineCap: 'round', shadowColor: '#fee8c8', shadowBlur: 2.0 } },
-                { classMinValue: 10001, classMaxValue: 20000, symbol: { strokeStyle: '#ff671f', lineWidth: 1.5, lineCap: 'round', shadowColor: '#fdbb84', shadowBlur: 2.0 } },
-                { classMinValue: 20001, classMaxValue: 200000, symbol: { strokeStyle: '#d22630', lineWidth: 3, lineCap: 'round', shadowColor: '#e34a33', shadowBlur: 2.0 } }
-              ],
-              defaultSymbol: { strokeStyle: '#e7e1ef', lineWidth: 0.5, lineCap: 'round', shadowColor: '#e7e1ef', shadowBlur: 1.5 }
-            },
-            pathDisplayMode: 'all',
-            animationStarted: true,
-            animationEasingFamily: 'Linear',
-            animationEasingType: 'None',
-            animationDuration: 3000,
-            onEachFeature: addTooltip
-          }).addTo(map2);
-
-          // Add tooltip and popup to features
-          function addTooltip(feature, layer) {
-            const tooltipContent = feature.properties.isOrigin
-              ? `Displacement From: ${feature.properties.s_State}`
-              : `Displacement To: ${feature.properties.e_locality}`;
-
-            layer.bindTooltip(tooltipContent);
-            layer.on('mouseover', () => layer.openTooltip());
-            layer.on('mouseout', () => layer.closeTooltip());
-
-            // Add popup
-            const popupContent = feature.properties.isOrigin
-              ? `<b>Displacement From:</b> ${feature.properties.s_State}`
-              : `<b>Displacement To:</b> ${feature.properties.e_locality}`;
-
-            layer.bindPopup(popupContent);
-          }
-
-          // Highlight paths on mouseover
-          flowmapLayer2.on('mouseover', (e) => {
-            if (e.sharedOriginFeatures.length) {
-              flowmapLayer2.selectFeaturesForPathDisplay(e.sharedOriginFeatures, 'SELECTION_NEW');
-            }
-            if (e.sharedDestinationFeatures.length) {
-              flowmapLayer2.selectFeaturesForPathDisplay(e.sharedDestinationFeatures, 'SELECTION_NEW');
-            }
-          });
-
-          // Select initial feature for path display
-          flowmapLayer2.selectFeaturesForPathDisplayById('s_state_id', "SD15", true, 'SELECTION_NEW');
-        }
-      });
-
-      // Add legend to the second map
-      const legend2 = L.control({ position: 'bottomright' });
-      legend2.onAdd = () => {
-        const div = L.DomUtil.create('div', 'legend');
-        div.innerHTML = `
-          <span style="font-size:14px">Returnee Flow Volume:</span><br/>
-          <div style="width:70px;height:3px;background:#ffb81c;float:left;margin-right:10px;margin-top:10px"></div>
-          <span style="float:left;font-weight:bold"> < 10000</span><br/>
-          <div style="width:70px;height:4px;background:#ff671f;float:left;margin-right:10px;margin-top:10px"></div>
-          <span style="float:left;font-weight:bold">10,001 - 20,000</span><br/>
-          <div style="width:70px;height:7px;background:#e34a33;float:left;margin-right:10px;margin-top:10px"></div>
-          <span style="float:left;font-weight:bold"> > 20,000</span><br/>
-        `;
-        return div;
-      };
-      legend2.addTo(map2);
-
-      // Initialize the third map
-      const map3 = L.map('map3').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
-
-      // Define multiple base layers for the third map
-      const cartoDBLight3 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      });
-
-      const openStreetMap3 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      });
-
-      const esriWorldImagery3 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
-      });
-
-      const stamenToner3 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
-        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
-      });
-
-      // Add default base layer to the third map
-      mapboxCustom3.addTo(map3);
-
-      // Add layer control to the third map
-      const baseLayers3 = {
-        "Mapbox Custom": mapboxCustom3,
-        "CartoDB Light": cartoDBLight3,
-        "OpenStreetMap": openStreetMap3,
-        "Esri World Imagery": esriWorldImagery3,
-        "Stamen Toner": stamenToner3
-      };
-
-      L.control.layers(baseLayers3).addTo(map3);
-
-      // Variables for drill-down functionality
-      let stateMarkersLayer = L.layerGroup();
-      let districtMarkersLayer = L.layerGroup();
-      let currentState = null;
-      const drilldownBackBtn = document.getElementById('drilldown-back');
-
-      // Function to load district data for a state
-      function loadDistrictData(stateName) {
-        // Show loading indicator
-        document.getElementById('map-title-3').textContent = `Loading districts for ${stateName}...`;
-        
-        // In a real application, you would load district data from your server or CSV file
-        // For this example, we'll use a mock data structure
-        Papa.parse('./data/districts_data.csv', {
-          download: true,
-          header: true,
-          dynamicTyping: true,
-          skipEmptyLines: true,
-          complete: (results) => {
-            // Filter districts for the selected state
-            const stateDistricts = results.data.filter(d => d.state === stateName);
+          // Filter districts for the selected state
+          const stateDistricts = results.data.filter(d => d.state === stateName);
+          
+          // Clear previous district markers
+          districtMarkersLayer.clearLayers();
+          
+          // Find the maximum total_idps value for normalization
+          const maxTotalIdps = Math.max(...stateDistricts.map(d => d.total_idps));
+          
+          // Add markers for each district
+          stateDistricts.forEach(district => {
+            const baseRadius = 8 + (district.total_idps / maxTotalIdps) * 20;
             
-            // Clear previous district markers
-            districtMarkersLayer.clearLayers();
-            
-            // Find the maximum total_idps value for normalization
-            const maxTotalIdps = Math.max(...stateDistricts.map(d => d.total_idps));
-            
-            // Add markers for each district
-            stateDistricts.forEach(district => {
-              const baseRadius = 8 + (district.total_idps / maxTotalIdps) * 20;
-              
-              const marker = L.circleMarker([district.lat, district.lon], {
-                radius: baseRadius,
-                fillColor: '#418FDE', // Different color for districts
-                color: '#fff',
-                weight: 1,
-                opacity: 1,
-                fillOpacity: 0.7
-              });
-              
-              // Add animation
-              animateCircleMarker(marker, baseRadius);
-              
-              // Add popup
-              marker.bindPopup(`
-                <b>District:</b> ${district.district}<br/>
-                <b>Total IDPs:</b> ${district.total_idps.toLocaleString()}
-              `);
-              
-              // Add tooltip
-              marker.bindTooltip(`
-                <b>${district.district}</b><br/>
-                <b>Total IDPs:</b> ${district.total_idps.toLocaleString()}
-              `);
-              
-              // Add to district layer
-              districtMarkersLayer.addLayer(marker);
+            const marker = L.circleMarker([district.lat, district.lon], {
+              radius: baseRadius,
+              fillColor: '#418FDE', // Different color for districts
+              color: '#fff',
+              weight: 1,
+              opacity: 1,
+              fillOpacity: 0.7
             });
             
-            // Add district layer to map
-            map3.addLayer(districtMarkersLayer);
+            // Add animation
+            animateCircleMarker(marker, baseRadius);
             
-            // Update title
-            document.getElementById('map-title-3').textContent = `IDPs by District in ${stateName}`;
+            // Add popup
+            marker.bindPopup(`
+              <b>District:</b> ${district.district}<br/>
+              <b>Total IDPs:</b> ${district.total_idps.toLocaleString()}
+            `);
             
-            // Show back button
-            drilldownBackBtn.style.display = 'block';
+            // Add tooltip
+            marker.bindTooltip(`
+              <b>${district.district}</b><br/>
+              <b>Total IDPs:</b> ${district.total_idps.toLocaleString()}
+            `);
             
-            // Store current state
-            currentState = stateName;
-            
-            // Fit bounds to show all districts
-            if (stateDistricts.length > 0) {
-              const bounds = L.latLngBounds(stateDistricts.map(d => [d.lat, d.lon]));
-              map3.fitBounds(bounds, { padding: [50, 50] });
-            }
-          },
-          error: (error) => {
-            console.error('Error loading district data:', error);
-            alert('Failed to load district data. Please try again.');
-            document.getElementById('map-title-3').textContent = 'Total Number of IDPs by State';
-          }
-        });
-      }
-
-      // Back button functionality
-      drilldownBackBtn.addEventListener('click', function() {
-        // Remove district layer
-        map3.removeLayer(districtMarkersLayer);
-        
-        // Add state layer back
-        map3.addLayer(stateMarkersLayer);
-        
-        // Reset view
-        map3.setView([16, 30], L.Browser.mobile ? 3 : 5.5);
-        
-        // Update title
-        document.getElementById('map-title-3').textContent = 'Total Number of IDPs by State';
-        
-        // Hide back button
-        drilldownBackBtn.style.display = 'none';
-        
-        // Clear current state
-        currentState = null;
-      });
-
-      // Parse CSV data and create animated markers for the third map
-      Papa.parse('./data/total_idps.csv', {
-        download: true,
-        header: true,
-        dynamicTyping: true,
-        skipEmptyLines: true,
-        complete: (results) => {
-          const geoJsonFeatureCollection3 = {
-            type: 'FeatureCollection',
-            features: results.data.map(datum => ({
-              type: 'Feature',
-              geometry: { type: 'Point', coordinates: [datum.lon, datum.lat] },
-              properties: datum
-            }))
-          };
-
-          // Find the maximum total_idps value for normalization
-          const maxTotalIdps = Math.max(...results.data.map(d => d.total_idps));
-
-          // Function to animate circle markers
-          function animateCircleMarker(marker, baseRadius) {
-            const tween = new TWEEN.Tween({ radius: baseRadius })
-              .to({ radius: baseRadius * 1.5 }, 1000) // Animate to 1.5x the base radius
-              .easing(TWEEN.Easing.Sinusoidal.InOut) // Smooth easing
-              .yoyo(true) // Reverse the animation
-              .repeat(Infinity) // Repeat indefinitely
-              .onUpdate(({ radius }) => {
-                marker.setRadius(radius); // Update the marker's radius
-              })
-              .start(); // Start the animation
-          }
-
-          // Add animated markers to the third map
-          L.geoJSON(geoJsonFeatureCollection3, {
-            pointToLayer: (feature, latlng) => {
-              // Normalize the total_idps value to determine the base radius
-              const baseRadius = 8 + (feature.properties.total_idps / maxTotalIdps) * 20;
-
-              // Create a circle marker
-              const marker = L.circleMarker(latlng, {
-                radius: baseRadius, // Initial radius
-                fillColor: '#418FDE', // Blue color for IDPs
-                color: '#fff',
-                weight: 1,
-                opacity: 1,
-                fillOpacity: 0.7
-              });
-
-              // Animate the marker
-              animateCircleMarker(marker, baseRadius);
-
-              // Add click handler for drill-down
-              marker.on('click', function(e) {
-                // Remove state layer
-                map3.removeLayer(stateMarkersLayer);
-                
-                // Load district data for this state
-                loadDistrictData(feature.properties.state);
-              });
-
-              return marker;
-            },
-            onEachFeature: (feature, layer) => {
-              const popupContent = `
-                <b>State:</b> ${feature.properties.state}<br/>
-                <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}<br/>
-                <small>Click to view districts</small>
-              `;
-              layer.bindPopup(popupContent);
-
-              // Add tooltip
-              const tooltipContent = `<b>${feature.properties.state}</b><br/>
-                <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}`;
-              layer.bindTooltip(tooltipContent);
-            }
-          }).addTo(stateMarkersLayer);
-
-          // Add state markers layer to map
-          map3.addLayer(stateMarkersLayer);
-        }
-      });
-
-      // Update Tween.js animations on each frame
-      function animate() {
-        requestAnimationFrame(animate);
-        TWEEN.update();
-      }
-      animate(); // Start the animation loop
-
-      // Add legend to the third map
-      const legend3 = L.control({ position: 'bottomright' });
-      legend3.onAdd = () => {
-        const div = L.DomUtil.create('div', 'legend');
-        div.innerHTML = `
-          <span style="font-size:14px; font-weight:bold;">Total IDPs by State:</span><br/>
-          <div style="display: flex; align-items: center; margin-top: 10px;">
-            <div style="width: 10px; height: 10px; background: #418FDE; border-radius: 50%; margin-right: 10px;"></div>
-            <span style="font-size:12px;">  < 500,000 IDPs</span>
-          </div>
-          <div style="display: flex; align-items: center; margin-top: 5px;">
-            <div style="width: 20px; height: 20px; background: #418FDE; border-radius: 50%; margin-right: 10px;"></div>
-            <span style="font-size:12px;"> 500,001 - 1,000,000 IDPs</span>
-          </div>
-          <div style="display: flex; align-items: center; margin-top: 5px;">
-            <div style="width: 30px; height: 30px; background: #418FDE; border-radius: 50%; margin-right: 10px;"></div>
-            <span style="font-size:12px;"> > 1,000,001 IDPs</span>
-          </div>
-          <div style="margin-top: 10px; font-size:12px; color: #666;">
-            Click on a state to view district-level data
-          </div>
-        `;
-        return div;
-      };
-      legend3.addTo(map3);
-      
-      // Initialize the fourth map
-      const map4 = L.map('map4').setView([16, 30], 5);
-
-      // Define multiple base layers for the fourth map
-      const cartoDBLight4 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; OpenStreetMap'
-      });
-
-      const openStreetMap4 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap'
-      });
-
-      const esriWorldImagery4 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
-      });
-
-      const stamenToner4 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
-        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
-      });
-
-      // Add default base layer to the fourth map
-      mapboxCustom4.addTo(map4);
-
-      // Add layer control to the fourth map
-      const baseLayers4 = {
-        "Mapbox Custom": mapboxCustom4,
-        "CartoDB Light": cartoDBLight4,
-        "OpenStreetMap": openStreetMap4,
-        "Esri World Imagery": esriWorldImagery4,
-        "Stamen Toner": stamenToner4
-      };
-
-      L.control.layers(baseLayers4).addTo(map4);
-
-      // Parse CSV data and create animated markers for the fourth map
-      Papa.parse('./data/total_return.csv', {
-        download: true,
-        header: true,
-        dynamicTyping: true,
-        skipEmptyLines: true,
-        complete: (results) => {
-          const geoJsonFeatureCollection4 = {
-            type: 'FeatureCollection',
-            features: results.data.map(datum => ({
-              type: 'Feature',
-              geometry: { type: 'Point', coordinates: [datum.lon, datum.lat] },
-              properties: datum
-            }))
-          };
-
-          // Find the maximum total_return value for normalization
-          const maxTotalReturn = Math.max(...results.data.map(d => d.total_return));
-
-          // Function to animate circle markers
-          function animateCircleMarker(marker, baseRadius) {
-            const tween = new TWEEN.Tween({ radius: baseRadius })
-              .to({ radius: baseRadius * 1.5 }, 1000) // Animate to 1.5x the base radius
-              .easing(TWEEN.Easing.Sinusoidal.InOut) // Smooth easing
-              .yoyo(true) // Reverse the animation
-              .repeat(Infinity) // Repeat indefinitely
-              .onUpdate(({ radius }) => {
-                marker.setRadius(radius); // Update the marker's radius
-              })
-              .start(); // Start the animation
-          }
-
-          // Add animated markers to the fourth map
-          L.geoJSON(geoJsonFeatureCollection4, {
-            pointToLayer: (feature, latlng) => {
-              // Normalize the total_return value to determine the base radius
-              const baseRadius = 8 + (feature.properties.total_return / maxTotalReturn) * 20;
-
-              // Create a circle marker
-              const marker = L.circleMarker(latlng, {
-                radius: baseRadius, // Initial radius
-                fillColor: 'rgba(255, 103, 31, 0.8)', // Orange color for returnees
-                color: '#fff',
-                weight: 1,
-                opacity: 1,
-                fillOpacity: 0.7
-              });
-
-              // Animate the marker
-              animateCircleMarker(marker, baseRadius);
-
-              return marker;
-            },
-            onEachFeature: (feature, layer) => {
-              const popupContent = `
-                <b>State:</b> ${feature.properties.state}<br/>
-                <b>Total Returnees:</b> ${feature.properties.total_return.toLocaleString()}
-              `;
-              layer.bindPopup(popupContent);
-
-              // Add tooltip
-              const tooltipContent = `<b>${feature.properties.state}</b><br/>
-                <b>Total Returnees:</b> ${feature.properties.total_return.toLocaleString()}`;
-              layer.bindTooltip(tooltipContent);
-            }
-          }).addTo(map4);
-        }
-      });
-
-      // Add legend to the fourth map
-      const legend4 = L.control({ position: 'bottomleft' });
-      legend4.onAdd = () => {
-        const div = L.DomUtil.create('div', 'legend');
-        div.innerHTML = `
-          <span style="font-size:14px; font-weight:bold;">Total Returnees by State:</span><br/>
-          <div style="display: flex; align-items: center; margin-top: 10px;">
-            <div style="width: 10px; height: 10px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
-            <span style="font-size:12px;">< 10,000 Returnees</span>
-          </div>
-          <div style="display: flex; align-items: center; margin-top: 5px;">
-            <div style="width: 20px; height: 20px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
-            <span style="font-size:12px;">10,000 - 50,000 Returnees</span>
-          </div>
-          <div style="display: flex; align-items: center; margin-top: 5px;">
-            <div style="width: 30px; height: 30px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
-            <span style="font-size:12px;"> > 50,000 Returnees</span>
-          </div>
-        `;
-        return div;
-      };
-      legend4.addTo(map4);
-
-      // Pie Chart Map Showing Displacement Proportions
-      const map5 = L.map('map5').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; OpenStreetMap'
-      }).addTo(map5);
-
-      // State data with coordinates (lat, lng), displaced, total population
-      const stateData = [
-        ["Aj Jazirah", 14.900, 33.434, 876156, 5687557],
-        ["Blue Nile", 11.270, 34.390, 270810, 1344267],
-        ["Central Darfur", 12.900, 23.470, 749491, 1786503],
-        ["East Darfur", 11.160, 26.140, 247874, 1213951],
-        ["Gedaref", 14.040, 35.380, 14327, 2545604],
-        ["Kassala", 15.450, 36.400, 6211, 2811446],
-        ["Khartoum", 15.501, 32.560, 3500400, 9146191],
-        ["North Darfur", 15.766, 27.333, 1844175, 2775652],
-        ["North Kordofan", 13.630, 27.930, 91161, 2160476],
-        ["Northern", 19.615, 30.416, 12052, 1023194],
-        ["Red Sea", 19.580, 37.130, 30480, 1549857],
-        ["River Nile", 18.500, 33.800, 53683, 1651873],
-        ["Sennar", 13.550, 33.600, 244250, 2170863],
-        ["South Darfur", 11.783, 24.883, 2082537, 3912372],
-        ["South Kordofan", 11.150, 29.633, 414734, 2017962],
-        ["West Darfur", 12.900, 22.466, 368971, 1940860],
-        ["West Kordofan", 11.200, 28.433, 314484, 1713462],
-        ["White Nile", 13.450, 32.500, 179544, 3046811]
-      ];
-
-      // Create pie chart icon function with standardized size
-      function createPieChartIcon(displaced, total, sizeFactor = 1) {
-        const displacedPercent = displaced / total;
-        const endAngle = displacedPercent * 360;
-        
-        // Use a fixed radius for all pie charts (e.g., 16 pixels)
-        const baseRadius = 30;
-        const radius = baseRadius * sizeFactor;
-        
-        const svg = `
-          <svg width="${radius * 2}" height="${radius * 2}" viewBox="0 0 ${radius * 2} ${radius * 2}">
-            <circle cx="${radius}" cy="${radius}" r="${radius}" fill="#418FDE"/>
-            <path d="M${radius},${radius} L${radius},0 A${radius},${radius} 0 ${endAngle > 180 ? 1 : 0},1 
-              ${radius + Math.sin((endAngle * Math.PI)/180) * radius},
-              ${radius - Math.cos((endAngle * Math.PI)/180) * radius} z" 
-              fill="rgba(255, 103, 31, 0.8)"/>
-            <circle cx="${radius}" cy="${radius}" r="${radius * 0.6}" fill="white" opacity="0.7"/>
-            <text x="${radius}" y="${radius}" text-anchor="middle" dominant-baseline="middle" 
-                  font-size="${8 * sizeFactor}" font-weight="bold" fill="#82C4FF">
-              ${Math.round(displacedPercent * 100)}%
-            </text>
-          </svg>
-        `;
-
-        return L.divIcon({
-          html: svg,
-          iconSize: [radius * 2, radius * 2],
-          className: 'pie-chart-marker'
-        });
-      }
-
-      // Create a layer group for the pie chart markers
-      const pieMarkersLayer = L.layerGroup().addTo(map5);
-      
-      // Store references to all pie chart markers
-      const pieMarkers = [];
-
-      // Add markers with standardized pie charts
-      stateData.forEach(state => {
-        const [name, lat, lng, displaced, total] = state;
-        
-        const marker = L.marker([lat, lng], {
-          icon: createPieChartIcon(displaced, total, 1.0) // Default medium size
-        }).addTo(pieMarkersLayer).bindPopup(`
-          <b>${name}</b><br>
-          Total Population: ${total.toLocaleString()}<br>
-          Displaced: ${displaced.toLocaleString()} (${((displaced/total)*100).toFixed(1)}%)<br>
-          Non-Displaced: ${(total - displaced).toLocaleString()}
-        `);
-        
-        // Store reference to marker
-        pieMarkers.push({
-          name: name,
-          lat: lat,
-          lng: lng,
-          displaced: displaced,
-          total: total,
-          marker: marker
-        });
-      });
-
-      // Function to update pie chart sizes
-      function updatePieChartSizes(size) {
-        const sizeFactors = {
-          small: 0.7,
-          medium: 1.0,
-          large: 1.3
-        };
-        
-        const factor = sizeFactors[size];
-        
-        // Update all pie chart markers
-        pieMarkers.forEach(pieMarker => {
-          pieMarker.marker.setIcon(createPieChartIcon(pieMarker.displaced, pieMarker.total, factor));
-        });
-      }
-
-      // Enhanced legend control for pie chart map
-      const legend5 = L.control({position: 'bottomright'});
-      legend5.onAdd = () => {
-        const div = L.DomUtil.create('div', 'legend');
-        div.innerHTML = `
-          <h4>Displacement Proportion</h4>
-          <div class="legend-checkbox">
-            <input type="checkbox" id="displaced-checkbox" checked>
-            <label for="displaced-checkbox">Displaced Population</label>
-          </div>
-          <div class="legend-checkbox">
-            <input type="checkbox" id="remaining-checkbox" checked>
-            <label for="remaining-checkbox">Remaining Population</label>
-          </div>
-          <div class="marker-size-controls">
-            <div class="marker-size-label">Marker Size</div>
-            <div class="marker-size-buttons">
-              <button id="size-small">Small</button>
-              <button id="size-medium" class="active">Medium</button>
-              <button id="size-large">Large</button>
-            </div>
-            <div class="marker-size-label">Represents total state population</div>
-          </div>
-        `;
-        
-        // Add functionality to checkboxes
-        const displacedCheckbox = div.querySelector('#displaced-checkbox');
-        const remainingCheckbox = div.querySelector('#remaining-checkbox');
-        
-        displacedCheckbox.addEventListener('change', function() {
-          // Toggle visibility of displaced segments (orange)
-          const opacity = this.checked ? 1 : 0;
-          pieMarkers.forEach(pieMarker => {
-            const icon = pieMarker.marker.getIcon();
-            const newHtml = icon.options.html.replace(/fill="rgba\(255, 103, 31, [\d.]+\)"/g, 
-                                            `fill="rgba(255, 103, 31, ${opacity})"`);
-            icon.options.html = newHtml;
-            pieMarker.marker.setIcon(icon);
+            // Add to district layer
+            districtMarkersLayer.addLayer(marker);
           });
-        });
-        
-        remainingCheckbox.addEventListener('change', function() {
-          // Toggle visibility of remaining segments (blue)
-          const opacity = this.checked ? 1 : 0;
-          pieMarkers.forEach(pieMarker => {
-            const icon = pieMarker.marker.getIcon();
-            const newHtml = icon.options.html.replace(/fill="#418FDE"/g, 
-                                            `fill="rgba(65, 143, 222, ${opacity})"`);
-            icon.options.html = newHtml;
-            pieMarker.marker.setIcon(icon);
-          });
-        });
-        
-        // Add functionality to size buttons
-        const sizeButtons = div.querySelectorAll('.marker-size-buttons button');
-        sizeButtons.forEach(button => {
-          button.addEventListener('click', function() {
-            // Remove active class from all buttons
-            sizeButtons.forEach(btn => btn.classList.remove('active'));
-            // Add active class to clicked button
-            this.classList.add('active');
-            
-            // Change marker size
-            const size = this.id.split('-')[1]; // small, medium, or large
-            updatePieChartSizes(size);
-          });
-        });
-        
-        return div;
-      };
-      legend5.addTo(map5);
-
-      // Heatmap Data (from your timeline chart)
-      const months = ['Aug-2023', 'Sep-2023', 'Oct-2023', 'Nov-2023', 'Dec-2023', 
-                     'Jan-2024', 'Feb-2024', 'Mar-2024', 'Apr-2024', 'May-2024', 
-                     'Jun-2024', 'Jul-2024', 'Aug-2024', 'Sep-2024', 'Oct-2024', 
-                     'Nov-2024', 'Dec-2024', 'Jan-2025', 'Feb-2025', 'Mar-2025'];
-      
-      const idpsData = [3801754, 4425083, 4856294, 5340863, 5942580, 6144363, 
-                       6397698, 6622565, 6786816, 10095054, 10540215, 10710015, 
-                       10834382, 10890722, 11018231, 11359005, 11532774, 11568970, 
-                       11585384, 11301340];
-      
-      const returneesData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 396738];
-
-      // Prepare heatmap data
-      const heatmapData = [];
-      for (let i = 0; i < months.length; i++) {
-        heatmapData.push({
-          month: months[i],
-          idps: idpsData[i],
-          returnees: returneesData[i]
-        });
-      }
-
-      // Create heatmap
-      const heatmapElement = document.getElementById('heatmapChart');
-      const heatmapSlider = document.getElementById('heatmap-slider');
-      const heatmapPlayButton = document.getElementById('heatmap-play-button');
-      const heatmapTimeDisplay = document.getElementById('heatmap-time-display');
-      const heatmapExportButton = document.getElementById('heatmap-export-button');
-      
-      let heatmapChart;
-      let isPlaying = false;
-      let playInterval;
-      const animationSpeed = 1000; // milliseconds between frames
-
-      // Initialize heatmap
-      function initHeatmap() {
-        const initialData = getDataUpToIndex(0);
-        
-        const layout = {
-          title: 'Displacement Over Time',
-          xaxis: {
-            title: 'Month',
-            tickangle: -45,
-            showgrid: true,
-            gridcolor: '#f0f0f0'
-          },
-          yaxis: {
-            title: 'Number of People',
-            showgrid: true,
-            gridcolor: '#f0f0f0',
-            rangemode: 'tozero'
-          },
-          margin: {t: 50, l: 60, r: 30, b: 80},
-          hovermode: 'closest',
-          plot_bgcolor: 'rgba(0,0,0,0)',
-          paper_bgcolor: 'rgba(0,0,0,0)',
-          legend: {
-            orientation: 'h',
-            yanchor: 'bottom',
-            y: 1.02,
-            xanchor: 'right',
-            x: 1
-          },
-          transition: {
-            duration: 500,
-            easing: 'cubic-in-out'
-          }
-        };
-        
-        const config = {
-          responsive: true,
-          displayModeBar: true
-        };
-        
-        heatmapChart = Plotly.newPlot(
-          heatmapElement, 
-          [
-            createTrace('IDPs', '#418FDE', initialData),
-            createTrace('Returnees', '#FF671F', initialData)
-          ], 
-          layout, 
-          config
-        );
-      }
-
-      // Create a trace for the chart
-      function createTrace(name, color, data) {
-        return {
-          x: data.map(d => d.month),
-          y: data.map(d => d[name.toLowerCase()]),
-          name: name,
-          type: 'scatter',
-          mode: 'lines+markers',
-          line: {color: color, width: 3},
-          marker: {size: 8, color: color},
-          hoverinfo: 'y+name',
-          hoverlabel: {bgcolor: color},
-          fill: 'tozeroy',
-          fillcolor: hexToRgba(color, 0.2)
-        };
-      }
-
-      // Helper function to convert hex to rgba
-      function hexToRgba(hex, alpha) {
-        const r = parseInt(hex.slice(1, 3), 16);
-        const g = parseInt(hex.slice(3, 5), 16);
-        const b = parseInt(hex.slice(5, 7), 16);
-        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-      }
-
-      // Get data up to a specific index
-      function getDataUpToIndex(index) {
-        return heatmapData.slice(0, index + 1);
-      }
-
-      // Update heatmap to show data up to a specific time index
-      function updateHeatmap(timeIndex) {
-        timeIndex = Math.max(0, Math.min(timeIndex, months.length - 1));
-        
-        // Update UI elements
-        heatmapSlider.value = timeIndex;
-        heatmapTimeDisplay.textContent = months[timeIndex];
-        
-        // Get data for this time period
-        const currentData = getDataUpToIndex(timeIndex);
-        
-        // Update chart
-        Plotly.react(
-          heatmapElement,
-          [
-            createTrace('IDPs', '#418FDE', currentData),
-            createTrace('Returnees', '#FF671F', currentData)
-          ],
-          heatmapChart.layout
-        );
-      }
-
-      // Toggle play/pause of animation
-      function togglePlayback() {
-        isPlaying = !isPlaying;
-        
-        if (isPlaying) {
-          heatmapPlayButton.textContent = '❚❚ Pause';
           
-          let currentIndex = parseInt(heatmapSlider.value);
-          playInterval = setInterval(() => {
-            currentIndex++;
-            if (currentIndex >= months.length) {
-              currentIndex = months.length - 1; // Stop at the last month
-              togglePlayback(); // Stop playback
-              return;
-            }
-            updateHeatmap(currentIndex);
-          }, animationSpeed);
-        } else {
-          heatmapPlayButton.textContent = '▶ Play';
-          clearInterval(playInterval);
+          // Add district layer to map
+          map3.addLayer(districtMarkersLayer);
+          
+          // Update title
+          document.getElementById('map-title-3').textContent = `IDPs by District in ${stateName}`;
+          
+          // Show back button
+          drilldownBackBtn.style.display = 'block';
+          
+          // Store current state
+          currentState = stateName;
+          
+          // Fit bounds to show all districts
+          if (stateDistricts.length > 0) {
+            const bounds = L.latLngBounds(stateDistricts.map(d => [d.lat, d.lon]));
+            map3.fitBounds(bounds, { padding: [50, 50] });
+          }
+        },
+        error: (error) => {
+          console.error('Error loading district data:', error);
+          alert('Failed to load district data. Please try again.');
+          document.getElementById('map-title-3').textContent = 'Total Number of IDPs by State';
         }
-      }
+      });
+    }
 
-      // Export heatmap as image
-      function exportHeatmap() {
-        Plotly.downloadImage(heatmapElement, {
-          format: 'png',
-          width: 1200,
-          height: 600,
-          filename: 'sudan-displacement-heatmap'
+    // Back button functionality
+    drilldownBackBtn.addEventListener('click', function() {
+      // Remove district layer
+      map3.removeLayer(districtMarkersLayer);
+      
+      // Add state layer back
+      map3.addLayer(stateMarkersLayer);
+      
+      // Reset view
+      map3.setView([16, 30], L.Browser.mobile ? 3 : 5.5);
+      
+      // Update title
+      document.getElementById('map-title-3').textContent = 'Total Number of IDPs by State';
+      
+      // Hide back button
+      drilldownBackBtn.style.display = 'none';
+      
+      // Clear current state
+      currentState = null;
+    });
+
+    // Parse CSV data and create animated markers for the third map
+    Papa.parse('./data/total_idps.csv', {
+      download: true,
+      header: true,
+      dynamicTyping: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        const geoJsonFeatureCollection3 = {
+          type: 'FeatureCollection',
+          features: results.data.map(datum => ({
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: [datum.lon, datum.lat] },
+            properties: datum
+          }))
+        };
+
+        // Find the maximum total_idps value for normalization
+        const maxTotalIdps = Math.max(...results.data.map(d => d.total_idps));
+
+        // Function to animate circle markers
+        function animateCircleMarker(marker, baseRadius) {
+          const tween = new TWEEN.Tween({ radius: baseRadius })
+            .to({ radius: baseRadius * 1.5 }, 1000) // Animate to 1.5x the base radius
+            .easing(TWEEN.Easing.Sinusoidal.InOut) // Smooth easing
+            .yoyo(true) // Reverse the animation
+            .repeat(Infinity) // Repeat indefinitely
+            .onUpdate(({ radius }) => {
+              marker.setRadius(radius); // Update the marker's radius
+            })
+            .start(); // Start the animation
+        }
+
+        // Add animated markers to the third map
+        L.geoJSON(geoJsonFeatureCollection3, {
+          pointToLayer: (feature, latlng) => {
+            // Normalize the total_idps value to determine the base radius
+            const baseRadius = 8 + (feature.properties.total_idps / maxTotalIdps) * 20;
+
+            // Create a circle marker
+            const marker = L.circleMarker(latlng, {
+              radius: baseRadius, // Initial radius
+              fillColor: '#418FDE', // Blue color for IDPs
+              color: '#fff',
+              weight: 1,
+              opacity: 1,
+              fillOpacity: 0.7
+            });
+
+            // Animate the marker
+            animateCircleMarker(marker, baseRadius);
+
+            // Add click handler for drill-down
+            marker.on('click', function(e) {
+              // Remove state layer
+              map3.removeLayer(stateMarkersLayer);
+              
+              // Load district data for this state
+              loadDistrictData(feature.properties.state);
+            });
+
+            return marker;
+          },
+          onEachFeature: (feature, layer) => {
+            const popupContent = `
+              <b>State:</b> ${feature.properties.state}<br/>
+              <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}<br/>
+              <small>Click to view districts</small>
+            `;
+            layer.bindPopup(popupContent);
+
+            // Add tooltip
+            const tooltipContent = `<b>${feature.properties.state}</b><br/>
+              <b>Total IDPs:</b> ${feature.properties.total_idps.toLocaleString()}`;
+            layer.bindTooltip(tooltipContent);
+          }
+        }).addTo(stateMarkersLayer);
+
+        // Add state markers layer to map
+        map3.addLayer(stateMarkersLayer);
+      }
+    });
+
+    // Update Tween.js animations on each frame
+    function animate() {
+      requestAnimationFrame(animate);
+      TWEEN.update();
+    }
+    animate(); // Start the animation loop
+
+    // Add legend to the third map
+    const legend3 = L.control({ position: 'bottomright' });
+    legend3.onAdd = () => {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = `
+        <span style="font-size:14px; font-weight:bold;">Total IDPs by State:</span><br/>
+        <div style="display: flex; align-items: center; margin-top: 10px;">
+          <div style="width: 10px; height: 10px; background: #418FDE; border-radius: 50%; margin-right: 10px;"></div>
+          <span style="font-size:12px;">  < 500,000 IDPs</span>
+        </div>
+        <div style="display: flex; align-items: center; margin-top: 5px;">
+          <div style="width: 20px; height: 20px; background: #418FDE; border-radius: 50%; margin-right: 10px;"></div>
+          <span style="font-size:12px;"> 500,001 - 1,000,000 IDPs</span>
+        </div>
+        <div style="display: flex; align-items: center; margin-top: 5px;">
+          <div style="width: 30px; height: 30px; background: #418FDE; border-radius: 50%; margin-right: 10px;"></div>
+          <span style="font-size:12px;"> > 1,000,001 IDPs</span>
+        </div>
+        <div style="margin-top: 10px; font-size:12px; color: #666;">
+          Click on a state to view district-level data
+        </div>
+      `;
+      return div;
+    };
+    legend3.addTo(map3);
+    
+    // Initialize the fourth map
+    const map4 = L.map('map4').setView([16, 30], 5);
+
+    // Define multiple base layers for the fourth map
+    const cartoDBLight4 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap'
+    });
+
+    const openStreetMap4 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap'
+    });
+
+    const esriWorldImagery4 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
+    });
+
+    const stamenToner4 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
+    });
+
+    // Add default base layer to the fourth map
+    mapboxCustom4.addTo(map4);
+
+    // Add layer control to the fourth map
+    const baseLayers4 = {
+      "Mapbox Custom": mapboxCustom4,
+      "CartoDB Light": cartoDBLight4,
+      "OpenStreetMap": openStreetMap4,
+      "Esri World Imagery": esriWorldImagery4,
+      "Stamen Toner": stamenToner4
+    };
+
+    L.control.layers(baseLayers4).addTo(map4);
+
+    // Parse CSV data and create animated markers for the fourth map
+    Papa.parse('./data/total_return.csv', {
+      download: true,
+      header: true,
+      dynamicTyping: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        const geoJsonFeatureCollection4 = {
+          type: 'FeatureCollection',
+          features: results.data.map(datum => ({
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: [datum.lon, datum.lat] },
+            properties: datum
+          }))
+        };
+
+        // Find the maximum total_return value for normalization
+        const maxTotalReturn = Math.max(...results.data.map(d => d.total_return));
+
+        // Function to animate circle markers
+        function animateCircleMarker(marker, baseRadius) {
+          const tween = new TWEEN.Tween({ radius: baseRadius })
+            .to({ radius: baseRadius * 1.5 }, 1000) // Animate to 1.5x the base radius
+            .easing(TWEEN.Easing.Sinusoidal.InOut) // Smooth easing
+            .yoyo(true) // Reverse the animation
+            .repeat(Infinity) // Repeat indefinitely
+            .onUpdate(({ radius }) => {
+              marker.setRadius(radius); // Update the marker's radius
+            })
+            .start(); // Start the animation
+        }
+
+        // Add animated markers to the fourth map
+        L.geoJSON(geoJsonFeatureCollection4, {
+          pointToLayer: (feature, latlng) => {
+            // Normalize the total_return value to determine the base radius
+            const baseRadius = 8 + (feature.properties.total_return / maxTotalReturn) * 20;
+
+            // Create a circle marker
+            const marker = L.circleMarker(latlng, {
+              radius: baseRadius, // Initial radius
+              fillColor: 'rgba(255, 103, 31, 0.8)', // Orange color for returnees
+              color: '#fff',
+              weight: 1,
+              opacity: 1,
+              fillOpacity: 0.7
+            });
+
+            // Animate the marker
+            animateCircleMarker(marker, baseRadius);
+
+            return marker;
+          },
+          onEachFeature: (feature, layer) => {
+            const popupContent = `
+              <b>State:</b> ${feature.properties.state}<br/>
+              <b>Total Returnees:</b> ${feature.properties.total_return.toLocaleString()}
+            `;
+            layer.bindPopup(popupContent);
+
+            // Add tooltip
+            const tooltipContent = `<b>${feature.properties.state}</b><br/>
+              <b>Total Returnees:</b> ${feature.properties.total_return.toLocaleString()}`;
+            layer.bindTooltip(tooltipContent);
+          }
+        }).addTo(map4);
+      }
+    });
+
+    // Add legend to the fourth map
+    const legend4 = L.control({ position: 'bottomleft' });
+    legend4.onAdd = () => {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = `
+        <span style="font-size:14px; font-weight:bold;">Total Returnees by State:</span><br/>
+        <div style="display: flex; align-items: center; margin-top: 10px;">
+          <div style="width: 10px; height: 10px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
+          <span style="font-size:12px;">< 10,000 Returnees</span>
+        </div>
+        <div style="display: flex; align-items: center; margin-top: 5px;">
+          <div style="width: 20px; height: 20px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
+          <span style="font-size:12px;">10,000 - 50,000 Returnees</span>
+        </div>
+        <div style="display: flex; align-items: center; margin-top: 5px;">
+          <div style="width: 30px; height: 30px; background: rgba(255, 103, 31, 0.8); border-radius: 50%; margin-right: 10px;"></div>
+          <span style="font-size:12px;"> > 50,000 Returnees</span>
+        </div>
+      `;
+      return div;
+    };
+    legend4.addTo(map4);
+
+    // Initialize the country circle map with layer controls
+    const countryCircleMap = L.map('country-circle-map').setView([16, 30], 5);
+    
+    // Define multiple base layers for the country circle map
+    const cartoDBLightCountry = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap'
+    });
+
+    const openStreetMapCountry = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap'
+    });
+
+    const esriWorldImageryCountry = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
+    });
+
+    const stamenTonerCountry = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>'
+    });
+
+    const mapboxCustomCountry = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
+      attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      tileSize: 512,
+      zoomOffset: -1,
+      maxZoom: 18
+    });
+
+    // Add default base layer to the country circle map
+    mapboxCustomCountry.addTo(countryCircleMap);
+
+    // Add layer control to the country circle map
+    const baseLayersCountry = {
+      "CartoDB Light": cartoDBLightCountry,
+      "OpenStreetMap": openStreetMapCountry,
+      "Esri World Imagery": esriWorldImageryCountry,
+      "Stamen Toner": stamenTonerCountry,
+      "Mapbox Custom": mapboxCustomCountry
+    };
+
+    // Country data with coordinates and volume
+    const countryData = [
+      {country: "Egypt", e_lat: 26.8206, e_lon: 30.8025, Volume: 1500000},
+      {country: "libya", e_lat: 26.3351, e_lon: 17.2283, Volume: 105721},
+      {country: "Chad", e_lat: 15.4542, e_lon: 18.7322, Volume: 767365},
+      {country: "Central African Republic", e_lat: 6.6111, e_lon: 20.9394, Volume: 35376},
+      {country: "South Sudan", e_lat: 6.877, e_lon: 31.307, Volume: 341909},
+      {country: "Ethiopia", e_lat: 9.145, e_lon: 40.4897, Volume: 88001},
+      {country: "Eritrea", e_lat: 15.1794, e_lon: 39.7823, Volume: 14141}
+    ];
+
+    // Find the maximum volume for scaling
+    const maxVolume = Math.max(...countryData.map(d => d.Volume));
+
+    // Create a layer group for the country circles
+    const countryCirclesLayer = L.layerGroup().addTo(countryCircleMap);
+
+    // Function to animate circle markers
+    function animateCircleMarker(marker, baseRadius) {
+      const tween = new TWEEN.Tween({ radius: baseRadius })
+        .to({ radius: baseRadius * 1.5 }, 1500) // Animate to 1.5x the base radius
+        .easing(TWEEN.Easing.Sinusoidal.InOut) // Smooth easing
+        .yoyo(true) // Reverse the animation
+        .repeat(Infinity) // Repeat indefinitely
+        .onUpdate(({ radius }) => {
+          marker.setRadius(radius); // Update the marker's radius
+        })
+        .start(); // Start the animation
+    }
+
+    // Add animated circle markers for each country to the layer group
+    countryData.forEach(country => {
+      // Calculate base radius based on volume (scaled to a reasonable size)
+      const baseRadius = 5 + (country.Volume / maxVolume) * 30;
+      
+      // Create circle marker
+      const circle = L.circleMarker([country.e_lat, country.e_lon], {
+        radius: baseRadius,
+        fillColor: '#5CB8B2',
+        color: '#fff',
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.7
+      }).addTo(countryCirclesLayer);
+
+      // Add animation
+      animateCircleMarker(circle, baseRadius);
+
+      // Add popup with country info
+      circle.bindPopup(`
+        <b>${country.country}</b><br>
+        Volume: ${country.Volume.toLocaleString()}
+      `);
+
+      // Add tooltip
+      circle.bindTooltip(`
+        <b>${country.country}</b><br>
+        Volume: ${country.Volume.toLocaleString()}
+      `);
+    });
+
+    // Add overlay control for the country circles
+    const overlaysCountry = {
+      "Displacement Circles": countryCirclesLayer
+    };
+
+    // Add layer control with both base layers and overlays
+    L.control.layers(baseLayersCountry, overlaysCountry).addTo(countryCircleMap);
+
+    // Add legend for the country circle map
+    const countryLegend = L.control({ position: 'bottomright' });
+    countryLegend.onAdd = () => {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = `
+        <h4>Displacement to Neighboring Countries</h4>
+        <div style="display: flex; align-items: center; margin: 5px 0;">
+          <svg width="20" height="20">
+            <circle cx="10" cy="10" r="10" fill="#5CB8B2"/>
+          </svg>
+          Displaced Population
+        </div>
+        <p>Circle size represents relative volume</p>
+      `;
+      return div;
+    };
+    countryLegend.addTo(countryCircleMap);
+
+    // Pie Chart Map Showing Displacement Proportions
+    const map5 = L.map('map5').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map5);
+
+    // State data with coordinates (lat, lng), displaced, total population
+    const stateData = [
+      ["Aj Jazirah", 14.900, 33.434, 876156, 5687557],
+      ["Blue Nile", 11.270, 34.390, 270810, 1344267],
+      ["Central Darfur", 12.900, 23.470, 749491, 1786503],
+      ["East Darfur", 11.160, 26.140, 247874, 1213951],
+      ["Gedaref", 14.040, 35.380, 14327, 2545604],
+      ["Kassala", 15.450, 36.400, 6211, 2811446],
+      ["Khartoum", 15.501, 32.560, 3500400, 9146191],
+      ["North Darfur", 15.766, 27.333, 1844175, 2775652],
+      ["North Kordofan", 13.630, 27.930, 91161, 2160476],
+      ["Northern", 19.615, 30.416, 12052, 1023194],
+      ["Red Sea", 19.580, 37.130, 30480, 1549857],
+      ["River Nile", 18.500, 33.800, 53683, 1651873],
+      ["Sennar", 13.550, 33.600, 244250, 2170863],
+      ["South Darfur", 11.783, 24.883, 2082537, 3912372],
+      ["South Kordofan", 11.150, 29.633, 414734, 2017962],
+      ["West Darfur", 12.900, 22.466, 368971, 1940860],
+      ["West Kordofan", 11.200, 28.433, 314484, 1713462],
+      ["White Nile", 13.450, 32.500, 179544, 3046811]
+    ];
+
+    // Create pie chart icon function with standardized size
+    function createPieChartIcon(displaced, total, sizeFactor = 1) {
+      const displacedPercent = displaced / total;
+      const endAngle = displacedPercent * 360;
+      
+      // Use a fixed radius for all pie charts (e.g., 16 pixels)
+      const baseRadius = 30;
+      const radius = baseRadius * sizeFactor;
+      
+      const svg = `
+        <svg width="${radius * 2}" height="${radius * 2}" viewBox="0 0 ${radius * 2} ${radius * 2}">
+          <circle cx="${radius}" cy="${radius}" r="${radius}" fill="#418FDE"/>
+          <path d="M${radius},${radius} L${radius},0 A${radius},${radius} 0 ${endAngle > 180 ? 1 : 0},1 
+            ${radius + Math.sin((endAngle * Math.PI)/180) * radius},
+            ${radius - Math.cos((endAngle * Math.PI)/180) * radius} z" 
+            fill="rgba(255, 103, 31, 0.8)"/>
+          <circle cx="${radius}" cy="${radius}" r="${radius * 0.6}" fill="white" opacity="0.7"/>
+          <text x="${radius}" y="${radius}" text-anchor="middle" dominant-baseline="middle" 
+                font-size="${8 * sizeFactor}" font-weight="bold" fill="#82C4FF">
+            ${Math.round(displacedPercent * 100)}%
+          </text>
+        </svg>
+      `;
+
+      return L.divIcon({
+        html: svg,
+        iconSize: [radius * 2, radius * 2],
+        className: 'pie-chart-marker'
+      });
+    }
+
+    // Create a layer group for the pie chart markers
+    const pieMarkersLayer = L.layerGroup().addTo(map5);
+    
+    // Store references to all pie chart markers
+    const pieMarkers = [];
+
+    // Add markers with standardized pie charts
+    stateData.forEach(state => {
+      const [name, lat, lng, displaced, total] = state;
+      
+      const marker = L.marker([lat, lng], {
+        icon: createPieChartIcon(displaced, total, 1.0) // Default medium size
+      }).addTo(pieMarkersLayer).bindPopup(`
+        <b>${name}</b><br>
+        Total Population: ${total.toLocaleString()}<br>
+        Displaced: ${displaced.toLocaleString()} (${((displaced/total)*100).toFixed(1)}%)<br>
+        Non-Displaced: ${(total - displaced).toLocaleString()}
+      `);
+      
+      // Store reference to marker
+      pieMarkers.push({
+        name: name,
+        lat: lat,
+        lng: lng,
+        displaced: displaced,
+        total: total,
+        marker: marker
+      });
+    });
+
+    // Function to update pie chart sizes
+    function updatePieChartSizes(size) {
+      const sizeFactors = {
+        small: 0.7,
+        medium: 1.0,
+        large: 1.3
+      };
+      
+      const factor = sizeFactors[size];
+      
+      // Update all pie chart markers
+      pieMarkers.forEach(pieMarker => {
+        pieMarker.marker.setIcon(createPieChartIcon(pieMarker.displaced, pieMarker.total, factor));
+      });
+    }
+
+    // Enhanced legend control for pie chart map
+    const legend5 = L.control({position: 'bottomright'});
+    legend5.onAdd = () => {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = `
+        <h4>Displacement Proportion</h4>
+        <div class="legend-checkbox">
+          <input type="checkbox" id="displaced-checkbox" checked>
+          <label for="displaced-checkbox">Displaced Population</label>
+        </div>
+        <div class="legend-checkbox">
+          <input type="checkbox" id="remaining-checkbox" checked>
+          <label for="remaining-checkbox">Remaining Population</label>
+        </div>
+        <div class="marker-size-controls">
+          <div class="marker-size-label">Marker Size</div>
+          <div class="marker-size-buttons">
+            <button id="size-small">Small</button>
+            <button id="size-medium" class="active">Medium</button>
+            <button id="size-large">Large</button>
+          </div>
+          <div class="marker-size-label">Represents total state population</div>
+        </div>
+      `;
+      
+      // Add functionality to checkboxes
+      const displacedCheckbox = div.querySelector('#displaced-checkbox');
+      const remainingCheckbox = div.querySelector('#remaining-checkbox');
+      
+      displacedCheckbox.addEventListener('change', function() {
+        // Toggle visibility of displaced segments (orange)
+        const opacity = this.checked ? 1 : 0;
+        pieMarkers.forEach(pieMarker => {
+          const icon = pieMarker.marker.getIcon();
+          const newHtml = icon.options.html.replace(/fill="rgba\(255, 103, 31, [\d.]+\)"/g, 
+                                          `fill="rgba(255, 103, 31, ${opacity})"`);
+          icon.options.html = newHtml;
+          pieMarker.marker.setIcon(icon);
         });
-      }
+      });
+      
+      remainingCheckbox.addEventListener('change', function() {
+        // Toggle visibility of remaining segments (blue)
+        const opacity = this.checked ? 1 : 0;
+        pieMarkers.forEach(pieMarker => {
+          const icon = pieMarker.marker.getIcon();
+          const newHtml = icon.options.html.replace(/fill="#418FDE"/g, 
+                                          `fill="rgba(65, 143, 222, ${opacity})"`);
+          icon.options.html = newHtml;
+          pieMarker.marker.setIcon(icon);
+        });
+      });
+      
+      // Add functionality to size buttons
+      const sizeButtons = div.querySelectorAll('.marker-size-buttons button');
+      sizeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // Remove active class from all buttons
+          sizeButtons.forEach(btn => btn.classList.remove('active'));
+          // Add active class to clicked button
+          this.classList.add('active');
+          
+          // Change marker size
+          const size = this.id.split('-')[1]; // small, medium, or large
+          updatePieChartSizes(size);
+        });
+      });
+      
+      return div;
+    };
+    legend5.addTo(map5);
 
-      // Initialize heatmap when page loads
+    // Heatmap Data (from your timeline chart)
+    const months = ['Aug-2023', 'Sep-2023', 'Oct-2023', 'Nov-2023', 'Dec-2023', 
+                   'Jan-2024', 'Feb-2024', 'Mar-2024', 'Apr-2024', 'May-2024', 
+                   'Jun-2024', 'Jul-2024', 'Aug-2024', 'Sep-2024', 'Oct-2024', 
+                   'Nov-2024', 'Dec-2024', 'Jan-2025', 'Feb-2025', 'Mar-2025'];
+    
+    const idpsData = [3801754, 4425083, 4856294, 5340863, 5942580, 6144363, 
+                     6397698, 6622565, 6786816, 10095054, 10540215, 10710015, 
+                     10834382, 10890722, 11018231, 11359005, 11532774, 11568970, 
+                     11585384, 11301340];
+    
+    const returneesData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 396738];
+
+    // Prepare heatmap data
+    const heatmapData = [];
+    for (let i = 0; i < months.length; i++) {
+      heatmapData.push({
+        month: months[i],
+        idps: idpsData[i],
+        returnees: returneesData[i]
+      });
+    }
+
+    // Create heatmap
+    const heatmapElement = document.getElementById('heatmapChart');
+    const heatmapSlider = document.getElementById('heatmap-slider');
+    const heatmapPlayButton = document.getElementById('heatmap-play-button');
+    const heatmapTimeDisplay = document.getElementById('heatmap-time-display');
+    const heatmapExportButton = document.getElementById('heatmap-export-button');
+    
+    let heatmapChart;
+    let isPlaying = false;
+    let playInterval;
+    const animationSpeed = 1000; // milliseconds between frames
+
+    // Initialize heatmap
+    function initHeatmap() {
+      const initialData = getDataUpToIndex(0);
+      
+      const layout = {
+        title: 'Displacement Over Time',
+        xaxis: {
+          title: 'Month',
+          tickangle: -45,
+          showgrid: true,
+          gridcolor: '#f0f0f0'
+        },
+        yaxis: {
+          title: 'Number of People',
+          showgrid: true,
+          gridcolor: '#f0f0f0',
+          rangemode: 'tozero'
+        },
+        margin: {t: 50, l: 60, r: 30, b: 80},
+        hovermode: 'closest',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        legend: {
+          orientation: 'h',
+          yanchor: 'bottom',
+          y: 1.02,
+          xanchor: 'right',
+          x: 1
+        },
+        transition: {
+          duration: 500,
+          easing: 'cubic-in-out'
+        }
+      };
+      
+      const config = {
+        responsive: true,
+        displayModeBar: true
+      };
+      
+      heatmapChart = Plotly.newPlot(
+        heatmapElement, 
+        [
+          createTrace('IDPs', '#418FDE', initialData),
+          createTrace('Returnees', '#FF671F', initialData)
+        ], 
+        layout, 
+        config
+      );
+    }
+
+    // Create a trace for the chart
+    function createTrace(name, color, data) {
+      return {
+        x: data.map(d => d.month),
+        y: data.map(d => d[name.toLowerCase()]),
+        name: name,
+        type: 'scatter',
+        mode: 'lines+markers',
+        line: {color: color, width: 3},
+        marker: {size: 8, color: color},
+        hoverinfo: 'y+name',
+        hoverlabel: {bgcolor: color},
+        fill: 'tozeroy',
+        fillcolor: hexToRgba(color, 0.2)
+      };
+    }
+
+    // Helper function to convert hex to rgba
+    function hexToRgba(hex, alpha) {
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    // Get data up to a specific index
+    function getDataUpToIndex(index) {
+      return heatmapData.slice(0, index + 1);
+    }
+
+    // Update heatmap to show data up to a specific time index
+    function updateHeatmap(timeIndex) {
+      timeIndex = Math.max(0, Math.min(timeIndex, months.length - 1));
+      
+      // Update UI elements
+      heatmapSlider.value = timeIndex;
+      heatmapTimeDisplay.textContent = months[timeIndex];
+      
+      // Get data for this time period
+      const currentData = getDataUpToIndex(timeIndex);
+      
+      // Update chart
+      Plotly.react(
+        heatmapElement,
+        [
+          createTrace('IDPs', '#418FDE', currentData),
+          createTrace('Returnees', '#FF671F', currentData)
+        ],
+        heatmapChart.layout
+      );
+    }
+
+    // Toggle play/pause of animation
+    function togglePlayback() {
+      isPlaying = !isPlaying;
+      
+      if (isPlaying) {
+        heatmapPlayButton.textContent = '❚❚ Pause';
+        
+        let currentIndex = parseInt(heatmapSlider.value);
+        playInterval = setInterval(() => {
+          currentIndex++;
+          if (currentIndex >= months.length) {
+            currentIndex = months.length - 1; // Stop at the last month
+            togglePlayback(); // Stop playback
+            return;
+          }
+          updateHeatmap(currentIndex);
+        }, animationSpeed);
+      } else {
+        heatmapPlayButton.textContent = '▶ Play';
+        clearInterval(playInterval);
+      }
+    }
+
+    // Export heatmap as image
+    function exportHeatmap() {
+      Plotly.downloadImage(heatmapElement, {
+        format: 'png',
+        width: 1200,
+        height: 600,
+        filename: 'sudan-displacement-heatmap'
+      });
+    }
+
+    // Initialize heatmap when page loads
+    document.addEventListener('DOMContentLoaded', () => {
       initHeatmap();
       
       // Event listeners
@@ -2851,203 +2913,207 @@
           }
         }
       });
+    });
 
-      // IDP Accommodation Chart
-      // Accommodation data
-      const data = {
-          labels: [
-              'Camp (formal)',
-              'Host Family/Community',
-              'Rented accommodation',
-              'Improvised shelters',
-              'Schools/public buildings',
-              'Informal settlements'
-          ],
-          datasets: [{
-              data: [415783, 1077264, 137092, 56239, 206804, 385332],
-              backgroundColor: [
-                  'rgba(52, 152, 219, 0.7)',
-                  'rgba(52, 152, 219, 0.7)',
-                  'rgba(52, 152, 219, 0.7)',
-                  'rgba(52, 152, 219, 0.7)',
-                  'rgba(52, 152, 219, 0.7)',
-                  'rgba(52, 152, 219, 0.7)'
-              ],
-              borderColor: [
-                  'rgba(52, 152, 219, 1)',
-                  'rgba(52, 152, 219, 0.7)',
-                  'rgba(52, 152, 219, 0.7)',
-                  'rgba(52, 152, 219, 0.7)',
-                  'rgba(52, 152, 219, 0.7)',
-                  'rgba(52, 152, 219, 0.7)'
-              ],
-              borderWidth: 1
-          }]
-      };
+    // IDP Accommodation Chart
+    document.addEventListener('DOMContentLoaded', function() {
+        // Accommodation data
+        const data = {
+            labels: [
+                'Camp (formal)',
+                'Host Family/Community',
+                'Rented accommodation',
+                'Improvised shelters',
+                'Schools/public buildings',
+                'Informal settlements'
+            ],
+            datasets: [{
+                data: [415783, 1077264, 137092, 56239, 206804, 385332],
+                backgroundColor: [
+                    'rgba(52, 152, 219, 0.7)',
+                    'rgba(52, 152, 219, 0.7)',
+                    'rgba(52, 152, 219, 0.7)',
+                    'rgba(52, 152, 219, 0.7)',
+                    'rgba(52, 152, 219, 0.7)',
+                    'rgba(52, 152, 219, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(52, 152, 219, 1)',
+                    'rgba(52, 152, 219, 0.7)',
+                    'rgba(52, 152, 219, 0.7)',
+                    'rgba(52, 152, 219, 0.7)',
+                    'rgba(52, 152, 219, 0.7)',
+                    'rgba(52, 152, 219, 0.7)'
+                ],
+                borderWidth: 1
+            }]
+        };
 
-      // Chart configuration
-      const config = {
-          type: 'bar',
-          data: data,
-          options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                  legend: {
-                      display: false
-                  },
-                  tooltip: {
-                      callbacks: {
-                          label: function(context) {
-                              return context.raw.toLocaleString();
-                          },
-                          afterLabel: function(context) {
-                              const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
-                              const percentage = ((context.raw / total) * 100).toFixed(1);
-                              return `Represents ${percentage}% of total`;
-                          }
-                      }
-                  },
-                  title: {
-                      display: true,
-                      text: 'Number of IDPs by Accommodation Type',
-                      font: {
-                          size: 18
-                      }
-                  }
-              },
-              scales: {
-                  y: {
-                      beginAtZero: true,
-                      ticks: {
-                          callback: function(value) {
-                              return value.toLocaleString();
-                          }
-                      },
-                      title: {
-                          display: true,
-                          text: 'Number of IDPs',
-                          font: {
-                              weight: 'bold'
-                          }
-                      }
-                  },
-                  x: {
-                      title: {
-                          display: true,
-                          text: 'Accommodation Type',
-                          font: {
-                              weight: 'bold'
-                          }
-                      }
-                  }
-              }
-          }
-      };
+        // Chart configuration
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.raw.toLocaleString();
+                            },
+                            afterLabel: function(context) {
+                                const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = ((context.raw / total) * 100).toFixed(1);
+                                return `Represents ${percentage}% of total`;
+                            }
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Number of IDPs by Accommodation Type',
+                        font: {
+                            size: 18
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString();
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Number of IDPs',
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Accommodation Type',
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            }
+        };
 
-      // Create the chart
-      const ctx = document.getElementById('accommodationChart').getContext('2d');
-      new Chart(ctx, config);
+        // Create the chart
+        const ctx = document.getElementById('accommodationChart').getContext('2d');
+        new Chart(ctx, config);
+    });
 
-      // Population Pyramid Chart
-      // Population pyramid data
-      const ageGroups = ['0 - 01 Year', '01 - 05 Years', '06 - 17 Years', '18 - 59 Years', '60+ Years'];
-      const maleData = [523121, 866389, 1365369, 2054763, 425893];
-      const femaleData = [563794, 1045329, 1585772, 2436550, 434360];
-      
-      // Calculate percentages for better visualization
-      const totalPopulation = maleData.reduce((a, b) => a + b, 0) + femaleData.reduce((a, b) => a + b, 0);
-      const malePercentages = maleData.map(value => -(value / totalPopulation * 100).toFixed(2));
-      const femalePercentages = femaleData.map(value => (value / totalPopulation * 100).toFixed(2));
-      
-      const ctxPyramid = document.getElementById('populationPyramidChart').getContext('2d');
-      
-      const chart = new Chart(ctxPyramid, {
-          type: 'bar',
-          data: {
-              labels: ageGroups,
-              datasets: [
-                  {
-                      label: 'Male',
-                      data: malePercentages,
-                      backgroundColor: 'rgba(65, 143, 222, 0.7)',
-                      borderColor: 'rgba(65, 143, 222, 1)',
-                      borderWidth: 1
-                  },
-                  {
-                      label: 'Female',
-                      data: femalePercentages,
-                      backgroundColor: 'rgba(255, 103, 31, 0.7)',
-                      borderColor: 'rgba(255, 103, 31, 1)',
-                      borderWidth: 1
-                  }
-              ]
-          },
-          options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              indexAxis: 'y',
-              scales: {
-                  x: {
-                      stacked: true,
-                      ticks: {
-                          callback: function(value) {
-                              return Math.abs(value) + '%';
-                          }
-                      },
-                      title: {
-                          display: true,
-                          text: 'Percentage of Total Population',
-                          font: {
-                              weight: 'bold'
-                          }
-                      }
-                  },
-                  y: {
-                      stacked: true,
-                      title: {
-                          display: true,
-                          text: 'Age Group',
-                          font: {
-                              weight: 'bold'
-                          }
-                      }
-                  }
-              },
-              plugins: {
-                  tooltip: {
-                      callbacks: {
-                          label: function(context) {
-                              const datasetLabel = context.dataset.label || '';
-                              const value = context.raw;
-                              const absValue = Math.abs(value);
-                              const count = context.datasetIndex === 0 ? 
-                                  maleData[context.dataIndex] : 
-                                  femaleData[context.dataIndex];
-                              
-                              return `${datasetLabel}: ${absValue}% (${count.toLocaleString()})`;
-                          }
-                      }
-                  },
-                  legend: {
-                      position: 'top',
-                      labels: {
-                          boxWidth: 12,
-                          padding: 20
-                      }
-                  },
-                  title: {
-                      display: true,
-                      text: 'IDP Population by Age and Gender',
-                      font: {
-                          size: 16,
-                          weight: 'bold'
-                      }
-                  }
-              }
-          }
-      });
-    }
+    // Population Pyramid Chart
+    document.addEventListener('DOMContentLoaded', function() {
+        // Population pyramid data
+        const ageGroups = ['0 - 01 Year', '01 - 05 Years', '06 - 17 Years', '18 - 59 Years', '60+ Years'];
+        const maleData = [523121, 866389, 1365369, 2054763, 425893];
+        const femaleData = [563794, 1045329, 1585772, 2436550, 434360];
+        
+        // Calculate percentages for better visualization
+        const totalPopulation = maleData.reduce((a, b) => a + b, 0) + femaleData.reduce((a, b) => a + b, 0);
+        const malePercentages = maleData.map(value => -(value / totalPopulation * 100).toFixed(2));
+        const femalePercentages = femaleData.map(value => (value / totalPopulation * 100).toFixed(2));
+        
+        const ctx = document.getElementById('populationPyramidChart').getContext('2d');
+        
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ageGroups,
+                datasets: [
+                    {
+                        label: 'Male',
+                        data: malePercentages,
+                        backgroundColor: 'rgba(65, 143, 222, 0.7)',
+                        borderColor: 'rgba(65, 143, 222, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Female',
+                        data: femalePercentages,
+                        backgroundColor: 'rgba(255, 103, 31, 0.7)',
+                        borderColor: 'rgba(255, 103, 31, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        stacked: true,
+                        ticks: {
+                            callback: function(value) {
+                                return Math.abs(value) + '%';
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Percentage of Total Population',
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    y: {
+                        stacked: true,
+                        title: {
+                            display: true,
+                            text: 'Age Group',
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const datasetLabel = context.dataset.label || '';
+                                const value = context.raw;
+                                const absValue = Math.abs(value);
+                                const count = context.datasetIndex === 0 ? 
+                                    maleData[context.dataIndex] : 
+                                    femaleData[context.dataIndex];
+                                
+                                return `${datasetLabel}: ${absValue}% (${count.toLocaleString()})`;
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            boxWidth: 12,
+                            padding: 20
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'IDP Population by Age and Gender',
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        }
+                    }
+                }
+            }
+        });
+    });
   </script>
 </body>
 </html>
