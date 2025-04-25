@@ -12,11 +12,67 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="./data/final_integration.js"></script>
-  <script src="./data/map-visualization.js"></script>
-  <script src="./data/performance-optimization.js"></script>
-  <script src="./data/user-interaction.js"></script>
-
+ 
   <style>
+    /* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 800px;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  z-index: 1000;
+}
+
+.modal-close {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  font-size: 30px;
+  cursor: pointer;
+  color: #666;
+}
+
+.modal-content {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.state-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2A6FBB;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #666;
+}
+
+.state-chart-container {
+  height: 400px;
+  margin: 20px 0;
+}
     /* Card Icon Styling */
     .card-icon {
       width: 50px;
@@ -1282,13 +1338,16 @@
         </ul>
       </div>
 
-      <!-- Map Container for Total Number of IDPs by State -->
-      <div class="map-container">
-        <h2 id="map-title-3">Total Number of IDPs by State</h2>
-        <button id="drilldown-back" class="drilldown-back">← Back to States</button>
-        <div id="map3" class="map"></div>
-      </div>
-    </div>
+     <!-- For IDP Map -->
+<div class="map-container">
+  <h2>Total Number of IDPs by State</h2>
+  <div id="map-container" class="map"></div> <!-- Changed from map3 -->
+</div>
+
+<!-- For Proportional Map -->
+<div class="map-container">
+  <div id="proportional-map" class="pie-map"></div> <!-- Changed from map5 -->
+</div>
     
     <!-- Population Pyramid Section -->
     <div class="population-pyramid-container">
@@ -1540,6 +1599,12 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
+    document.addEventListener('DOMContentLoaded', function() {
+  // Keep your existing loading spinner logic
+  // But remove other map initialization calls
+  initializeIDPMap();
+  initializeProportionalMap();
+});
     // Loading spinner functionality
     document.addEventListener('DOMContentLoaded', function() {
       // Simulate loading progress
