@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -1499,9 +1499,6 @@
           This map shows the movement patterns of returnees across Sudan. The flow lines represent the pathways taken by returning populations, with thickness indicating relative volume of movement between locations.
         </p>
       </div>
-     <!-- Data Summary -->
-        <div id="summary-stats" class="summary-container"></div>
-
       <div class="map-container">
         <div id="map" class="map"></div>
       </div>
@@ -1541,9 +1538,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
   <script>
     // Loading spinner functionality
@@ -3048,104 +3042,7 @@
             }
         });
     });
-// PERFORMANCE OPTIMIZATION
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize performance features
-        initializeLazyLoading();
-        setupProgressiveRendering();
-        implementDataCaching();
-        optimizeMapRendering();
-        setupPerformanceMonitoring();
 
-        // Load data and initialize map
-        loadIDPData().then(idpData => {
-            initializeIDPMap(idpData);
-            displaySummaryStats(idpData);
-        }).catch(console.error);
-    });
-
-    // DATA LOADING
-    async function loadIDPData() {
-        return new Promise((resolve, reject) => {
-            Papa.parse('./data/total_all.csv', {
-                download: true,
-                header: true,
-                complete: function(results) {
-                    // Process CSV data
-                    const data = processCSVData(results.data);
-                    resolve(data);
-                },
-                error: reject
-            });
-        });
-    }
-
-    // MAP VISUALIZATION
-    function initializeIDPMap(idpData) {
-        const map = L.map('map', {
-            center: [15.5, 30.5],
-            zoom: 5.5,
-            layers: [getBaseLayer()]
-        });
-
-        // Add interactive features
-        addMapControls(map);
-        addGeoJSONLayer(map, idpData);
-        addLegend(map);
-        setupMapInteractions(map, idpData);
-    }
-
-    // USER INTERACTION
-    function initializeNavigation() {
-        // Setup smooth scrolling and other interactions
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', smoothScroll);
-        });
-    }
-
-    // [Include all other functions from map-visualization.js, 
-    // performance-optimization.js, and user-interaction.js]
- 
-
-    <!-- Existing Visualization Scripts -->
- // performance-optimization.js
-function initializeLazyLoading() {
-  // Implementation
-}
-
-function setupPerformanceMonitoring() {
-  // Implementation
-}
-   // map-visualization.js
-function addGeoJSONLayer(map, idpData) {
-  fetch('./data/Admin1.json')
-    .then(response => response.json())
-    .then(geojson => {
-      L.geoJSON(optimizeGeoJSON(geojson), {
-        style: feature => getFeatureStyle(feature, idpData),
-        onEachFeature: (feature, layer) => setupFeatureInteractions(feature, layer, map)
-      }).addTo(map);
-    });
-}
-   // user-interaction.js
-function initializeUserTour() {
-  const tourSteps = [
-    { element: '#main-map-container', title: 'Main Map', content: 'Interactive displacement map' },
-    // Add more steps
-  ];
-  // Tour implementation
-}
-   // performance-optimization.js
-function implementDataCaching() {
-  if ('caches' in window) {
-    caches.open('sudan-data-v1').then(cache => {
-      cache.addAll([
-        '/data/Admin1.json',
-        '/data/total_all.csv'
-      ]);
-    });
-  }
-}
   </script>
 </body>
 </html>
