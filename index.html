@@ -1177,7 +1177,15 @@
       <div class="nav-tab" data-tab="data-tables">Data Tables</div>
       <div class="nav-tab" data-tab="about">About</div>
     </div>
-
+    
+  <section id="dashboard-section">
+  <h2>Overview</h2>
+  <p>Content for Overview...</p>
+  </section>
+<section id="frame-container">
+  <h2>Displacement Map</h2>
+  <p>Content for Displacement Map...</p>
+</section>
     <!-- Loading Spinner -->
     <div id="loading-spinner">
       <div class="spinner">
@@ -1585,31 +1593,19 @@
 
   <script>
     // Tab functionality
-    document.addEventListener('DOMContentLoaded', function() {
-      const tabs = document.querySelectorAll('.nav-tab');
-      
-      tabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-          // Remove active class from all tabs
-          tabs.forEach(t => t.classList.remove('active'));
-          
-          // Add active class to clicked tab
-          this.classList.add('active');
-          
-          // Get the tab data attribute
-          const tabName = this.getAttribute('data-tab');
-          
-          // Here you would add logic to show/hide content based on the selected tab
-          // For example:
-          // document.querySelectorAll('.tab-content').forEach(content => {
-          //   content.style.display = 'none';
-          // });
-          // document.getElementById(tabName + '-content').style.display = 'block';
-          
-          console.log('Switched to tab:', tabName);
-        });
-      });
+// Get all nav-tabs
+  const tabs = document.querySelectorAll('.nav-tab');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const sectionId = tab.getAttribute('data-tab');
+      const section = document.getElementById(sectionId);
+
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
     });
+  });
 
     // Loading spinner functionality
     document.addEventListener('DOMContentLoaded', function() {
