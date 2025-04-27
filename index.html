@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -17,7 +17,7 @@
   <script src="./data/user-interaction.js"></script>
 
   <style>
-      /* Navigation Tabs */
+    /* Navigation Tabs */
     .nav-tabs {
       display: flex;
       flex-wrap: wrap;
@@ -47,6 +47,7 @@
       background: #2A6FBB;
       color: white;
     }
+
     /* Card Icon Styling */
     .card-icon {
       width: 50px;
@@ -1163,7 +1164,7 @@
 </head>
 
 <body>
-   <div class="main-container">
+  <div class="main-container">
     <!-- Navigation Tabs -->
     <div class="nav-tabs">
       <div class="nav-tab active" data-tab="overview">Overview</div>
@@ -1175,7 +1176,6 @@
       <div class="nav-tab" data-tab="about">About</div>
     </div>
 
-  <div class="main-container">
     <!-- Loading Spinner -->
     <div id="loading-spinner">
       <div class="spinner">
@@ -1582,6 +1582,33 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
+    // Tab functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabs = document.querySelectorAll('.nav-tab');
+      
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          // Remove active class from all tabs
+          tabs.forEach(t => t.classList.remove('active'));
+          
+          // Add active class to clicked tab
+          this.classList.add('active');
+          
+          // Get the tab data attribute
+          const tabName = this.getAttribute('data-tab');
+          
+          // Here you would add logic to show/hide content based on the selected tab
+          // For example:
+          // document.querySelectorAll('.tab-content').forEach(content => {
+          //   content.style.display = 'none';
+          // });
+          // document.getElementById(tabName + '-content').style.display = 'block';
+          
+          console.log('Switched to tab:', tabName);
+        });
+      });
+    });
+
     // Loading spinner functionality
     document.addEventListener('DOMContentLoaded', function() {
       // Simulate loading progress
