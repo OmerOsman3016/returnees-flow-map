@@ -1178,14 +1178,7 @@
       <div class="nav-tab" data-tab="about">About</div>
     </div>
     
-  <section id="dashboard-section">
-  <h2>Overview</h2>
-  <p>Content for Overview...</p>
-  </section>
-<section id="frame-container">
-  <h2>Displacement Map</h2>
-  <p>Content for Displacement Map...</p>
-</section>
+ 
     <!-- Loading Spinner -->
     <div id="loading-spinner">
       <div class="spinner">
@@ -1592,20 +1585,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
-    // Tab functionality
-// Get all nav-tabs
-  const tabs = document.querySelectorAll('.nav-tab');
-
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const sectionId = tab.getAttribute('data-tab');
-      const section = document.getElementById(sectionId);
-
-      if (section) {
-        section.scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-  });
+ 
 
     // Loading spinner functionality
     document.addEventListener('DOMContentLoaded', function() {
