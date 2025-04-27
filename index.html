@@ -17,6 +17,62 @@
   <script src="./data/user-interaction.js"></script>
 
   <style>
+        /* Navigation Tabs */
+    .navigation-tabs {
+      flex: 0 0 100%;
+      display: flex;
+      gap: 15px;
+      padding: 12px 0;
+      margin-bottom: 15px;
+      border-bottom: 2px solid rgba(255,255,255,0.2);
+    }
+
+    .navigation-tabs a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 20px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .navigation-tabs a:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateY(-2px);
+    }
+
+    .navigation-tabs a.active {
+      background: rgba(255,255,255,0.3);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    @media (max-width: 768px) {
+      .navigation-tabs {
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+      }
+      
+      .navigation-tabs a {
+        padding: 6px 12px;
+        font-size: 14px;
+      }
+    }
+
+    /* Existing styles remain unchanged below */
+    /* Card Icon Styling */
+    .card-icon {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(var(--card-color-rgb), 0.1);
+      border-radius: 50%;
+      padding: 10px;
+    }
     /* Card Icon Styling */
     .card-icon {
       width: 50px;
@@ -1155,6 +1211,15 @@
 
     <!-- Dashboard Section -->
     <div id="dashboard-section">
+       <!-- Title Container with Logo, Title, and Navigation -->
+      <div id="title-container">
+        <nav class="navigation-tabs">
+          <a href="#dashboard-section" class="active">Dashboard</a>
+          <a href="#idps-section">IDPs Analysis</a>
+          <a href="#returnees-section">Returnees</a>
+          <a href="#cross-border">Cross-Border</a>
+          <a href="#accommodation">Accommodation</a>
+        </nav>
       <!-- Title Container with Logo, Title, and Info Card -->
       <div id="title-container">
         <div id="title">
@@ -1179,7 +1244,41 @@
         <div class="slide fade">
           <img src="./data/image1.jpg" alt="Displacement Image 3"> 
         </div>
-        
+         <!-- Add IDs to sections for navigation -->
+    <!-- IDPs Section -->
+    <div class="frame-container" id="idps-section">
+      <!-- ... (existing IDPs content) ... -->
+    </div>
+
+    <!-- Population Pyramid Section -->
+    <div class="population-pyramid-container" id="population-pyramid">
+      <!-- ... (existing content) ... -->
+    </div>
+
+    <!-- Displacement Section -->
+    <div class="frame-container" id="displacement-section">
+      <!-- ... (existing content) ... -->
+    </div>
+
+    <!-- Pathways Section -->
+    <div class="frame-container" id="pathways-section">
+      <!-- ... (existing content) ... -->
+    </div>
+
+    <!-- Country Circle Propagation Map -->
+    <div class="frame-container" id="cross-border">
+      <!-- ... (existing content) ... -->
+    </div>
+
+    <!-- IDP Accommodation Data Analysis Section -->
+    <div class="frame-container" id="accommodation">
+      <!-- ... (existing content) ... -->
+    </div>
+
+    <!-- Returnees Section -->
+    <div class="frame-container" id="returnees-section">
+      <!-- ... (existing content) ... -->
+    </div>
         <!-- Next and previous buttons -->
         <a class="prev" onclick="plusSlides(-1)">❮</a>
         <a class="next" onclick="plusSlides(1)">❯</a>
