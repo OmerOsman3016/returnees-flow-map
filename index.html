@@ -1164,6 +1164,7 @@
 </head>
 
 <body>
+  
   <div class="main-container">
     <!-- Navigation Tabs -->
     <div class="nav-tabs">
@@ -1171,13 +1172,44 @@
       <div class="nav-tab" data-tab="displacement-map">Displacement Map</div>
       <div class="nav-tab" data-tab="returnees-map">Returnees Map</div>
       <div class="nav-tab" data-tab="demographics">Demographics</div>
-      <div class="nav-tab" data-tab="demographics">Demographics</div>
-      <div class="nav-tab" data-tab="demographics">Demographics</div>
       <div class="nav-tab" data-tab="trends">Trends</div>
       <div class="nav-tab" data-tab="data-tables">Data Tables</div>
       <div class="nav-tab" data-tab="about">About</div>
     </div>
-    
+    <!-- Overview Section -->
+<div id="overview-section">
+  <!-- Your overview content -->
+</div>
+
+<!-- Displacement Map Section -->
+<div id="displacement-map-section" class="frame-container">
+  <!-- Your displacement map content -->
+</div>
+
+<!-- Returnees Map Section -->
+<div id="returnees-map-section" class="frame-container">
+  <!-- Your returnees map content -->
+</div>
+
+<!-- Demographics Section -->
+<div id="demographics-section" class="population-pyramid-container">
+  <!-- Your demographics content -->
+</div>
+
+<!-- Trends Section -->
+<div id="trends-section" class="frame-container">
+  <!-- Your trends content -->
+</div>
+
+<!-- Data Tables Section -->
+<div id="data-tables-section">
+  <!-- Your data tables content -->
+</div>
+
+<!-- About Section -->
+<div id="about-section">
+  <!-- Your about content -->
+</div>
  
     <!-- Loading Spinner -->
     <div id="loading-spinner">
@@ -1585,7 +1617,36 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
- 
+ // Navigation tabs functionality
+document.addEventListener('DOMContentLoaded', function() {
+  // Get all tab elements
+  const tabs = document.querySelectorAll('.nav-tab');
+  
+  // Add click event listener to each tab
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      // Remove active class from all tabs
+      tabs.forEach(t => t.classList.remove('active'));
+      
+      // Add active class to clicked tab
+      this.classList.add('active');
+      
+      // Get the section ID from data-tab attribute
+      const sectionId = this.getAttribute('data-tab') + '-section';
+      
+      // Find the section element
+      const section = document.getElementById(sectionId);
+      
+      if (section) {
+        // Scroll to the section with smooth behavior
+        section.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+});
 
     // Loading spinner functionality
     document.addEventListener('DOMContentLoaded', function() {
