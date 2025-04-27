@@ -17,6 +17,36 @@
   <script src="./data/user-interaction.js"></script>
 
   <style>
+      /* Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .nav-tab {
+      padding: 10px 20px;
+      margin: 0 5px;
+      cursor: pointer;
+      border-radius: 6px;
+      font-weight: 500;
+      color: #555;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-tab:hover {
+      background: #e9ecef;
+      color: #2A6FBB;
+    }
+    
+    .nav-tab.active {
+      background: #2A6FBB;
+      color: white;
+    }
     /* Card Icon Styling */
     .card-icon {
       width: 50px;
@@ -1133,6 +1163,18 @@
 </head>
 
 <body>
+   <div class="main-container">
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+      <div class="nav-tab active" data-tab="overview">Overview</div>
+      <div class="nav-tab" data-tab="displacement-map">Displacement Map</div>
+      <div class="nav-tab" data-tab="returnees-map">Returnees Map</div>
+      <div class="nav-tab" data-tab="demographics">Demographics</div>
+      <div class="nav-tab" data-tab="trends">Trends</div>
+      <div class="nav-tab" data-tab="data-tables">Data Tables</div>
+      <div class="nav-tab" data-tab="about">About</div>
+    </div>
+
   <div class="main-container">
     <!-- Loading Spinner -->
     <div id="loading-spinner">
