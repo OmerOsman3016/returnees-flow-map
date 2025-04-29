@@ -1,6 +1,3 @@
-// Population Distribution by State Map Integration
-// This script adds a choropleth map showing IDP, Returnee, and Foreign National distribution across Sudan states
-
 // Function to initialize the Population Distribution map
 async function initPopulationDistributionMap() {
   console.log("Initializing Population Distribution Map");
@@ -361,8 +358,8 @@ async function initPopulationDistributionMap() {
     // Current data type (IDPs, Returnees, or Foreign Nationals)
     let currentDataType = 'idps';
     
-    // Define color function based on population count
-    function getColor(d) {
+    // Define color functions based on population type
+    function getColorForIDPs(d) {
       return d > 1000000 ? '#084594' :
              d > 500000  ? '#2171b5' :
              d > 200000  ? '#4292c6' :
@@ -370,6 +367,42 @@ async function initPopulationDistributionMap() {
              d > 50000   ? '#9ecae1' :
              d > 20000   ? '#c6dbef' :
                            '#eff3ff';
+    }
+    
+    function getColorForReturnees(d) {
+      // Use RGB(255, 137, 82) for returnees with different opacities
+      return d > 1000000 ? 'rgba(255, 137, 82, 0.9)' :
+             d > 500000  ? 'rgba(255, 137, 82, 0.8)' :
+             d > 200000  ? 'rgba(255, 137, 82, 0.7)' :
+             d > 100000  ? 'rgba(255, 137, 82, 0.6)' :
+             d > 50000   ? 'rgba(255, 137, 82, 0.5)' :
+             d > 20000   ? 'rgba(255, 137, 82, 0.4)' :
+                           'rgba(255, 137, 82, 0.3)';
+    }
+    
+    function getColorForForeignNationals(d) {
+      // Use RGB(0, 196, 148) for foreign nationals with different opacities
+      return d > 1000000 ? 'rgba(0, 196, 148, 0.9)' :
+             d > 500000  ? 'rgba(0, 196, 148, 0.8)' :
+             d > 200000  ? 'rgba(0, 196, 148, 0.7)' :
+             d > 100000  ? 'rgba(0, 196, 148, 0.6)' :
+             d > 50000   ? 'rgba(0, 196, 148, 0.5)' :
+             d > 20000   ? 'rgba(0, 196, 148, 0.4)' :
+                           'rgba(0, 196, 148, 0.3)';
+    }
+    
+    // Main color function that selects the appropriate palette
+    function getColor(d) {
+      switch(currentDataType) {
+        case 'idps':
+          return getColorForIDPs(d);
+        case 'returnees':
+          return getColorForReturnees(d);
+        case 'foreign_nationals':
+          return getColorForForeignNationals(d);
+        default:
+          return getColorForIDPs(d);
+      }
     }
     
     // Define style function
