@@ -15,17 +15,13 @@ async function initIDPDistributionMap() {
     mapContainer.style.animation = 'slideUp 0.8s ease-in-out forwards';
     mapContainer.style.animationDelay = '0.8s';
     
-    mapContainer.innerHTML = `
-      <div id="idp-distribution-map-wrapper">
-        <h2>IDP Distribution by State</h2>
-        <div class="search-container">
-          <input type="text" id="state-search" placeholder="Search for a state..." />
-          <div id="search-results" class="search-results"></div>
-        </div>
-        <div id="idp-distribution-map" style="width: 100%; height: 80vh; border-radius: 8px;"></div>
-        <div id="map-loading" class="map-loading">Loading map data...</div>
-      </div>
-    `;
+   mapContainer.innerHTML = `
+  <div id="idp-distribution-map-wrapper">
+    <h2>IDP Distribution by State</h2>
+    <div id="idp-distribution-map" style="width: 100%; height: 80vh; border-radius: 8px;"></div>
+    <div id="map-loading" class="map-loading">Loading map data...</div>
+  </div>
+`;
     
     // Insert the map container after the IDPs section
     const idpsSection = document.getElementById('idps-section');
