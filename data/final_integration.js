@@ -1,5 +1,5 @@
- // IDP and Returnee Distribution by State Map Integration
-// This script adds a choropleth map showing population distribution across Sudan states with toggle functionality
+// Population Distribution by State Map Integration
+// This script adds a choropleth map showing IDP, Returnee, and Foreign National distribution across Sudan states
 
 // Function to initialize the Population Distribution map
 async function initPopulationDistributionMap() {
@@ -22,6 +22,7 @@ async function initPopulationDistributionMap() {
           <div class="population-toggle">
             <button class="toggle-btn active" data-type="idps">IDPs</button>
             <button class="toggle-btn" data-type="returnees">Returnees</button>
+            <button class="toggle-btn" data-type="foreign_nationals">Foreign Nationals</button>
           </div>
         </div>
         <div id="population-distribution-map" style="width: 100%; height: 80vh; border-radius: 8px;"></div>
@@ -59,6 +60,7 @@ async function initPopulationDistributionMap() {
         align-items: center;
         margin-bottom: 15px;
         flex-wrap: wrap;
+        gap: 15px;
       }
       
       .population-toggle {
@@ -66,6 +68,7 @@ async function initPopulationDistributionMap() {
         background: #f0f0f0;
         border-radius: 6px;
         overflow: hidden;
+        flex-wrap: wrap;
       }
       
       .population-toggle .toggle-btn {
@@ -77,6 +80,7 @@ async function initPopulationDistributionMap() {
         font-weight: 500;
         color: #555;
         transition: all 0.3s ease;
+        white-space: nowrap;
       }
     
       .population-toggle .toggle-btn.active {
@@ -179,6 +183,17 @@ async function initPopulationDistributionMap() {
         font-size: 16px;
         color: #333;
       }
+      
+      @media (max-width: 768px) {
+        .map-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        
+        .population-toggle {
+          width: 100%;
+        }
+      }
     `;
     document.head.appendChild(style);
   }
@@ -198,24 +213,96 @@ async function initPopulationDistributionMap() {
     
     // Sample population data - in a real app, this would come from your data source
     const populationData = {
-      "North Darfur": { idps: 1234567, returnees: 0 },
-      "South Darfur": { idps: 2345678, returnees: 0 },
-      "West Darfur": { idps: 876543, returnees: 0 },
-      "East Darfur": { idps: 567890, returnees: 0 },
-      "Central Darfur": { idps: 456789, returnees: 0 },
-      "Khartoum": { idps: 3456789, returnees:  56789 },
-      "Aj Jazirah": { idps: 789012, returnees: 89012 },
-      "White Nile": { idps: 678901, returnees: 78901 },
-      "Blue Nile": { idps: 345678, returnees:0 },
-      "Sennar": { idps: 234567, returnees: 34567 },
-      "Kassala": { idps: 123456, returnees: 0 },
-      "Red Sea": { idps: 98765, returnees: 0 },
-      "Northern": { idps: 87654, returnees: 0 },
-      "River Nile": { idps: 76543, returnees: 0 },
-      "North Kordofan": { idps: 654321, returnees: 0 },
-      "South Kordofan": { idps: 543210, returnees: 0 },
-      "West Kordofan": { idps: 432109, returnees: 0 },
-      "Gedaref": { idps: 321098, returnees: 0 }
+      "North Darfur": { 
+        idps: 1234567, 
+        returnees: 234567,
+        foreign_nationals: 12345
+      },
+      "South Darfur": { 
+        idps: 2345678, 
+        returnees: 345678,
+        foreign_nationals: 23456
+      },
+      "West Darfur": { 
+        idps: 876543, 
+        returnees: 98765,
+        foreign_nationals: 3456
+      },
+      "East Darfur": { 
+        idps: 567890, 
+        returnees: 67890,
+        foreign_nationals: 4567
+      },
+      "Central Darfur": { 
+        idps: 456789, 
+        returnees: 56789,
+        foreign_nationals: 5678
+      },
+      "Khartoum": { 
+        idps: 3456789, 
+        returnees: 456789,
+        foreign_nationals: 67890
+      },
+      "Aj Jazirah": { 
+        idps: 789012, 
+        returnees: 89012,
+        foreign_nationals: 7890
+      },
+      "White Nile": { 
+        idps: 678901, 
+        returnees: 78901,
+        foreign_nationals: 8901
+      },
+      "Blue Nile": { 
+        idps: 345678, 
+        returnees: 45678,
+        foreign_nationals: 9012
+      },
+      "Sennar": { 
+        idps: 234567, 
+        returnees: 34567,
+        foreign_nationals: 1234
+      },
+      "Kassala": { 
+        idps: 123456, 
+        returnees: 23456,
+        foreign_nationals: 2345
+      },
+      "Red Sea": { 
+        idps: 98765, 
+        returnees: 8765,
+        foreign_nationals: 3456
+      },
+      "Northern": { 
+        idps: 87654, 
+        returnees: 7654,
+        foreign_nationals: 4567
+      },
+      "River Nile": { 
+        idps: 76543, 
+        returnees: 6543,
+        foreign_nationals: 5678
+      },
+      "North Kordofan": { 
+        idps: 654321, 
+        returnees: 54321,
+        foreign_nationals: 6789
+      },
+      "South Kordofan": { 
+        idps: 543210, 
+        returnees: 43210,
+        foreign_nationals: 7890
+      },
+      "West Kordofan": { 
+        idps: 432109, 
+        returnees: 32109,
+        foreign_nationals: 8901
+      },
+      "Gedaref": { 
+        idps: 321098, 
+        returnees: 21098,
+        foreign_nationals: 9012
+      }
     };
     
     // Merge population data with GeoJSON features
@@ -226,11 +313,13 @@ async function initPopulationDistributionMap() {
       if (stateName && populationData[stateName]) {
         feature.properties.total_idps = populationData[stateName].idps || 0;
         feature.properties.total_returnees = populationData[stateName].returnees || 0;
+        feature.properties.total_foreign_nationals = populationData[stateName].foreign_nationals || 0;
         feature.properties.state = stateName;
       } else {
         console.warn(`No population data found for state: ${stateName}`);
         feature.properties.total_idps = 0;
         feature.properties.total_returnees = 0;
+        feature.properties.total_foreign_nationals = 0;
         feature.properties.state = stateName || 'Unknown';
       }
     });
@@ -269,7 +358,7 @@ async function initPopulationDistributionMap() {
     
     L.control.layers(baseLayers).addTo(populationMap);
     
-    // Current data type (IDPs or Returnees)
+    // Current data type (IDPs, Returnees, or Foreign Nationals)
     let currentDataType = 'idps';
     
     // Define color function based on population count
@@ -349,11 +438,28 @@ async function initPopulationDistributionMap() {
     };
     
     info.update = function(props) {
-      this._div.innerHTML = `<h4>Sudan ${currentDataType === 'idps' ? 'IDP' : 'Returnee'} Distribution</h4>` + 
+      let title, valueLabel;
+      
+      switch(currentDataType) {
+        case 'idps':
+          title = 'IDP Distribution';
+          valueLabel = 'IDPs';
+          break;
+        case 'returnees':
+          title = 'Returnee Distribution';
+          valueLabel = 'Returnees';
+          break;
+        case 'foreign_nationals':
+          title = 'Foreign Nationals Distribution';
+          valueLabel = 'Foreign Nationals';
+          break;
+      }
+      
+      this._div.innerHTML = `<h4>Sudan ${title}</h4>` + 
         (props ? 
           `<b>${props.state}</b><br />` + 
           (props[`total_${currentDataType}`] || 0).toLocaleString() + 
-          ` ${currentDataType === 'idps' ? 'IDPs' : 'Returnees'}` : 
+          ` ${valueLabel}` : 
           'Hover over a state');
     };
     
@@ -384,11 +490,28 @@ async function initPopulationDistributionMap() {
       
       // Update the info control function
       info.update = function(props) {
-        this._div.innerHTML = `<h4>Sudan ${dataType === 'idps' ? 'IDP' : 'Returnee'} Distribution</h4>` + 
+        let title, valueLabel;
+        
+        switch(dataType) {
+          case 'idps':
+            title = 'IDP Distribution';
+            valueLabel = 'IDPs';
+            break;
+          case 'returnees':
+            title = 'Returnee Distribution';
+            valueLabel = 'Returnees';
+            break;
+          case 'foreign_nationals':
+            title = 'Foreign Nationals Distribution';
+            valueLabel = 'Foreign Nationals';
+            break;
+        }
+        
+        this._div.innerHTML = `<h4>Sudan ${title}</h4>` + 
           (props ? 
             `<b>${props.state}</b><br />` + 
             (props[`total_${dataType}`] || 0).toLocaleString() + 
-            ` ${dataType === 'idps' ? 'IDPs' : 'Returnees'}` : 
+            ` ${valueLabel}` : 
             'Hover over a state');
       };
       
@@ -405,7 +528,20 @@ async function initPopulationDistributionMap() {
       const labels = [];
       let from, to;
       
-      div.innerHTML = `<h4>${currentDataType === 'idps' ? 'IDPs' : 'Returnees'} by State</h4>`;
+      let legendTitle;
+      switch(currentDataType) {
+        case 'idps':
+          legendTitle = 'IDPs by State';
+          break;
+        case 'returnees':
+          legendTitle = 'Returnees by State';
+          break;
+        case 'foreign_nationals':
+          legendTitle = 'Foreign Nationals by State';
+          break;
+      }
+      
+      div.innerHTML = `<h4>${legendTitle}</h4>`;
       
       for (let i = 0; i < grades.length; i++) {
         from = grades[i];
