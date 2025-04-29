@@ -177,17 +177,20 @@ async function initIDPDistributionMap() {
       "Al Qadarif": 321098
     };
     
-    // Merge IDP data with GeoJSON features
-    sudanStatesData.features.forEach(feature => {
-      const stateName = feature.properties.NAME_1 || feature.properties.name;
-      if (stateName && idpData[stateName]) {
-        feature.properties.total_idps = idpData[stateName];
-        feature.properties.state = stateName;
-      } else {
-        feature.properties.total_idps = 0;
-        feature.properties.state = stateName || 'Unknown';
-      }
-    });
+  // Merge IDP data with GeoJSON features
+sudanStatesData.features.forEach(feature => {
+  const stateName = feature.properties.admin1Name_en;
+  console.log(`Processing state: ${stateName}`); // Debug logging
+  
+  if (stateName && idpData[stateName] !== undefined) {
+    feature.properties.total_idps = idpData[stateName];
+    feature.properties.state = stateName;
+  } else {
+    console.warn(`No IDP data found for state: ${stateName}`);
+    feature.properties.total_idps = 0;
+    feature.properties.state = stateName || 'Unknown';
+  }
+});
     
     // Initialize the map
     const idpMap = L.map('idp-distribution-map').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
