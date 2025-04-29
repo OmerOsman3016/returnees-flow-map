@@ -148,7 +148,7 @@ async function initIDPDistributionMap() {
     if (loadingElement) loadingElement.style.display = 'flex';
     
     // Load GeoJSON data
-    const response = await fetch('./data/Admin1.json');
+    const response = await fetch('./data/ADMIN1.json');
     if (!response.ok) {
       throw new Error(`Failed to load GeoJSON data: ${response.status}`);
     }
