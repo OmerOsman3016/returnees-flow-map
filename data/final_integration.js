@@ -1,27 +1,33 @@
-// IDP Distribution by State Map Integration
-// This script adds a choropleth map showing IDP distribution across Sudan states
+ // IDP and Returnee Distribution by State Map Integration
+// This script adds a choropleth map showing population distribution across Sudan states with toggle functionality
 
-// Function to initialize the IDP Distribution map
-async function initIDPDistributionMap() {
-  console.log("Initializing IDP Distribution Map");
+// Function to initialize the Population Distribution map
+async function initPopulationDistributionMap() {
+  console.log("Initializing Population Distribution Map");
   
   // Create a new map container in the HTML
-  if (!document.getElementById('idp-distribution-map-container')) {
+  if (!document.getElementById('population-distribution-map-container')) {
     const mapContainer = document.createElement('div');
-    mapContainer.id = 'idp-distribution-map-container';
+    mapContainer.id = 'population-distribution-map-container';
     mapContainer.className = 'maps-container';
     mapContainer.style.opacity = '0';
     mapContainer.style.transform = 'translateY(20px)';
     mapContainer.style.animation = 'slideUp 0.8s ease-in-out forwards';
     mapContainer.style.animationDelay = '0.8s';
     
-   mapContainer.innerHTML = `
-  <div id="idp-distribution-map-wrapper">
-    <h2>IDP Distribution by State</h2>
-    <div id="idp-distribution-map" style="width: 100%; height: 80vh; border-radius: 8px;"></div>
-    <div id="map-loading" class="map-loading">Loading map data...</div>
-  </div>
-`;
+    mapContainer.innerHTML = `
+      <div id="population-distribution-map-wrapper">
+        <div class="map-header">
+          <h2>Population Distribution by State</h2>
+          <div class="population-toggle">
+            <button class="toggle-btn active" data-type="idps">IDPs</button>
+            <button class="toggle-btn" data-type="returnees">Returnees</button>
+          </div>
+        </div>
+        <div id="population-distribution-map" style="width: 100%; height: 80vh; border-radius: 8px;"></div>
+        <div id="map-loading" class="map-loading">Loading map data...</div>
+      </div>
+    `;
     
     // Insert the map container after the IDPs section
     const idpsSection = document.getElementById('idps-section');
@@ -38,13 +44,52 @@ async function initIDPDistributionMap() {
     // Add CSS for the new map container
     const style = document.createElement('style');
     style.textContent = `
-      #idp-distribution-map-wrapper {
+      #population-distribution-map-wrapper {
         flex: 1;
         background-color: #ffffff;
         border-radius: 12px;
         padding: 15px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         position: relative;
+      }
+      
+      .map-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+      }
+      
+      .population-toggle {
+        display: flex;
+        background: #f0f0f0;
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      
+      .population-toggle .toggle-btn {
+        border: none;
+        padding: 8px 16px;
+        background: transparent;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        color: #555;
+        transition: all 0.3s ease;
+      }
+    
+      .population-toggle .toggle-btn.active {
+        background: #2A6FBB;
+        color: white;
+      }
+      
+      .population-toggle .toggle-btn:first-child {
+        border-radius: 6px 0 0 6px;
+      }
+      
+      .population-toggle .toggle-btn:last-child {
+        border-radius: 0 6px 6px 0;
       }
       
       .search-container {
@@ -97,7 +142,7 @@ async function initIDPDistributionMap() {
         font-size: 16px;
       }
       
-      .idp-legend {
+      .population-legend {
         background: white;
         padding: 15px;
         border-radius: 8px;
@@ -105,7 +150,7 @@ async function initIDPDistributionMap() {
         line-height: 1.5;
       }
       
-      .idp-legend i {
+      .population-legend i {
         width: 18px;
         height: 18px;
         float: left;
@@ -113,7 +158,7 @@ async function initIDPDistributionMap() {
         opacity: 0.7;
       }
       
-      .idp-legend h4 {
+      .population-legend h4 {
         margin: 0 0 10px;
         color: #2A6FBB;
         font-size: 15px;
@@ -151,97 +196,83 @@ async function initIDPDistributionMap() {
     
     const sudanStatesData = await response.json();
     
-    // Sample IDP data - in a real app, this would come from your data source
-    const idpData = {
-      "North Darfur": 1234567,
-      "South Darfur": 2345678,
-      "West Darfur": 876543,
-      "East Darfur": 567890,
-      "Central Darfur": 456789,
-      "Khartoum": 3456789,
-      "Al Jazirah": 789012,
-      "White Nile": 678901,
-      "Blue Nile": 345678,
-      "Sennar": 234567,
-      "Kassala": 123456,
-      "Red Sea": 98765,
-      "Northern": 87654,
-      "River Nile": 76543,
-      "North Kordofan": 654321,
-      "South Kordofan": 543210,
-      "West Kordofan": 432109,
-      "Al Qadarif": 321098
+    // Sample population data - in a real app, this would come from your data source
+    const populationData = {
+      "North Darfur": { idps: 1234567, returnees: 234567 },
+      "South Darfur": { idps: 2345678, returnees: 345678 },
+      "West Darfur": { idps: 876543, returnees: 98765 },
+      "East Darfur": { idps: 567890, returnees: 67890 },
+      "Central Darfur": { idps: 456789, returnees: 56789 },
+      "Khartoum": { idps: 3456789, returnees: 456789 },
+      "Al Jazirah": { idps: 789012, returnees: 89012 },
+      "White Nile": { idps: 678901, returnees: 78901 },
+      "Blue Nile": { idps: 345678, returnees: 45678 },
+      "Sennar": { idps: 234567, returnees: 34567 },
+      "Kassala": { idps: 123456, returnees: 23456 },
+      "Red Sea": { idps: 98765, returnees: 8765 },
+      "Northern": { idps: 87654, returnees: 7654 },
+      "River Nile": { idps: 76543, returnees: 6543 },
+      "North Kordofan": { idps: 654321, returnees: 54321 },
+      "South Kordofan": { idps: 543210, returnees: 43210 },
+      "West Kordofan": { idps: 432109, returnees: 32109 },
+      "Al Qadarif": { idps: 321098, returnees: 21098 }
     };
     
-  // Merge IDP data with GeoJSON features
-sudanStatesData.features.forEach(feature => {
-  const stateName = feature.properties.admin1Name_en;
-  console.log(`Processing state: ${stateName}`); // Debug logging
-  
-  if (stateName && idpData[stateName] !== undefined) {
-    feature.properties.total_idps = idpData[stateName];
-    feature.properties.state = stateName;
-  } else {
-    console.warn(`No IDP data found for state: ${stateName}`);
-    feature.properties.total_idps = 0;
-    feature.properties.state = stateName || 'Unknown';
-  }
-});
+    // Merge population data with GeoJSON features
+    sudanStatesData.features.forEach(feature => {
+      const stateName = feature.properties.admin1Name_en;
+      console.log(`Processing state: ${stateName}`);
+      
+      if (stateName && populationData[stateName]) {
+        feature.properties.total_idps = populationData[stateName].idps || 0;
+        feature.properties.total_returnees = populationData[stateName].returnees || 0;
+        feature.properties.state = stateName;
+      } else {
+        console.warn(`No population data found for state: ${stateName}`);
+        feature.properties.total_idps = 0;
+        feature.properties.total_returnees = 0;
+        feature.properties.state = stateName || 'Unknown';
+      }
+    });
     
     // Initialize the map
-    const idpMap = L.map('idp-distribution-map').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
+    const populationMap = L.map('population-distribution-map').setView([16, 30], L.Browser.mobile ? 3 : 5.5);
     
     // Add the base layer
-    const mapboxCustomIDPs = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
+    const mapboxCustom = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
       attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       tileSize: 512,
       zoomOffset: -1,
       maxZoom: 18
-    }).addTo(idpMap);
+    }).addTo(populationMap);
     
     // Define multiple base layers for the map
-    const cartoDBLightIDPs = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    const cartoDBLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
     
-    const openStreetMapIDPs = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    const openStreetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
     
-    const esriWorldImageryIDPs = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    const esriWorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
     });
     
     // Add layer control
-    const baseLayersIDPs = {
-      "Mapbox Custom": mapboxCustomIDPs,
-      "CartoDB Light": cartoDBLightIDPs,
-      "OpenStreetMap": openStreetMapIDPs,
-      "Esri World Imagery": esriWorldImageryIDPs
+    const baseLayers = {
+      "Mapbox Custom": mapboxCustom,
+      "CartoDB Light": cartoDBLight,
+      "OpenStreetMap": openStreetMap,
+      "Esri World Imagery": esriWorldImagery
     };
     
-    L.control.layers(baseLayersIDPs).addTo(idpMap);
+    L.control.layers(baseLayers).addTo(populationMap);
     
-    // Add info control
-    const info = L.control();
+    // Current data type (IDPs or Returnees)
+    let currentDataType = 'idps';
     
-    info.onAdd = function(map) {
-      this._div = L.DomUtil.create('div', 'info');
-      this.update();
-      return this._div;
-    };
-    
-    info.update = function(props) {
-      this._div.innerHTML = '<h4>Sudan IDP Distribution</h4>' + 
-        (props ? 
-          '<b>' + props.state + '</b><br />' + 
-          (props.total_idps || 0).toLocaleString() + ' IDPs' : 
-          'Hover over a state');
-    };
-    
-    info.addTo(idpMap);
-    
-    // Define color function based on IDP count
+    // Define color function based on population count
     function getColor(d) {
       return d > 1000000 ? '#084594' :
              d > 500000  ? '#2171b5' :
@@ -255,7 +286,7 @@ sudanStatesData.features.forEach(feature => {
     // Define style function
     function style(feature) {
       return {
-        fillColor: getColor(feature.properties.total_idps || 0),
+        fillColor: getColor(feature.properties[`total_${currentDataType}`] || 0),
         weight: 2,
         opacity: 1,
         color: 'white',
@@ -288,7 +319,7 @@ sudanStatesData.features.forEach(feature => {
     }
     
     function zoomToFeature(e) {
-      idpMap.fitBounds(e.target.getBounds());
+      populationMap.fitBounds(e.target.getBounds());
     }
     
     function onEachFeature(feature, layer) {
@@ -303,91 +334,78 @@ sudanStatesData.features.forEach(feature => {
     let geojsonLayer = L.geoJSON(sudanStatesData, {
       style: style,
       onEachFeature: onEachFeature
-    }).addTo(idpMap);
+    }).addTo(populationMap);
     
     // Fit map to bounds of all features
-    idpMap.fitBounds(geojsonLayer.getBounds());
+    populationMap.fitBounds(geojsonLayer.getBounds());
     
-    // Add search functionality
-    const searchInput = document.getElementById('state-search');
-    const searchResults = document.getElementById('search-results');
+    // Add info control
+    const info = L.control();
     
-    if (searchInput && searchResults) {
-      let searchTimeout;
+    info.onAdd = function(map) {
+      this._div = L.DomUtil.create('div', 'info');
+      this.update();
+      return this._div;
+    };
+    
+    info.update = function(props) {
+      this._div.innerHTML = `<h4>Sudan ${currentDataType === 'idps' ? 'IDP' : 'Returnee'} Distribution</h4>` + 
+        (props ? 
+          `<b>${props.state}</b><br />` + 
+          (props[`total_${currentDataType}`] || 0).toLocaleString() + 
+          ` ${currentDataType === 'idps' ? 'IDPs' : 'Returnees'}` : 
+          'Hover over a state');
+    };
+    
+    info.addTo(populationMap);
+    
+    // Function to update map display based on selected data type
+    function updateMapDisplay(dataType) {
+      currentDataType = dataType;
       
-      searchInput.addEventListener('input', function(e) {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => {
-          const searchText = e.target.value.toLowerCase().trim();
-          
-          if (searchText.length < 2) {
-            searchResults.style.display = 'none';
-            return;
-          }
-          
-          const matches = sudanStatesData.features.filter(feature => {
-            const stateName = feature.properties.state.toLowerCase();
-            return stateName.includes(searchText);
-          });
-          
-          if (matches.length > 0) {
-            searchResults.innerHTML = matches.map(feature => 
-              `<div data-state="${feature.properties.state}">${feature.properties.state}</div>`
-            ).join('');
-            searchResults.style.display = 'block';
-          } else {
-            searchResults.innerHTML = '<div>No matching states found</div>';
-            searchResults.style.display = 'block';
-          }
-        }, 300);
+      // Update the legend
+      if (legend) {
+        legend.remove();
+        legend.addTo(populationMap);
+      }
+      
+      // Update the style and info display
+      geojsonLayer.setStyle(feature => {
+        const value = feature.properties[`total_${dataType}`] || 0;
+        return {
+          fillColor: getColor(value),
+          weight: 2,
+          opacity: 1,
+          color: 'white',
+          dashArray: '3',
+          fillOpacity: 0.7
+        };
       });
       
-      // Handle click on search results
-      searchResults.addEventListener('click', function(e) {
-        if (e.target.tagName === 'DIV' && e.target.dataset.state) {
-          const stateName = e.target.dataset.state;
-          const feature = sudanStatesData.features.find(f => 
-            f.properties.state === stateName
-          );
-          
-          if (feature) {
-            const layer = geojsonLayer.getLayers().find(l => 
-              l.feature.properties.state === stateName
-            );
-            
-            if (layer) {
-              searchInput.value = stateName;
-              searchResults.style.display = 'none';
-              zoomToFeature({ target: layer });
-              highlightFeature({ target: layer });
-              
-              // Reset highlight after 3 seconds
-              setTimeout(() => {
-                resetHighlight({ target: layer });
-              }, 3000);
-            }
-          }
-        }
-      });
+      // Update the info control function
+      info.update = function(props) {
+        this._div.innerHTML = `<h4>Sudan ${dataType === 'idps' ? 'IDP' : 'Returnee'} Distribution</h4>` + 
+          (props ? 
+            `<b>${props.state}</b><br />` + 
+            (props[`total_${dataType}`] || 0).toLocaleString() + 
+            ` ${dataType === 'idps' ? 'IDPs' : 'Returnees'}` : 
+            'Hover over a state');
+      };
       
-      // Close search results when clicking elsewhere
-      document.addEventListener('click', function(e) {
-        if (e.target !== searchInput && e.target !== searchResults) {
-          searchResults.style.display = 'none';
-        }
-      });
+      // Force update of info control
+      info.update();
     }
     
     // Add legend
     const legend = L.control({position: 'bottomright'});
     
     legend.onAdd = function(map) {
-      const div = L.DomUtil.create('div', 'idp-legend');
+      const div = L.DomUtil.create('div', 'population-legend');
       const grades = [0, 20000, 50000, 100000, 200000, 500000, 1000000];
       const labels = [];
       let from, to;
       
-      div.innerHTML = '<h4>IDPs by State</h4>';
+      div.innerHTML = `<h4>${currentDataType === 'idps' ? 'IDPs' : 'Returnees'} by State</h4>`;
       
       for (let i = 0; i < grades.length; i++) {
         from = grades[i];
@@ -403,27 +421,43 @@ sudanStatesData.features.forEach(feature => {
       return div;
     };
     
-    legend.addTo(idpMap);
+    legend.addTo(populationMap);
+    
+    // Add event listeners for toggle buttons
+    const toggleButtons = document.querySelectorAll('.toggle-btn');
+    toggleButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Update active state
+        document.querySelectorAll('.toggle-btn').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        this.classList.add('active');
+        
+        // Update map display
+        const dataType = this.dataset.type;
+        updateMapDisplay(dataType);
+      });
+    });
     
     // Hide loading state
     if (loadingElement) loadingElement.style.display = 'none';
     
     // Ensure map is properly sized
     setTimeout(function() {
-      idpMap.invalidateSize();
+      populationMap.invalidateSize();
     }, 1000);
     
-    return idpMap;
+    return populationMap;
     
   } catch (error) {
-    console.error('Error initializing IDP map:', error);
+    console.error('Error initializing population map:', error);
     const errorElement = document.createElement('div');
     errorElement.className = 'map-error';
     errorElement.style.color = 'red';
     errorElement.style.padding = '20px';
     errorElement.textContent = 'Failed to load map data. Please try again later.';
     
-    const mapContainer = document.getElementById('idp-distribution-map');
+    const mapContainer = document.getElementById('population-distribution-map');
     if (mapContainer) {
       mapContainer.appendChild(errorElement);
     }
@@ -442,14 +476,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const loadingSpinner = document.getElementById('loading-spinner');
     if (!loadingSpinner || loadingSpinner.style.display === 'none') {
       clearInterval(loadingInterval);
-      // Initialize the IDP Distribution map
-      initIDPDistributionMap();
+      // Initialize the Population Distribution map
+      initPopulationDistributionMap();
     }
   }, 500);
   
   // Fallback timeout in case loading spinner never disappears
   setTimeout(() => {
     clearInterval(loadingInterval);
-    initIDPDistributionMap();
+    initPopulationDistributionMap();
   }, 10000);
 });
