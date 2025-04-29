@@ -203,7 +203,7 @@ async function initPopulationDistributionMap() {
       "West Darfur": { idps: 876543, returnees: 0 },
       "East Darfur": { idps: 567890, returnees: 0 },
       "Central Darfur": { idps: 456789, returnees: 0 },
-      "Khartoum": { idps: 3456789, returnees: 456789 },
+      "Khartoum": { idps: 3456789, returnees:  56789 },
       "Al Jazirah": { idps: 789012, returnees: 89012 },
       "White Nile": { idps: 678901, returnees: 78901 },
       "Blue Nile": { idps: 345678, returnees:0 },
