@@ -198,24 +198,24 @@ async function initPopulationDistributionMap() {
     
     // Sample population data - in a real app, this would come from your data source
     const populationData = {
-      "North Darfur": { idps: 1234567, returnees: 234567 },
-      "South Darfur": { idps: 2345678, returnees: 345678 },
-      "West Darfur": { idps: 876543, returnees: 98765 },
-      "East Darfur": { idps: 567890, returnees: 67890 },
-      "Central Darfur": { idps: 456789, returnees: 56789 },
+      "North Darfur": { idps: 1234567, returnees: 0 },
+      "South Darfur": { idps: 2345678, returnees: 0 },
+      "West Darfur": { idps: 876543, returnees: 0 },
+      "East Darfur": { idps: 567890, returnees: 0 },
+      "Central Darfur": { idps: 456789, returnees: 0 },
       "Khartoum": { idps: 3456789, returnees: 456789 },
       "Al Jazirah": { idps: 789012, returnees: 89012 },
       "White Nile": { idps: 678901, returnees: 78901 },
-      "Blue Nile": { idps: 345678, returnees: 45678 },
+      "Blue Nile": { idps: 345678, returnees:0 },
       "Sennar": { idps: 234567, returnees: 34567 },
-      "Kassala": { idps: 123456, returnees: 23456 },
-      "Red Sea": { idps: 98765, returnees: 8765 },
-      "Northern": { idps: 87654, returnees: 7654 },
-      "River Nile": { idps: 76543, returnees: 6543 },
-      "North Kordofan": { idps: 654321, returnees: 54321 },
-      "South Kordofan": { idps: 543210, returnees: 43210 },
-      "West Kordofan": { idps: 432109, returnees: 32109 },
-      "Al Qadarif": { idps: 321098, returnees: 21098 }
+      "Kassala": { idps: 123456, returnees: 0 },
+      "Red Sea": { idps: 98765, returnees: 0 },
+      "Northern": { idps: 87654, returnees: 0 },
+      "River Nile": { idps: 76543, returnees: 0 },
+      "North Kordofan": { idps: 654321, returnees: 0 },
+      "South Kordofan": { idps: 543210, returnees: 0 },
+      "West Kordofan": { idps: 432109, returnees: 0 },
+      "Al Qadarif": { idps: 321098, returnees: 0 }
     };
     
     // Merge population data with GeoJSON features
