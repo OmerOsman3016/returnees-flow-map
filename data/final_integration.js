@@ -204,7 +204,7 @@ async function initPopulationDistributionMap() {
       "East Darfur": { idps: 567890, returnees: 0 },
       "Central Darfur": { idps: 456789, returnees: 0 },
       "Khartoum": { idps: 3456789, returnees:  56789 },
-      "Al Jazirah": { idps: 789012, returnees: 89012 },
+      "Aj Jazirah": { idps: 789012, returnees: 89012 },
       "White Nile": { idps: 678901, returnees: 78901 },
       "Blue Nile": { idps: 345678, returnees:0 },
       "Sennar": { idps: 234567, returnees: 34567 },
@@ -215,7 +215,7 @@ async function initPopulationDistributionMap() {
       "North Kordofan": { idps: 654321, returnees: 0 },
       "South Kordofan": { idps: 543210, returnees: 0 },
       "West Kordofan": { idps: 432109, returnees: 0 },
-      "Al Qadarif": { idps: 321098, returnees: 0 }
+      "Gedaref": { idps: 321098, returnees: 0 }
     };
     
     // Merge population data with GeoJSON features
