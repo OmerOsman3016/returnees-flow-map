@@ -212,37 +212,37 @@ async function initPopulationDistributionMap() {
     const populationData = {
       "North Darfur": { 
         idps: 1234567, 
-        returnees: 234567,
-        foreign_nationals: 12345
+        returnees: 0,
+        foreign_nationals: 0
       },
       "South Darfur": { 
         idps: 2345678, 
-        returnees: 345678,
-        foreign_nationals: 23456
+        returnees: 0,
+        foreign_nationals: 0
       },
       "West Darfur": { 
         idps: 876543, 
-        returnees: 98765,
-        foreign_nationals: 3456
+        returnees:  8765,
+        foreign_nationals: 0
       },
       "East Darfur": { 
         idps: 567890, 
-        returnees: 67890,
-        foreign_nationals: 4567
+        returnees: 0,
+        foreign_nationals: 0
       },
       "Central Darfur": { 
         idps: 456789, 
-        returnees: 56789,
-        foreign_nationals: 5678
+        returnees:0,
+        foreign_nationals: 0
       },
       "Khartoum": { 
-        idps: 3456789, 
-        returnees: 456789,
-        foreign_nationals: 67890
+        idps:  456789, 
+        returnees:  6789,
+        foreign_nationals:  7890
       },
       "Aj Jazirah": { 
         idps: 789012, 
-        returnees: 89012,
+        returnees: 889012,
         foreign_nationals: 7890
       },
       "White Nile": { 
@@ -252,13 +252,13 @@ async function initPopulationDistributionMap() {
       },
       "Blue Nile": { 
         idps: 345678, 
-        returnees: 45678,
+        returnees: 0,
         foreign_nationals: 9012
       },
       "Sennar": { 
         idps: 234567, 
         returnees: 34567,
-        foreign_nationals: 1234
+        foreign_nationals: 0
       },
       "Kassala": { 
         idps: 123456, 
@@ -273,31 +273,31 @@ async function initPopulationDistributionMap() {
       "Northern": { 
         idps: 87654, 
         returnees: 7654,
-        foreign_nationals: 4567
+        foreign_nationals: 0
       },
       "River Nile": { 
         idps: 76543, 
-        returnees: 6543,
-        foreign_nationals: 5678
+        returnees:  0,
+        foreign_nationals:  678
       },
       "North Kordofan": { 
         idps: 654321, 
-        returnees: 54321,
-        foreign_nationals: 6789
+        returnees: 0,
+        foreign_nationals: 0
       },
       "South Kordofan": { 
         idps: 543210, 
-        returnees: 43210,
-        foreign_nationals: 7890
+        returnees: 0,
+        foreign_nationals: 0
       },
       "West Kordofan": { 
         idps: 432109, 
-        returnees: 32109,
-        foreign_nationals: 8901
+        returnees: 0,
+        foreign_nationals: 0
       },
       "Gedaref": { 
         idps: 321098, 
-        returnees: 21098,
+        returnees: 0,
         foreign_nationals: 9012
       }
     };
