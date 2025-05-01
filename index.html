@@ -23,12 +23,41 @@
  
 
   <style>
-  #movableContainer {
-  margin: 20px 0;
-  position: relative; /* Changed from absolute */
-  width: 100%;
-  height: 600px; /* Set appropriate height */
+      /* Add to your existing styles */
+#population-map-container {
+  margin-top: 30px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
+
+#population-distribution-map {
+  width: 100%;
+  height: 60vh; /* Adjust height as needed */
+  min-height: 400px;
+}
+
+.map-header {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.population-toggle {
+  margin-top: 15px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  #population-distribution-map {
+    height: 50vh;
+  }
+  
+  .map-header h2 {
+    font-size: 1.25rem;
+  }
+}
+  
     /* Card Icon Styling */
     .card-icon {
       width: 50px;
@@ -1272,6 +1301,10 @@
         </div>
       </div>
     </div>
+      
+      <!-- Add this empty map container -->
+    <div id="population-map-container"></div>
+  </div>
   
     <!-- IDPs Section -->
     <div class="frame-container">
@@ -3049,33 +3082,51 @@
 </html>
 <script>
 // Function to initialize the Population Distribution map
+// Replace the existing container creation code
 async function initPopulationDistributionMap() {
-  console.log("Initializing Population Distribution Map");
+  // 1. Get the map container element
+  let mapContainer = document.getElementById('population-map-container');
   
-  // Create a new map container in the HTML
-  if (!document.getElementById('population-distribution-map-container')) {
-    const mapContainer = document.createElement('div');
-    mapContainer.id = 'population-distribution-map-container';
-    mapContainer.className = 'maps-container';
+  // 2. Create container if it doesn't exist
+  if (!mapContainer) {
+    mapContainer = document.createElement('div');
+    mapContainer.id = 'population-map-container';
+    
+    // Add animation classes
     mapContainer.style.opacity = '0';
     mapContainer.style.transform = 'translateY(20px)';
     mapContainer.style.animation = 'slideUp 0.8s ease-in-out forwards';
     mapContainer.style.animationDelay = '0.8s';
+
+    // 3. Find the dashboard section
+    const dashboardSection = document.getElementById('dashboard-section');
     
-    mapContainer.innerHTML = `
-      <div id="population-distribution-map-wrapper">
-        <div class="map-header">
-          <h2>Population Distribution by State</h2>
-          <div class="population-toggle">
-            <button class="toggle-btn active" data-type="idps">IDPs</button>
-            <button class="toggle-btn" data-type="returnees">Returnees</button>
-            <button class="toggle-btn" data-type="foreign_nationals">Foreign Nationals</button>
-          </div>
+    // 4. Insert after dashboard cards
+    if (dashboardSection) {
+      const cards = document.querySelector('.dashboard-cards');
+      if (cards) {
+        cards.insertAdjacentElement('afterend', mapContainer);
+      } else {
+        dashboardSection.appendChild(mapContainer);
+      }
+    }
+  }
+
+  // 5. Add map HTML structure
+  mapContainer.innerHTML = `
+    <div id="population-distribution-map-wrapper">
+      <div class="map-header">
+        <h2>Population Distribution by State</h2>
+        <div class="population-toggle">
+          <button class="toggle-btn active" data-type="idps">IDPs</button>
+          <button class="toggle-btn" data-type="returnees">Returnees</button>
+          <button class="toggle-btn" data-type="foreign_nationals">Foreign Nationals</button>
         </div>
-        <div id="population-distribution-map" style="width: 100%; height: 80vh; border-radius: 8px;"></div>
-        <div id="map-loading" class="map-loading">Loading map data...</div>
       </div>
-    `;
+      <div id="population-distribution-map"></div>
+      <div id="map-loading" class="map-loading">Loading map data...</div>
+    </div>
+  `;
     
     // Insert the map container after the IDPs section
     const idpsSection = document.getElementById('idps-section');
