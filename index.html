@@ -1720,35 +1720,7 @@
     setInterval(() => {
       plusSlides(1);
     }, 5000);
-// Mobile navigation toggle
-document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
-  document.querySelector('.nav-links').classList.toggle('active');
-});
 
-// Close mobile menu when clicking a link
-document.querySelectorAll('.nav-links a').forEach(link => {
-  link.addEventListener('click', function() {
-    document.querySelector('.nav-links').classList.remove('active');
-  });
-});
-
-// Smooth scrolling for navigation links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function(e) {
-    e.preventDefault();
-    
-    const targetId = this.getAttribute('href');
-    if (targetId === '#') return;
-    
-    const targetElement = document.querySelector(targetId);
-    if (targetElement) {
-      window.scrollTo({
-        top: targetElement.offsetTop - 80,
-        behavior: 'smooth'
-      });
-    }
-  });
-});
     // Define Mapbox custom layers
     const mapboxCustom1 = L.tileLayer('https://api.mapbox.com/styles/v1/omerosman/cm8oy6is4006101si7ll3bs4h/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoib21lcm9zbWFuIiwiYSI6ImUxZDBkODBlNjQxMDE2M2Y3OTQ3MWIwNTJkMjgzZTI3In0.ekCHuxRflTOO0RpQ6rQR7Q', {
         attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -3181,7 +3153,35 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             }
         });
     });
+// Mobile navigation toggle
+document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+  document.querySelector('.nav-links').classList.toggle('active');
+});
 
+// Close mobile menu when clicking a link
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', function() {
+    document.querySelector('.nav-links').classList.remove('active');
+  });
+});
+
+// Smooth scrolling for navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    const targetId = this.getAttribute('href');
+    if (targetId === '#') return;
+    
+    const targetElement = document.querySelector(targetId);
+    if (targetElement) {
+      window.scrollTo({
+        top: targetElement.offsetTop - 80,
+        behavior: 'smooth'
+      });
+    }
+  });
+});
   </script>
 </body>
 </html>
