@@ -1,4 +1,4 @@
-     <!DOCTYPE html>
+      <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -21,101 +21,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
- /* Navigation Styles */
-.main-nav {
-  background: linear-gradient(135deg, #418FDE 0%, #2A6FBB 100%);
-  color: white;
-  padding: 0 20px;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.nav-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 0;
-}
-
-.nav-logo img {
-  height: 40px;
-  width: auto;
-}
-
-.nav-links {
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.nav-links li {
-  margin-left: 25px;
-}
-
-.nav-links a {
-  color: white;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 15px;
-  transition: all 0.3s ease;
-  padding: 5px 0;
-  position: relative;
-}
-
-.nav-links a:after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: white;
-  transition: width 0.3s ease;
-}
-
-.nav-links a:hover:after {
-  width: 100%;
-}
-
-.mobile-menu-btn {
-  display: none;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-/* Mobile Navigation */
-@media (max-width: 768px) {
-  .nav-links {
-    position: fixed;
-    top: 70px;
-    left: 0;
-    right: 0;
-    background: linear-gradient(135deg, #418FDE 0%, #2A6FBB 100%);
-    flex-direction: column;
-    align-items: center;
-    padding: 20px 0;
-    transform: translateY(-150%);
-    transition: transform 0.3s ease;
-    z-index: 999;
-  }
-  
-  .nav-links.active {
-    transform: translateY(0);
-  }
-  
-  .nav-links li {
-    margin: 10px 0;
-  }
-  
-  .mobile-menu-btn {
-    display: block;
-  }
-}
+ 
     /* Card Icon Styling */
     .card-icon {
       width: 50px;
@@ -1251,25 +1157,7 @@
         <div class="loading-progress-bar" id="progress-bar"></div>
       </div>
     </div>
-<!-- Navigation Panel -->
-<nav class="main-nav">
-  <div class="nav-container">
-    <div class="nav-logo">
-      <img src="./data/IOM_DTM_WHITE.png" alt="IOM Logo">
-    </div>
-    <ul class="nav-links">
-      <li><a href="#dashboard-section">Dashboard</a></li>
-      <li><a href="#map3">IDPs by State</a></li>
-      <li><a href="#map5">Displacement Proportions</a></li>
-      <li><a href="#map2">IDP Pathways</a></li>
-      <li><a href="#country-circle-map">Cross-Border</a></li>
-      <li><a href="#map4">Returnees</a></li>
-    </ul>
-    <div class="mobile-menu-btn">
-      <i class="fas fa-bars"></i>
-    </div>
-  </div>
-</nav>
+
     <!-- Dashboard Section -->
     <div id="dashboard-section">
       <!-- Title Container with Logo, Title, and Info Card -->
@@ -3153,35 +3041,7 @@
             }
         });
     });
-// Mobile navigation toggle
-document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
-  document.querySelector('.nav-links').classList.toggle('active');
-});
 
-// Close mobile menu when clicking a link
-document.querySelectorAll('.nav-links a').forEach(link => {
-  link.addEventListener('click', function() {
-    document.querySelector('.nav-links').classList.remove('active');
-  });
-});
-
-// Smooth scrolling for navigation links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function(e) {
-    e.preventDefault();
-    
-    const targetId = this.getAttribute('href');
-    if (targetId === '#') return;
-    
-    const targetElement = document.querySelector(targetId);
-    if (targetElement) {
-      window.scrollTo({
-        top: targetElement.offsetTop - 80,
-        behavior: 'smooth'
-      });
-    }
-  });
-});
   </script>
 </body>
 </html>
