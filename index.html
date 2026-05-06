@@ -3,644 +3,656 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sudan | Cross-Border Inflow — Displacement Tracking Matrix</title>
+<title>Sudan | Cross-Border Monitoring — DTM Survey Data</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&family=Barlow+Condensed:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --blue:#418FDE;--orange:#FF671F;--dark:#1A3A5C;
-  --teal:#5CB8B2;--yellow:#FFB81C;--green:#5CB85C;
+  --teal:#5CB8B2;--yellow:#FFB81C;--green:#5CB85C;--red:#D9534F;
   --bg:#EEF2F7;--surface:#fff;--border:#DDE3ED;
   --text:#1e293b;--muted:#64748b;
-  --sh:0 2px 12px rgba(26,58,92,.08);
-  --sh2:0 8px 32px rgba(26,58,92,.16);
+  --sh:0 2px 12px rgba(26,58,92,.08);--sh2:0 8px 28px rgba(26,58,92,.16);
 }
-html,body{height:100%;font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+html,body{height:100%;font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;overflow:hidden}
 
 /* HEADER */
-#hdr{background:var(--dark);border-bottom:3px solid var(--orange);position:sticky;top:0;z-index:1000}
-.hi{max-width:100%;display:flex;align-items:stretch}
-.hbrand{background:var(--blue);padding:.6rem 1.2rem;display:flex;align-items:center;gap:.6rem;flex-shrink:0}
-.hlogo{width:36px;height:36px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.6rem;color:var(--blue);line-height:1.2;text-align:center}
-.hbtext{color:#fff}.hbtext b{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:700;letter-spacing:.06em;display:block}
-.hbtext small{font-size:.57rem;opacity:.7;letter-spacing:.07em}
-.htitle{padding:.6rem 1.3rem;display:flex;flex-direction:column;justify-content:center;color:#fff}
-.htitle h1{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;line-height:1.1}
+#hdr{background:var(--dark);border-bottom:3px solid var(--orange);position:sticky;top:0;z-index:1000;height:52px}
+.hi{height:100%;display:flex;align-items:stretch}
+.hbrand{background:var(--blue);padding:0 1.1rem;display:flex;align-items:center;gap:.55rem;flex-shrink:0}
+.hlogo{width:34px;height:34px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.58rem;color:var(--blue);line-height:1.2;text-align:center}
+.hbtext{color:#fff}.hbtext b{font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;letter-spacing:.06em;display:block}
+.hbtext small{font-size:.55rem;opacity:.7;letter-spacing:.07em}
+.htitle{padding:0 1.2rem;display:flex;flex-direction:column;justify-content:center;color:#fff}
+.htitle h1{font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;line-height:1.1}
 .htitle h1 em{color:var(--yellow);font-style:normal}
-.htitle p{font-size:.58rem;opacity:.6;letter-spacing:.08em;text-transform:uppercase;margin-top:.1rem}
+.htitle p{font-size:.56rem;opacity:.6;letter-spacing:.08em;text-transform:uppercase}
 .hstats{margin-left:auto;display:flex;align-items:stretch}
-.hs{padding:.4rem 1rem;border-left:1px solid rgba(255,255,255,.1);display:flex;flex-direction:column;justify-content:center;text-align:right;color:#fff}
-.hs .hv{font-family:'Barlow Condensed',sans-serif;font-size:1.25rem;font-weight:800;color:var(--yellow);line-height:1}
-.hs .hl{font-size:.55rem;opacity:.55;letter-spacing:.07em;text-transform:uppercase;margin-top:.08rem}
+.hs{padding:0 .9rem;border-left:1px solid rgba(255,255,255,.1);display:flex;flex-direction:column;justify-content:center;text-align:right;color:#fff}
+.hs .hv{font-family:'Barlow Condensed',sans-serif;font-size:1.15rem;font-weight:800;color:var(--yellow);line-height:1}
+.hs .hl{font-size:.52rem;opacity:.55;letter-spacing:.07em;text-transform:uppercase}
 
 /* SHELL */
 .shell{display:flex;height:calc(100vh - 52px)}
 
-/* LEFT SIDEBAR */
-#sidebar{width:340px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;z-index:100}
-.sb-head{padding:.85rem 1rem;border-bottom:1px solid var(--border);background:var(--bg)}
-.sb-head h2{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--dark);margin-bottom:.4rem}
-.filter-row{display:flex;gap:.35rem;flex-wrap:wrap}
-.ftab{padding:.22rem .65rem;background:var(--surface);border:1.5px solid var(--border);border-radius:100px;font-size:.6rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;color:var(--muted);transition:all .15s;font-family:'Source Sans 3',sans-serif}
+/* SIDEBAR */
+#sb{width:360px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;z-index:100}
+
+/* Crossing list */
+.sb-top{padding:.7rem .9rem;border-bottom:1px solid var(--border);background:var(--bg)}
+.sb-top h2{font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--dark);margin-bottom:.45rem}
+.frow{display:flex;gap:.3rem;flex-wrap:wrap}
+.ftab{padding:.2rem .6rem;background:var(--surface);border:1.5px solid var(--border);border-radius:100px;font-size:.58rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;color:var(--muted);transition:all .15s;font-family:'Source Sans 3',sans-serif}
 .ftab:hover{border-color:var(--blue);color:var(--blue)}
 .ftab.on{background:var(--blue);border-color:var(--blue);color:#fff}
-.search-wrap{position:relative;margin-top:.5rem}
-.search-wrap i{position:absolute;left:.6rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.7rem;pointer-events:none}
-#srch{width:100%;padding:.35rem .7rem .35rem 1.9rem;border:1.5px solid var(--border);border-radius:6px;font-size:.72rem;font-family:'Source Sans 3',sans-serif;outline:none;background:var(--surface);transition:border-color .15s}
-#srch:focus{border-color:var(--blue)}
 
-/* CROSSING LIST */
-.sb-scroll{flex:1;overflow-y:auto;padding:.5rem}
-.sb-scroll::-webkit-scrollbar{width:4px}
-.sb-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-.country-group{margin-bottom:.7rem}
-.cg-head{display:flex;align-items:center;gap:.5rem;padding:.35rem .6rem;border-radius:6px;cursor:pointer;transition:background .15s;user-select:none}
-.cg-head:hover{background:var(--bg)}
-.cg-head.on{background:rgba(65,143,222,.08)}
-.cg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.cg-name{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:700;flex:1;color:var(--dark)}
-.cg-count{font-size:.65rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700}
-.cg-arrow{font-size:.6rem;color:var(--muted);transition:transform .2s}
-.cg-head.open .cg-arrow{transform:rotate(90deg)}
-.cg-crossings{display:none;padding:0 .3rem .3rem 1.5rem}
-.cg-crossings.open{display:block}
-.crossing-item{padding:.4rem .6rem;border-radius:5px;cursor:pointer;transition:background .15s;border-left:2px solid transparent;margin-bottom:.2rem}
-.crossing-item:hover{background:var(--bg)}
-.crossing-item.active{background:rgba(255,103,31,.06);border-left-color:var(--orange)}
-.ci-name{font-size:.78rem;font-weight:700;color:var(--dark)}
-.ci-meta{font-size:.62rem;color:var(--muted);margin-top:.08rem}
-.ci-state{display:inline-block;font-size:.55rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:.1rem .4rem;border-radius:100px;margin-top:.2rem}
+.clist{flex:0 0 auto;overflow-y:auto;max-height:195px;padding:.4rem .5rem}
+.clist::-webkit-scrollbar{width:3px}
+.clist::-webkit-scrollbar-thumb{background:var(--border)}
 
-/* DETAIL PANEL */
-.sb-detail{border-top:1px solid var(--border);padding:.85rem 1rem;background:var(--bg);min-height:160px;transition:opacity .22s,transform .22s}
-.sb-detail.fade{opacity:0;transform:translateY(4px)}
-.sd-placeholder{display:flex;align-items:center;gap:.5rem;color:var(--muted);font-size:.75rem}
-.sd-placeholder i{font-size:1.2rem;opacity:.3}
-.sd-content h3{font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:800;color:var(--dark);margin-bottom:.5rem;display:flex;align-items:center;gap:.45rem}
-.sd-content h3 .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.sd-rows{display:flex;flex-direction:column;gap:.28rem}
-.sd-row{display:flex;justify-content:space-between;align-items:center;padding:.28rem .45rem;border-radius:4px;background:var(--surface);font-size:.72rem}
-.sd-row:hover{background:#e8f1fb}
-.sd-k{color:var(--muted)}.sd-v{font-weight:700;font-family:'Barlow Condensed',sans-serif;font-size:.88rem;color:var(--dark)}
-.sd-note{margin-top:.55rem;background:linear-gradient(135deg,#eef4fd,#f8fbff);border-left:3px solid var(--blue);border-radius:0 4px 4px 0;padding:.45rem .7rem;font-size:.68rem;color:var(--text);line-height:1.65}
+.citem{display:flex;align-items:center;gap:.55rem;padding:.45rem .6rem;border-radius:6px;cursor:pointer;transition:background .15s;border-left:2px solid transparent}
+.citem:hover{background:var(--bg)}
+.citem.on{background:rgba(65,143,222,.07);border-left-color:var(--orange)}
+.ci-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.ci-name{font-size:.78rem;font-weight:700;color:var(--dark);flex:1}
+.ci-country{font-size:.58rem;padding:.1rem .4rem;border-radius:100px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.ci-coords{font-size:.56rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif}
 
-/* CHART STRIP (bottom of sidebar) */
-.sb-chart{border-top:1px solid var(--border);padding:.7rem 1rem;background:var(--surface)}
-.sb-chart h4{font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--dark);margin-bottom:.5rem}
-#mini-chart{max-height:110px}
+/* Survey data panel */
+#data-panel{flex:1;overflow-y:auto;border-top:2px solid var(--border);background:var(--bg)}
+#data-panel::-webkit-scrollbar{width:3px}
+#data-panel::-webkit-scrollbar-thumb{background:var(--border)}
 
-/* MAP AREA */
+.dp-placeholder{padding:1.5rem 1rem;text-align:center;color:var(--muted);font-size:.75rem}
+.dp-placeholder i{font-size:1.8rem;opacity:.2;display:block;margin-bottom:.5rem}
+
+/* Section blocks */
+.dp-section{background:var(--surface);margin:.5rem;border-radius:7px;overflow:hidden;box-shadow:var(--sh)}
+.dp-section-head{padding:.5rem .75rem;background:var(--dark);color:#fff;display:flex;align-items:center;gap:.45rem;cursor:pointer;user-select:none}
+.dp-section-head i{font-size:.7rem;color:var(--yellow)}
+.dp-section-head h4{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;flex:1}
+.dp-section-head .toggle{font-size:.6rem;opacity:.6;transition:transform .2s}
+.dp-section-head.open .toggle{transform:rotate(180deg)}
+.dp-body{padding:.65rem .75rem;display:none}
+.dp-body.open{display:block}
+
+/* KPI row */
+.kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem;margin-bottom:.55rem}
+.kpi{background:var(--bg);border-radius:5px;padding:.4rem .5rem;text-align:center}
+.kpi .kv{font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:800;color:var(--dark);line-height:1}
+.kpi .kl{font-size:.58rem;color:var(--muted);margin-top:.1rem;line-height:1.3}
+.kpi.highlight .kv{color:var(--orange)}
+
+/* Inline bar */
+.ibar-row{display:flex;align-items:center;gap:.5rem;padding:.2rem 0;font-size:.68rem}
+.ibar-label{width:130px;flex-shrink:0;color:var(--text);line-height:1.2}
+.ibar-track{flex:1;height:14px;background:var(--bg);border-radius:2px;overflow:hidden;position:relative}
+.ibar-fill{height:14px;border-radius:2px;display:flex;align-items:center;padding:0 .3rem;font-size:.6rem;font-weight:700;color:#fff;white-space:nowrap;min-width:0;transition:width .5s ease}
+.ibar-pct{width:38px;flex-shrink:0;text-align:right;font-weight:700;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:.75rem}
+
+/* Alert badge */
+.alert-badge{display:inline-flex;align-items:center;gap:.3rem;background:rgba(217,83,79,.1);border:1px solid rgba(217,83,79,.3);color:var(--red);font-size:.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.18rem .5rem;border-radius:100px;margin:.2rem .2rem 0 0}
+.alert-badge i{font-size:.55rem}
+
+/* Small chart canvas */
+.mini-canvas-wrap{margin-top:.4rem}
+.mini-canvas-wrap canvas{max-height:130px}
+
+/* State origin chart wrap */
+.origin-chart-wrap{margin-top:.4rem}
+.origin-chart-wrap canvas{max-height:160px}
+
+/* MAP */
 #map-area{flex:1;position:relative;overflow:hidden}
 #the-map{width:100%;height:100%}
 #arc-svg{position:absolute;inset:0;pointer-events:none;z-index:400}
-
-/* ARC ANIMATIONS */
 @keyframes flowDash{to{stroke-dashoffset:-32}}
 .arc{fill:none;stroke-linecap:round;transition:opacity .3s,stroke-width .3s}
 .arc.live{stroke-dasharray:9 5;animation:flowDash 1.5s linear infinite}
+@keyframes pulse{0%{r:7;opacity:.85}70%{r:22;opacity:0}100%{r:22;opacity:0}}
+.pring{animation:pulse 2.2s ease-out infinite}
 
-/* PULSE */
-@keyframes pulse{0%{r:7;opacity:.9}70%{r:22;opacity:0}100%{r:22;opacity:0}}
-.pring{animation:pulse 2.3s ease-out infinite}
+/* Map overlays */
+.map-legend{position:absolute;bottom:12px;left:12px;z-index:600;background:rgba(255,255,255,.95);border-radius:6px;padding:.55rem .8rem;box-shadow:var(--sh2);font-size:.6rem}
+.mlt{font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--dark);margin-bottom:.3rem;font-size:.58rem}
+.mli{display:flex;align-items:center;gap:.38rem;padding:.1rem 0;color:var(--muted)}
+.mli-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.mli-line{width:16px;height:2px;border-radius:1px;flex-shrink:0}
 
-/* MAP OVERLAYS */
-.map-legend{position:absolute;bottom:16px;left:16px;z-index:600;background:rgba(255,255,255,.95);border-radius:7px;padding:.65rem .9rem;box-shadow:var(--sh2);font-size:.62rem}
-.mlt{font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--dark);margin-bottom:.35rem;font-size:.58rem}
-.mli{display:flex;align-items:center;gap:.4rem;padding:.1rem 0;color:var(--muted)}
-.mli-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.mli-sq{width:12px;height:7px;border-radius:2px;flex-shrink:0}
-.mli-line{width:18px;height:2px;border-radius:1px;flex-shrink:0}
+.map-card{position:absolute;top:12px;right:12px;z-index:600;background:rgba(255,255,255,.97);border-radius:6px;padding:.65rem .9rem;box-shadow:var(--sh2);font-size:.65rem;max-width:200px;border-top:2px solid var(--orange)}
+.mc-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.9rem;color:var(--dark);margin-bottom:.35rem}
+.mc-row{display:flex;justify-content:space-between;gap:.6rem;padding:.15rem 0;font-size:.6rem;border-bottom:1px solid rgba(0,0,0,.04)}
+.mc-row:last-child{border:none}
+.mc-k{color:var(--muted)}.mc-v{font-weight:700;color:var(--dark);font-family:'Barlow Condensed',sans-serif}
 
-.map-info{position:absolute;top:16px;right:16px;z-index:600;background:rgba(255,255,255,.96);border-radius:7px;padding:.65rem .9rem;box-shadow:var(--sh2);font-size:.65rem;max-width:220px;border-top:2px solid var(--orange)}
-.mi-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;color:var(--dark);margin-bottom:.4rem}
-.mi-row{display:flex;justify-content:space-between;gap:.8rem;padding:.18rem 0;font-size:.62rem;border-bottom:1px solid rgba(0,0,0,.05)}
-.mi-row:last-child{border:none}
-.mi-k{color:var(--muted)}.mi-v{font-weight:700;color:var(--dark);font-family:'Barlow Condensed',sans-serif}
-
-/* Leaflet overrides */
-.leaflet-control-attribution{font-size:.5rem!important}
-.leaflet-popup-content-wrapper{border-radius:7px!important;box-shadow:var(--sh2)!important;font-family:'Source Sans 3',sans-serif}
-.leaflet-popup-content{font-size:.78rem!important;line-height:1.6!important}
-
-/* TOOLTIP */
 #tip{position:fixed;z-index:9999;pointer-events:none;background:var(--dark);color:#fff;padding:.4rem .75rem;font-size:.65rem;border-radius:5px;opacity:0;transition:opacity .12s;white-space:nowrap;border-top:2px solid var(--orange);box-shadow:var(--sh2)}
 #tip.on{opacity:1}
 #tip b{color:var(--yellow);font-family:'Barlow Condensed',sans-serif;font-size:.82rem;display:block}
 
-/* RESPONSIVE */
-@media(max-width:860px){
-  .shell{flex-direction:column;height:auto}
-  #sidebar{width:100%;height:auto;max-height:50vh}
-  #map-area{height:55vh}
-  .hstats{display:none}
-}
+.leaflet-control-attribution{font-size:.5rem!important}
+.leaflet-popup-content-wrapper{border-radius:6px!important;font-family:'Source Sans 3',sans-serif}
+.leaflet-popup-content{font-size:.76rem!important;line-height:1.6!important}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header id="hdr">
   <div class="hi">
     <div class="hbrand">
       <div class="hlogo">IOM<br>DTM</div>
-      <div class="hbtext"><b>IOM · DTM</b><small>Displacement Tracking Matrix</small></div>
+      <div class="hbtext"><b>IOM · DTM</b><small>Cross-Border Monitoring</small></div>
     </div>
     <div class="htitle">
-      <h1>Sudan | <em>Cross-Border Inflow</em> — Refugee Entry Points</h1>
-      <p>Official border crossings · origin countries · location data</p>
+      <h1>Sudan | <em>Cross-Border Inflow</em> — Survey Data Dashboard</h1>
+      <p>Border crossing points · traveller profiles · movement intentions · border experiences</p>
     </div>
     <div class="hstats">
-      <div class="hs"><div class="hv">8</div><div class="hl">Active Crossings</div></div>
-      <div class="hs"><div class="hv">4</div><div class="hl">Neighbouring Countries</div></div>
-      <div class="hs"><div class="hv">837,966</div><div class="hl">Refugees in Sudan</div></div>
-      <div class="hs"><div class="hv">−13%</div><div class="hl">Change 2023–24</div></div>
+      <div class="hs"><div class="hv">8</div><div class="hl">Crossings</div></div>
+      <div class="hs"><div class="hv">90.8%</div><div class="hl">Sudanese</div></div>
+      <div class="hs"><div class="hv">63.2%</div><div class="hl">Return to origin</div></div>
+      <div class="hs"><div class="hv">53.8%</div><div class="hl">Fled conflict</div></div>
     </div>
   </div>
 </header>
 
 <div class="shell">
-
-  <!-- SIDEBAR -->
-  <aside id="sidebar">
-    <div class="sb-head">
+  <aside id="sb">
+    <div class="sb-top">
       <h2>Border Crossings</h2>
-      <div class="filter-row">
-        <button class="ftab on" onclick="setFilter('all',this)">All</button>
-        <button class="ftab" onclick="setFilter('Chad',this)">Chad</button>
-        <button class="ftab" onclick="setFilter('Ethiopia',this)">Ethiopia</button>
-        <button class="ftab" onclick="setFilter('Egypt',this)">Egypt</button>
-        <button class="ftab" onclick="setFilter('South Sudan',this)">S. Sudan</button>
-        <button class="ftab" onclick="setFilter('Eritrea',this)">Eritrea</button>
-      </div>
-      <div class="search-wrap">
-        <i class="fas fa-search"></i>
-        <input id="srch" type="text" placeholder="Search crossing or state…" oninput="doSearch(this.value)">
+      <div class="frow">
+        <button class="ftab on" onclick="setFilt('all',this)">All</button>
+        <button class="ftab" onclick="setFilt('Chad',this)">Chad</button>
+        <button class="ftab" onclick="setFilt('Egypt',this)">Egypt</button>
+        <button class="ftab" onclick="setFilt('Ethiopia',this)">Ethiopia</button>
       </div>
     </div>
-
-    <div class="sb-scroll" id="sb-scroll"></div>
-
-    <div class="sb-detail" id="sb-detail">
-      <div class="sd-placeholder"><i class="fas fa-map-marker-alt"></i><span>Select a crossing or country to see details</span></div>
-    </div>
-
-    <div class="sb-chart">
-      <h4>Inflow by Neighbouring Country</h4>
-      <canvas id="mini-chart"></canvas>
+    <div class="clist" id="clist"></div>
+    <div id="data-panel">
+      <div class="dp-placeholder"><i class="fas fa-hand-pointer"></i>Select a crossing to view DTM survey data</div>
     </div>
   </aside>
 
-  <!-- MAP -->
   <div id="map-area">
     <div id="the-map"></div>
     <svg id="arc-svg" xmlns="http://www.w3.org/2000/svg"></svg>
-
     <div class="map-legend">
       <div class="mlt">Legend</div>
-      <div class="mli"><div class="mli-dot" style="background:var(--orange)"></div>Sudan interior</div>
+      <div class="mli"><div class="mli-dot" style="background:var(--orange)"></div>Sudan (destination)</div>
       <div class="mli"><div class="mli-dot" style="background:var(--blue)"></div>Border crossing</div>
-      <div class="mli"><div class="mli-sq" style="background:rgba(65,143,222,.25)"></div>State (origin country)</div>
-      <div class="mli"><div class="mli-line" style="background:linear-gradient(90deg,var(--blue),var(--orange))"></div>Inflow route</div>
+      <div class="mli"><div class="mli-line" style="background:linear-gradient(90deg,var(--blue),var(--orange))"></div>Flow route</div>
     </div>
-
-    <div class="map-info" id="map-info">
-      <div class="mi-title">Sudan Overview</div>
-      <div class="mi-row"><span class="mi-k">Total refugees hosted</span><span class="mi-v">837,966</span></div>
-      <div class="mi-row"><span class="mi-k">Largest origin group</span><span class="mi-v">South Sudan</span></div>
-      <div class="mi-row"><span class="mi-k">New arrivals (post-Apr 23)</span><span class="mi-v">~13,667</span></div>
-      <div class="mi-row"><span class="mi-k">Change from 2023</span><span class="mi-v" style="color:var(--orange)">−13%</span></div>
+    <div class="map-card" id="map-card">
+      <div class="mc-title">Overall Statistics</div>
+      <div class="mc-row"><span class="mc-k">Transport (bus/minibus)</span><span class="mc-v">75.5%</span></div>
+      <div class="mc-row"><span class="mc-k">Travelling alone</span><span class="mc-v">51.2%</span></div>
+      <div class="mc-row"><span class="mc-k">Displaced post-Apr 2023</span><span class="mc-v">62.1%</span></div>
+      <div class="mc-row"><span class="mc-k">Still displaced</span><span class="mc-v">69.1%</span></div>
+      <div class="mc-row"><span class="mc-k">In voluntary return prog.</span><span class="mc-v">74.3%</span></div>
     </div>
   </div>
-
 </div>
-
 <div id="tip"></div>
 
 <script>
-/* ═══════════════ CROSSING DATA ═══════════════ */
-/* Real coordinates from provided dataset */
+/* ─── CROSSING DATA ─── */
 const CROSSINGS = [
   {
-    id:'c1', crossing:'Um Dukhun', state:'Central Darfur', locality:'Um Dukhun',
-    country:'Chad', lat:11.139, lng:22.966,
-    desc:'Main crossing point between Central Darfur and eastern Chad. Serves communities displaced from Darfur conflict zones.',
-    stats:[['State','Central Darfur'],['Locality','Um Dukhun'],['Neighbouring country','Chad'],['Flow type','Refugee inflow & outflow'],['Coordinates','11.139°N, 22.966°E']]
+    id:'atina', name:'At Tina', state:'West Darfur', locality:'At Tina', country:'Chad',
+    lat:15.011970, lng:22.489920, clr:'#418FDE',
+    survey: {
+      transport:[{l:'On foot / animal cart',v:5},{l:'Private/rented vehicle',v:95}],
+      sex:[{l:'Female',v:42.5},{l:'Male',v:57.5}],
+      age:47.7, age_med:50,
+      nationality:[{l:'Sudanese',v:100}],
+      non_sudanese:[],
+      travelling:[{l:'Alone',v:7.5},{l:'With family',v:92.5}],
+      family_avg:7.0,
+      vulnerable:[{l:'Pregnant/Lactating',v:32.4},{l:'Disability',v:5.4},{l:'None',v:67.6}],
+      disp_2023:[{l:'Yes',v:85},{l:'No',v:2.5},{l:'Prefer not',v:12.5}],
+      still_disp:[{l:'Yes',v:91.2},{l:'No',v:8.8}],
+      prev_left:[{l:'Yes',v:95},{l:'No',v:5}],
+      reason_leave:[{l:'Conflict/violence',v:94.7},{l:'Climate hazards',v:5.3},{l:'Economic deterioration',v:2.6},{l:'Economic reasons',v:2.6},{l:'Medical treatment',v:5.3}],
+      reason_return:[{l:'Family visit',v:0},{l:'Business/trade',v:0},{l:'Economic hardship',v:45},{l:'Depletion of resources',v:17.5},{l:'Legal difficulties',v:20}],
+      border_issues:[{l:'Long processing (>3h)',v:0},{l:'Lack of documentation',v:25},{l:'Denial of entry',v:7.5},{l:'Harassment',v:0},{l:'Bribery/extortion',v:7.5},{l:'Family separation',v:37.5},{l:'Insecurity',v:12.5},{l:'Loss of belongings',v:25},{l:'Language barriers',v:12.5},{l:'Prefer not to answer',v:30}],
+      movement:[{l:'Move outside Sudan',v:5},{l:'Move to 3rd location',v:80},{l:'Return to origin',v:15}],
+      origin_states:[{l:'North Darfur',v:85},{l:'South Darfur',v:7.5},{l:'East Darfur',v:5},{l:'White Nile',v:2.5}],
+      vol_return:[{l:'Yes',v:5},{l:'No',v:75},{l:'Prefer not',v:20}],
+      duration:[{l:'Don\'t know yet',v:72.5},{l:'No intention to leave',v:27.5}]
+    }
   },
   {
-    id:'c2', crossing:'Gallabat / Metema', state:'Gedaref', locality:'Basundah',
-    country:'Ethiopia', lat:12.95798, lng:36.151888,
-    desc:'Key crossing between Gedaref state and Ethiopia\'s Amhara region. Primary entry point for Ethiopians fleeing the Tigray War (2020–22). New arrivals continue through this crossing post-April 2023.',
-    stats:[['State','Gedaref'],['Locality','Basundah'],['Neighbouring country','Ethiopia'],['Key inflow','Tigray War displaced (2020–22)'],['Coordinates','12.958°N, 36.152°E']]
+    id:'adekonk', name:'Adekonk', state:'West Darfur', locality:'Ag Geneina', country:'Chad',
+    lat:13.4623111, lng:22.2296523, clr:'#418FDE',
+    survey: {
+      transport:[{l:'On foot / animal cart',v:99.6},{l:'Public transport',v:0.4}],
+      sex:[{l:'Female',v:81.3},{l:'Male',v:18.7}],
+      age:35.6, age_med:35,
+      nationality:[{l:'Sudanese',v:84},{l:'Non-Sudanese',v:16}],
+      non_sudanese:[{l:'Chadian',v:97.4},{l:'Other',v:2.6}],
+      travelling:[{l:'Alone',v:47.4},{l:'With family',v:52.6}],
+      family_avg:3.6,
+      vulnerable:[{l:'Pregnant/Lactating',v:35.6},{l:'Unaccomp. child',v:0.8},{l:'Chronic illness',v:8.8},{l:'Disability',v:11.2},{l:'None',v:48}],
+      disp_2023:[{l:'Yes',v:60.8},{l:'No',v:36.4},{l:'Prefer not',v:2.7}],
+      still_disp:[{l:'Yes',v:64},{l:'No',v:36}],
+      prev_left:[{l:'Yes',v:97.9},{l:'No',v:2.1}],
+      reason_leave:[{l:'Conflict/violence',v:57.6},{l:'Economic deterioration',v:0.2},{l:'Economic reasons',v:0},{l:'Family visit',v:23.4},{l:'Business/trade',v:13.3},{l:'Medical treatment',v:3},{l:'Special occasions',v:8.2}],
+      reason_return:[{l:'Family visit',v:71.6},{l:'Business/trade',v:13.1},{l:'Economic hardship',v:1.7},{l:'Improved security',v:8}],
+      border_issues:[{l:'Long processing (>3h)',v:1.3},{l:'Lack of documentation',v:9.9},{l:'Denial of entry',v:6.5},{l:'Harassment',v:9.1},{l:'Bribery/extortion',v:0.6},{l:'Family separation',v:0.9},{l:'Loss of belongings',v:0.2},{l:'Language barriers',v:0},{l:'Prefer not to answer',v:88.4}],
+      movement:[{l:'Move outside Sudan',v:40.6},{l:'Move to 3rd location',v:9.1},{l:'Return to origin',v:50.3}],
+      origin_states:[{l:'West Darfur',v:73.9},{l:'South Darfur',v:14.3},{l:'Central Darfur',v:5.5},{l:'Khartoum',v:4.8}],
+      vol_return:[{l:'Yes',v:0.3},{l:'No',v:92.5},{l:'Prefer not',v:7.3}],
+      duration:[{l:'< 1 month',v:37.7},{l:'1–3 months',v:19.2},{l:'Don\'t know',v:22.3},{l:'No intention to leave',v:17.1}]
+    }
   },
   {
-    id:'c3', crossing:'Argeen', state:'Northern', locality:'Halfa',
-    country:'Egypt', lat:21.988934, lng:31.153322,
-    desc:'Northern crossing between Halfa locality and Egypt. Primary corridor for movement between Sudan and Egypt, used by refugees and migrants heading to or arriving from Egypt.',
-    stats:[['State','Northern'],['Locality','Halfa'],['Neighbouring country','Egypt'],['Type','Sudan–Egypt corridor'],['Coordinates','21.989°N, 31.153°E']]
+    id:'umdukhun', name:'Um Dukhun', state:'Central Darfur', locality:'Um Dukhun', country:'Chad',
+    lat:11.139, lng:22.966, clr:'#418FDE',
+    survey: {
+      transport:[{l:'On foot / animal cart',v:24.2},{l:'Private/rented vehicle',v:67.3},{l:'Goods vehicle',v:7.9},{l:'Public transport',v:0.6}],
+      sex:[{l:'Female',v:20.3},{l:'Male',v:79.7}],
+      age:41.5, age_med:40,
+      nationality:[{l:'Sudanese',v:47.1},{l:'Non-Sudanese',v:52.9}],
+      non_sudanese:[{l:'Chadian',v:75.1},{l:'Central African',v:17.3},{l:'Other',v:7.2},{l:'South Sudanese',v:0.4}],
+      travelling:[{l:'Alone',v:93.2},{l:'With family',v:6.8}],
+      family_avg:6.7,
+      vulnerable:[{l:'Pregnant/Lactating',v:74.2},{l:'Unaccomp. child',v:3},{l:'Chronic illness',v:31.8},{l:'Disability',v:37.9},{l:'None',v:13.6}],
+      disp_2023:[{l:'Yes',v:10.3},{l:'No',v:89.7}],
+      still_disp:[{l:'Yes',v:89},{l:'No',v:11}],
+      prev_left:[{l:'Yes',v:75.8},{l:'No',v:24.2}],
+      reason_leave:[{l:'Business/trade',v:59.3},{l:'Economic deterioration',v:38.2},{l:'Economic reasons',v:22.1},{l:'Family visit',v:13},{l:'Conflict/violence',v:11.7},{l:'Seasonal movement',v:5.4},{l:'Medical treatment',v:6.2}],
+      reason_return:[{l:'Business/trade',v:60.6},{l:'Family visit',v:30.5},{l:'Check assets',v:10.2},{l:'Economic reasons',v:2}],
+      border_issues:[{l:'Long processing (>3h)',v:60.5},{l:'Bribery/extortion',v:48},{l:'Insecurity',v:52.1},{l:'Harassment',v:23},{l:'Lack of documentation',v:15.9},{l:'Denial of entry',v:10.7},{l:'Language barriers',v:11.3}],
+      movement:[{l:'Move outside Sudan',v:39.7},{l:'Move to 3rd location',v:43.5},{l:'Return to origin',v:16.9}],
+      origin_states:[{l:'Central Darfur',v:74.9},{l:'South Darfur',v:21.2},{l:'East Darfur',v:1.7},{l:'Khartoum',v:1.5}],
+      vol_return:[{l:'Yes',v:14.2},{l:'No',v:85.6},{l:'Prefer not',v:0.2}],
+      duration:[{l:'1–3 months',v:28.7},{l:'3–6 months',v:22.7},{l:'< 1 month',v:18.8},{l:'Don\'t know',v:12.2},{l:'No intention to leave',v:9.8}]
+    }
   },
   {
-    id:'c4', crossing:'Ashkeet', state:'Northern', locality:'Halfa',
-    country:'Egypt', lat:22.000523, lng:31.511477,
-    desc:'Secondary crossing in Halfa locality near the Egypt border. Used alongside Argeen as part of the northern Sudan–Egypt movement corridor.',
-    stats:[['State','Northern'],['Locality','Halfa'],['Neighbouring country','Egypt'],['Type','Secondary Sudan–Egypt crossing'],['Coordinates','22.001°N, 31.511°E']]
+    id:'gallabat', name:'Gallabat / Metema', state:'Gedaref', locality:'Basundah', country:'Ethiopia',
+    lat:12.95798, lng:36.151888, clr:'#5CB8B2',
+    survey: {
+      transport:[{l:'On foot / animal cart',v:100}],
+      sex:[{l:'Female',v:22.8},{l:'Male',v:77.2}],
+      age:38.7, age_med:36,
+      nationality:[{l:'Sudanese',v:74.6},{l:'Non-Sudanese',v:25.4}],
+      non_sudanese:[{l:'Ethiopian',v:100}],
+      travelling:[{l:'Alone',v:93},{l:'With family',v:7}],
+      family_avg:2.8,
+      vulnerable:[{l:'Unaccomp. child',v:12.5},{l:'None',v:87.5}],
+      disp_2023:[{l:'Yes',v:23.7},{l:'No',v:71.9},{l:'Prefer not',v:4.4}],
+      still_disp:[{l:'Yes',v:92.6},{l:'No',v:7.4}],
+      prev_left:[{l:'Yes',v:5.3},{l:'No',v:94.7}],
+      reason_leave:[{l:'Conflict/violence',v:0},{l:'Economic deterioration',v:33.3},{l:'Business/trade',v:33.3},{l:'Family visit',v:16.7},{l:'Consular services',v:16.7}],
+      reason_return:[{l:'Business/trade',v:63.2},{l:'Family visit',v:12.3},{l:'Legal difficulties',v:14},{l:'Check assets',v:2.6},{l:'Improved security',v:0}],
+      border_issues:[{l:'Long processing (>3h)',v:0.9},{l:'Insecurity',v:24.6},{l:'Loss of belongings',v:31.6},{l:'Language barriers',v:21.1},{l:'Bribery/extortion',v:3.5},{l:'Lack of documentation',v:1.8},{l:'Denial of entry',v:1.8},{l:'Prefer not to answer',v:16.7}],
+      movement:[{l:'Move outside Sudan',v:43.9},{l:'Move to 3rd location',v:7.9},{l:'Return to origin',v:48.2}],
+      origin_states:[{l:'Gedaref',v:36.5},{l:'Kassala',v:20},{l:'Khartoum',v:23.5},{l:'Aj Jazirah',v:10.6},{l:'Red Sea',v:4.7}],
+      vol_return:[{l:'No',v:100}],
+      duration:[{l:'< 1 month',v:49.1},{l:'3–6 months',v:11.4},{l:'6–12 months',v:8.8},{l:'1–3 months',v:9.6},{l:'Don\'t know',v:9.6}]
+    }
   },
   {
-    id:'c5', crossing:'Adekonk', state:'West Darfur', locality:'Ag Geneina',
-    country:'Chad', lat:13.4623111, lng:22.2296523,
-    desc:'Located in Ag Geneina locality, West Darfur. Major crossing point for the largest flows of Sudanese refugees into Chad following the April 2023 conflict escalation — particularly from West Darfur.',
-    stats:[['State','West Darfur'],['Locality','Ag Geneina'],['Neighbouring country','Chad'],['Significance','Major 2023 exodus route'],['Coordinates','13.462°N, 22.230°E']]
+    id:'argeen', name:'Argeen', state:'Northern', locality:'Halfa', country:'Egypt',
+    lat:21.988934, lng:31.153322, clr:'#FFB81C',
+    survey: {
+      transport:[{l:'Public transport (bus)',v:99.8},{l:'Goods vehicle',v:0.1},{l:'Private/rented',v:0.1}],
+      sex:[{l:'Female',v:25},{l:'Male',v:75}],
+      age:38.7, age_med:38,
+      nationality:[{l:'Sudanese',v:100}],
+      non_sudanese:[],
+      travelling:[{l:'Alone',v:46.6},{l:'With family',v:53.4}],
+      family_avg:3.3,
+      vulnerable:[{l:'Pregnant/Lactating',v:7},{l:'Unaccomp. child',v:0},{l:'Chronic illness',v:0.2},{l:'Disability',v:1},{l:'None',v:92}],
+      disp_2023:[{l:'Yes',v:87.6},{l:'No',v:12.4}],
+      still_disp:[{l:'Yes',v:74.3},{l:'No',v:25.7}],
+      prev_left:[{l:'Yes',v:56.5},{l:'No',v:43.5}],
+      reason_leave:[{l:'Conflict/violence',v:76.1},{l:'Economic deterioration',v:41.4},{l:'Depletion of resources',v:22.1},{l:'Family visit',v:11.2},{l:'Business/trade',v:5.2},{l:'Medical treatment',v:5.5},{l:'Education',v:2.5}],
+      reason_return:[{l:'Improved security',v:81.4},{l:'Business/trade',v:12.2},{l:'Family visit',v:16.9},{l:'Economic reasons',v:11.7},{l:'Check assets',v:6.5},{l:'Legal difficulties',v:7.5}],
+      border_issues:[{l:'Long processing (>3h)',v:4.7},{l:'Bribery/extortion',v:0.1},{l:'Harassment',v:0.5},{l:'Insecurity',v:0},{l:'Loss of belongings',v:0.1},{l:'Language barriers',v:0},{l:'Prefer not to answer',v:95.1}],
+      movement:[{l:'Move outside Sudan',v:1},{l:'Move to 3rd location',v:20.8},{l:'Return to origin',v:78.1}],
+      origin_states:[{l:'Khartoum',v:34.8},{l:'Aj Jazirah',v:19.6},{l:'River Nile',v:13.3},{l:'Northern',v:11.7},{l:'Red Sea',v:5},{l:'White Nile',v:3.6}],
+      vol_return:[{l:'Yes',v:88.3},{l:'No',v:11.7}],
+      duration:[{l:'Don\'t know',v:37.1},{l:'No intention to leave',v:25.4},{l:'> 1 year',v:17.4},{l:'1–3 months',v:5.3},{l:'< 1 month',v:2.6}]
+    }
   },
   {
-    id:'c6', crossing:'Tina', state:'West Darfur', locality:'At Tina',
-    country:'Chad', lat:15.011970, lng:22.489920,
-    desc:'At Tina locality crossing into Chad. One of several crossing points in West Darfur used during the mass displacement from Darfur since April 2023.',
-    stats:[['State','West Darfur'],['Locality','At Tina'],['Neighbouring country','Chad'],['Type','Darfur–Chad corridor'],['Coordinates','15.012°N, 22.490°E']]
-  },
-  {
-    id:'c7', crossing:'Juda', state:'White Nile', locality:'Aj Jabaleen',
-    country:'South Sudan', lat:12.236580, lng:32.761862,
-    desc:'Crossing between White Nile state and South Sudan. Used by South Sudanese returnees and refugees. White Nile hosts the majority (~79%) of South Sudanese refugees in Sudan — the largest group.',
-    stats:[['State','White Nile'],['Locality','Aj Jabaleen'],['Neighbouring country','South Sudan'],['Significance','Main S. Sudanese corridor'],['Coordinates','12.237°N, 32.762°E']]
-  },
-  {
-    id:'c8', crossing:'Al Laffa', state:'Kassala', locality:'Kassala',
-    country:'Eritrea', lat:15.15372, lng:36.4355,
-    desc:'Kassala crossing into Eritrea. Key entry point for Eritrean refugees fleeing forced conscription and political repression. ~6,704 new Eritrean arrivals recorded post-April 2023 through eastern crossings including this one.',
-    stats:[['State','Kassala'],['Locality','Kassala'],['Neighbouring country','Eritrea'],['New arrivals (post-Apr 23)','~6,704'],['Coordinates','15.154°N, 36.436°E']]
-  },
+    id:'ashkeet', name:'Ashkeet', state:'Northern', locality:'Halfa', country:'Egypt',
+    lat:22.000523, lng:31.511477, clr:'#FFB81C',
+    survey: {
+      transport:[{l:'Public transport (bus)',v:99.9},{l:'Private/rented',v:0.1}],
+      sex:[{l:'Female',v:42.4},{l:'Male',v:57.6}],
+      age:39.9, age_med:37,
+      nationality:[{l:'Sudanese',v:100}],
+      non_sudanese:[],
+      travelling:[{l:'Alone',v:37.8},{l:'With family',v:62.2}],
+      family_avg:4.7,
+      vulnerable:[{l:'Pregnant/Lactating',v:15.8},{l:'Unaccomp. child',v:5.3},{l:'Chronic illness',v:21.6},{l:'Disability',v:10.2},{l:'None',v:49.3}],
+      disp_2023:[{l:'Yes',v:43},{l:'No',v:50.8},{l:'Prefer not',v:6.2}],
+      still_disp:[{l:'Yes',v:48.6},{l:'No',v:51.4}],
+      prev_left:[{l:'Yes',v:54.6},{l:'No',v:45.4}],
+      reason_leave:[{l:'Conflict/violence',v:39.2},{l:'Business/trade',v:22.5},{l:'Medical treatment',v:22},{l:'Family visit',v:8.6},{l:'Education',v:7.1},{l:'Economic reasons',v:1},{l:'Special occasions',v:3.5}],
+      reason_return:[{l:'Business/trade',v:32.6},{l:'Improved security',v:23.3},{l:'Family visit',v:12.8},{l:'Legal difficulties',v:15.1},{l:'Economic hardship',v:9.7},{l:'Forced return',v:11.6},{l:'Check assets',v:10.1}],
+      border_issues:[{l:'Long processing (>3h)',v:16.7},{l:'Harassment',v:16.9},{l:'Loss of belongings',v:4.8},{l:'Forced return',v:11.6},{l:'Unaccomp. child',v:5.3},{l:'Prefer not to answer',v:62.3}],
+      movement:[{l:'Move outside Sudan',v:3.7},{l:'Move to 3rd location',v:30.4},{l:'Return to origin',v:65.9}],
+      origin_states:[{l:'Khartoum',v:41},{l:'Aj Jazirah',v:14.2},{l:'Northern',v:16},{l:'River Nile',v:7.5},{l:'South Darfur',v:2.9},{l:'White Nile',v:2.2}],
+      vol_return:[{l:'Yes',v:87.6},{l:'No',v:12}],
+      duration:[{l:'Don\'t know',v:68.1},{l:'1–3 months',v:11.3},{l:'No intention to leave',v:9.7},{l:'< 1 month',v:5},{l:'3–6 months',v:3.6}]
+    }
+  }
 ];
 
-/* Country config */
-const COUNTRIES = {
-  'Chad':       { clr:'#418FDE', icon:'🇹🇩', refugees:9000,  desc:'Chad is primarily a destination for Sudanese (~767,000 fled there). Small Chadian population in Sudan represents cross-border communities in West/North Darfur.' },
-  'Ethiopia':   { clr:'#5CB8B2', icon:'🇪🇹', refugees:97000, desc:'~97,000 Ethiopian refugees in Sudan, primarily Tigrayans from the 2020–22 war. New arrivals continue through Gedaref state crossings.' },
-  'Egypt':      { clr:'#FFB81C', icon:'🇪🇬', refugees:0,     desc:'Egypt is a major destination for Sudanese refugees (1.5M+). The northern crossings at Halfa are primarily transit routes.' },
-  'South Sudan':{ clr:'#FF671F', icon:'🇸🇸', refugees:540000,desc:'Largest group — ~540,000 South Sudanese in Sudan. Most in White Nile camps. ~640,000 returned home post-April 2023 conflict.' },
-  'Eritrea':    { clr:'#E74C3C', icon:'🇪🇷', refugees:137000,desc:'~137,000 Eritreans in Sudan in Kassala/Gedaref Shagarab camp complex. Flee forced conscription & repression. ~6,704 new arrivals since April 2023.' },
-};
+const SC=[15.5,30.5];
+const CC={'Chad':'#418FDE','Egypt':'#FFB81C','Ethiopia':'#5CB8B2','South Sudan':'#FF671F','Eritrea':'#E74C3C'};
+let sel=null, filt='all';
+const charts={};
 
-/* Sudan center for arc terminus */
-const SC = [15.5, 30.5];
+/* ─── MAP ─── */
+const map=L.map('the-map',{center:[16,31],zoom:5,scrollWheelZoom:true,minZoom:3,maxZoom:10,attributionControl:true});
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap &copy; CARTO',maxZoom:19}).addTo(map);
 
-/* ═══════════════ STATE ═══════════════ */
-let selId = null, selCountry = null, filt = 'all', searchQ = '';
-
-/* ═══════════════ MAP INIT ═══════════════ */
-const map = L.map('the-map', {
-  center:[16, 30], zoom:5,
-  scrollWheelZoom:true, minZoom:4, maxZoom:10,
-  attributionControl:true
-});
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
-  attribution:'&copy; OpenStreetMap &copy; CARTO', maxZoom:19
-}).addTo(map);
-
-/* Sudan center marker */
-const sudanIcon = L.divIcon({
-  className:'',
-  html:`<svg width="50" height="50" viewBox="0 0 50 50">
-    <circle cx="25" cy="25" r="16" fill="#FF671F" opacity=".15"/>
-    <circle cx="25" cy="25" r="10" fill="#FF671F" opacity=".45"/>
-    <circle cx="25" cy="25" r="5"  fill="#FF671F"/>
-  </svg>`,
-  iconSize:[50,50], iconAnchor:[25,25]
-});
+const sudanIcon=L.divIcon({className:'',html:`<svg width="46" height="46" viewBox="0 0 46 46"><circle cx="23" cy="23" r="14" fill="#FF671F" opacity=".18"/><circle cx="23" cy="23" r="9" fill="#FF671F" opacity=".5"/><circle cx="23" cy="23" r="4" fill="#FF671F"/></svg>`,iconSize:[46,46],iconAnchor:[23,23]});
 L.marker(SC,{icon:sudanIcon,zIndexOffset:1000}).addTo(map)
-  .bindTooltip(`<b style="color:#FF671F">SUDAN</b><br>
-    <small>837,966 refugees hosted · End 2024</small>`,
-    {direction:'right',offset:[12,0]});
+  .bindTooltip('<b style="color:#FF671F">SUDAN</b><br><small>Destination country</small>',{direction:'right',offset:[10,0]});
 
-/* Crossing markers */
-const mkrMap = {};
-CROSSINGS.forEach(c => {
-  const cc = COUNTRIES[c.country];
-  const icon = L.divIcon({
-    className:'',
-    html:`<svg width="44" height="44" viewBox="0 0 44 44">
-      <circle cx="22" cy="22" r="7" fill="${cc.clr}" opacity=".9"/>
-      <circle class="pring" cx="22" cy="22" r="7" fill="none" stroke="${cc.clr}" stroke-width="1.5"
-        style="animation-delay:${(Math.random()*1.8).toFixed(2)}s"/>
-    </svg>`,
-    iconSize:[44,44], iconAnchor:[22,22]
-  });
-  const m = L.marker([c.lat,c.lng],{icon})
-    .addTo(map)
-    .on('click',()=>pickCrossing(c.id))
+const mkrs={};
+CROSSINGS.forEach(c=>{
+  const icon=L.divIcon({className:'',html:`<svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="6" fill="${c.clr}" opacity=".9"/><circle class="pring" cx="20" cy="20" r="6" fill="none" stroke="${c.clr}" stroke-width="1.5" style="animation-delay:${(Math.random()*1.5).toFixed(2)}s"/></svg>`,iconSize:[40,40],iconAnchor:[20,20]});
+  mkrs[c.id]=L.marker([c.lat,c.lng],{icon}).addTo(map)
+    .on('click',()=>pick(c.id))
     .on('mouseover',e=>showTip(e,c))
     .on('mouseout',()=>document.getElementById('tip').classList.remove('on'));
-  mkrMap[c.id]=m;
 });
 
-/* ═══════════════ ARC SVG ═══════════════ */
-const arcSvg = document.getElementById('arc-svg');
-const NS = 'http://www.w3.org/2000/svg';
-
-function pt(lat,lng){
-  const r = map.getContainer().getBoundingClientRect();
-  const p = map.latLngToContainerPoint([lat,lng]);
-  return {x:p.x, y:p.y};
-}
-
+/* ─── ARCS ─── */
+const arcSvg=document.getElementById('arc-svg');
+const NS='http://www.w3.org/2000/svg';
+function pt(lat,lng){const p=map.latLngToContainerPoint([lat,lng]);return{x:p.x,y:p.y}}
 function drawArcs(){
   arcSvg.innerHTML='';
-  const defs = document.createElementNS(NS,'defs');
-
+  const defs=document.createElementNS(NS,'defs');
   CROSSINGS.forEach(c=>{
-    const cc = COUNTRIES[c.country];
-    const a = pt(c.lat,c.lng), b = pt(SC[0],SC[1]);
-    const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
-    const dx=b.x-a.x, dy=b.y-a.y, nm=Math.sqrt(dx*dx+dy*dy)||1;
-    const cv = nm*0.28;
-    // curve upward/toward center
-    const cx = mx-(dy/nm)*cv, cy = my+(dx/nm)*cv;
-    const d=`M${a.x} ${a.y} Q${cx} ${cy} ${b.x} ${b.y}`;
-
+    const a=pt(c.lat,c.lng),b=pt(SC[0],SC[1]);
+    const mx=(a.x+b.x)/2,my=(a.y+b.y)/2,dx=b.x-a.x,dy=b.y-a.y,nm=Math.sqrt(dx*dx+dy*dy)||1,cv=nm*.28;
+    const cx2=mx-(dy/nm)*cv,cy2=my+(dx/nm)*cv;
+    const d=`M${a.x} ${a.y} Q${cx2} ${cy2} ${b.x} ${b.y}`;
     const gid=`g${c.id}`;
     const gr=document.createElementNS(NS,'linearGradient');
-    gr.setAttribute('id',gid); gr.setAttribute('gradientUnits','userSpaceOnUse');
-    gr.setAttribute('x1',a.x); gr.setAttribute('y1',a.y);
-    gr.setAttribute('x2',b.x); gr.setAttribute('y2',b.y);
-    [{off:'0%',clr:cc.clr,op:.85},{off:'100%',clr:'#FF671F',op:.4}].forEach(s=>{
-      const st=document.createElementNS(NS,'stop');
-      st.setAttribute('offset',s.off); st.setAttribute('stop-color',s.clr);
-      st.setAttribute('stop-opacity',s.op); gr.appendChild(st);
-    });
+    gr.setAttribute('id',gid);gr.setAttribute('gradientUnits','userSpaceOnUse');
+    gr.setAttribute('x1',a.x);gr.setAttribute('y1',a.y);gr.setAttribute('x2',b.x);gr.setAttribute('y2',b.y);
+    [{off:'0%',cl:c.clr,op:.85},{off:'100%',cl:'#FF671F',op:.4}].forEach(s=>{const st=document.createElementNS(NS,'stop');st.setAttribute('offset',s.off);st.setAttribute('stop-color',s.cl);st.setAttribute('stop-opacity',s.op);gr.appendChild(st)});
     defs.appendChild(gr);
-
     const path=document.createElementNS(NS,'path');
-    path.setAttribute('d',d);
-    path.setAttribute('id',`arc-${c.id}`);
-    path.setAttribute('class','arc');
-    path.setAttribute('stroke',`url(#${gid})`);
-    path.setAttribute('stroke-width','2');
-    path.style.opacity='0';
-
-    // click on arc
-    path.style.pointerEvents='visibleStroke';
-    path.style.cursor='pointer';
-    path.addEventListener('click',()=>pickCrossing(c.id));
-
+    path.setAttribute('d',d);path.setAttribute('id',`arc-${c.id}`);path.setAttribute('class','arc');
+    path.setAttribute('stroke',`url(#${gid})`);path.setAttribute('stroke-width','2');path.style.opacity='0';
+    path.style.pointerEvents='visibleStroke';path.style.cursor='pointer';
+    path.addEventListener('click',()=>pick(c.id));
     arcSvg.appendChild(path);
   });
   arcSvg.insertBefore(defs,arcSvg.firstChild);
   applyVis();
 }
-
-function isVisible(c){
-  if(searchQ && !c.crossing.toLowerCase().includes(searchQ.toLowerCase())
-     && !c.state.toLowerCase().includes(searchQ.toLowerCase())
-     && !c.country.toLowerCase().includes(searchQ.toLowerCase())) return false;
-  if(filt==='all') return true;
-  return c.country===filt;
-}
-
 function applyVis(){
   CROSSINGS.forEach(c=>{
     const el=document.getElementById(`arc-${c.id}`);
     if(!el) return;
     el.classList.remove('live');
-    const cc=COUNTRIES[c.country];
-    const vis = isVisible(c);
-    const highlight = selId ? c.id===selId : (selCountry ? c.country===selCountry : vis);
-
-    if(highlight && vis){
+    const show=filt==='all'||c.country===filt;
+    const active=c.id===sel;
+    if(show){
       el.classList.add('live');
-      const w = selId&&c.id===selId ? 4 : selCountry ? 3 : 2;
-      el.setAttribute('stroke-width',w);
-      el.style.opacity = selId ? (c.id===selId?'1':'.12') : (selCountry ? (c.country===selCountry?'.9':'.08') : '.72');
+      el.setAttribute('stroke-width',active?4:2);
+      el.style.opacity=sel?(active?'1':'.15'):'0.65';
     } else {
-      el.style.opacity = vis ? '.35' : '.04';
+      el.style.opacity='0.04';
     }
-
-    // marker opacity
-    if(mkrMap[c.id]){
-      const el2 = mkrMap[c.id].getElement();
-      if(el2) el2.style.opacity = vis ? '1' : '.25';
-    }
+    const me=mkrs[c.id]?.getElement();
+    if(me) me.style.opacity=show?'1':'.2';
   });
 }
-
 map.on('move zoom',drawArcs);
 window.addEventListener('resize',drawArcs);
 
-/* ═══════════════ SIDEBAR LIST ═══════════════ */
+/* ─── CROSSING LIST ─── */
 function buildList(){
-  const el=document.getElementById('sb-scroll');
-  // group by country
-  const groups={};
-  CROSSINGS.forEach(c=>{ if(!groups[c.country]) groups[c.country]=[]; groups[c.country].push(c); });
-
-  let html='';
-  Object.entries(groups).forEach(([country,crossings])=>{
-    const cc=COUNTRIES[country];
-    const allVis=crossings.filter(isVisible);
-    if(allVis.length===0) return;
-    const isOpen = filt===country || selCountry===country || filt==='all';
-    const hasActive = crossings.some(c=>c.id===selId);
-    html+=`<div class="country-group">
-      <div class="cg-head${selCountry===country?' on':''} ${isOpen?'open':''}" onclick="toggleGroup('${country}',this)">
-        <div class="cg-dot" style="background:${cc.clr}"></div>
-        <span class="cg-name">${cc.icon} ${country}</span>
-        <span class="cg-count">${allVis.length} crossing${allVis.length>1?'s':''}</span>
-        <span class="cg-arrow">▶</span>
+  const el=document.getElementById('clist');
+  const vis=CROSSINGS.filter(c=>filt==='all'||c.country===filt);
+  el.innerHTML=vis.map(c=>`
+    <div class="citem${c.id===sel?' on':''}" onclick="pick('${c.id}')">
+      <div class="ci-dot" style="background:${c.clr}"></div>
+      <div>
+        <div class="ci-name">${c.name}</div>
+        <div class="ci-coords">${c.lat.toFixed(4)}°N, ${c.lng.toFixed(4)}°E · ${c.state}</div>
       </div>
-      <div class="cg-crossings ${isOpen||hasActive?'open':''}">
-        ${allVis.map(c=>`
-        <div class="crossing-item${c.id===selId?' active':''}" id="ci-${c.id}" onclick="pickCrossing('${c.id}')">
-          <div class="ci-name"><i class="fas fa-border-all" style="font-size:.65rem;color:${cc.clr};margin-right:.3rem"></i>${c.crossing}</div>
-          <div class="ci-meta"><i class="fas fa-map-pin" style="font-size:.55rem;margin-right:.2rem"></i>${c.state} · ${c.locality}</div>
-          <span class="ci-state" style="background:${cc.clr}18;color:${cc.clr}">${c.country}</span>
-        </div>`).join('')}
+      <span class="ci-country" style="background:${c.clr}18;color:${c.clr}">${c.country}</span>
+    </div>`).join('');
+}
+
+/* ─── SURVEY PANEL ─── */
+function buildPanel(c){
+  const s=c.survey;
+  // Destroy old charts
+  Object.values(charts).forEach(ch=>ch.destroy());
+  Object.keys(charts).forEach(k=>delete charts[k]);
+
+  // Alert badges for border issues (top 3 >10%)
+  const bigIssues=s.border_issues.filter(x=>x.l!=='Prefer not to answer'&&x.v>=10).sort((a,b)=>b.v-a.v).slice(0,4);
+
+  const html=`
+  <!-- KPIs -->
+  <div class="dp-section">
+    <div class="dp-section-head open" onclick="toggleSec(this)">
+      <i class="fas fa-id-card"></i><h4>Traveller Profile</h4><span class="toggle">▾</span>
+    </div>
+    <div class="dp-body open">
+      <div class="kpi-row">
+        <div class="kpi highlight"><div class="kv">${s.age.toFixed(1)}</div><div class="kl">Avg age (median: ${s.age_med})</div></div>
+        <div class="kpi"><div class="kv">${s.sex.find(x=>x.l==='Male')?.v||0}%</div><div class="kl">Male respondents</div></div>
+        <div class="kpi"><div class="kv">${s.travelling.find(x=>x.l==='Alone')?.v||0}%</div><div class="kl">Travelling alone</div></div>
       </div>
-    </div>`;
-  });
-  el.innerHTML=html;
-}
+      <div class="kpi-row">
+        <div class="kpi"><div class="kv">${s.nationality.find(x=>x.l==='Sudanese')?.v||0}%</div><div class="kl">Sudanese</div></div>
+        <div class="kpi highlight"><div class="kv">${s.family_avg}</div><div class="kl">Avg family size</div></div>
+        <div class="kpi"><div class="kv">${s.disp_2023.find(x=>x.l==='Yes')?.v||0}%</div><div class="kl">Displaced post-2023</div></div>
+      </div>
+      ${s.non_sudanese.length?`<div style="font-size:.62rem;color:var(--muted);margin:.3rem 0 .2rem">Non-Sudanese breakdown:</div>`+
+        s.non_sudanese.map(x=>barRow(x.l,x.v,'#9B59B6')).join(''):''}
+    </div>
+  </div>
 
-function toggleGroup(country,el){
-  const wasOpen=el.classList.contains('open');
-  document.querySelectorAll('.cg-head').forEach(h=>{h.classList.remove('open','on');h.nextElementSibling.classList.remove('open')});
-  if(!wasOpen){
-    el.classList.add('open','on');
-    el.nextElementSibling.classList.add('open');
-    selCountry=country; selId=null;
-    updateDetail(country);
-    applyVis();
-    // fly to country crossings centroid
-    const pts=CROSSINGS.filter(c=>c.country===country);
-    if(pts.length){
-      const lat=pts.reduce((s,c)=>s+c.lat,0)/pts.length;
-      const lng=pts.reduce((s,c)=>s+c.lng,0)/pts.length;
-      map.flyTo([lat,lng],6,{duration:.9});
-    }
-  } else {
-    selCountry=null; selId=null;
-    clearDetail(); applyVis();
-    map.flyTo([16,30],5,{duration:.8});
-  }
-  buildList();
-}
+  <!-- Transport -->
+  <div class="dp-section">
+    <div class="dp-section-head open" onclick="toggleSec(this)">
+      <i class="fas fa-bus"></i><h4>Transport Mode</h4><span class="toggle">▾</span>
+    </div>
+    <div class="dp-body open">
+      ${s.transport.map(x=>barRow(x.l,x.v,c.clr)).join('')}
+    </div>
+  </div>
 
-/* ═══════════════ DETAIL PANEL ═══════════════ */
-function updateDetail(countryOrId){
-  const det=document.getElementById('sb-detail');
-  det.classList.add('fade');
-  setTimeout(()=>{
-    if(selId){
-      const c=CROSSINGS.find(x=>x.id===selId);
-      const cc=COUNTRIES[c.country];
-      const rows=c.stats.map(([k,v])=>`<div class="sd-row"><span class="sd-k">${k}</span><span class="sd-v">${v}</span></div>`).join('');
-      det.innerHTML=`<div class="sd-content">
-        <h3><span class="dot" style="background:${cc.clr}"></span>${c.crossing}</h3>
-        <div class="sd-rows">${rows}</div>
-        <div class="sd-note" style="border-color:${cc.clr}"><i class="fas fa-info-circle" style="color:${cc.clr}"></i> ${c.desc}</div>
-      </div>`;
-    } else if(selCountry){
-      const cc=COUNTRIES[selCountry];
-      const cs=CROSSINGS.filter(c=>c.country===selCountry);
-      det.innerHTML=`<div class="sd-content">
-        <h3><span class="dot" style="background:${cc.clr}"></span>${cc.icon} ${selCountry}</h3>
-        <div class="sd-rows">
-          <div class="sd-row"><span class="sd-k">Refugees in Sudan</span><span class="sd-v">${cc.refugees.toLocaleString()}</span></div>
-          <div class="sd-row"><span class="sd-k">Active crossings</span><span class="sd-v">${cs.length}</span></div>
-          <div class="sd-row"><span class="sd-k">States</span><span class="sd-v">${[...new Set(cs.map(c=>c.state))].join(', ')}</span></div>
-        </div>
-        <div class="sd-note" style="border-color:${cc.clr}"><i class="fas fa-info-circle" style="color:${cc.clr}"></i> ${cc.desc}</div>
-      </div>`;
-    }
-    det.classList.remove('fade');
-  },200);
-}
+  <!-- Displacement status -->
+  <div class="dp-section">
+    <div class="dp-section-head open" onclick="toggleSec(this)">
+      <i class="fas fa-home"></i><h4>Displacement Status</h4><span class="toggle">▾</span>
+    </div>
+    <div class="dp-body open">
+      <div class="kpi-row">
+        <div class="kpi${s.still_disp.find(x=>x.l==='Yes')?.v>50?' highlight':''}"><div class="kv">${s.still_disp.find(x=>x.l==='Yes')?.v||0}%</div><div class="kl">Still displaced</div></div>
+        <div class="kpi"><div class="kv">${s.prev_left.find(x=>x.l==='Yes')?.v||0}%</div><div class="kl">Previously left Sudan</div></div>
+        <div class="kpi"><div class="kv">${s.vol_return.find(x=>x.l==='Yes')?.v||0}%</div><div class="kl">In vol. return program</div></div>
+      </div>
+    </div>
+  </div>
 
-function clearDetail(){
-  const det=document.getElementById('sb-detail');
-  det.classList.add('fade');
-  setTimeout(()=>{
-    det.innerHTML=`<div class="sd-placeholder"><i class="fas fa-map-marker-alt"></i><span>Select a crossing or country to see details</span></div>`;
-    det.classList.remove('fade');
-  },200);
-}
+  <!-- Vulnerable groups -->
+  <div class="dp-section">
+    <div class="dp-section-head" onclick="toggleSec(this)">
+      <i class="fas fa-child"></i><h4>Vulnerable Populations</h4><span class="toggle">▾</span>
+    </div>
+    <div class="dp-body">
+      ${s.vulnerable.map(x=>barRow(x.l,x.v,x.l==='None'?'#95A5A6':'#D9534F')).join('')}
+    </div>
+  </div>
 
-/* ═══════════════ PICK CROSSING ═══════════════ */
-function pickCrossing(id){
-  selId = selId===id ? null : id;
-  if(selId){
-    const c=CROSSINGS.find(x=>x.id===selId);
-    selCountry=c.country;
-    map.flyTo([c.lat,c.lng],7,{duration:.9});
-    updateDetail();
-    // Update map info panel
-    const cc=COUNTRIES[c.country];
-    document.getElementById('map-info').innerHTML=`
-      <div class="mi-title" style="color:${cc.clr}">${c.crossing}</div>
-      <div class="mi-row"><span class="mi-k">State</span><span class="mi-v">${c.state}</span></div>
-      <div class="mi-row"><span class="mi-k">Locality</span><span class="mi-v">${c.locality}</span></div>
-      <div class="mi-row"><span class="mi-k">Country</span><span class="mi-v">${c.country}</span></div>
-      <div class="mi-row"><span class="mi-k">Coordinates</span><span class="mi-v">${c.lat.toFixed(4)}°N, ${c.lng.toFixed(4)}°E</span></div>
-    `;
-  } else {
-    selCountry=null;
-    clearDetail();
-    resetMapInfo();
-    map.flyTo([16,30],5,{duration:.8});
-  }
-  buildList();
-  applyVis();
-}
+  <!-- Reasons for leaving -->
+  <div class="dp-section">
+    <div class="dp-section-head open" onclick="toggleSec(this)">
+      <i class="fas fa-sign-out-alt"></i><h4>Reasons for Leaving Sudan</h4><span class="toggle">▾</span>
+    </div>
+    <div class="dp-body open">
+      ${s.reason_leave.filter(x=>x.v>0).sort((a,b)=>b.v-a.v).map(x=>barRow(x.l,x.v,
+        x.l.includes('Conflict')?'#D9534F':x.l.includes('usiness')||x.l.includes('conomic')?'#F0AD4E':'#418FDE'
+      )).join('')}
+    </div>
+  </div>
 
-function resetMapInfo(){
-  document.getElementById('map-info').innerHTML=`
-    <div class="mi-title">Sudan Overview</div>
-    <div class="mi-row"><span class="mi-k">Total refugees hosted</span><span class="mi-v">837,966</span></div>
-    <div class="mi-row"><span class="mi-k">Largest origin group</span><span class="mi-v">South Sudan</span></div>
-    <div class="mi-row"><span class="mi-k">New arrivals (post-Apr 23)</span><span class="mi-v">~13,667</span></div>
-    <div class="mi-row"><span class="mi-k">Change from 2023</span><span class="mi-v" style="color:var(--orange)">−13%</span></div>
+  <!-- Reasons for returning -->
+  <div class="dp-section">
+    <div class="dp-section-head" onclick="toggleSec(this)">
+      <i class="fas fa-sign-in-alt"></i><h4>Reasons for Returning to Sudan</h4><span class="toggle">▾</span>
+    </div>
+    <div class="dp-body">
+      ${s.reason_return.filter(x=>x.v>0).sort((a,b)=>b.v-a.v).map(x=>barRow(x.l,x.v,
+        x.l.includes('security')||x.l.includes('Security')?'#5CB85C':x.l.includes('usiness')?'#F0AD4E':'#418FDE'
+      )).join('')}
+    </div>
+  </div>
+
+  <!-- Border issues -->
+  <div class="dp-section">
+    <div class="dp-section-head open" onclick="toggleSec(this)">
+      <i class="fas fa-exclamation-triangle"></i><h4>Border Issues Experienced</h4><span class="toggle">▾</span>
+    </div>
+    <div class="dp-body open">
+      ${bigIssues.length?`<div style="margin-bottom:.4rem">${bigIssues.map(x=>`<span class="alert-badge"><i class="fas fa-circle-exclamation"></i>${x.l}: ${x.v}%</span>`).join('')}</div>`:''}
+      ${s.border_issues.filter(x=>x.l!=='Prefer not to answer'&&x.v>0).sort((a,b)=>b.v-a.v).map(x=>barRow(x.l,x.v,'#D9534F')).join('')}
+    </div>
+  </div>
+
+  <!-- Movement intentions -->
+  <div class="dp-section">
+    <div class="dp-section-head open" onclick="toggleSec(this)">
+      <i class="fas fa-route"></i><h4>Movement Intentions (next 3 months)</h4><span class="toggle">▾</span>
+    </div>
+    <div class="dp-body open">
+      <div class="mini-canvas-wrap"><canvas id="mv-chart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Origin states -->
+  <div class="dp-section">
+    <div class="dp-section-head" onclick="toggleSec(this)">
+      <i class="fas fa-map-marker-alt"></i><h4>State of Origin (top states)</h4><span class="toggle">▾</span>
+    </div>
+    <div class="dp-body">
+      ${s.origin_states.sort((a,b)=>b.v-a.v).map(x=>barRow(x.l,x.v,c.clr)).join('')}
+    </div>
+  </div>
+
+  <!-- Intended duration -->
+  <div class="dp-section" style="margin-bottom:.5rem">
+    <div class="dp-section-head" onclick="toggleSec(this)">
+      <i class="fas fa-clock"></i><h4>Intended Duration of Stay</h4><span class="toggle">▾</span>
+    </div>
+    <div class="dp-body">
+      ${s.duration.map(x=>barRow(x.l,x.v,'#5CB8B2')).join('')}
+    </div>
+  </div>
   `;
-}
 
-/* ═══════════════ FILTER ═══════════════ */
-function setFilter(f,btn){
-  filt=f; selId=null; selCountry=null; searchQ=''; document.getElementById('srch').value='';
-  document.querySelectorAll('.ftab').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  buildList(); applyVis(); clearDetail(); resetMapInfo();
-  if(f!=='all'){
-    const pts=CROSSINGS.filter(c=>c.country===f);
-    if(pts.length){
-      const lat=pts.reduce((s,c)=>s+c.lat,0)/pts.length;
-      const lng=pts.reduce((s,c)=>s+c.lng,0)/pts.length;
-      map.flyTo([lat,lng],6,{duration:.9});
-    }
-  } else {
-    map.flyTo([16,30],5,{duration:.7});
-  }
-}
+  document.getElementById('data-panel').innerHTML=html;
 
-/* ═══════════════ SEARCH ═══════════════ */
-function doSearch(q){
-  searchQ=q;
-  if(q){
-    const match=CROSSINGS.find(c=>
-      c.crossing.toLowerCase().includes(q.toLowerCase())||
-      c.state.toLowerCase().includes(q.toLowerCase())||
-      c.country.toLowerCase().includes(q.toLowerCase())
-    );
-    if(match){ selId=match.id; selCountry=match.country; updateDetail(); }
-  } else { selId=null; selCountry=null; clearDetail(); }
-  buildList(); applyVis();
-}
-
-/* ═══════════════ MINI BAR CHART ═══════════════ */
-function buildMiniChart(){
-  const entries=Object.entries(COUNTRIES).filter(([k])=>CROSSINGS.some(c=>c.country===k));
-  const sorted=entries.sort((a,b)=>b[1].refugees-a[1].refugees);
-  new Chart(document.getElementById('mini-chart').getContext('2d'),{
-    type:'bar',
-    data:{
-      labels:sorted.map(([k,v])=>`${v.icon} ${k}`),
-      datasets:[{
-        data:sorted.map(([,v])=>v.refugees),
-        backgroundColor:sorted.map(([,v])=>v.clr+'BB'),
-        borderColor:sorted.map(([,v])=>v.clr),
-        borderWidth:1.5, borderRadius:3
-      }]
-    },
-    options:{
-      indexAxis:'y', responsive:true, maintainAspectRatio:false,
-      onClick:(e,els)=>{
-        if(els.length){
-          const country=sorted[els[0].index][0];
-          selCountry=country; selId=null;
-          buildList(); applyVis(); updateDetail();
-          const pts=CROSSINGS.filter(c=>c.country===country);
-          if(pts.length){
-            const lat=pts.reduce((s,c)=>s+c.lat,0)/pts.length;
-            const lng=pts.reduce((s,c)=>s+c.lng,0)/pts.length;
-            map.flyTo([lat,lng],6,{duration:.9});
+  // Movement intentions donut
+  const mv=s.movement;
+  setTimeout(()=>{
+    const ctx=document.getElementById('mv-chart');
+    if(ctx){
+      charts['mv']=new Chart(ctx,{
+        type:'doughnut',
+        data:{
+          labels:mv.map(x=>x.l),
+          datasets:[{data:mv.map(x=>x.v),backgroundColor:['#5CB85C','#F0AD4E','#418FDE'],borderWidth:2,borderColor:'#fff',hoverOffset:6}]
+        },
+        options:{
+          cutout:'62%',responsive:true,maintainAspectRatio:true,
+          plugins:{
+            legend:{position:'right',labels:{font:{size:10},boxWidth:10,padding:8}},
+            tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw}%`}}
           }
         }
-      },
-      plugins:{
-        legend:{display:false},
-        tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toLocaleString()} in Sudan`}}
-      },
-      scales:{
-        x:{ticks:{callback:v=>v>=1000?(v/1000).toFixed(0)+'K':v,font:{size:9}},grid:{color:'rgba(0,0,0,.04)'}},
-        y:{grid:{display:false},ticks:{font:{size:10}}}
-      }
+      });
     }
-  });
+    document.querySelectorAll('.dp-section-head.open').forEach(h=>{h.nextElementSibling.classList.add('open')});
+  },50);
 }
 
-/* ═══════════════ TOOLTIP ═══════════════ */
+function barRow(label,pct,color){
+  const w=Math.min(100,Math.max(0,pct));
+  return `<div class="ibar-row">
+    <div class="ibar-label">${label}</div>
+    <div class="ibar-track"><div class="ibar-fill" style="width:${w}%;background:${color}">${w>18?pct.toFixed(1)+'%':''}</div></div>
+    <div class="ibar-pct">${pct.toFixed(1)}%</div>
+  </div>`;
+}
+
+function toggleSec(head){
+  head.classList.toggle('open');
+  const body=head.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+/* ─── PICK ─── */
+function pick(id){
+  sel=sel===id?null:id;
+  buildList();
+  applyVis();
+  if(sel){
+    const c=CROSSINGS.find(x=>x.id===sel);
+    map.flyTo([c.lat,c.lng],7,{duration:.9});
+    buildPanel(c);
+    // Map card
+    document.getElementById('map-card').innerHTML=`
+      <div class="mc-title" style="color:${c.clr}">${c.name}</div>
+      <div class="mc-row"><span class="mc-k">Country</span><span class="mc-v">${c.country}</span></div>
+      <div class="mc-row"><span class="mc-k">State</span><span class="mc-v">${c.state}</span></div>
+      <div class="mc-row"><span class="mc-k">Avg respondent age</span><span class="mc-v">${c.survey.age} yrs</span></div>
+      <div class="mc-row"><span class="mc-k">Disp. post-2023</span><span class="mc-v">${c.survey.disp_2023.find(x=>x.l==='Yes')?.v||0}%</span></div>
+      <div class="mc-row"><span class="mc-k">Return to origin</span><span class="mc-v">${c.survey.movement.find(x=>x.l==='Return to origin')?.v||0}%</span></div>
+    `;
+  } else {
+    Object.values(charts).forEach(ch=>ch.destroy());
+    Object.keys(charts).forEach(k=>delete charts[k]);
+    document.getElementById('data-panel').innerHTML=`<div class="dp-placeholder"><i class="fas fa-hand-pointer"></i>Select a crossing to view DTM survey data</div>`;
+    document.getElementById('map-card').innerHTML=`<div class="mc-title">Overall Statistics</div>
+      <div class="mc-row"><span class="mc-k">Transport (bus/minibus)</span><span class="mc-v">75.5%</span></div>
+      <div class="mc-row"><span class="mc-k">Travelling alone</span><span class="mc-v">51.2%</span></div>
+      <div class="mc-row"><span class="mc-k">Displaced post-Apr 2023</span><span class="mc-v">62.1%</span></div>
+      <div class="mc-row"><span class="mc-k">Still displaced</span><span class="mc-v">69.1%</span></div>
+      <div class="mc-row"><span class="mc-k">In voluntary return prog.</span><span class="mc-v">74.3%</span></div>`;
+    map.flyTo([16,31],5,{duration:.8});
+  }
+}
+
+/* ─── FILTER ─── */
+function setFilt(f,btn){
+  filt=f;sel=null;
+  document.querySelectorAll('.ftab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  buildList();applyVis();
+  if(f!=='all'){
+    const pts=CROSSINGS.filter(c=>c.country===f);
+    if(pts.length){const lat=pts.reduce((s,c)=>s+c.lat,0)/pts.length,lng=pts.reduce((s,c)=>s+c.lng,0)/pts.length;map.flyTo([lat,lng],6,{duration:.8});}
+  } else map.flyTo([16,31],5,{duration:.7});
+}
+
+/* ─── TOOLTIP ─── */
 function showTip(e,c){
-  const cc=COUNTRIES[c.country];
   const t=document.getElementById('tip');
-  t.innerHTML=`<b>${c.crossing}</b>${c.state} · ${c.country}`;
+  t.innerHTML=`<b>${c.name}</b>${c.state} · ${c.country}`;
   t.classList.add('on');
 }
 document.addEventListener('mousemove',e=>{
@@ -648,25 +660,9 @@ document.addEventListener('mousemove',e=>{
   if(t.classList.contains('on')){t.style.left=(e.clientX+14)+'px';t.style.top=(e.clientY-36)+'px';}
 });
 
-/* ═══════════════ POPUP on marker ═══════════════ */
-CROSSINGS.forEach(c=>{
-  const cc=COUNTRIES[c.country];
-  mkrMap[c.id].bindPopup(`
-    <div style="min-width:180px">
-      <div style="font-family:Barlow Condensed,sans-serif;font-size:1rem;font-weight:800;color:${cc.clr};margin-bottom:.35rem">${c.crossing}</div>
-      <div style="font-size:.75rem;color:#555;margin-bottom:.25rem"><b>State:</b> ${c.state}</div>
-      <div style="font-size:.75rem;color:#555;margin-bottom:.25rem"><b>Locality:</b> ${c.locality}</div>
-      <div style="font-size:.75rem;color:#555;margin-bottom:.25rem"><b>Country:</b> ${c.country}</div>
-      <div style="font-size:.7rem;color:#888;margin-top:.4rem">${c.lat.toFixed(4)}°N, ${c.lng.toFixed(4)}°E</div>
-    </div>`,
-    {maxWidth:240}
-  );
-});
-
-/* ═══════════════ INIT ═══════════════ */
+/* ─── INIT ─── */
 buildList();
-buildMiniChart();
-setTimeout(drawArcs, 500);
+setTimeout(drawArcs,450);
 </script>
 </body>
 </html>
