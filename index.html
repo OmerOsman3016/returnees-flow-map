@@ -1,9 +1,9 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sudan | Inflow — Refugees & Asylum-Seekers</title>
+<title>Sudan | Cross-Border Inflow — Displacement Tracking Matrix</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&family=Barlow+Condensed:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -12,142 +12,132 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --blue:#418FDE; --orange:#FF671F; --dark:#1A3A5C;
-  --teal:#5CB8B2; --yellow:#FFB81C; --green:#5CB85C;
-  --bg:#F0F4F9; --surface:#fff; --border:#DDE3ED;
-  --text:#1e293b; --muted:#64748b;
+  --blue:#418FDE;--orange:#FF671F;--dark:#1A3A5C;
+  --teal:#5CB8B2;--yellow:#FFB81C;--green:#5CB85C;
+  --bg:#EEF2F7;--surface:#fff;--border:#DDE3ED;
+  --text:#1e293b;--muted:#64748b;
   --sh:0 2px 12px rgba(26,58,92,.08);
-  --sh2:0 6px 28px rgba(26,58,92,.14);
+  --sh2:0 8px 32px rgba(26,58,92,.16);
 }
-body{font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.5}
+html,body{height:100%;font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
 
-/* ── HEADER ── */
-#hdr{background:var(--dark);border-bottom:3px solid var(--orange);position:sticky;top:0;z-index:900}
-.hi{max-width:1500px;margin:0 auto;display:flex;align-items:stretch}
-.hbrand{background:var(--blue);padding:.75rem 1.3rem;display:flex;align-items:center;gap:.65rem;flex-shrink:0}
-.hlogo{width:38px;height:38px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.65rem;color:var(--blue);line-height:1.15;text-align:center}
-.hbtext{color:#fff}.hbtext b{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;letter-spacing:.06em;display:block}
-.hbtext small{font-size:.58rem;opacity:.7;letter-spacing:.08em}
-.htitle{padding:.75rem 1.4rem;display:flex;flex-direction:column;justify-content:center;color:#fff}
-.htitle h1{font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;line-height:1.1}
+/* HEADER */
+#hdr{background:var(--dark);border-bottom:3px solid var(--orange);position:sticky;top:0;z-index:1000}
+.hi{max-width:100%;display:flex;align-items:stretch}
+.hbrand{background:var(--blue);padding:.6rem 1.2rem;display:flex;align-items:center;gap:.6rem;flex-shrink:0}
+.hlogo{width:36px;height:36px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.6rem;color:var(--blue);line-height:1.2;text-align:center}
+.hbtext{color:#fff}.hbtext b{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:700;letter-spacing:.06em;display:block}
+.hbtext small{font-size:.57rem;opacity:.7;letter-spacing:.07em}
+.htitle{padding:.6rem 1.3rem;display:flex;flex-direction:column;justify-content:center;color:#fff}
+.htitle h1{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;line-height:1.1}
 .htitle h1 em{color:var(--yellow);font-style:normal}
-.htitle p{font-size:.6rem;opacity:.6;letter-spacing:.08em;margin-top:.1rem;text-transform:uppercase}
+.htitle p{font-size:.58rem;opacity:.6;letter-spacing:.08em;text-transform:uppercase;margin-top:.1rem}
 .hstats{margin-left:auto;display:flex;align-items:stretch}
-.hs{padding:.5rem 1.1rem;border-left:1px solid rgba(255,255,255,.1);display:flex;flex-direction:column;justify-content:center;text-align:right;color:#fff}
-.hs .hv{font-family:'Barlow Condensed',sans-serif;font-size:1.35rem;font-weight:800;color:var(--yellow);line-height:1}
-.hs .hl{font-size:.57rem;opacity:.55;letter-spacing:.07em;text-transform:uppercase;margin-top:.1rem}
+.hs{padding:.4rem 1rem;border-left:1px solid rgba(255,255,255,.1);display:flex;flex-direction:column;justify-content:center;text-align:right;color:#fff}
+.hs .hv{font-family:'Barlow Condensed',sans-serif;font-size:1.25rem;font-weight:800;color:var(--yellow);line-height:1}
+.hs .hl{font-size:.55rem;opacity:.55;letter-spacing:.07em;text-transform:uppercase;margin-top:.08rem}
 
-/* ── LAYOUT ── */
-.wrap{max-width:1500px;margin:0 auto;padding:1.4rem}
+/* SHELL */
+.shell{display:flex;height:calc(100vh - 52px)}
 
-/* ── TOP BAR ── */
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap}
-.sec-title{display:flex;align-items:center;gap:.65rem}
-.abar{width:4px;height:26px;background:var(--orange);border-radius:2px;flex-shrink:0}
-.sec-title h2{font-family:'Barlow Condensed',sans-serif;font-size:1.25rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--dark)}
-.sec-title p{font-size:.72rem;color:var(--muted)}
-.controls{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
-.ftab{padding:.3rem .8rem;background:var(--surface);border:1.5px solid var(--border);border-radius:100px;font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;color:var(--muted);transition:all .18s;font-family:'Source Sans 3',sans-serif}
+/* LEFT SIDEBAR */
+#sidebar{width:340px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;z-index:100}
+.sb-head{padding:.85rem 1rem;border-bottom:1px solid var(--border);background:var(--bg)}
+.sb-head h2{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--dark);margin-bottom:.4rem}
+.filter-row{display:flex;gap:.35rem;flex-wrap:wrap}
+.ftab{padding:.22rem .65rem;background:var(--surface);border:1.5px solid var(--border);border-radius:100px;font-size:.6rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;color:var(--muted);transition:all .15s;font-family:'Source Sans 3',sans-serif}
 .ftab:hover{border-color:var(--blue);color:var(--blue)}
 .ftab.on{background:var(--blue);border-color:var(--blue);color:#fff}
-.search-wrap{position:relative;display:flex;align-items:center}
-.search-wrap i{position:absolute;left:.6rem;color:var(--muted);font-size:.75rem;pointer-events:none}
-#search{padding:.3rem .7rem .3rem 1.8rem;border:1.5px solid var(--border);border-radius:100px;font-size:.7rem;font-family:'Source Sans 3',sans-serif;outline:none;width:160px;transition:border-color .18s}
-#search:focus{border-color:var(--blue)}
+.search-wrap{position:relative;margin-top:.5rem}
+.search-wrap i{position:absolute;left:.6rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.7rem;pointer-events:none}
+#srch{width:100%;padding:.35rem .7rem .35rem 1.9rem;border:1.5px solid var(--border);border-radius:6px;font-size:.72rem;font-family:'Source Sans 3',sans-serif;outline:none;background:var(--surface);transition:border-color .15s}
+#srch:focus{border-color:var(--blue)}
 
-/* ── CARDS ROW ── */
-.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:.85rem;margin-bottom:1.3rem}
-.card{background:var(--surface);border-radius:8px;padding:.9rem 1rem;box-shadow:var(--sh);cursor:pointer;transition:transform .18s,box-shadow .18s;position:relative;overflow:hidden;border-top:3px solid transparent}
-.card:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
-.card.active{box-shadow:var(--sh2)}
-.card.hidden{opacity:.35;pointer-events:none}
-.card-color-bar{position:absolute;top:0;left:0;right:0;height:3px}
-.card-rank{position:absolute;top:.55rem;right:.7rem;font-family:'Barlow Condensed',sans-serif;font-size:.75rem;font-weight:700;color:var(--border)}
-.card.active .card-rank{color:var(--orange)}
-.card-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.85rem;margin-bottom:.5rem;opacity:.85}
-.card-name{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.15rem}
-.card-num{font-family:'Barlow Condensed',sans-serif;font-size:1.55rem;font-weight:800;color:var(--dark);line-height:1}
-.card-pct{font-size:.65rem;color:var(--muted);margin-top:.1rem}
-.card-bar-bg{height:3px;background:var(--border);border-radius:1.5px;margin-top:.6rem;overflow:hidden}
-.card-bar-fill{height:3px;border-radius:1.5px;transition:width .5s ease}
-.card-tag{display:inline-block;margin-top:.45rem;font-size:.55rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.12rem .45rem;border-radius:100px}
-.tag-new{background:rgba(92,184,178,.15);color:var(--teal)}
-.tag-large{background:rgba(255,103,31,.12);color:var(--orange)}
+/* CROSSING LIST */
+.sb-scroll{flex:1;overflow-y:auto;padding:.5rem}
+.sb-scroll::-webkit-scrollbar{width:4px}
+.sb-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.country-group{margin-bottom:.7rem}
+.cg-head{display:flex;align-items:center;gap:.5rem;padding:.35rem .6rem;border-radius:6px;cursor:pointer;transition:background .15s;user-select:none}
+.cg-head:hover{background:var(--bg)}
+.cg-head.on{background:rgba(65,143,222,.08)}
+.cg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.cg-name{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:700;flex:1;color:var(--dark)}
+.cg-count{font-size:.65rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700}
+.cg-arrow{font-size:.6rem;color:var(--muted);transition:transform .2s}
+.cg-head.open .cg-arrow{transform:rotate(90deg)}
+.cg-crossings{display:none;padding:0 .3rem .3rem 1.5rem}
+.cg-crossings.open{display:block}
+.crossing-item{padding:.4rem .6rem;border-radius:5px;cursor:pointer;transition:background .15s;border-left:2px solid transparent;margin-bottom:.2rem}
+.crossing-item:hover{background:var(--bg)}
+.crossing-item.active{background:rgba(255,103,31,.06);border-left-color:var(--orange)}
+.ci-name{font-size:.78rem;font-weight:700;color:var(--dark)}
+.ci-meta{font-size:.62rem;color:var(--muted);margin-top:.08rem}
+.ci-state{display:inline-block;font-size:.55rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:.1rem .4rem;border-radius:100px;margin-top:.2rem}
 
-/* ── MAIN GRID ── */
-.main-grid{display:grid;grid-template-columns:1fr 1.8fr;gap:1.2rem;margin-bottom:1.3rem}
-@media(max-width:960px){.main-grid{grid-template-columns:1fr}}
+/* DETAIL PANEL */
+.sb-detail{border-top:1px solid var(--border);padding:.85rem 1rem;background:var(--bg);min-height:160px;transition:opacity .22s,transform .22s}
+.sb-detail.fade{opacity:0;transform:translateY(4px)}
+.sd-placeholder{display:flex;align-items:center;gap:.5rem;color:var(--muted);font-size:.75rem}
+.sd-placeholder i{font-size:1.2rem;opacity:.3}
+.sd-content h3{font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:800;color:var(--dark);margin-bottom:.5rem;display:flex;align-items:center;gap:.45rem}
+.sd-content h3 .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.sd-rows{display:flex;flex-direction:column;gap:.28rem}
+.sd-row{display:flex;justify-content:space-between;align-items:center;padding:.28rem .45rem;border-radius:4px;background:var(--surface);font-size:.72rem}
+.sd-row:hover{background:#e8f1fb}
+.sd-k{color:var(--muted)}.sd-v{font-weight:700;font-family:'Barlow Condensed',sans-serif;font-size:.88rem;color:var(--dark)}
+.sd-note{margin-top:.55rem;background:linear-gradient(135deg,#eef4fd,#f8fbff);border-left:3px solid var(--blue);border-radius:0 4px 4px 0;padding:.45rem .7rem;font-size:.68rem;color:var(--text);line-height:1.65}
 
-/* ── LEFT COLUMN ── */
-.left-col{display:flex;flex-direction:column;gap:1.2rem}
+/* CHART STRIP (bottom of sidebar) */
+.sb-chart{border-top:1px solid var(--border);padding:.7rem 1rem;background:var(--surface)}
+.sb-chart h4{font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--dark);margin-bottom:.5rem}
+#mini-chart{max-height:110px}
 
-/* ── PANEL ── */
-.panel{background:var(--surface);border-radius:8px;box-shadow:var(--sh);overflow:hidden}
-.panel-head{padding:.7rem 1rem;background:var(--dark);color:#fff;display:flex;align-items:center;justify-content:space-between}
-.panel-head h3{font-family:'Barlow Condensed',sans-serif;font-size:.92rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
-.panel-head .badge{background:var(--orange);color:#fff;font-size:.55rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.14rem .5rem;border-radius:100px}
-.panel-body{padding:1.2rem}
+/* MAP AREA */
+#map-area{flex:1;position:relative;overflow:hidden}
+#the-map{width:100%;height:100%}
+#arc-svg{position:absolute;inset:0;pointer-events:none;z-index:400}
 
-/* ── DETAIL PANEL ── */
-#detail-panel .panel-body{min-height:260px;transition:opacity .25s,transform .25s}
-#detail-panel .panel-body.animating{opacity:0;transform:translateX(6px)}
-.dp-overview p{font-size:.82rem;color:var(--muted);line-height:1.75}
-.dp-origin h4{font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:800;color:var(--dark);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
-.dp-origin h4 .dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
-.dp-origin .desc{font-size:.78rem;color:var(--muted);line-height:1.75;margin-bottom:.8rem}
-.stat-rows{display:flex;flex-direction:column;gap:.35rem}
-.stat-row{display:flex;justify-content:space-between;align-items:center;padding:.32rem .55rem;border-radius:5px;background:var(--bg);font-size:.75rem;transition:background .15s}
-.stat-row:hover{background:#e8f1fb}
-.sr-k{color:var(--muted)}
-.sr-v{font-weight:700;color:var(--dark);font-family:'Barlow Condensed',sans-serif;font-size:.92rem}
-.loc-note{margin-top:.8rem;background:linear-gradient(135deg,#eef4fd,#f8fbff);border-left:3px solid var(--blue);border-radius:0 5px 5px 0;padding:.55rem .8rem;font-size:.73rem;color:var(--text);line-height:1.65}
-.loc-note i{margin-right:.35rem;color:var(--blue)}
-
-/* ── DONUT CHART ── */
-#donut-wrap{position:relative;max-width:220px;margin:0 auto}
-#donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
-#donut-center .dc-num{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:800;color:var(--dark);line-height:1}
-#donut-center .dc-lbl{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
-.donut-legend{display:flex;flex-direction:column;gap:.28rem;margin-top:.8rem}
-.dl-item{display:flex;align-items:center;gap:.5rem;font-size:.7rem;cursor:pointer;padding:.18rem .3rem;border-radius:4px;transition:background .15s}
-.dl-item:hover{background:var(--bg)}
-.dl-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.dl-name{flex:1;color:var(--text);font-weight:600}
-.dl-val{color:var(--muted);font-family:'Barlow Condensed',sans-serif}
-
-/* ── MAP PANEL ── */
-.map-panel{background:var(--surface);border-radius:8px;box-shadow:var(--sh);overflow:hidden;position:relative}
-#inflow-map{height:500px}
-#arc-svg{position:absolute;top:36px;left:0;right:0;bottom:0;pointer-events:none;z-index:500}
+/* ARC ANIMATIONS */
 @keyframes flowDash{to{stroke-dashoffset:-32}}
 .arc{fill:none;stroke-linecap:round;transition:opacity .3s,stroke-width .3s}
-.arc.live{stroke-dasharray:8 5;animation:flowDash 1.6s linear infinite}
-.map-legend{position:absolute;bottom:12px;left:12px;z-index:600;background:rgba(255,255,255,.95);border-radius:6px;padding:.6rem .85rem;box-shadow:var(--sh);font-size:.63rem}
-.mleg-title{font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--dark);margin-bottom:.35rem;font-size:.6rem}
-.mli{display:flex;align-items:center;gap:.4rem;padding:.1rem 0;color:var(--muted)}
-.mli-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.mli-line{width:18px;height:2px;border-radius:1px;flex-shrink:0}
-@keyframes pulse{0%{r:6;opacity:.85}70%{r:20;opacity:0}100%{r:20;opacity:0}}
+.arc.live{stroke-dasharray:9 5;animation:flowDash 1.5s linear infinite}
+
+/* PULSE */
+@keyframes pulse{0%{r:7;opacity:.9}70%{r:22;opacity:0}100%{r:22;opacity:0}}
 .pring{animation:pulse 2.3s ease-out infinite}
 
-/* ── BOTTOM CHARTS ROW ── */
-.charts-row{display:grid;grid-template-columns:1.2fr 1fr;gap:1.2rem;margin-bottom:1.3rem}
-@media(max-width:960px){.charts-row{grid-template-columns:1fr}}
+/* MAP OVERLAYS */
+.map-legend{position:absolute;bottom:16px;left:16px;z-index:600;background:rgba(255,255,255,.95);border-radius:7px;padding:.65rem .9rem;box-shadow:var(--sh2);font-size:.62rem}
+.mlt{font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--dark);margin-bottom:.35rem;font-size:.58rem}
+.mli{display:flex;align-items:center;gap:.4rem;padding:.1rem 0;color:var(--muted)}
+.mli-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.mli-sq{width:12px;height:7px;border-radius:2px;flex-shrink:0}
+.mli-line{width:18px;height:2px;border-radius:1px;flex-shrink:0}
 
-/* ── DATA NOTE ── */
-.data-note{background:var(--dark);color:rgba(255,255,255,.6);border-radius:8px;padding:.9rem 1.3rem;font-size:.68rem;line-height:1.7;display:flex;align-items:flex-start;gap:.8rem}
-.data-note i{color:var(--yellow);margin-top:.1rem;flex-shrink:0}
-.data-note a{color:var(--yellow);text-decoration:none}
+.map-info{position:absolute;top:16px;right:16px;z-index:600;background:rgba(255,255,255,.96);border-radius:7px;padding:.65rem .9rem;box-shadow:var(--sh2);font-size:.65rem;max-width:220px;border-top:2px solid var(--orange)}
+.mi-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;color:var(--dark);margin-bottom:.4rem}
+.mi-row{display:flex;justify-content:space-between;gap:.8rem;padding:.18rem 0;font-size:.62rem;border-bottom:1px solid rgba(0,0,0,.05)}
+.mi-row:last-child{border:none}
+.mi-k{color:var(--muted)}.mi-v{font-weight:700;color:var(--dark);font-family:'Barlow Condensed',sans-serif}
 
-/* ── TOOLTIP ── */
-#tip{position:fixed;z-index:9999;pointer-events:none;background:var(--dark);color:#fff;padding:.5rem .85rem;font-size:.68rem;border-radius:5px;opacity:0;transition:opacity .12s;white-space:nowrap;border-top:2px solid var(--orange);box-shadow:var(--sh2)}
+/* Leaflet overrides */
+.leaflet-control-attribution{font-size:.5rem!important}
+.leaflet-popup-content-wrapper{border-radius:7px!important;box-shadow:var(--sh2)!important;font-family:'Source Sans 3',sans-serif}
+.leaflet-popup-content{font-size:.78rem!important;line-height:1.6!important}
+
+/* TOOLTIP */
+#tip{position:fixed;z-index:9999;pointer-events:none;background:var(--dark);color:#fff;padding:.4rem .75rem;font-size:.65rem;border-radius:5px;opacity:0;transition:opacity .12s;white-space:nowrap;border-top:2px solid var(--orange);box-shadow:var(--sh2)}
 #tip.on{opacity:1}
-#tip b{color:var(--yellow);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;display:block}
+#tip b{color:var(--yellow);font-family:'Barlow Condensed',sans-serif;font-size:.82rem;display:block}
 
-/* Leaflet */
-.leaflet-control-attribution{font-size:.52rem!important}
-.leaflet-popup-content-wrapper{border-radius:6px!important;box-shadow:var(--sh2)!important}
-.leaflet-popup-content{font-family:'Source Sans 3',sans-serif;font-size:.8rem!important}
+/* RESPONSIVE */
+@media(max-width:860px){
+  .shell{flex-direction:column;height:auto}
+  #sidebar{width:100%;height:auto;max-height:50vh}
+  #map-area{height:55vh}
+  .hstats{display:none}
+}
 </style>
 </head>
 <body>
@@ -160,121 +150,69 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--tex
       <div class="hbtext"><b>IOM · DTM</b><small>Displacement Tracking Matrix</small></div>
     </div>
     <div class="htitle">
-      <h1>Sudan | <em>Inflow</em> — Refugees &amp; Asylum-Seekers</h1>
-      <p>Origins of refugee populations hosted in Sudan · UNHCR / IOM · End 2024</p>
+      <h1>Sudan | <em>Cross-Border Inflow</em> — Refugee Entry Points</h1>
+      <p>Official border crossings · origin countries · location data</p>
     </div>
     <div class="hstats">
+      <div class="hs"><div class="hv">8</div><div class="hl">Active Crossings</div></div>
+      <div class="hs"><div class="hv">4</div><div class="hl">Neighbouring Countries</div></div>
       <div class="hs"><div class="hv">837,966</div><div class="hl">Refugees in Sudan</div></div>
-      <div class="hs"><div class="hv">−13%</div><div class="hl">Change from 2023</div></div>
-      <div class="hs"><div class="hv">2nd</div><div class="hl">Largest host in Africa</div></div>
-      <div class="hs"><div class="hv">7</div><div class="hl">Origin Countries</div></div>
+      <div class="hs"><div class="hv">−13%</div><div class="hl">Change 2023–24</div></div>
     </div>
   </div>
 </header>
 
-<div class="wrap">
+<div class="shell">
 
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <div class="sec-title">
-      <div class="abar"></div>
-      <div><h2>Refugee &amp; Asylum-Seeker Origins</h2><p>Click any card, bar, or map marker to explore a specific origin country</p></div>
-    </div>
-    <div class="controls">
-      <button class="ftab on" onclick="setFilter('all',this)">All Origins</button>
-      <button class="ftab" onclick="setFilter('top',this)">Top 3</button>
-      <button class="ftab" onclick="setFilter('new',this)">Post-2023 Arrivals</button>
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <div class="sb-head">
+      <h2>Border Crossings</h2>
+      <div class="filter-row">
+        <button class="ftab on" onclick="setFilter('all',this)">All</button>
+        <button class="ftab" onclick="setFilter('Chad',this)">Chad</button>
+        <button class="ftab" onclick="setFilter('Ethiopia',this)">Ethiopia</button>
+        <button class="ftab" onclick="setFilter('Egypt',this)">Egypt</button>
+        <button class="ftab" onclick="setFilter('South Sudan',this)">S. Sudan</button>
+        <button class="ftab" onclick="setFilter('Eritrea',this)">Eritrea</button>
+      </div>
       <div class="search-wrap">
         <i class="fas fa-search"></i>
-        <input id="search" type="text" placeholder="Search country…" oninput="doSearch(this.value)">
-      </div>
-    </div>
-  </div>
-
-  <!-- CARDS -->
-  <div class="cards-grid" id="cards-grid"></div>
-
-  <!-- MAIN GRID: detail+donut | map -->
-  <div class="main-grid">
-
-    <!-- LEFT -->
-    <div class="left-col">
-
-      <!-- DETAIL PANEL -->
-      <div class="panel" id="detail-panel">
-        <div class="panel-head">
-          <h3 id="dp-head">Overview</h3>
-          <span class="badge" id="dp-badge">UNHCR · End 2024</span>
-        </div>
-        <div class="panel-body" id="dp-body">
-          <div class="dp-overview">
-            <p>Sudan hosted <strong>837,966</strong> refugees and asylum-seekers at end of 2024 — a <strong>13% decline</strong> from 2023, driven by secondary displacement after the April 2023 SAF–RSF conflict. Before the conflict, Sudan was Africa's <strong>2nd-largest refugee host</strong>, sheltering over 1 million people. South Sudanese remain the largest group, followed by Eritreans and Ethiopians.<br><br>Select any origin country above or on the map to explore detailed data.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- DONUT CHART -->
-      <div class="panel">
-        <div class="panel-head"><h3>Population Composition</h3><span class="badge">% of total</span></div>
-        <div class="panel-body">
-          <div id="donut-wrap">
-            <canvas id="donut-chart" height="220"></canvas>
-            <div id="donut-center"><div class="dc-num">837K</div><div class="dc-lbl">Total</div></div>
-          </div>
-          <div class="donut-legend" id="donut-legend"></div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- MAP -->
-    <div class="map-panel">
-      <div class="panel-head">
-        <h3>Geographic Origins — Flow into Sudan</h3>
-        <span class="badge">Interactive</span>
-      </div>
-      <div style="position:relative">
-        <div id="inflow-map"></div>
-        <svg id="arc-svg" xmlns="http://www.w3.org/2000/svg"></svg>
-        <div class="map-legend">
-          <div class="mleg-title">Legend</div>
-          <div class="mli"><div class="mli-dot" style="background:var(--orange)"></div>Sudan (host)</div>
-          <div class="mli"><div class="mli-dot" style="background:var(--blue)"></div>Origin country</div>
-          <div class="mli"><div class="mli-dot" style="background:#aaa;opacity:.5"></div>Bubble = population size</div>
-          <div class="mli"><div class="mli-line" style="background:linear-gradient(90deg,var(--blue),var(--orange))"></div>Flow route</div>
-        </div>
+        <input id="srch" type="text" placeholder="Search crossing or state…" oninput="doSearch(this.value)">
       </div>
     </div>
 
-  </div>
+    <div class="sb-scroll" id="sb-scroll"></div>
 
-  <!-- BOTTOM CHARTS -->
-  <div class="charts-row">
-
-    <!-- HORIZONTAL BAR -->
-    <div class="panel">
-      <div class="panel-head"><h3>Refugees by Origin — Ranked</h3><span class="badge">Click to select</span></div>
-      <div class="panel-body"><canvas id="hbar-chart" height="220"></canvas></div>
+    <div class="sb-detail" id="sb-detail">
+      <div class="sd-placeholder"><i class="fas fa-map-marker-alt"></i><span>Select a crossing or country to see details</span></div>
     </div>
 
-    <!-- TIMELINE -->
-    <div class="panel">
-      <div class="panel-head"><h3>Refugee Population in Sudan Over Time</h3><span class="badge">2015–2024</span></div>
-      <div class="panel-body"><canvas id="timeline-chart" height="220"></canvas></div>
+    <div class="sb-chart">
+      <h4>Inflow by Neighbouring Country</h4>
+      <canvas id="mini-chart"></canvas>
+    </div>
+  </aside>
+
+  <!-- MAP -->
+  <div id="map-area">
+    <div id="the-map"></div>
+    <svg id="arc-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+
+    <div class="map-legend">
+      <div class="mlt">Legend</div>
+      <div class="mli"><div class="mli-dot" style="background:var(--orange)"></div>Sudan interior</div>
+      <div class="mli"><div class="mli-dot" style="background:var(--blue)"></div>Border crossing</div>
+      <div class="mli"><div class="mli-sq" style="background:rgba(65,143,222,.25)"></div>State (origin country)</div>
+      <div class="mli"><div class="mli-line" style="background:linear-gradient(90deg,var(--blue),var(--orange))"></div>Inflow route</div>
     </div>
 
-  </div>
-
-  <!-- DATA NOTE -->
-  <div class="data-note">
-    <i class="fas fa-info-circle"></i>
-    <div>
-      <strong style="color:rgba(255,255,255,.85)">Data sources &amp; methodology:</strong>
-      Refugee and asylum-seeker figures are sourced from <a href="https://reporting.unhcr.org/operational/operations/sudan" target="_blank">UNHCR Sudan</a> and
-      <a href="https://dtm.iom.int/sudan" target="_blank">IOM Displacement Tracking Matrix</a>. Population counts represent end-of-year 2024 estimates.
-      The 13% decline from 2023 reflects secondary displacement caused by the April 2023 SAF–RSF conflict. New arrivals post-April 2023 (~13,667)
-      are primarily from Eritrea and Ethiopia. Figures are estimates and subject to revision.
-      Contact: <a href="mailto:dtmsudan@iom.int">dtmsudan@iom.int</a>
+    <div class="map-info" id="map-info">
+      <div class="mi-title">Sudan Overview</div>
+      <div class="mi-row"><span class="mi-k">Total refugees hosted</span><span class="mi-v">837,966</span></div>
+      <div class="mi-row"><span class="mi-k">Largest origin group</span><span class="mi-v">South Sudan</span></div>
+      <div class="mi-row"><span class="mi-k">New arrivals (post-Apr 23)</span><span class="mi-v">~13,667</span></div>
+      <div class="mi-row"><span class="mi-k">Change from 2023</span><span class="mi-v" style="color:var(--orange)">−13%</span></div>
     </div>
   </div>
 
@@ -283,432 +221,452 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--tex
 <div id="tip"></div>
 
 <script>
-/* ═══════════════ DATA ═══════════════ */
-const TOTAL = 837966;
-const SC = [15.5, 30.5]; // Sudan center
-
-const O = [
-  { id:'ss', name:'South Sudan',    lat:6.8,  lng:31.3, n:540000,  lbl:'~540,000', clr:'#FF671F', top:true,  isNew:false,
-    icon:'🇸🇸', tag:'large',
-    loc:'White Nile, Upper Nile & Central Darfur states',
-    desc:'The largest refugee group in Sudan. Primarily fled civil wars between 2013 and 2018. Most reside in White Nile camp complexes. ~640,000 South Sudanese returned home from Sudan after the April 2023 conflict began, straining both South Sudan and Sudan's response capacity.',
-    stats:[['Peak influx period','2013–2018'],['Primary host state','White Nile (79%)'],['Returnees to S. Sudan (23–24)','~640,000'],['Main camps','White Nile camp complex'],['Status','Ongoing arrivals & returns']]
+/* ═══════════════ CROSSING DATA ═══════════════ */
+/* Real coordinates from provided dataset */
+const CROSSINGS = [
+  {
+    id:'c1', crossing:'Um Dukhun', state:'Central Darfur', locality:'Um Dukhun',
+    country:'Chad', lat:11.139, lng:22.966,
+    desc:'Main crossing point between Central Darfur and eastern Chad. Serves communities displaced from Darfur conflict zones.',
+    stats:[['State','Central Darfur'],['Locality','Um Dukhun'],['Neighbouring country','Chad'],['Flow type','Refugee inflow & outflow'],['Coordinates','11.139°N, 22.966°E']]
   },
-  { id:'er', name:'Eritrea',        lat:15.2, lng:39.8, n:137000,  lbl:'~137,000', clr:'#418FDE', top:true,  isNew:true,
-    icon:'🇪🇷', tag:'new',
-    loc:'Kassala & Gedaref states — Shagarab camp complex',
-    desc:'Eritrean refugees flee forced military conscription and political repression. Shagarab camps 1–3 host the majority. New arrivals continued after April 2023 with ~6,704 individuals. Total since 2018: ~49,095. Sudan\'s open-border policy means this flow persists.',
-    stats:[['Arrivals since 2018','~49,095'],['New arrivals (post-Apr 23)','~6,704'],['Primary camps','Shagarab 1, 2, 3 & Kilo 26'],['Host states','Kassala / Gedaref'],['Driver','Forced conscription & repression']]
+  {
+    id:'c2', crossing:'Gallabat / Metema', state:'Gedaref', locality:'Basundah',
+    country:'Ethiopia', lat:12.95798, lng:36.151888,
+    desc:'Key crossing between Gedaref state and Ethiopia\'s Amhara region. Primary entry point for Ethiopians fleeing the Tigray War (2020–22). New arrivals continue through this crossing post-April 2023.',
+    stats:[['State','Gedaref'],['Locality','Basundah'],['Neighbouring country','Ethiopia'],['Key inflow','Tigray War displaced (2020–22)'],['Coordinates','12.958°N, 36.152°E']]
   },
-  { id:'et', name:'Ethiopia',       lat:9.1,  lng:40.5, n:97000,   lbl:'~97,000',  clr:'#5CB8B2', top:true,  isNew:true,
-    icon:'🇪🇹', tag:'new',
-    loc:'Gedaref & Blue Nile states',
-    desc:'Primarily Tigrayans who fled the 2020–2022 Tigray War. ~11,771 identified returnees as of August 2024. New arrivals continue as conditions in Ethiopia remain volatile. Sudan maintains open borders for Ethiopians arriving at eastern crossings.',
-    stats:[['Primary trigger','Tigray War 2020–2022'],['Identified returnees (Aug 24)','~11,771'],['Host states','Gedaref / Blue Nile'],['Post-2023 arrivals','Ongoing'],['Entry points','Eastern border crossings']]
+  {
+    id:'c3', crossing:'Argeen', state:'Northern', locality:'Halfa',
+    country:'Egypt', lat:21.988934, lng:31.153322,
+    desc:'Northern crossing between Halfa locality and Egypt. Primary corridor for movement between Sudan and Egypt, used by refugees and migrants heading to or arriving from Egypt.',
+    stats:[['State','Northern'],['Locality','Halfa'],['Neighbouring country','Egypt'],['Type','Sudan–Egypt corridor'],['Coordinates','21.989°N, 31.153°E']]
   },
-  { id:'sy', name:'Syria',          lat:34.8, lng:38.9, n:64000,   lbl:'~64,000',  clr:'#FFB81C', top:false, isNew:false,
-    icon:'🇸🇾', tag:'',
-    loc:'Khartoum metropolitan area — urban settlement',
-    desc:'Syrian refugees arrived mainly between 2012 and 2018 following the Syrian civil war. Concentrated in urban Khartoum. Severely impacted by the 2023 Sudan conflict; many underwent secondary displacement, reducing the registered population significantly.',
-    stats:[['Main influx period','2012–2018'],['Settlement type','Urban — Khartoum'],['Impact of 2023 conflict','Mass secondary displacement'],['Current trend','Population significantly reduced'],['Origin trigger','Syrian civil war']]
+  {
+    id:'c4', crossing:'Ashkeet', state:'Northern', locality:'Halfa',
+    country:'Egypt', lat:22.000523, lng:31.511477,
+    desc:'Secondary crossing in Halfa locality near the Egypt border. Used alongside Argeen as part of the northern Sudan–Egypt movement corridor.',
+    stats:[['State','Northern'],['Locality','Halfa'],['Neighbouring country','Egypt'],['Type','Secondary Sudan–Egypt crossing'],['Coordinates','22.001°N, 31.511°E']]
   },
-  { id:'ca', name:'Cent. Afr. Rep.',lat:6.6,  lng:20.9, n:18000,   lbl:'~18,000',  clr:'#9B59B6', top:false, isNew:false,
-    icon:'🇨🇫', tag:'',
-    loc:'South Darfur state — border refugee camps',
-    desc:'Fled armed group violence in the Central African Republic across the southwestern Sudan border. A persistent low-level flow exists. UNHCR projected 10,000 eventual returns when security conditions improve.',
-    stats:[['Host state','South Darfur (border camps)'],['Entry point','SW Sudan border crossings'],['UNHCR return projection','10,000 individuals'],['Flow type','Stable low-level inflow'],['Driver','Armed group violence']]
+  {
+    id:'c5', crossing:'Adekonk', state:'West Darfur', locality:'Ag Geneina',
+    country:'Chad', lat:13.4623111, lng:22.2296523,
+    desc:'Located in Ag Geneina locality, West Darfur. Major crossing point for the largest flows of Sudanese refugees into Chad following the April 2023 conflict escalation — particularly from West Darfur.',
+    stats:[['State','West Darfur'],['Locality','Ag Geneina'],['Neighbouring country','Chad'],['Significance','Major 2023 exodus route'],['Coordinates','13.462°N, 22.230°E']]
   },
-  { id:'cd', name:'Chad',           lat:15.5, lng:18.7, n:9000,    lbl:'~9,000',   clr:'#27AE60', top:false, isNew:false,
-    icon:'🇹🇩', tag:'',
-    loc:'West Darfur & North Darfur states — border zone',
-    desc:'Cross-border nomadic and conflict-displaced Chadian communities. Note: the flow is bidirectional — Chad is primarily a destination for Sudanese, with approximately 767,000 Sudanese refugees now in Chad. The small Chadian population in Sudan represents traditional cross-border communities.',
-    stats:[['Chadians in Sudan','~9,000'],['Sudanese refugees in Chad','~767,000'],['Host states','West & North Darfur'],['Population type','Cross-border community'],['Direction','Primarily outflow from Sudan']]
+  {
+    id:'c6', crossing:'Tina', state:'West Darfur', locality:'At Tina',
+    country:'Chad', lat:15.011970, lng:22.489920,
+    desc:'At Tina locality crossing into Chad. One of several crossing points in West Darfur used during the mass displacement from Darfur since April 2023.',
+    stats:[['State','West Darfur'],['Locality','At Tina'],['Neighbouring country','Chad'],['Type','Darfur–Chad corridor'],['Coordinates','15.012°N, 22.490°E']]
   },
-  { id:'ot', name:'Other Origins',  lat:15.5, lng:48.5, n:17000,   lbl:'~17,000',  clr:'#95A5A6', top:false, isNew:false,
-    icon:'🌍', tag:'',
-    loc:'Urban centres — Khartoum, Port Sudan',
-    desc:'Includes refugees and asylum-seekers from Yemen, DRC, Somalia, and other nationalities. Mostly urban settlement. Reduced significantly due to secondary displacement caused by the 2023 Sudan conflict. IOM supports many through transit and voluntary return programmes.',
-    stats:[['Main nationalities','Yemen, DRC, Somalia'],['Settlement type','Urban — Khartoum, Port Sudan'],['2024 trend','Declining — secondary displacement'],['IOM programmes','Transit & voluntary return'],['Host states','Various urban centres']]
+  {
+    id:'c7', crossing:'Juda', state:'White Nile', locality:'Aj Jabaleen',
+    country:'South Sudan', lat:12.236580, lng:32.761862,
+    desc:'Crossing between White Nile state and South Sudan. Used by South Sudanese returnees and refugees. White Nile hosts the majority (~79%) of South Sudanese refugees in Sudan — the largest group.',
+    stats:[['State','White Nile'],['Locality','Aj Jabaleen'],['Neighbouring country','South Sudan'],['Significance','Main S. Sudanese corridor'],['Coordinates','12.237°N, 32.762°E']]
+  },
+  {
+    id:'c8', crossing:'Al Laffa', state:'Kassala', locality:'Kassala',
+    country:'Eritrea', lat:15.15372, lng:36.4355,
+    desc:'Kassala crossing into Eritrea. Key entry point for Eritrean refugees fleeing forced conscription and political repression. ~6,704 new Eritrean arrivals recorded post-April 2023 through eastern crossings including this one.',
+    stats:[['State','Kassala'],['Locality','Kassala'],['Neighbouring country','Eritrea'],['New arrivals (post-Apr 23)','~6,704'],['Coordinates','15.154°N, 36.436°E']]
   },
 ];
 
-const TIMELINE_DATA = {
-  labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'],
-  values:[230000, 312000, 420000, 780000, 895000, 970000, 1050000, 1100000, 960000, 837966]
+/* Country config */
+const COUNTRIES = {
+  'Chad':       { clr:'#418FDE', icon:'🇹🇩', refugees:9000,  desc:'Chad is primarily a destination for Sudanese (~767,000 fled there). Small Chadian population in Sudan represents cross-border communities in West/North Darfur.' },
+  'Ethiopia':   { clr:'#5CB8B2', icon:'🇪🇹', refugees:97000, desc:'~97,000 Ethiopian refugees in Sudan, primarily Tigrayans from the 2020–22 war. New arrivals continue through Gedaref state crossings.' },
+  'Egypt':      { clr:'#FFB81C', icon:'🇪🇬', refugees:0,     desc:'Egypt is a major destination for Sudanese refugees (1.5M+). The northern crossings at Halfa are primarily transit routes.' },
+  'South Sudan':{ clr:'#FF671F', icon:'🇸🇸', refugees:540000,desc:'Largest group — ~540,000 South Sudanese in Sudan. Most in White Nile camps. ~640,000 returned home post-April 2023 conflict.' },
+  'Eritrea':    { clr:'#E74C3C', icon:'🇪🇷', refugees:137000,desc:'~137,000 Eritreans in Sudan in Kassala/Gedaref Shagarab camp complex. Flee forced conscription & repression. ~6,704 new arrivals since April 2023.' },
 };
 
-/* ═══════════════ STATE ═══════════════ */
-let sel = null, filt = 'all', searchQ = '';
-let hbarChart, donutChart, timelineChart;
+/* Sudan center for arc terminus */
+const SC = [15.5, 30.5];
 
-/* ═══════════════ MAP ═══════════════ */
-const map = L.map('inflow-map',{
-  center:[16,31], zoom:4,
-  scrollWheelZoom:false, minZoom:3, maxZoom:8,
-  attributionControl:true, zoomControl:true
+/* ═══════════════ STATE ═══════════════ */
+let selId = null, selCountry = null, filt = 'all', searchQ = '';
+
+/* ═══════════════ MAP INIT ═══════════════ */
+const map = L.map('the-map', {
+  center:[16, 30], zoom:5,
+  scrollWheelZoom:true, minZoom:4, maxZoom:10,
+  attributionControl:true
 });
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
   attribution:'&copy; OpenStreetMap &copy; CARTO', maxZoom:19
 }).addTo(map);
 
-// Sudan marker
+/* Sudan center marker */
 const sudanIcon = L.divIcon({
   className:'',
-  html:`<svg width="52" height="52" viewBox="0 0 52 52">
-    <circle cx="26" cy="26" r="16" fill="#FF671F" opacity=".18"/>
-    <circle cx="26" cy="26" r="10" fill="#FF671F" opacity=".5"/>
-    <circle cx="26" cy="26" r="5"  fill="#FF671F"/>
+  html:`<svg width="50" height="50" viewBox="0 0 50 50">
+    <circle cx="25" cy="25" r="16" fill="#FF671F" opacity=".15"/>
+    <circle cx="25" cy="25" r="10" fill="#FF671F" opacity=".45"/>
+    <circle cx="25" cy="25" r="5"  fill="#FF671F"/>
   </svg>`,
-  iconSize:[52,52], iconAnchor:[26,26]
+  iconSize:[50,50], iconAnchor:[25,25]
 });
-L.marker(SC,{icon:sudanIcon}).addTo(map)
-  .bindTooltip(`<b style="color:#FF671F;font-family:Barlow Condensed,sans-serif;font-size:1rem">SUDAN</b><br>
-    <span style="font-size:.75rem;color:#555">Host country · 837,966 refugees</span>`,
-    {direction:'right', offset:[10,0]});
+L.marker(SC,{icon:sudanIcon,zIndexOffset:1000}).addTo(map)
+  .bindTooltip(`<b style="color:#FF671F">SUDAN</b><br>
+    <small>837,966 refugees hosted · End 2024</small>`,
+    {direction:'right',offset:[12,0]});
 
-// Proportional bubble circles + markers
-const bubbles={}, mkrs={};
-O.forEach(o=>{
-  const r = Math.max(6, Math.sqrt(o.n/TOTAL)*110);
-  const circle = L.circle([o.lat,o.lng],{
-    radius: r*8000,
-    color: o.clr, fillColor: o.clr,
-    fillOpacity:.12, weight:1.5, opacity:.5
-  }).addTo(map);
-  bubbles[o.id]=circle;
-
+/* Crossing markers */
+const mkrMap = {};
+CROSSINGS.forEach(c => {
+  const cc = COUNTRIES[c.country];
   const icon = L.divIcon({
     className:'',
-    html:`<svg width="42" height="42" viewBox="0 0 42 42">
-      <circle cx="21" cy="21" r="7" fill="${o.clr}" opacity=".9"/>
-      <circle class="pring" cx="21" cy="21" r="7" fill="none" stroke="${o.clr}" stroke-width="1.5"
-        style="animation-delay:${(Math.random()*1.5).toFixed(2)}s"/>
+    html:`<svg width="44" height="44" viewBox="0 0 44 44">
+      <circle cx="22" cy="22" r="7" fill="${cc.clr}" opacity=".9"/>
+      <circle class="pring" cx="22" cy="22" r="7" fill="none" stroke="${cc.clr}" stroke-width="1.5"
+        style="animation-delay:${(Math.random()*1.8).toFixed(2)}s"/>
     </svg>`,
-    iconSize:[42,42], iconAnchor:[21,21]
+    iconSize:[44,44], iconAnchor:[22,22]
   });
-  const m = L.marker([o.lat,o.lng],{icon}).addTo(map)
-    .on('click',()=>pick(o.id))
-    .on('mouseover',e=>showTip(e,o))
+  const m = L.marker([c.lat,c.lng],{icon})
+    .addTo(map)
+    .on('click',()=>pickCrossing(c.id))
+    .on('mouseover',e=>showTip(e,c))
     .on('mouseout',()=>document.getElementById('tip').classList.remove('on'));
-  mkrs[o.id]=m;
+  mkrMap[c.id]=m;
 });
 
-/* ═══════════════ ARCS ═══════════════ */
+/* ═══════════════ ARC SVG ═══════════════ */
 const arcSvg = document.getElementById('arc-svg');
-const NS='http://www.w3.org/2000/svg';
+const NS = 'http://www.w3.org/2000/svg';
 
 function pt(lat,lng){
-  const p=map.latLngToContainerPoint([lat,lng]);
-  return {x:p.x,y:p.y};
+  const r = map.getContainer().getBoundingClientRect();
+  const p = map.latLngToContainerPoint([lat,lng]);
+  return {x:p.x, y:p.y};
 }
+
 function drawArcs(){
   arcSvg.innerHTML='';
-  const defs=document.createElementNS(NS,'defs');
-  O.forEach(o=>{
-    const a=pt(o.lat,o.lng), b=pt(SC[0],SC[1]);
-    const mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
-    const dx=b.x-a.x,dy=b.y-a.y,nm=Math.sqrt(dx*dx+dy*dy)||1;
-    const cv=nm*.3, cx=mx-(dy/nm)*cv, cy=my+(dx/nm)*cv;
+  const defs = document.createElementNS(NS,'defs');
+
+  CROSSINGS.forEach(c=>{
+    const cc = COUNTRIES[c.country];
+    const a = pt(c.lat,c.lng), b = pt(SC[0],SC[1]);
+    const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+    const dx=b.x-a.x, dy=b.y-a.y, nm=Math.sqrt(dx*dx+dy*dy)||1;
+    const cv = nm*0.28;
+    // curve upward/toward center
+    const cx = mx-(dy/nm)*cv, cy = my+(dx/nm)*cv;
     const d=`M${a.x} ${a.y} Q${cx} ${cy} ${b.x} ${b.y}`;
-    const gid=`g${o.id}`;
+
+    const gid=`g${c.id}`;
     const gr=document.createElementNS(NS,'linearGradient');
     gr.setAttribute('id',gid); gr.setAttribute('gradientUnits','userSpaceOnUse');
     gr.setAttribute('x1',a.x); gr.setAttribute('y1',a.y);
     gr.setAttribute('x2',b.x); gr.setAttribute('y2',b.y);
-    [{off:'0%',clr:o.clr,op:'.85'},{off:'100%',clr:'#FF671F',op:'.4'}].forEach(s=>{
+    [{off:'0%',clr:cc.clr,op:.85},{off:'100%',clr:'#FF671F',op:.4}].forEach(s=>{
       const st=document.createElementNS(NS,'stop');
       st.setAttribute('offset',s.off); st.setAttribute('stop-color',s.clr);
       st.setAttribute('stop-opacity',s.op); gr.appendChild(st);
     });
     defs.appendChild(gr);
+
     const path=document.createElementNS(NS,'path');
-    path.setAttribute('d',d); path.setAttribute('id',`arc-${o.id}`);
-    path.setAttribute('class','arc'); path.setAttribute('stroke',`url(#${gid})`);
-    path.setAttribute('stroke-width','1.5'); path.style.opacity='0';
+    path.setAttribute('d',d);
+    path.setAttribute('id',`arc-${c.id}`);
+    path.setAttribute('class','arc');
+    path.setAttribute('stroke',`url(#${gid})`);
+    path.setAttribute('stroke-width','2');
+    path.style.opacity='0';
+
+    // click on arc
+    path.style.pointerEvents='visibleStroke';
+    path.style.cursor='pointer';
+    path.addEventListener('click',()=>pickCrossing(c.id));
+
     arcSvg.appendChild(path);
   });
   arcSvg.insertBefore(defs,arcSvg.firstChild);
   applyVis();
 }
+
+function isVisible(c){
+  if(searchQ && !c.crossing.toLowerCase().includes(searchQ.toLowerCase())
+     && !c.state.toLowerCase().includes(searchQ.toLowerCase())
+     && !c.country.toLowerCase().includes(searchQ.toLowerCase())) return false;
+  if(filt==='all') return true;
+  return c.country===filt;
+}
+
 function applyVis(){
-  O.forEach(o=>{
-    const el=document.getElementById(`arc-${o.id}`);
+  CROSSINGS.forEach(c=>{
+    const el=document.getElementById(`arc-${c.id}`);
     if(!el) return;
     el.classList.remove('live');
-    const vis = sel ? o.id===sel : (filt==='all'||( filt==='top'&&o.top)||(filt==='new'&&o.isNew));
-    if(vis){
+    const cc=COUNTRIES[c.country];
+    const vis = isVisible(c);
+    const highlight = selId ? c.id===selId : (selCountry ? c.country===selCountry : vis);
+
+    if(highlight && vis){
       el.classList.add('live');
-      const w=Math.max(1.5,Math.log10(o.n)-1.4);
-      el.setAttribute('stroke-width', sel ? w+1.8 : w);
-      el.style.opacity = sel ? '.95' : '.72';
+      const w = selId&&c.id===selId ? 4 : selCountry ? 3 : 2;
+      el.setAttribute('stroke-width',w);
+      el.style.opacity = selId ? (c.id===selId?'1':'.12') : (selCountry ? (c.country===selCountry?'.9':'.08') : '.72');
     } else {
-      el.style.opacity = sel ? '.03' : '.05';
+      el.style.opacity = vis ? '.35' : '.04';
     }
-    // bubble visibility
-    if(bubbles[o.id]){
-      bubbles[o.id].setStyle({opacity: vis?.5:.1, fillOpacity: vis?.12:.03});
+
+    // marker opacity
+    if(mkrMap[c.id]){
+      const el2 = mkrMap[c.id].getElement();
+      if(el2) el2.style.opacity = vis ? '1' : '.25';
     }
   });
 }
+
 map.on('move zoom',drawArcs);
 window.addEventListener('resize',drawArcs);
 
-/* ═══════════════ CARDS ═══════════════ */
-function buildCards(){
-  const grid=document.getElementById('cards-grid');
-  const sorted=[...O].sort((a,b)=>b.n-a.n);
-  grid.innerHTML=sorted.map((o,i)=>{
-    const pct=((o.n/TOTAL)*100).toFixed(1);
-    const visible = filt==='all'||(filt==='top'&&o.top)||(filt==='new'&&o.isNew);
-    const matchSearch = !searchQ || o.name.toLowerCase().includes(searchQ.toLowerCase());
-    const hidden = (!visible||!matchSearch) && !sel ? 'hidden' : '';
-    const tagHtml = o.tag==='new'
-      ? `<span class="card-tag tag-new"><i class="fas fa-plus-circle"></i> Post-2023</span>`
-      : o.tag==='large'
-      ? `<span class="card-tag tag-large"><i class="fas fa-users"></i> Largest group</span>`
-      : '';
-    return `<div class="card${o.id===sel?' active':''} ${hidden}" id="card-${o.id}"
-        style="border-top-color:${o.clr}" onclick="pick('${o.id}')">
-      <div class="card-rank">#${i+1}</div>
-      <div class="card-icon" style="background:${o.clr}22;color:${o.clr}">${o.icon}</div>
-      <div class="card-name">${o.name}</div>
-      <div class="card-num">${o.lbl}</div>
-      <div class="card-pct">${pct}% of total</div>
-      <div class="card-bar-bg"><div class="card-bar-fill" style="width:${o.n/540000*100}%;background:${o.clr}"></div></div>
-      ${tagHtml}
+/* ═══════════════ SIDEBAR LIST ═══════════════ */
+function buildList(){
+  const el=document.getElementById('sb-scroll');
+  // group by country
+  const groups={};
+  CROSSINGS.forEach(c=>{ if(!groups[c.country]) groups[c.country]=[]; groups[c.country].push(c); });
+
+  let html='';
+  Object.entries(groups).forEach(([country,crossings])=>{
+    const cc=COUNTRIES[country];
+    const allVis=crossings.filter(isVisible);
+    if(allVis.length===0) return;
+    const isOpen = filt===country || selCountry===country || filt==='all';
+    const hasActive = crossings.some(c=>c.id===selId);
+    html+=`<div class="country-group">
+      <div class="cg-head${selCountry===country?' on':''} ${isOpen?'open':''}" onclick="toggleGroup('${country}',this)">
+        <div class="cg-dot" style="background:${cc.clr}"></div>
+        <span class="cg-name">${cc.icon} ${country}</span>
+        <span class="cg-count">${allVis.length} crossing${allVis.length>1?'s':''}</span>
+        <span class="cg-arrow">▶</span>
+      </div>
+      <div class="cg-crossings ${isOpen||hasActive?'open':''}">
+        ${allVis.map(c=>`
+        <div class="crossing-item${c.id===selId?' active':''}" id="ci-${c.id}" onclick="pickCrossing('${c.id}')">
+          <div class="ci-name"><i class="fas fa-border-all" style="font-size:.65rem;color:${cc.clr};margin-right:.3rem"></i>${c.crossing}</div>
+          <div class="ci-meta"><i class="fas fa-map-pin" style="font-size:.55rem;margin-right:.2rem"></i>${c.state} · ${c.locality}</div>
+          <span class="ci-state" style="background:${cc.clr}18;color:${cc.clr}">${c.country}</span>
+        </div>`).join('')}
+      </div>
     </div>`;
-  }).join('');
+  });
+  el.innerHTML=html;
+}
+
+function toggleGroup(country,el){
+  const wasOpen=el.classList.contains('open');
+  document.querySelectorAll('.cg-head').forEach(h=>{h.classList.remove('open','on');h.nextElementSibling.classList.remove('open')});
+  if(!wasOpen){
+    el.classList.add('open','on');
+    el.nextElementSibling.classList.add('open');
+    selCountry=country; selId=null;
+    updateDetail(country);
+    applyVis();
+    // fly to country crossings centroid
+    const pts=CROSSINGS.filter(c=>c.country===country);
+    if(pts.length){
+      const lat=pts.reduce((s,c)=>s+c.lat,0)/pts.length;
+      const lng=pts.reduce((s,c)=>s+c.lng,0)/pts.length;
+      map.flyTo([lat,lng],6,{duration:.9});
+    }
+  } else {
+    selCountry=null; selId=null;
+    clearDetail(); applyVis();
+    map.flyTo([16,30],5,{duration:.8});
+  }
+  buildList();
 }
 
 /* ═══════════════ DETAIL PANEL ═══════════════ */
-function animatePanel(html, title, badge){
-  const body=document.getElementById('dp-body');
-  body.classList.add('animating');
+function updateDetail(countryOrId){
+  const det=document.getElementById('sb-detail');
+  det.classList.add('fade');
   setTimeout(()=>{
-    document.getElementById('dp-head').textContent=title;
-    document.getElementById('dp-badge').textContent=badge;
-    body.innerHTML=html;
-    body.classList.remove('animating');
+    if(selId){
+      const c=CROSSINGS.find(x=>x.id===selId);
+      const cc=COUNTRIES[c.country];
+      const rows=c.stats.map(([k,v])=>`<div class="sd-row"><span class="sd-k">${k}</span><span class="sd-v">${v}</span></div>`).join('');
+      det.innerHTML=`<div class="sd-content">
+        <h3><span class="dot" style="background:${cc.clr}"></span>${c.crossing}</h3>
+        <div class="sd-rows">${rows}</div>
+        <div class="sd-note" style="border-color:${cc.clr}"><i class="fas fa-info-circle" style="color:${cc.clr}"></i> ${c.desc}</div>
+      </div>`;
+    } else if(selCountry){
+      const cc=COUNTRIES[selCountry];
+      const cs=CROSSINGS.filter(c=>c.country===selCountry);
+      det.innerHTML=`<div class="sd-content">
+        <h3><span class="dot" style="background:${cc.clr}"></span>${cc.icon} ${selCountry}</h3>
+        <div class="sd-rows">
+          <div class="sd-row"><span class="sd-k">Refugees in Sudan</span><span class="sd-v">${cc.refugees.toLocaleString()}</span></div>
+          <div class="sd-row"><span class="sd-k">Active crossings</span><span class="sd-v">${cs.length}</span></div>
+          <div class="sd-row"><span class="sd-k">States</span><span class="sd-v">${[...new Set(cs.map(c=>c.state))].join(', ')}</span></div>
+        </div>
+        <div class="sd-note" style="border-color:${cc.clr}"><i class="fas fa-info-circle" style="color:${cc.clr}"></i> ${cc.desc}</div>
+      </div>`;
+    }
+    det.classList.remove('fade');
   },200);
 }
 
-function updatePanel(){
-  if(!sel){
-    animatePanel(
-      `<div class="dp-overview"><p>Sudan hosted <strong>837,966</strong> refugees and asylum-seekers at end of 2024 — a <strong>13% decline</strong> from 2023, driven by secondary displacement after the April 2023 SAF–RSF conflict. Before the conflict, Sudan was Africa's <strong>2nd-largest refugee host</strong>. South Sudanese remain the largest group, followed by Eritreans and Ethiopians.<br><br>Select any origin country above or on the map to explore detailed data.</p></div>`,
-      'Overview', 'UNHCR · End 2024'
-    );
-    return;
-  }
-  const o=O.find(x=>x.id===sel);
-  const pct=((o.n/TOTAL)*100).toFixed(1);
-  const rows=o.stats.map(([k,v])=>`<div class="stat-row"><span class="sr-k">${k}</span><span class="sr-v">${v}</span></div>`).join('');
-  animatePanel(`
-    <div class="dp-origin">
-      <h4><span class="dot" style="background:${o.clr}"></span>${o.name} <span style="color:var(--muted);font-size:.85rem;font-weight:400;font-family:'Source Sans 3'">${pct}% of total</span></h4>
-      <p class="desc">${o.desc}</p>
-      <div class="stat-rows">${rows}</div>
-      <div class="loc-note"><i class="fas fa-map-marker-alt"></i><strong>Location in Sudan:</strong> ${o.loc}</div>
-    </div>`,
-    o.name, `${o.lbl} individuals`
-  );
+function clearDetail(){
+  const det=document.getElementById('sb-detail');
+  det.classList.add('fade');
+  setTimeout(()=>{
+    det.innerHTML=`<div class="sd-placeholder"><i class="fas fa-map-marker-alt"></i><span>Select a crossing or country to see details</span></div>`;
+    det.classList.remove('fade');
+  },200);
 }
 
-/* ═══════════════ DONUT ═══════════════ */
-function buildDonut(){
-  const sorted=[...O].sort((a,b)=>b.n-a.n);
-  const ctx=document.getElementById('donut-chart').getContext('2d');
-  donutChart=new Chart(ctx,{
-    type:'doughnut',
-    data:{
-      labels:sorted.map(o=>o.name),
-      datasets:[{
-        data:sorted.map(o=>o.n),
-        backgroundColor:sorted.map(o=>o.clr+'CC'),
-        borderColor:sorted.map(o=>o.clr),
-        borderWidth:2, hoverOffset:8
-      }]
-    },
-    options:{
-      cutout:'68%', responsive:true, maintainAspectRatio:true,
-      onClick:(e,els)=>{ if(els.length) pick(sorted[els[0].index].id); },
-      plugins:{
-        legend:{display:false},
-        tooltip:{callbacks:{
-          label:ctx=>`${ctx.label}: ${ctx.raw.toLocaleString()} (${((ctx.raw/TOTAL)*100).toFixed(1)}%)`
-        }}
-      }
-    }
-  });
-  // legend
-  const leg=document.getElementById('donut-legend');
-  leg.innerHTML=sorted.map(o=>`
-    <div class="dl-item" onclick="pick('${o.id}')">
-      <div class="dl-dot" style="background:${o.clr}"></div>
-      <span class="dl-name">${o.name}</span>
-      <span class="dl-val">${o.lbl}</span>
-    </div>`).join('');
-}
-
-/* ═══════════════ HORIZONTAL BAR ═══════════════ */
-function buildHBar(){
-  const sorted=[...O].sort((a,b)=>b.n-a.n);
-  const ctx=document.getElementById('hbar-chart').getContext('2d');
-  hbarChart=new Chart(ctx,{
-    type:'bar',
-    data:{
-      labels:sorted.map(o=>o.name),
-      datasets:[{
-        label:'Refugees in Sudan',
-        data:sorted.map(o=>o.n),
-        backgroundColor:sorted.map(o=>o.clr+'BB'),
-        borderColor:sorted.map(o=>o.clr),
-        borderWidth:1.5, borderRadius:4, borderSkipped:false
-      }]
-    },
-    options:{
-      indexAxis:'y', responsive:true, maintainAspectRatio:false,
-      onClick:(e,els)=>{ if(els.length) pick(sorted[els[0].index].id); },
-      plugins:{
-        legend:{display:false},
-        tooltip:{callbacks:{
-          label:ctx=>` ${ctx.raw.toLocaleString()} people`,
-          afterLabel:ctx=>` ${((ctx.raw/TOTAL)*100).toFixed(1)}% of total`
-        }}
-      },
-      scales:{
-        x:{
-          beginAtZero:true,
-          ticks:{callback:v=>v>=1000?(v/1000).toFixed(0)+'K':v, font:{size:10}},
-          grid:{color:'rgba(0,0,0,.04)'},
-          title:{display:true,text:'Number of individuals',font:{size:10},color:'#64748b'}
-        },
-        y:{grid:{display:false},ticks:{font:{size:11},color:'#1e293b'}}
-      }
-    }
-  });
-}
-
-/* ═══════════════ TIMELINE CHART ═══════════════ */
-function buildTimeline(){
-  const ctx=document.getElementById('timeline-chart').getContext('2d');
-  timelineChart=new Chart(ctx,{
-    type:'line',
-    data:{
-      labels:TIMELINE_DATA.labels,
-      datasets:[{
-        label:'Refugees & asylum-seekers in Sudan',
-        data:TIMELINE_DATA.values,
-        borderColor:'#418FDE',
-        backgroundColor:'rgba(65,143,222,.1)',
-        borderWidth:2.5, fill:true, tension:.4,
-        pointBackgroundColor:TIMELINE_DATA.values.map((v,i)=>i===8?'#FF671F':'#418FDE'),
-        pointRadius:TIMELINE_DATA.values.map((v,i)=>i===8?6:4),
-        pointBorderColor:'#fff', pointBorderWidth:2
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{
-        legend:{display:false},
-        tooltip:{callbacks:{
-          label:ctx=>` ${ctx.raw.toLocaleString()} refugees`,
-          afterLabel:(ctx)=>ctx.dataIndex===8?' ← SAF-RSF conflict begins':''
-        }},
-        annotation:{annotations:{
-          line1:{type:'line',xMin:'2023',xMax:'2023',borderColor:'#FF671F',borderWidth:1.5,borderDash:[4,3],
-            label:{content:'Conflict Apr 2023',display:true,font:{size:9},color:'#FF671F',position:'end'}}
-        }}
-      },
-      scales:{
-        y:{
-          ticks:{callback:v=>v>=1000000?(v/1000000).toFixed(1)+'M':v>=1000?(v/1000).toFixed(0)+'K':v,font:{size:10}},
-          grid:{color:'rgba(0,0,0,.04)'},
-          title:{display:true,text:'Population',font:{size:10},color:'#64748b'}
-        },
-        x:{grid:{display:false},ticks:{font:{size:10}}}
-      }
-    }
-  });
-}
-
-/* ═══════════════ PICK / SELECT ═══════════════ */
-function pick(id){
-  sel = sel===id ? null : id;
-  buildCards();
-  applyVis();
-  updatePanel();
-  highlightCharts();
-  if(sel){
-    const o=O.find(x=>x.id===sel);
-    map.flyTo([o.lat, o.lng],5,{duration:.9});
+/* ═══════════════ PICK CROSSING ═══════════════ */
+function pickCrossing(id){
+  selId = selId===id ? null : id;
+  if(selId){
+    const c=CROSSINGS.find(x=>x.id===selId);
+    selCountry=c.country;
+    map.flyTo([c.lat,c.lng],7,{duration:.9});
+    updateDetail();
+    // Update map info panel
+    const cc=COUNTRIES[c.country];
+    document.getElementById('map-info').innerHTML=`
+      <div class="mi-title" style="color:${cc.clr}">${c.crossing}</div>
+      <div class="mi-row"><span class="mi-k">State</span><span class="mi-v">${c.state}</span></div>
+      <div class="mi-row"><span class="mi-k">Locality</span><span class="mi-v">${c.locality}</span></div>
+      <div class="mi-row"><span class="mi-k">Country</span><span class="mi-v">${c.country}</span></div>
+      <div class="mi-row"><span class="mi-k">Coordinates</span><span class="mi-v">${c.lat.toFixed(4)}°N, ${c.lng.toFixed(4)}°E</span></div>
+    `;
   } else {
-    map.flyTo([16,31],4,{duration:.8});
+    selCountry=null;
+    clearDetail();
+    resetMapInfo();
+    map.flyTo([16,30],5,{duration:.8});
   }
+  buildList();
+  applyVis();
 }
 
-function highlightCharts(){
-  // Highlight selected bar in horizontal bar
-  if(hbarChart){
-    const sorted=[...O].sort((a,b)=>b.n-a.n);
-    hbarChart.data.datasets[0].backgroundColor=sorted.map(o=>
-      !sel ? o.clr+'BB' : o.id===sel ? o.clr : o.clr+'33'
-    );
-    hbarChart.data.datasets[0].borderColor=sorted.map(o=>
-      !sel ? o.clr : o.id===sel ? o.clr : o.clr+'44'
-    );
-    hbarChart.update('none');
-  }
-  // Highlight selected donut segment
-  if(donutChart){
-    const sorted=[...O].sort((a,b)=>b.n-a.n);
-    donutChart.data.datasets[0].backgroundColor=sorted.map(o=>
-      !sel ? o.clr+'CC' : o.id===sel ? o.clr+'EE' : o.clr+'22'
-    );
-    donutChart.update('none');
-  }
+function resetMapInfo(){
+  document.getElementById('map-info').innerHTML=`
+    <div class="mi-title">Sudan Overview</div>
+    <div class="mi-row"><span class="mi-k">Total refugees hosted</span><span class="mi-v">837,966</span></div>
+    <div class="mi-row"><span class="mi-k">Largest origin group</span><span class="mi-v">South Sudan</span></div>
+    <div class="mi-row"><span class="mi-k">New arrivals (post-Apr 23)</span><span class="mi-v">~13,667</span></div>
+    <div class="mi-row"><span class="mi-k">Change from 2023</span><span class="mi-v" style="color:var(--orange)">−13%</span></div>
+  `;
 }
 
 /* ═══════════════ FILTER ═══════════════ */
-function setFilter(f, btn){
-  filt=f; sel=null; searchQ=''; document.getElementById('search').value='';
+function setFilter(f,btn){
+  filt=f; selId=null; selCountry=null; searchQ=''; document.getElementById('srch').value='';
   document.querySelectorAll('.ftab').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
-  buildCards(); applyVis(); updatePanel(); highlightCharts();
-  map.flyTo([16,31],4,{duration:.7});
+  buildList(); applyVis(); clearDetail(); resetMapInfo();
+  if(f!=='all'){
+    const pts=CROSSINGS.filter(c=>c.country===f);
+    if(pts.length){
+      const lat=pts.reduce((s,c)=>s+c.lat,0)/pts.length;
+      const lng=pts.reduce((s,c)=>s+c.lng,0)/pts.length;
+      map.flyTo([lat,lng],6,{duration:.9});
+    }
+  } else {
+    map.flyTo([16,30],5,{duration:.7});
+  }
 }
 
 /* ═══════════════ SEARCH ═══════════════ */
 function doSearch(q){
   searchQ=q;
   if(q){
-    const match=O.find(o=>o.name.toLowerCase().includes(q.toLowerCase()));
-    if(match){ sel=match.id; }
-  } else { sel=null; }
-  buildCards(); applyVis(); updatePanel(); highlightCharts();
+    const match=CROSSINGS.find(c=>
+      c.crossing.toLowerCase().includes(q.toLowerCase())||
+      c.state.toLowerCase().includes(q.toLowerCase())||
+      c.country.toLowerCase().includes(q.toLowerCase())
+    );
+    if(match){ selId=match.id; selCountry=match.country; updateDetail(); }
+  } else { selId=null; selCountry=null; clearDetail(); }
+  buildList(); applyVis();
+}
+
+/* ═══════════════ MINI BAR CHART ═══════════════ */
+function buildMiniChart(){
+  const entries=Object.entries(COUNTRIES).filter(([k])=>CROSSINGS.some(c=>c.country===k));
+  const sorted=entries.sort((a,b)=>b[1].refugees-a[1].refugees);
+  new Chart(document.getElementById('mini-chart').getContext('2d'),{
+    type:'bar',
+    data:{
+      labels:sorted.map(([k,v])=>`${v.icon} ${k}`),
+      datasets:[{
+        data:sorted.map(([,v])=>v.refugees),
+        backgroundColor:sorted.map(([,v])=>v.clr+'BB'),
+        borderColor:sorted.map(([,v])=>v.clr),
+        borderWidth:1.5, borderRadius:3
+      }]
+    },
+    options:{
+      indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      onClick:(e,els)=>{
+        if(els.length){
+          const country=sorted[els[0].index][0];
+          selCountry=country; selId=null;
+          buildList(); applyVis(); updateDetail();
+          const pts=CROSSINGS.filter(c=>c.country===country);
+          if(pts.length){
+            const lat=pts.reduce((s,c)=>s+c.lat,0)/pts.length;
+            const lng=pts.reduce((s,c)=>s+c.lng,0)/pts.length;
+            map.flyTo([lat,lng],6,{duration:.9});
+          }
+        }
+      },
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toLocaleString()} in Sudan`}}
+      },
+      scales:{
+        x:{ticks:{callback:v=>v>=1000?(v/1000).toFixed(0)+'K':v,font:{size:9}},grid:{color:'rgba(0,0,0,.04)'}},
+        y:{grid:{display:false},ticks:{font:{size:10}}}
+      }
+    }
+  });
 }
 
 /* ═══════════════ TOOLTIP ═══════════════ */
-function showTip(e,o){
+function showTip(e,c){
+  const cc=COUNTRIES[c.country];
   const t=document.getElementById('tip');
-  t.innerHTML=`<b>${o.lbl}</b>${o.name} → Sudan`;
+  t.innerHTML=`<b>${c.crossing}</b>${c.state} · ${c.country}`;
   t.classList.add('on');
 }
 document.addEventListener('mousemove',e=>{
   const t=document.getElementById('tip');
-  if(t.classList.contains('on')){
-    t.style.left=(e.clientX+14)+'px';
-    t.style.top=(e.clientY-38)+'px';
-  }
+  if(t.classList.contains('on')){t.style.left=(e.clientX+14)+'px';t.style.top=(e.clientY-36)+'px';}
+});
+
+/* ═══════════════ POPUP on marker ═══════════════ */
+CROSSINGS.forEach(c=>{
+  const cc=COUNTRIES[c.country];
+  mkrMap[c.id].bindPopup(`
+    <div style="min-width:180px">
+      <div style="font-family:Barlow Condensed,sans-serif;font-size:1rem;font-weight:800;color:${cc.clr};margin-bottom:.35rem">${c.crossing}</div>
+      <div style="font-size:.75rem;color:#555;margin-bottom:.25rem"><b>State:</b> ${c.state}</div>
+      <div style="font-size:.75rem;color:#555;margin-bottom:.25rem"><b>Locality:</b> ${c.locality}</div>
+      <div style="font-size:.75rem;color:#555;margin-bottom:.25rem"><b>Country:</b> ${c.country}</div>
+      <div style="font-size:.7rem;color:#888;margin-top:.4rem">${c.lat.toFixed(4)}°N, ${c.lng.toFixed(4)}°E</div>
+    </div>`,
+    {maxWidth:240}
+  );
 });
 
 /* ═══════════════ INIT ═══════════════ */
-buildCards();
-updatePanel();
-buildDonut();
-buildHBar();
-buildTimeline();
-setTimeout(drawArcs, 450);
+buildList();
+buildMiniChart();
+setTimeout(drawArcs, 500);
 </script>
 </body>
 </html>
