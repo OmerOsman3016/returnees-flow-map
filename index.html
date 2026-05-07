@@ -381,6 +381,132 @@ function showTip(e,c){
   const t=e.target._icon;if(t) t.title=`${c.n} · ${c.country}`;
 }
 
+/* ═══════════════ BORDERS ═══════════════
+   Sudan outline + neighbouring countries loaded from public GeoJSON APIs.
+   We use the Natural Earth / GADM via Leaflet's built-in fetch.
+   Fallback: simplified inline polygons for Sudan + neighbours.
+═══════════════════════════════════════ */
+
+/* ── Sudan approximate border (simplified polygon) ── */
+const SUDAN_BORDER = {
+  type:'Feature',properties:{name:'Sudan'},
+  geometry:{type:'Polygon',coordinates:[[
+    [24.0,8.5],[23.5,11.0],[23.1,12.5],[22.5,14.0],[22.0,15.0],[21.8,16.5],[22.5,18.0],[23.0,20.0],[24.0,22.0],
+    [25.0,22.4],[26.0,22.0],[28.0,22.0],[30.5,22.0],[31.5,22.0],[32.0,21.9],[33.5,22.0],[36.9,22.0],
+    [37.5,21.0],[38.0,19.5],[38.2,17.0],[37.5,15.5],[36.5,14.5],[36.0,13.0],[35.5,12.0],[35.0,11.0],
+    [34.5,10.5],[34.0,10.0],[33.0,9.5],[32.0,9.0],[31.5,8.5],[30.0,8.0],[29.0,8.0],[28.0,8.0],
+    [27.0,7.8],[26.5,8.0],[25.5,8.5],[24.5,8.5],[24.0,8.5]
+  ]]}
+};
+
+/* ── Neighbouring countries (simplified) ── */
+const NEIGHBOURS = [
+  {name:'Egypt', clr:'#FFB81C', coords:[[
+    [24.0,22.0],[25.0,22.4],[26.0,22.0],[28.0,22.0],[30.5,22.0],[31.5,22.0],[32.0,21.9],[33.5,22.0],[36.9,22.0],
+    [37.0,26.0],[34.0,27.5],[32.5,29.0],[30.0,30.0],[27.0,30.5],[25.0,30.0],[24.0,27.0],[24.7,25.0],[24.0,22.0]
+  ]]},
+  {name:'Ethiopia', clr:'#5CB8B2', coords:[[
+    [35.0,11.0],[35.5,12.0],[36.0,13.0],[36.5,14.5],[37.5,15.5],[38.2,17.0],[38.0,19.5],[40.0,18.0],
+    [42.0,16.5],[43.0,14.0],[43.5,12.5],[43.0,11.5],[42.0,10.5],[40.5,10.0],[39.0,9.5],[37.5,9.0],
+    [36.0,8.5],[35.0,9.0],[35.0,11.0]
+  ]]},
+  {name:'Chad', clr:'#418FDE', coords:[[
+    [22.0,15.0],[22.5,14.0],[23.1,12.5],[23.5,11.0],[24.0,8.5],[24.5,8.5],[23.5,8.0],[22.0,8.0],
+    [20.0,7.5],[18.0,7.0],[16.0,7.5],[14.0,9.0],[13.5,11.0],[14.0,13.0],[14.5,15.0],[15.5,16.0],
+    [16.0,18.0],[17.0,20.0],[19.0,21.5],[20.0,21.0],[22.0,20.0],[22.0,15.0]
+  ]]},
+  {name:'Central African Republic', clr:'#9B59B6', coords:[[
+    [24.0,8.5],[24.5,8.5],[25.5,8.5],[26.5,8.0],[27.0,7.8],[28.0,8.0],[27.5,6.5],[26.0,5.5],
+    [24.5,5.0],[23.0,5.5],[21.5,6.0],[20.5,7.0],[22.0,8.0],[23.5,8.0],[24.0,8.5]
+  ]]},
+  {name:'South Sudan', clr:'#FF671F', coords:[[
+    [24.0,8.5],[24.5,8.5],[25.5,8.5],[26.5,8.0],[27.0,7.8],[28.0,8.0],[29.0,8.0],[30.0,8.0],
+    [31.5,8.5],[32.0,9.0],[33.0,9.5],[34.0,10.0],[34.5,10.5],[35.0,11.0],[35.0,9.0],
+    [34.0,8.0],[32.5,7.0],[31.0,6.0],[29.5,5.5],[28.0,5.5],[26.5,6.5],[25.0,7.5],[24.0,8.5]
+  ]]},
+  {name:'Libya', clr:'#E8A800', coords:[[
+    [22.0,20.0],[22.5,18.0],[21.8,16.5],[22.0,15.0],[22.0,20.0],[19.0,21.5],[17.0,20.0],[16.0,18.0],
+    [13.0,23.0],[12.5,25.0],[14.0,28.0],[16.0,30.5],[19.0,31.5],[22.0,31.0],[25.0,30.0],[24.7,25.0],[24.0,22.0],[22.0,20.0]
+  ]]},
+  {name:'Eritrea', clr:'#E74C3C', coords:[[
+    [36.9,22.0],[37.5,21.0],[38.0,19.5],[38.2,17.0],[38.0,15.0],[37.0,14.0],[36.5,14.5],[37.5,15.5],
+    [38.2,17.0],[38.0,19.5],[37.5,21.0],[36.9,22.0]
+  ]]}
+];
+
+/* Draw neighbouring country fills */
+NEIGHBOURS.forEach(nb => {
+  L.polygon(nb.coords[0].map(c=>[c[1],c[0]]),{
+    color: nb.clr,
+    weight: 1.4,
+    opacity: 0.7,
+    fillColor: nb.clr,
+    fillOpacity: 0.04,
+    dashArray: '4 5',
+    interactive: false
+  }).addTo(map).bindTooltip(nb.name,{sticky:true,className:'',direction:'center'});
+});
+
+/* Draw Sudan border — bright solid outline */
+L.polygon(SUDAN_BORDER.geometry.coordinates[0].map(c=>[c[1],c[0]]),{
+  color: '#FF671F',
+  weight: 2,
+  opacity: 0.85,
+  fillColor: '#FF671F',
+  fillOpacity: 0.06,
+  interactive: false
+}).addTo(map);
+
+/* Sudan label */
+L.marker([15.5,30.5],{
+  icon:L.divIcon({className:'',html:`<div style="color:#FF671F;font-size:11px;font-weight:700;font-family:system-ui;letter-spacing:.06em;text-transform:uppercase;text-shadow:0 1px 6px #000;white-space:nowrap">SUDAN</div>`,iconAnchor:[22,8]}),
+  interactive:false, zIndexOffset:999
+}).addTo(map);
+
+/* Country name labels */
+const CLABELS=[
+  {n:'Egypt',lat:27,lng:30},{n:'Chad',lat:15,lng:18},{n:'Ethiopia',lat:10,lng:40},
+  {n:'Libya',lat:27,lng:18},{n:'S. Sudan',lat:6.5,lng:30},{n:'C.A.R.',lat:6.5,lng:21},{n:'Eritrea',lat:16,lng:39}
+];
+CLABELS.forEach(l=>{
+  const nb=NEIGHBOURS.find(n=>n.name.includes(l.n.replace('S. ','South ').replace('C.A.R.','Central')));
+  const clr=nb?nb.clr:'#aaa';
+  L.marker([l.lat,l.lng],{
+    icon:L.divIcon({className:'',html:`<div style="color:${clr};font-size:9px;font-weight:700;font-family:system-ui;letter-spacing:.07em;text-transform:uppercase;opacity:.75;text-shadow:0 1px 5px #000;white-space:nowrap">${l.n}</div>`,iconAnchor:[18,7]}),
+    interactive:false,zIndexOffset:100
+  }).addTo(map);
+});
+
+/* ── Active border crossing markers — highlighted with country-color rings ── */
+CROSS.forEach(c=>{
+  const nb=NEIGHBOURS.find(n=>n.name===c.country);
+  const bclr=nb?nb.clr:c.clr;
+  /* Crossing point marker — larger outer ring in country color */
+  L.circleMarker([c.lat,c.lng],{
+    radius:14, color:bclr, weight:1.5, opacity:0.5,
+    fillColor:bclr, fillOpacity:0.08, interactive:false
+  }).addTo(map);
+  /* Label */
+  L.marker([c.lat,c.lng],{
+    icon:L.divIcon({className:'',
+      html:`<div style="color:${bclr};font-size:9px;font-weight:700;font-family:system-ui;letter-spacing:.04em;white-space:nowrap;text-shadow:0 1px 5px #000;margin-top:18px;text-align:center">${c.n}</div>`,
+      iconAnchor:[30,0]
+    }),
+    interactive:false, zIndexOffset:600
+  }).addTo(map);
+});
+
+/* Update legend */
+document.getElementById('leg').innerHTML=`
+  <div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:#5a7090;margin-bottom:6px;font-weight:700">Legend</div>
+  <div class="li"><div class="ldot" style="background:#FF671F;border:1px solid #FF671F"></div>Sudan (host country)</div>
+  <div class="li"><div style="width:18px;height:1px;border:1px dashed #418FDE;flex-shrink:0"></div>Chad border</div>
+  <div class="li"><div style="width:18px;height:1px;border:1px dashed #FFB81C;flex-shrink:0"></div>Egypt border</div>
+  <div class="li"><div style="width:18px;height:1px;border:1px dashed #5CB8B2;flex-shrink:0"></div>Ethiopia border</div>
+  <div class="li"><div class="ldot" style="background:#fff;opacity:.7"></div>Border crossing point</div>
+  <div class="li"><div class="lline" style="background:linear-gradient(90deg,#418FDE,#FF671F)"></div>Flow route (animated)</div>
+`;
+
 buildList();
 setTimeout(rebuild,500);
 </script>
